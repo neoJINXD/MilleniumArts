@@ -9,3 +9,4 @@ Advanced Game Dev Project made by Millenium Arts using Unity 2020.2.1f1
 - Gregory Alexis John
 - Scott Smith
 - Reynald Servera
+- Michael Luger
