@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Game loop for the host only, p2p client has no gameloop instance
+ */
+
 public class GameLoop
 {
     private GameLoop()
@@ -16,6 +20,7 @@ public class GameLoop
 
     private List<Player> players = new List<Player>();
 
+    //To be able to wait for local player, networked player, and AI player turns
     public IEnumerator Play()
     {
         while (true)

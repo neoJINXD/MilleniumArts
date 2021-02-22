@@ -1,30 +1,28 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-public class Player : MonoBehaviour
-{
-    private bool turnComplete;
+/*
+    Abstract class to be inherited by a local player, networked player, client player?, and AI player
+ */
 
+public /* abstract */ class Player : MonoBehaviour
+{
     public Player()
     {
-        turnComplete = true;
+        TurnComplete = true;
     }
 
     public void StartTurn()
     {
-        turnComplete = false;
+        TurnComplete = false;
     }
 
     public void EndTurn()
     {
-        turnComplete = true;
+        TurnComplete = true;
     }
     
-    public bool TurnComplete
-    {
-        get => turnComplete;
-    }
-    
+    public bool TurnComplete { get; private set; }
 }
 
 [CustomEditor(typeof(Player))]

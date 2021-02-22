@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+/*
+    To be control and initiate gameloop & misc local game actions
+ */
+
 public class GameManager : MonoBehaviour
 {
     private GameLoop gameLoop;
