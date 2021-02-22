@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class GameLoop
@@ -10,20 +9,24 @@ public class GameLoop
 
     public static GameLoop Instance
     {
-        get { return instance ?? (instance = new GameLoop()); }
+        get { return instance ??= new GameLoop(); }
     }
     
     private static GameLoop instance;
 
-    private bool isPlaying;
     private List<Player> players = new List<Player>();
 
-    public async void Play()
+    public IEnumerator Play()
     {
-        foreach (var player in players)
+        while (true)
         {
-            player.StartTurn();
-            await player.AwaitTurn();
+            for (int i = 0; i < players.Count; i++)
+            {
+                Player player = players[i];
+                player.StartTurn();
+                Debug.Log("Player " + i + "'s turn.");
+                yield return new WaitUntil(() => player.TurnComplete);
+            }
         }
     }
 
