@@ -9,7 +9,9 @@ using UnityEngine;
 public class GameLoop
 {
     private GameLoop()
-    {}
+    {
+        
+    }
 
     public static GameLoop Instance
     {
