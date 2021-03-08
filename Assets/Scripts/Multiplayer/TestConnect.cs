@@ -32,8 +32,10 @@ public class TestConnect : MonoBehaviourPunCallbacks
         {
             print($"PhotonNetwork.IsConnected | Trying to create or join room {roomName}");
             RoomOptions options = new RoomOptions();
+            options.MaxPlayers = 2;
             TypedLobby lobby = new TypedLobby(roomName, LobbyType.Default);
             PhotonNetwork.JoinOrCreateRoom(roomName, options, lobby);
+            
         }
     }
 
