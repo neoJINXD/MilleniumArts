@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 using Photon.Pun;
 using Photon.Realtime;
-using System.Linq;
-using TMPro;
 
 public class TestConnect : MonoBehaviourPunCallbacks
 {
@@ -30,18 +25,6 @@ public class TestConnect : MonoBehaviourPunCallbacks
         PhotonNetwork.GameVersion = settings.GameVersion;
         PhotonNetwork.ConnectUsingSettings();
     }
-
-    // private void CreateRoom() 
-    // {
-    //     if (PhotonNetwork.IsConnected)
-    //     {
-    //         if (string.IsNullOrEmpty(roomName.text))
-    //         {
-    //             return;
-    //         }
-    //         PhotonNetwork.CreateRoom(roomName.text);
-    //     }
-    // }
 
     public void JoinRoom()
     {
@@ -79,26 +62,5 @@ public class TestConnect : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         print($"Disconnected form server for {cause}");
-    }
-}
-
-
-[CustomEditor(typeof(TestConnect))]
-public class TestConnectEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
-
-        TestConnect connection = (TestConnect)target;
-        if(PhotonNetwork.IsConnected && GUILayout.Button("Get Player List"))
-        {
-
-            Debug.Log("Getting player list:");
-            foreach (var item in PhotonNetwork.PlayerList)
-            {
-                Debug.Log(item.NickName);
-            }
-        }
     }
 }

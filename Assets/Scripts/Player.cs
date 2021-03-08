@@ -25,17 +25,3 @@ public /* abstract */ class Player : MonoBehaviour
     public bool TurnComplete { get; private set; }
 }
 
-// [CustomEditor(typeof(Player))]
-// public class PlayerEditor : Editor
-// {
-//     public override void OnInspectorGUI()
-//     {
-//         DrawDefaultInspector();
-
-//         Player player = (Player)target;
-//         if(!player.TurnComplete && GUILayout.Button("End Turn"))
-//         {
-//             player.EndTurn();
-//         }
-//     }
-// }
