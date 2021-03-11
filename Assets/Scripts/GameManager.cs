@@ -48,9 +48,9 @@ public class GameManager : MonoBehaviour
         }
 
         // gameLoop.AddPlayer(gameObject.AddComponent<Player>());
-        Player p1 = gameLoop.AddReturnPlayer(gameObject.AddComponent<Player>());
+        Player p1 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
         // gameLoop.AddPlayer(gameObject.AddComponent<Player>());
-        Player p2 = gameLoop.AddReturnPlayer(gameObject.AddComponent<Player>());
+        Player p2 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
         StartCoroutine(gameLoop.Play());
 
         view.ObservedComponents.Add(p1);

@@ -6,7 +6,7 @@ using Photon.Pun;
  */
 
 // TODO move the IPunObservable to Networked player
-public /* abstract */ class Player : MonoBehaviour, IPunObservable
+public /* abstract */ class Player : MonoBehaviour//, IPunObservable
 {
     public Player()
     {
@@ -23,17 +23,17 @@ public /* abstract */ class Player : MonoBehaviour, IPunObservable
         TurnComplete = true;
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(TurnComplete);
-        }
-        else
-        {
-            TurnComplete = (bool)stream.ReceiveNext();
-        }
-    }
+    // public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    // {
+    //     if (stream.IsWriting)
+    //     {
+    //         stream.SendNext(TurnComplete);
+    //     }
+    //     else
+    //     {
+    //         TurnComplete = (bool)stream.ReceiveNext();
+    //     }
+    // }
 
     public bool TurnComplete ;//{ get; private set; }
 }
