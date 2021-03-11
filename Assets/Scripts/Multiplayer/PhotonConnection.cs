@@ -68,4 +68,9 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
     {
         print($"Disconnected form server for {cause}");
     }
+
+    public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
+    {
+        print($"{newPlayer.NickName} has joined the room");
+    }
 }
