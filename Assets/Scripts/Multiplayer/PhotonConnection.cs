@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class TestConnect : MonoBehaviourPunCallbacks
+public class PhotonConnection : MonoBehaviourPunCallbacks
 {
     // [SerializeField] TMP_InputField roomName;
-    [SerializeField] string roomName;
+    [SerializeField] string roomName; // TODO should eventually not have this hardcoded
     private NetworkSettings settings;
 
     private void Awake() 
@@ -59,6 +60,8 @@ public class TestConnect : MonoBehaviourPunCallbacks
         print("Connected to Room Succ");
         MenuManager.instance.CloseMenu("main");
         MenuManager.instance.OpenMenu("ingame");
+        // PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity);
+        SceneManager.LoadScene("PhotonMain");
     }
 
     public override void OnDisconnected(DisconnectCause cause)

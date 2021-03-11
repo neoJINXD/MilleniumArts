@@ -2,14 +2,13 @@ using UnityEngine;
 using UnityEditor;
 using Photon.Pun;
 
-[CustomEditor(typeof(TestConnect))]
-public class TestConnectEditor : Editor
+[CustomEditor(typeof(PhotonConnection))]
+public class PhotonConnectionEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        TestConnect connection = (TestConnect)target;
         if(PhotonNetwork.IsConnected && GUILayout.Button("Get Player List"))
         {
 

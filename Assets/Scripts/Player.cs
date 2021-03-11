@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
+using Photon.Pun;
 
 /*
     Abstract class to be inherited by a local player, networked player, client player?, and AI player
  */
 
-public /* abstract */ class Player : MonoBehaviour
+// TODO move the IPunObservable to Networked player
+public /* abstract */ class Player : MonoBehaviour, IPunObservable
 {
     public Player()
     {
@@ -16,11 +18,23 @@ public /* abstract */ class Player : MonoBehaviour
         TurnComplete = false;
     }
 
-    public void EndTurn()
+    public virtual void EndTurn()
     {
         TurnComplete = true;
     }
-    
-    public bool TurnComplete { get; private set; }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(TurnComplete);
+        }
+        else
+        {
+            TurnComplete = (bool)stream.ReceiveNext();
+        }
+    }
+
+    public bool TurnComplete ;//{ get; private set; }
 }
 

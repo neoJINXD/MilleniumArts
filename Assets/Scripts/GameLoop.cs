@@ -1,22 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zone.Core.Utils;
 
 /*
     Game loop for the host only, p2p client has no gameloop instance
  */
 
-public class GameLoop
+public class GameLoop : Singleton<GameLoop>
 {
     private GameLoop()
     {}
-
-    public static GameLoop Instance
-    {
-        get { return instance ??= new GameLoop(); }
-    }
-    
-    private static GameLoop instance;
 
     private List<Player> players = new List<Player>();
 
@@ -38,5 +32,11 @@ public class GameLoop
     public void AddPlayer(Player toAdd)
     {
         players.Add(toAdd);
+    }
+
+    public Player AddReturnPlayer(Player toAdd)
+    {
+        players.Add(toAdd);
+        return toAdd;
     }
 }
