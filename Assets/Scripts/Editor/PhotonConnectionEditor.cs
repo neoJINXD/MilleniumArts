@@ -12,7 +12,8 @@ public class PhotonConnectionEditor : Editor
         if(PhotonNetwork.IsConnected && GUILayout.Button("Get Player List"))
         {
 
-            Debug.Log("Getting player list:");
+            PhotonConnection connection = (PhotonConnection)target;
+            Debug.Log($"Getting player list of {PhotonNetwork.PlayerList.Length}:");
             foreach (var item in PhotonNetwork.PlayerList)
             {
                 Debug.Log(item.NickName);
