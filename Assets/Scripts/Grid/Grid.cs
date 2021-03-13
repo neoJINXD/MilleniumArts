@@ -10,7 +10,7 @@ public class Grid : MonoBehaviour
 {
     [SerializeField] private Transform target;
     [SerializeField] private Transform unit;
-    
+
     // the size of the grid
     [SerializeField] private float size;
 
@@ -24,5 +24,14 @@ public class Grid : MonoBehaviour
 
         unit.transform.position = newPosition;
     }
-    
+
+    public LayerMask unableToWalkHere;
+    public Vector2 gridWorldSize;
+    public float nodeRadius;
+    private Node[,] grid;
+
+    void OnDrawGizmos()
+    {
+        Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
+    }
 }
