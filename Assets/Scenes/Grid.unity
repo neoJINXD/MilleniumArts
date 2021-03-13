@@ -330,7 +330,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 544443765}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.58, y: 1.22, z: -11.45}
+  m_LocalPosition: {x: 3.58, y: 1.22, z: -13.02}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -347,6 +347,7 @@ GameObject:
   - component: {fileID: 844824549}
   - component: {fileID: 844824548}
   - component: {fileID: 844824550}
+  - component: {fileID: 844824551}
   m_Layer: 0
   m_Name: A*
   m_TagString: Untagged
@@ -369,7 +370,7 @@ MonoBehaviour:
   target: {fileID: 1737116090}
   unit: {fileID: 1764270284}
   size: 1
-  onlyDisplayPathGizmos: 1
+  displayGridGizmos: 0
   unableToWalkHere:
     serializedVersion: 2
     m_Bits: 8
@@ -401,8 +402,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc65fda1cf3c774ba64274e240d9c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seeker: {fileID: 1596073718}
-  target: {fileID: 544443769}
+--- !u!114 &844824551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844824547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de5b0dec804893744b96a6a0ef13d93a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &856230022
 GameObject:
   m_ObjectHideFlags: 0
@@ -700,6 +711,7 @@ GameObject:
   - component: {fileID: 1596073717}
   - component: {fileID: 1596073716}
   - component: {fileID: 1596073715}
+  - component: {fileID: 1596073719}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -784,6 +796,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1596073719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596073714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4648fbbcfa915424a8d04fcf23929a24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 544443769}
+  speed: 10
 --- !u!1 &1617636894
 GameObject:
   m_ObjectHideFlags: 0
