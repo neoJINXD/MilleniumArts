@@ -22,7 +22,8 @@ public class Node : IHeapItem<Node> {
 
     public int fCost 
     {
-        get {
+        get 
+        {
             return gCost + hCost;
         }
     }

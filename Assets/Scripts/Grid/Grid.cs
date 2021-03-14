@@ -2,10 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * To test this scrip, run the game in scene view and move the map game object around.
- * You will see the clip movement between grids of the unit.
- */
 public class Grid : MonoBehaviour
 {
     [SerializeField] private Transform target;

@@ -3,8 +3,6 @@ using System.Collections;
 
 public class Unit : MonoBehaviour {
 
-
-    public Transform target;
     [SerializeField]
     private float speed = 20;
     Vector3[] path;
@@ -12,11 +10,35 @@ public class Unit : MonoBehaviour {
     
     // dictionary of heap index and unit itself.
 
-    void Start() {
-        PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
+    /*
+    For testing:
+    public Transform target;
+    void Start() 
+    {
+        // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
+    }*/
+
+    void Update()
+    {
+        SelectNewUnitPosition();
     }
 
-    public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
+    void SelectNewUnitPosition()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            {
+                PathRequestManager.RequestPath(transform.position,hit.point, OnPathFound);
+            }
+        }
+    }
+
+    public void OnPathFound(Vector3[] newPath, bool pathSuccessful) 
+    {
         if (pathSuccessful) {
             path = newPath;
             targetIndex = 0;
@@ -25,11 +47,12 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    IEnumerator FollowPath() {
+    IEnumerator FollowPath() 
+    {
         Vector3 currentWaypoint = path[0];
         while (true) {
             if (transform.position == currentWaypoint) {
-                targetIndex ++;
+                targetIndex++;
                 if (targetIndex >= path.Length) {
                     yield break;
                 }
@@ -42,7 +65,8 @@ public class Unit : MonoBehaviour {
         }
     }
 
-    public void OnDrawGizmos() {
+    public void OnDrawGizmos() 
+    {
         if (path != null) {
             for (int i = targetIndex; i < path.Length; i ++) {
                 Gizmos.color = Color.black;

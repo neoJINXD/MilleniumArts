@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class Pathfinding : MonoBehaviour {
+public class Pathfinding : MonoBehaviour 
+{
 	
 	PathRequestManager requestManager;
 
@@ -16,12 +17,14 @@ public class Pathfinding : MonoBehaviour {
 	}
 	
 	
-	public void StartFindPath(Vector3 startPos, Vector3 targetPos) {
+	public void StartFindPath(Vector3 startPos, Vector3 targetPos) 
+	{
 		StartCoroutine(FindPath(startPos,targetPos, GetDistance)); //pass the function to use to calculate hCost
 	}
 	
 	// implement function to click on tile as targetPosition, and be able to select unit.
-	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, HeuristicFunction heuristicFunc) {
+	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, HeuristicFunction heuristicFunc) 
+	{
 
 		Vector3[] waypoints = new Vector3[0];
 		bool pathSuccess = false;
@@ -65,12 +68,12 @@ public class Pathfinding : MonoBehaviour {
 		}
 		
 		yield return null;
-		
+
 		if (pathSuccess) {
-			waypoints = RetracePath(startNode,targetNode);
+			waypoints = RetracePath(startNode, targetNode);
 		}
-		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 		
+		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
 	Vector3[] RetracePath(Node startNode, Node endNode) {
@@ -114,13 +117,14 @@ public class Pathfinding : MonoBehaviour {
 		return waypoints.ToArray();
 	}
 	
-	int GetDistance(Node nodeA, Node nodeB) {
+	int GetDistance(Node nodeA, Node nodeB) 
+	{
 		int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
 		int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
 		
 		if (dstX > dstY)
-			return 14*dstY + 10* (dstX-dstY);
-		return 14*dstX + 10 * (dstY-dstX);
+			return 14 * dstY + 10 * (dstX-dstY);
+		return 14 * dstX + 10 * (dstY-dstX);
 	}
 
 	int GetEuclideanDistance(Node a, Node b)
