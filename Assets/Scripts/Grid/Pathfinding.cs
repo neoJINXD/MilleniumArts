@@ -109,4 +109,10 @@ public class Pathfinding : MonoBehaviour {
 			return 14*dstY + 10* (dstX-dstY);
 		return 14*dstX + 10 * (dstY-dstX);
 	}
+
+	int GetEuclideanDistance(Node a, Node b)
+	{
+		return Mathf.RoundToInt(Vector3.Distance(a.worldPosition, b.worldPosition));
+		// returns the Euclidean distance between the given nodes
+	}
 }
