@@ -18,6 +18,7 @@ public class Pathfinding : MonoBehaviour {
 		StartCoroutine(FindPath(startPos,targetPos));
 	}
 	
+	// implement function to click on tile as targetPosition, and be able to select unit.
 	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos) {
 
 		Vector3[] waypoints = new Vector3[0];
@@ -27,12 +28,14 @@ public class Pathfinding : MonoBehaviour {
 		Node targetNode = grid.NodeFromWorldPoint(targetPos);
 		
 		
-		if (startNode.canWalkHere && targetNode.canWalkHere) {
+		if (startNode.canWalkHere && targetNode.canWalkHere) 
+		{
 			Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
 			HashSet<Node> closedSet = new HashSet<Node>();
 			openSet.Add(startNode);
 			
-			while (openSet.Count > 0) {
+			while (openSet.Count > 0) 
+			{
 				Node currentNode = openSet.RemoveFirst();
 				closedSet.Add(currentNode);
 				
@@ -58,11 +61,13 @@ public class Pathfinding : MonoBehaviour {
 				}
 			}
 		}
+		
 		yield return null;
+		
 		if (pathSuccess) {
 			waypoints = RetracePath(startNode,targetNode);
 		}
-		requestManager.FinishedProcessingPath(waypoints,pathSuccess);
+		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 		
 	}
 	
@@ -102,6 +107,4 @@ public class Pathfinding : MonoBehaviour {
 			return 14*dstY + 10* (dstX-dstY);
 		return 14*dstX + 10 * (dstY-dstX);
 	}
-	
-	
 }

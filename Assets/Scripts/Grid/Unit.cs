@@ -9,6 +9,8 @@ public class Unit : MonoBehaviour {
     private float speed = 20;
     Vector3[] path;
     int targetIndex;
+    
+    // dictionary of heap index and unit itself.
 
     void Start() {
         PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
@@ -50,7 +52,7 @@ public class Unit : MonoBehaviour {
                     Gizmos.DrawLine(transform.position, path[i]);
                 }
                 else {
-                    Gizmos.DrawLine(path[i-1],path[i]);
+                    Gizmos.DrawLine(path[i - 1],path[i]);
                 }
             }
         }

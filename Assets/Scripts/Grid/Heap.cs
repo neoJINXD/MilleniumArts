@@ -32,7 +32,8 @@ public class Heap<T> where T : IHeapItem<T> {
     }
 
     public int Count {
-        get {
+        get 
+        {
             return currentItemCount;
         }
     }
@@ -67,7 +68,6 @@ public class Heap<T> where T : IHeapItem<T> {
             else {
                 return;
             }
-
         }
     }
 	

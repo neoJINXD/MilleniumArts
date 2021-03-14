@@ -14,6 +14,8 @@ public class Grid : MonoBehaviour
     [SerializeField] private float size;
 
     private Vector3 newPosition;
+    
+    // implement dictionary class. ?
 
     public bool displayGridGizmos;
     public LayerMask unableToWalkHere;
@@ -66,6 +68,7 @@ public class Grid : MonoBehaviour
         }
     }
 
+    // might have to use boolean, to change walkable nodes, based on flying and ground units.
     public List<Node> GetNeighbours(Node node)
     {
         List<Node> neighbours = new List<Node>();

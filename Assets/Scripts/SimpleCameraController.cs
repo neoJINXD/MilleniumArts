@@ -178,5 +178,4 @@ namespace UnityTemplateProjects
             m_InterpolatingCameraState.UpdateTransform(transform);
         }
     }
-
 }
