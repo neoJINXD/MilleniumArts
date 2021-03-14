@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class Unit : MonoBehaviour {
 
@@ -29,9 +30,14 @@ public class Unit : MonoBehaviour {
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
+                // fixes out of bounce error that occurs when unit selected.
+                if (Vector3.Distance(hit.point, transform.position) < 1)
+                    return;
+                
                 PathRequestManager.RequestPath(transform.position,hit.point, OnPathFound);
             }
         }
