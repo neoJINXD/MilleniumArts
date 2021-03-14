@@ -19,6 +19,7 @@ public class Unit : MonoBehaviour {
         // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
     }*/
 
+
     void Update()
     {
         SelectNewUnitPosition();
@@ -36,13 +37,12 @@ public class Unit : MonoBehaviour {
             {
                 // fixes out of bounce error that occurs when unit selected.
                 if (Vector3.Distance(hit.point, transform.position) < 1)
-                    return;
+                    return; // already at destination
                 
                 PathRequestManager.RequestPath(transform.position,hit.point, OnPathFound);
             }
         }
     }
-
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) 
     {
         if (pathSuccessful) {
@@ -74,15 +74,15 @@ public class Unit : MonoBehaviour {
     public void OnDrawGizmos() 
     {
         if (path != null) {
-            for (int i = targetIndex; i < path.Length; i ++) {
+            for (int i = targetIndex; i < path.Length; i++) {
                 Gizmos.color = Color.black;
-                Gizmos.DrawCube(path[i], Vector3.one * (1f-0.3f));
+                Gizmos.DrawCube(path[i], Vector3.one * (1f - 0.3f));
 
                 if (i == targetIndex) {
                     Gizmos.DrawLine(transform.position, path[i]);
                 }
                 else {
-                    Gizmos.DrawLine(path[i - 1],path[i]);
+                    Gizmos.DrawLine(path[i - 1], path[i]);
                 }
             }
         }
