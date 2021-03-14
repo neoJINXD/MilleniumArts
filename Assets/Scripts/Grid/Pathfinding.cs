@@ -6,6 +6,8 @@ using System;
 public class Pathfinding : MonoBehaviour {
 	
 	PathRequestManager requestManager;
+
+	delegate int HeuristicFunction(Node a, Node b); //dynamically change heuristic calculation  
 	Grid grid;
 	
 	void Awake() {
@@ -15,11 +17,11 @@ public class Pathfinding : MonoBehaviour {
 	
 	
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos) {
-		StartCoroutine(FindPath(startPos,targetPos));
+		StartCoroutine(FindPath(startPos,targetPos, GetDistance)); //pass the function to use to calculate hCost
 	}
 	
 	// implement function to click on tile as targetPosition, and be able to select unit.
-	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos) {
+	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, HeuristicFunction heuristicFunc) {
 
 		Vector3[] waypoints = new Vector3[0];
 		bool pathSuccess = false;
@@ -52,7 +54,7 @@ public class Pathfinding : MonoBehaviour {
 					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
 					if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) {
 						neighbour.gCost = newMovementCostToNeighbour;
-						neighbour.hCost = GetDistance(neighbour, targetNode);
+						neighbour.hCost = heuristicFunc(neighbour, targetNode);
 						neighbour.parent = currentNode;
 						
 						if (!openSet.Contains(neighbour))
