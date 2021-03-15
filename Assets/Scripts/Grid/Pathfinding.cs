@@ -19,11 +19,11 @@ public class Pathfinding : MonoBehaviour
 	
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos) 
 	{
-		StartCoroutine(FindPath(startPos,targetPos, GetDistance)); //pass the function to use to calculate hCost
+		StartCoroutine(FindPath(startPos,targetPos, true, GetDistance)); //pass the function to use to calculate hCost
 	}
 	
 	// implement function to click on tile as targetPosition, and be able to select unit.
-	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, HeuristicFunction heuristicFunc) 
+	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, bool canFly, HeuristicFunction heuristicFunc) 
 	{
 
 		Vector3[] waypoints = new Vector3[0];
@@ -49,13 +49,16 @@ public class Pathfinding : MonoBehaviour
 					break;
 				}
 				
-				foreach (Node neighbour in grid.GetNeighbours(currentNode)) {
-					if (!neighbour.canWalkHere || closedSet.Contains(neighbour)) {
+				foreach (Node neighbour in grid.GetNeighbours(currentNode)) 
+				{
+					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour)) 
+					{
 						continue;
 					}
 					
 					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
-					if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) {
+					if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+					{
 						neighbour.gCost = newMovementCostToNeighbour;
 						neighbour.hCost = heuristicFunc(neighbour, targetNode);
 						neighbour.parent = currentNode;
@@ -69,7 +72,8 @@ public class Pathfinding : MonoBehaviour
 		
 		yield return null;
 
-		if (pathSuccess) {
+		if (pathSuccess) 
+		{
 			waypoints = RetracePath(startNode, targetNode);
 		}
 		
