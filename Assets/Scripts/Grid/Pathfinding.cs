@@ -19,7 +19,9 @@ public class Pathfinding : MonoBehaviour
 	
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly) 
 	{
-		StartCoroutine(FindPath(startPos,targetPos, canFly, GetDistance)); //pass the function to use to calculate hCost
+		StartCoroutine(FindPath(startPos,targetPos, canFly, GetDistance));
+		//pass the function to use to calculate hCost
+		//can pass boolean to determine flying or normal pathfinding 
 	}
 	
 	// implement function to click on tile as targetPosition, and be able to select unit.

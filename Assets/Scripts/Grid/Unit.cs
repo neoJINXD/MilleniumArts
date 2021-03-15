@@ -5,7 +5,7 @@ using UnityEditor;
 public class Unit : MonoBehaviour {
 
     [SerializeField] private float speed = 20;
-    [SerializeField] private bool canFly;
+    [SerializeField] private bool canFly; //bool to toggle flying pathfinding
     Vector3[] path;
     int targetIndex;
 
