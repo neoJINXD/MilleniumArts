@@ -4,11 +4,11 @@ using UnityEditor;
 
 public class Unit : MonoBehaviour {
 
-    [SerializeField]
-    private float speed = 20;
+    [SerializeField] private float speed = 20;
+    [SerializeField] private bool canFly;
     Vector3[] path;
     int targetIndex;
-    
+
     // dictionary of heap index and unit itself.
 
     /*
@@ -39,7 +39,7 @@ public class Unit : MonoBehaviour {
                 if (Vector3.Distance(hit.point, transform.position) < 1)
                     return; // already at destination
                 
-                PathRequestManager.RequestPath(transform.position,hit.point, OnPathFound);
+                PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound);
             }
         }
     }
