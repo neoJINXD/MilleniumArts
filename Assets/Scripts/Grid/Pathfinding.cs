@@ -55,7 +55,8 @@ public class Pathfinding : MonoBehaviour
 				{
 					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour)) 
 					{
-						continue;
+						continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set
+						//considers unwalkable nodes if unit can fly, and ignores any node if in closed set
 					}
 					
 					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
