@@ -10,16 +10,50 @@ public class Pathfinding : MonoBehaviour
 
 	delegate int HeuristicFunction(Node a, Node b); //dynamically change heuristic calculation  
 	Grid grid;
-	
+	HeuristicFunction hf;
+
+	public enum Heuristic
+	{
+		TileDistance,
+		EuclidieanDistance,
+		Dijkstra
+	}
 	void Awake() {
 		requestManager = GetComponent<PathRequestManager>();
 		grid = GetComponent<Grid>();
 	}
 	
 	
-	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly) 
+	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, Heuristic desiredHeuristic) 
 	{
-		StartCoroutine(FindPath(startPos,targetPos, canFly, GetDistance));
+		switch (desiredHeuristic)
+		{
+			case Heuristic.EuclidieanDistance:
+			{
+				hf = new HeuristicFunction(GetEuclideanDistance);
+				break;
+			}
+
+			case Heuristic.TileDistance:
+			{
+				hf = new HeuristicFunction(GetDistance);
+				break;
+			}
+
+			case Heuristic.Dijkstra:
+			{
+				hf = new HeuristicFunction(Dijkstra);
+				break;
+			}
+
+			default:
+			{
+				hf = new HeuristicFunction(GetDistance);
+				break;
+			}
+		}
+		
+		StartCoroutine(FindPath(startPos,targetPos, canFly, hf));
 		//pass the function to use to calculate hCost
 		//can pass boolean to determine flying or normal pathfinding 
 	}
@@ -124,7 +158,7 @@ public class Pathfinding : MonoBehaviour
 		return waypoints.ToArray();
 	}
 	
-	int GetDistance(Node nodeA, Node nodeB) 
+	int GetDistance(Node nodeA, Node nodeB) //Gives tile distance between the nodes
 	{
 		int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
 		int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
@@ -138,5 +172,10 @@ public class Pathfinding : MonoBehaviour
 	{
 		return Mathf.RoundToInt(Vector3.Distance(a.worldPosition, b.worldPosition));
 		// returns the Euclidean distance between the given nodes
+	}
+
+	int Dijkstra(Node a, Node b)
+	{
+		return 0;
 	}
 }

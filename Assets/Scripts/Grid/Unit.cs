@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour {
 
     [SerializeField] private float speed = 20;
     [SerializeField] private bool canFly; //bool to toggle flying pathfinding
+    Pathfinding.Heuristic Heuristic = Pathfinding.Heuristic.Dijkstra; //determine which heuristic to use
     Vector3[] path;
     int targetIndex;
 
@@ -39,7 +40,7 @@ public class Unit : MonoBehaviour {
                 if (Vector3.Distance(hit.point, transform.position) < 1)
                     return; // already at destination
                 
-                PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound);
+                PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound, Heuristic);
             }
         }
     }
