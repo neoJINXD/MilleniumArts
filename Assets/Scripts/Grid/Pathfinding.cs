@@ -12,8 +12,6 @@ public class Pathfinding : MonoBehaviour
 	Grid grid;
 	HeuristicFunction hf;
 
-	[HideInInspector] public static bool unitClicked = false;
-
 	public enum Heuristic
 	{
 		TileDistance,

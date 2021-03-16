@@ -9,6 +9,11 @@ public class Unit : MonoBehaviour {
     Pathfinding.Heuristic Heuristic = Pathfinding.Heuristic.Dijkstra; //determine which heuristic to use
     Vector3[] path;
     int targetIndex;
+    
+    // need to fix to work with multiple units independently.
+    private SelectionManager selectionManager;
+    
+    
 
     // dictionary of heap index and unit itself.
 
@@ -20,29 +25,35 @@ public class Unit : MonoBehaviour {
         // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
     }*/
 
+    void Start()
+    {
+        selectionManager = GameObject.FindWithTag("SelectionManager").GetComponent<SelectionManager>();
+        
+    }
 
     void Update()
     {
+        
         SelectNewUnitPosition();
     }
 
     void SelectNewUnitPosition()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {
-                // fixes out of bounce error that occurs when unit selected.
-                if (Vector3.Distance(hit.point, transform.position) < 1)
-                    return; // already at destination
+         if (Input.GetMouseButtonDown(0))
+         {
+              RaycastHit hit;
+              Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 
-                PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound, Heuristic);
-            }
-        }
+
+              if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+              {
+                  // fixes out of bounce error that occurs when unit selected.
+                  if (Vector3.Distance(hit.point, transform.position) < 1)
+                         return; // already at destination
+                    
+                  PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound, Heuristic);
+              }
+         }
     }
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) 
     {
@@ -56,7 +67,7 @@ public class Unit : MonoBehaviour {
 
     IEnumerator FollowPath() 
     {
-        if (Pathfinding.unitClicked)
+        if (selectionManager.checkIfClicked)
         {
             Vector3 currentWaypoint = path[0];
             while (true) {

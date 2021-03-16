@@ -8,6 +8,19 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private Material defaultMaterial;
     private string unitTag = "Unit";
     private Transform selection;
+    private bool unitClicked = false;
+
+    public bool checkIfClicked
+    {
+        get
+        {
+            return unitClicked;
+        }
+        set
+        {
+            unitClicked = value;
+        }
+    }
 
     private void Update()
     {
@@ -27,7 +40,8 @@ public class SelectionManager : MonoBehaviour
             var selectionRenderer = selection.GetComponent<Renderer>();
             selectionRenderer.material = defaultMaterial;
             selection = null;
-            Pathfinding.unitClicked = false;
+            
+            unitClicked = false;
         }
     }
 
@@ -49,7 +63,8 @@ public class SelectionManager : MonoBehaviour
                      selectedRenderer.material = selectedMaterial;
                  }
                  selection = selected;
-                 Pathfinding.unitClicked = true;
+                 
+                 unitClicked = true;
              }
          }
     }
