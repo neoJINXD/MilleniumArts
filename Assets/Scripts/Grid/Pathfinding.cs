@@ -8,9 +8,11 @@ public class Pathfinding : MonoBehaviour
 	
 	PathRequestManager requestManager;
 
-	delegate int HeuristicFunction(Node a, Node b); //dynamically change heuristic calculation  
+	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	Grid grid;
 	HeuristicFunction hf;
+
+	[HideInInspector] public static bool unitClicked = false;
 
 	public enum Heuristic
 	{
@@ -31,9 +33,9 @@ public class Pathfinding : MonoBehaviour
 			case Heuristic.EuclidieanDistance:
 			{
 				hf = new HeuristicFunction(GetEuclideanDistance);
+
 				break;
 			}
-
 			case Heuristic.TileDistance:
 			{
 				hf = new HeuristicFunction(GetDistance);
