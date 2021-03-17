@@ -9,6 +9,7 @@ public class SelectionManager : Singleton<SelectionManager>
     [SerializeField] private Material defaultMaterial;
     private string unitTag = "Unit";
     private Transform selection;
+    private Renderer selectedRenderer;
     
     private void Update()
     {
@@ -21,7 +22,7 @@ public class SelectionManager : Singleton<SelectionManager>
     }
 
     // sets back to original color, idea is to call this after it reached it's path.
-    private void ChangeSelected()
+    private void ResetSelected()
     {
         if (selection != null)
         {
@@ -42,7 +43,9 @@ public class SelectionManager : Singleton<SelectionManager>
 
              if (selected.CompareTag(unitTag))
              {
-                 var selectedRenderer = selected.GetComponent<Renderer>();
+                 ResetSelected();
+                 
+                 selectedRenderer = selected.GetComponent<Renderer>();
 
                  if (selectedRenderer != null)
                  {

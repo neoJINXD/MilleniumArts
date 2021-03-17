@@ -23,6 +23,11 @@ public class Pathfinding : MonoBehaviour
 		grid = GetComponent<Grid>();
 	}
 	
+	/*
+	 * BFS function to add.
+	 * Instead of calculating all the nodes on the map. Need to set a limit on how far that unit can go, instead of anywhere on the map.
+	 */
+	
 	
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, Heuristic desiredHeuristic) 
 	{
