@@ -1,27 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zone.Core.Utils;
 
-public class SelectionManager : MonoBehaviour
+public class SelectionManager : Singleton<SelectionManager>
 {
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material defaultMaterial;
     private string unitTag = "Unit";
     private Transform selection;
-    private bool unitClicked = false;
-
-    public bool checkIfClicked
-    {
-        get
-        {
-            return unitClicked;
-        }
-        set
-        {
-            unitClicked = value;
-        }
-    }
-
+    
     private void Update()
     {
         // SetDefault();
@@ -33,15 +21,13 @@ public class SelectionManager : MonoBehaviour
     }
 
     // sets back to original color, idea is to call this after it reached it's path.
-    private void SetDefault()
+    private void ChangeSelected()
     {
         if (selection != null)
         {
             var selectionRenderer = selection.GetComponent<Renderer>();
             selectionRenderer.material = defaultMaterial;
             selection = null;
-            
-            unitClicked = false;
         }
     }
 
@@ -63,8 +49,6 @@ public class SelectionManager : MonoBehaviour
                      selectedRenderer.material = selectedMaterial;
                  }
                  selection = selected;
-                 
-                 unitClicked = true;
              }
          }
     }

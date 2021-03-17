@@ -9,11 +9,9 @@ public class Unit : MonoBehaviour {
     Pathfinding.Heuristic Heuristic = Pathfinding.Heuristic.Dijkstra; //determine which heuristic to use
     Vector3[] path;
     int targetIndex;
-    
-    // need to fix to work with multiple units independently.
-    private SelectionManager selectionManager;
-    
-    
+    public bool isClicked = false;
+
+
 
     // dictionary of heap index and unit itself.
 
@@ -25,19 +23,13 @@ public class Unit : MonoBehaviour {
         // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
     }*/
 
-    void Start()
-    {
-        selectionManager = GameObject.FindWithTag("SelectionManager").GetComponent<SelectionManager>();
-        
-    }
 
     void Update()
     {
-        
         SelectNewUnitPosition();
     }
 
-    void SelectNewUnitPosition()
+    public void SelectNewUnitPosition()
     {
          if (Input.GetMouseButtonDown(0))
          {
@@ -67,7 +59,7 @@ public class Unit : MonoBehaviour {
 
     IEnumerator FollowPath() 
     {
-        if (selectionManager.checkIfClicked)
+        if (isClicked)
         {
             Vector3 currentWaypoint = path[0];
             while (true) {
@@ -80,7 +72,7 @@ public class Unit : MonoBehaviour {
                 }
 
                 transform.position = Vector3.MoveTowards(transform.position,currentWaypoint,speed * Time.deltaTime);
-                
+            
                 yield return null;
             }
         }
