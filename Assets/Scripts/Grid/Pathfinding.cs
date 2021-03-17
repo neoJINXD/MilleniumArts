@@ -24,9 +24,44 @@ public class Pathfinding : MonoBehaviour
 	}
 	
 	/*
-	 * BFS function to add.
-	 * Instead of calculating all the nodes on the map. Need to set a limit on how far that unit can go, instead of anywhere on the map.
-	 */
+	* BFS function to add.
+	* Instead of calculating all the nodes on the map. Need to set a limit on how far that unit can go, instead of anywhere on the map.
+	*/
+	public void BFSLimitSearch(Vector3 startPos, bool canFly, float depth)
+	{
+		Node startNode = grid.NodeFromWorldPoint(startPos);
+
+		
+		Queue<Node> queue = new Queue<Node>();
+		HashSet<Node> visited = new HashSet<Node>();
+
+		queue.Enqueue(startNode);
+		queue.Enqueue(null);
+
+		int depthCounter = 0;
+
+		while (queue.Count != 0 && depthCounter < depth)
+		{
+			Node currentNode = queue.Dequeue();
+
+			if (currentNode == null)
+			{
+				depthCounter++;
+				queue.Enqueue(null);
+
+				if (queue.Peek() == null)
+				{
+					return;
+				}
+				
+				
+			}
+		}
+		
+		
+
+	}
+	
 	
 	
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, Heuristic desiredHeuristic) 

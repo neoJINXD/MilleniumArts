@@ -89,6 +89,19 @@ public class Grid : MonoBehaviour
         return neighbours;
     }
 
+    public List<Node> GetAdjacent(Node node)
+    {
+        List<Node> neighbours = new List<Node>();
+
+        // need to check if at an edge.
+        neighbours.Add(grid[node.gridX, node.gridY + 1]);
+        neighbours.Add(grid[node.gridX, node.gridY - 1]);
+        neighbours.Add(grid[node.gridX + 1, node.gridY]);
+        neighbours.Add(grid[node.gridX - 1, node.gridY]);
+        
+        return neighbours;
+    }
+
     // converts a world position to a node on the grid
     public Node NodeFromWorldPoint(Vector3 worldPosition)
     {
