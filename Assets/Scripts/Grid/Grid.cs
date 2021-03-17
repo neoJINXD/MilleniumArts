@@ -94,10 +94,14 @@ public class Grid : MonoBehaviour
         List<Node> neighbours = new List<Node>();
 
         // need to check if at an edge.
-        neighbours.Add(grid[node.gridX, node.gridY + 1]);
-        neighbours.Add(grid[node.gridX, node.gridY - 1]);
-        neighbours.Add(grid[node.gridX + 1, node.gridY]);
-        neighbours.Add(grid[node.gridX - 1, node.gridY]);
+        if (node.gridY + 1 < gridSizeY)
+            neighbours.Add(grid[node.gridX, node.gridY + 1]);
+        if (node.gridY - 1 >= 0)
+            neighbours.Add(grid[node.gridX, node.gridY - 1]);
+        if (node.gridX + 1 < gridSizeX)
+            neighbours.Add(grid[node.gridX + 1, node.gridY]);
+        if (node.gridX - 1 >= 0)
+            neighbours.Add(grid[node.gridX - 1, node.gridY]);
         
         return neighbours;
     }

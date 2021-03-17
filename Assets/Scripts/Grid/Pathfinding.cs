@@ -18,7 +18,8 @@ public class Pathfinding : MonoBehaviour
 		EuclidieanDistance,
 		Dijkstra
 	}
-	void Awake() {
+	void Awake() 
+	{
 		requestManager = GetComponent<PathRequestManager>();
 		grid = GetComponent<Grid>();
 	}
@@ -27,10 +28,9 @@ public class Pathfinding : MonoBehaviour
 	* BFS function to add.
 	* Instead of calculating all the nodes on the map. Need to set a limit on how far that unit can go, instead of anywhere on the map.
 	*/
-	public void BFSLimitSearch(Vector3 startPos, bool canFly, float depth)
+	public HashSet<Node> BFSLimitSearch(Vector3 startPos, bool canFly, int depth)
 	{
 		Node startNode = grid.NodeFromWorldPoint(startPos);
-
 		
 		Queue<Node> queue = new Queue<Node>();
 		HashSet<Node> visited = new HashSet<Node>();
@@ -40,10 +40,11 @@ public class Pathfinding : MonoBehaviour
 
 		int depthCounter = 0;
 
-		while (queue.Count != 0 && depthCounter < depth)
+		while (queue.Count != 0 && depthCounter <= depth)
 		{
 			Node currentNode = queue.Dequeue();
 
+			// check for depth
 			if (currentNode == null)
 			{
 				depthCounter++;
@@ -51,15 +52,29 @@ public class Pathfinding : MonoBehaviour
 
 				if (queue.Peek() == null)
 				{
-					return;
+					// TODO the BFS is done looking since 2 nulls are consecutive
+					// return result;
+					break;
 				}
-				
-				
+				continue;
+			}
+
+
+			visited.Add(currentNode);
+			var neighbours = grid.GetAdjacent(currentNode);
+
+			foreach (var neighbour in neighbours)
+			{
+				if ((!canFly && !neighbour.canWalkHere) || visited.Contains(neighbour)) 
+				{
+					continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set
+					//considers unwalkable nodes if unit can fly, and ignores any node if in closed set
+				}
+				queue.Enqueue(neighbour);
 			}
 		}
-		
-		
 
+		return visited;
 	}
 	
 	
@@ -218,4 +233,19 @@ public class Pathfinding : MonoBehaviour
 	{
 		return 0;
 	}
+
+	// WARNING currently commented out since only used for testing
+	// private void OnDrawGizmos() 
+	// {
+	//  	var temp = BFSLimitSearch(new Vector3(4f, 0f, 0f), false, 5);
+
+	// 	if (temp != null && temp.Count > 0)
+	// 	{
+	// 		foreach (var node in temp)
+	// 		{
+	// 			Gizmos.color = Color.green;
+	// 			Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
+	// 		}
+	// 	}
+	// }
 }

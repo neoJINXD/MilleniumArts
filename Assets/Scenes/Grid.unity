@@ -274,7 +274,7 @@ MonoBehaviour:
   target: {fileID: 1737116090}
   unit: {fileID: 1764270284}
   size: 1
-  displayGridGizmos: 0
+  displayGridGizmos: 1
   unableToWalkHere:
     serializedVersion: 2
     m_Bits: 8
