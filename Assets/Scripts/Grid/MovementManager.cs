@@ -8,11 +8,13 @@ public class MovementManager : Singleton<MovementManager>
     private string unitTag = "Unit";
     private Unit unitSelected;
     private Pathfinding pathfinding;
+    private int depth;
     
     
     void Awake()
     {
         pathfinding = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
+        depth = pathfinding.depthLimit;
     }
 
     private void Update()
@@ -50,15 +52,15 @@ public class MovementManager : Singleton<MovementManager>
         if (unitSelected != null)
         {
             Vector3 initialPosition = unitSelected.transform.position;
-
+            
             var temp = pathfinding.BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
-                false, 5);
+                false, depth);
 
             if (temp != null && temp.Count > 0)
             {
                 foreach (var node in temp)
                 {
-                    Gizmos.color = Color.green;
+                    Gizmos.color = Color.blue;
                     Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
                 }
             }
