@@ -13,7 +13,7 @@ public class Pathfinding : MonoBehaviour
 	HeuristicFunction hf;
 	
 	// for testing
-	[SerializeField] private Transform unit;
+	// [SerializeField] private Transform unit;
 	private Vector3 initialPosition;
 	
 	// unity crashes when depth is greater than 17, setting restriction.

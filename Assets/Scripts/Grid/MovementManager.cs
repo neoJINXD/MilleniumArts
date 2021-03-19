@@ -14,7 +14,6 @@ public class MovementManager : Singleton<MovementManager>
     void Awake()
     {
         pathfinding = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
-        depth = pathfinding.depthLimit;
     }
 
     private void Update()
@@ -52,7 +51,7 @@ public class MovementManager : Singleton<MovementManager>
         if (unitSelected != null)
         {
             Vector3 initialPosition = unitSelected.transform.position;
-            
+            depth = pathfinding.depthLimit;
             var temp = pathfinding.BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
                 false, depth);
 
