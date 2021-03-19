@@ -11,6 +11,8 @@ public class SelectionManager : Singleton<SelectionManager>
     private Transform selection;
     private Renderer selectedRenderer;
     
+    
+    
     private void Update()
     {
         // SetDefault();
@@ -32,6 +34,7 @@ public class SelectionManager : Singleton<SelectionManager>
         }
     }
 
+    private Pathfinding pathfinding;
     private void SetSelected()
     {
          var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -40,6 +43,8 @@ public class SelectionManager : Singleton<SelectionManager>
          if (Physics.Raycast(ray, out hit))
          {
              var selected = hit.transform;
+             
+             // pathfinding.OnDrawGizmos();
 
              if (selected.CompareTag(unitTag))
              {

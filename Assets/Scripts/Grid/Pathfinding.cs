@@ -11,6 +11,13 @@ public class Pathfinding : MonoBehaviour
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	Grid grid;
 	HeuristicFunction hf;
+	
+	// for testing
+	[SerializeField] private Transform unit;
+	private Vector3 initialPosition;
+	
+	// unity crashes when depth is greater than 17, setting restriction.
+	[SerializeField] [Range(0,15)] private int depthLimit;
 
 	public enum Heuristic
 	{
@@ -30,8 +37,13 @@ public class Pathfinding : MonoBehaviour
 	*/
 	public HashSet<Node> BFSLimitSearch(Vector3 startPos, bool canFly, int depth)
 	{
-		Node startNode = grid.NodeFromWorldPoint(startPos);
+		Node startNode = null;
 		
+		if (grid != null) // fixes null reference error, when terminating the game
+		{
+			startNode = grid.NodeFromWorldPoint(startPos);
+		}
+
 		Queue<Node> queue = new Queue<Node>();
 		HashSet<Node> visited = new HashSet<Node>();
 
@@ -113,7 +125,7 @@ public class Pathfinding : MonoBehaviour
 		//can pass boolean to determine flying or normal pathfinding 
 	}
 	
-	// implement function to click on tile as targetPosition, and be able to select unit.
+	
 	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, bool canFly, HeuristicFunction heuristicFunc) 
 	{
 
@@ -122,9 +134,12 @@ public class Pathfinding : MonoBehaviour
 		
 		Node startNode = grid.NodeFromWorldPoint(startPos);
 		Node targetNode = grid.NodeFromWorldPoint(targetPos);
+
+		HashSet<Node> nodesInBfs = BFSLimitSearch(startPos, canFly, depthLimit);
 		
 		
-		if (startNode.canWalkHere && targetNode.canWalkHere) 
+		// maybe add a third condition for the BFS to check if it's a node within the hashset.
+		if (startNode.canWalkHere && targetNode.canWalkHere && nodesInBfs.Contains(targetNode)) 
 		{
 			Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
 			HashSet<Node> closedSet = new HashSet<Node>();
@@ -234,18 +249,21 @@ public class Pathfinding : MonoBehaviour
 		return 0;
 	}
 
+	
 	// WARNING currently commented out since only used for testing
-	// private void OnDrawGizmos() 
-	// {
-	//  	var temp = BFSLimitSearch(new Vector3(4f, 0f, 0f), false, 5);
-
-	// 	if (temp != null && temp.Count > 0)
-	// 	{
-	// 		foreach (var node in temp)
-	// 		{
-	// 			Gizmos.color = Color.green;
-	// 			Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
-	// 		}
-	// 	}
-	// }
+	private void OnDrawGizmos()
+	{
+		initialPosition = unit.position;
+		
+	 	var temp = BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), false, depthLimit);
+	
+		if (temp != null && temp.Count > 0)
+		{
+			foreach (var node in temp)
+			{
+				Gizmos.color = Color.green;
+				Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
+			}
+		}
+	}
 }
