@@ -22,10 +22,6 @@ public class Unit : MonoBehaviour {
     {
         // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
     }*/
-    
-    // could maybe record units position here for pathfinding. this keyword to get that instance of unit. :)
-    
-    // if clicked, activate BFS.
 
 
     void Update()

@@ -17,7 +17,7 @@ public class Pathfinding : MonoBehaviour
 	private Vector3 initialPosition;
 	
 	// unity crashes when depth is greater than 17, setting restriction.
-	[SerializeField] [Range(0,15)] private int depthLimit;
+	[Range(0,15)] public int depthLimit;
 
 	public enum Heuristic
 	{
@@ -138,7 +138,6 @@ public class Pathfinding : MonoBehaviour
 		HashSet<Node> nodesInBfs = BFSLimitSearch(startPos, canFly, depthLimit);
 		
 		
-		// maybe add a third condition for the BFS to check if it's a node within the hashset.
 		if (startNode.canWalkHere && targetNode.canWalkHere && nodesInBfs.Contains(targetNode)) 
 		{
 			Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
@@ -251,19 +250,19 @@ public class Pathfinding : MonoBehaviour
 
 	
 	// WARNING currently commented out since only used for testing
-	private void OnDrawGizmos()
-	{
-		initialPosition = unit.position;
-		
-	 	var temp = BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), false, depthLimit);
-	
-		if (temp != null && temp.Count > 0)
-		{
-			foreach (var node in temp)
-			{
-				Gizmos.color = Color.green;
-				Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
-			}
-		}
-	}
+	// private void OnDrawGizmos()
+	// {
+	// 	initialPosition = unit.position;
+	// 	
+	//  	var temp = BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), false, depthLimit);
+	//
+	// 	if (temp != null && temp.Count > 0)
+	// 	{
+	// 		foreach (var node in temp)
+	// 		{
+	// 			Gizmos.color = Color.green;
+	// 			Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
+	// 		}
+	// 	}
+	// }
 }
