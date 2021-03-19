@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Pun;
+using System.Collections.Generic;
 
 /*
     Abstract class to be inherited by a local player, networked player, client player?, and AI player

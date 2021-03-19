@@ -1,12 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Photon.Pun;
+using Zone.Core.Utils;
 
 /*
     To be control and initiate gameloop & misc local game actions
  */
 
-public class GameManager : MonoBehaviour
+public class GameManager : Singleton<GameManager>
 {
     private GameLoop gameLoop;
 
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Material player1Mat;
     [SerializeField] Material player2Mat;
 
-    private PhotonView view;
+    public PhotonView view { get; private set; }
     
     void Start()
     {
@@ -56,4 +57,9 @@ public class GameManager : MonoBehaviour
         view.ObservedComponents.Add(p1);
         view.ObservedComponents.Add(p2);
     }
+
+    public Player GetCurrentPlayer() => gameLoop.GetCurrentPlayer();
+
+    [PunRPC]
+    public void EndCurrentPlayerTurn() => gameLoop.EndCurrentPlayer();
 }

@@ -14,16 +14,18 @@ public class GameLoop : Singleton<GameLoop>
 
     private List<Player> players = new List<Player>();
 
+    private int index;
+
     //To be able to wait for local player, networked player, and AI player turns
     public IEnumerator Play()
     {
         while (true)
         {
-            for (int i = 0; i < players.Count; i++)
+            for (index = 0; index < players.Count; index++)
             {
-                Player player = players[i];
+                Player player = players[index];
                 player.StartTurn();
-                Debug.Log("Player " + i + "'s turn.");
+                Debug.Log("Player " + index + "'s turn.");
                 yield return new WaitUntil(() => player.TurnComplete);
             }
         }
@@ -38,5 +40,14 @@ public class GameLoop : Singleton<GameLoop>
     {
         players.Add(toAdd);
         return toAdd;
+    }
+
+    public Player GetCurrentPlayer()
+    {
+        return players[index];
+    }
+    public void EndCurrentPlayer()
+    {
+        players[index].TurnComplete = true;
     }
 }
