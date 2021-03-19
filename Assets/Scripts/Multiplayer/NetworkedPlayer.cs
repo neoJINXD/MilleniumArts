@@ -1,5 +1,8 @@
-using UnityEngine;
 using Photon.Pun;
+
+/*
+    Networked variant of the player MonoBehaviour
+*/
 
 public class NetworkedPlayer : Player, IPunObservable
 {

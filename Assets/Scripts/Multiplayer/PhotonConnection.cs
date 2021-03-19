@@ -5,7 +5,6 @@ using Photon.Realtime;
 
 public class PhotonConnection : MonoBehaviourPunCallbacks
 {
-    // [SerializeField] TMP_InputField roomName;
     [SerializeField] string roomName; // TODO should eventually not have this hardcoded
     private NetworkSettings settings;
 
@@ -19,8 +18,6 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
     {
         PlayerPrefs.DeleteAll();
         print("Attempting connection to Photon");
-
-        
 
         PhotonNetwork.NickName = settings.Nickname;
         PhotonNetwork.GameVersion = settings.GameVersion;
@@ -61,6 +58,7 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
         MenuManager.instance.CloseMenu("main");
         MenuManager.instance.OpenMenu("ingame");
         // PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity);
+        // TODO should use PhotonNetwork's LoadScene method with a waiting lobby
         SceneManager.LoadScene("PhotonMain");
     }
 

@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/*
+    Placeholder for player prefab
+*/
 public class TestCube : MonoBehaviour
 {
     
