@@ -48,6 +48,6 @@ public class GameLoop : Singleton<GameLoop>
     }
     public void EndCurrentPlayer()
     {
-        players[index].TurnComplete = true;
+        players[index].EndTurn();
     }
 }
