@@ -17,6 +17,7 @@ public class Pathfinding : MonoBehaviour
 	private Vector3 initialPosition;
 	
 	// unity crashes when depth is greater than 17, setting restriction.
+	// to move to unit class.
 	[Range(0,15)] public int depthLimit;
 
 	public enum Heuristic

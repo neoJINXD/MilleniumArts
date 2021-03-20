@@ -122,6 +122,13 @@ public class Grid : MonoBehaviour
         return grid[x, y];
 
     }
+    
+    // List<Node> getAllUnitNodes() {returns a list of all unit nodes}
+    
+    // List<Node> getAllyUnitNodes() {returns a list of all ally nodes}
+    
+    // List<Node> getEnemyUnitNodes() {returns a list of all enemy nodes}
+    
     void OnDrawGizmos() 
     {
         Gizmos.DrawWireCube(transform.position,new Vector3(gridWorldSize.x,1,gridWorldSize.y));
