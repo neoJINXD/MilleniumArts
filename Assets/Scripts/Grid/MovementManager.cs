@@ -7,6 +7,7 @@ public class MovementManager : Singleton<MovementManager>
 {
     private string unitTag = "Unit";
     private Unit unitSelected;
+    private bool hasSelected = false;
     private Pathfinding pathfinding;
     private int depth;
     
@@ -21,6 +22,11 @@ public class MovementManager : Singleton<MovementManager>
         if (Input.GetMouseButtonDown(0))
         {
             CheckDesiredUnit();
+        }
+
+        if (hasSelected)
+        {
+            unitSelected.SelectNewUnitPosition();
         }
     }
     
@@ -42,6 +48,7 @@ public class MovementManager : Singleton<MovementManager>
                 
                 unitSelected = selected.GetComponent<Unit>();
                 unitSelected.isClicked = true;
+                hasSelected = true;
             }
         }
     }

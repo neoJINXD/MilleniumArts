@@ -2,16 +2,73 @@ using UnityEngine;
 using System.Collections;
 using UnityEditor;
 
-public class Unit : MonoBehaviour {
+public abstract class Unit : MonoBehaviour {
 
-    [SerializeField] private float speed = 20;
-    [SerializeField] private bool canFly; //bool to toggle flying pathfinding
-    Pathfinding.Heuristic Heuristic = Pathfinding.Heuristic.Dijkstra; //determine which heuristic to use
-    Vector3[] path;
-    int targetIndex;
+    [SerializeField] protected float movementSpeed = 20;
+    [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
+    protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
+    protected UnitTypes type;
+    protected int maxHealth;
+    protected int currentHealth;
+    protected int damage;
+    protected int defense;
+    protected int minRange;
+    protected int maxRange;
+    protected int accuracy;
+    protected int evasion;
+    protected int cost;
+    protected Vector3[] path;
+    protected int targetIndex;
     public bool isClicked = false;
 
+    public enum UnitTypes //enum for unit types
+    {
+        King,
+        Soldier,
+        Knight,
+        Assassin,
+        Priest,
+        Archer,
+        DragonRider,
+        Undefined
+    }
 
+    //default abstract constructor
+    protected Unit()
+    {
+        movementSpeed = 10;
+        canFly = false;
+        heuristic = Pathfinding.Heuristic.TileDistance;
+        type = UnitTypes.Undefined;
+        maxHealth = 0;
+        currentHealth = 0;
+        damage = 0;
+        defense = 0;
+        minRange = 0;
+        maxRange = 0;
+        accuracy = 0;
+        evasion = 0;
+        cost = 0;
+    }
+    
+    // parameterized abstract constructor
+    protected Unit(float _movementSpeed, bool _canfly, Pathfinding.Heuristic _hf, UnitTypes _type, int _maxHealth,
+        int _currentHealth, int _damage, int _defense, int _minRange, int _maxRange, int _accuracy, int _evasion, int _cost)
+    {
+        movementSpeed = _movementSpeed;
+        canFly = _canfly;
+        heuristic = _hf;
+        type = _type;
+        maxHealth = _maxHealth;
+        currentHealth = _currentHealth;
+        damage = _damage;
+        defense = _defense;
+        minRange = _minRange;
+        maxRange = _maxRange;
+        accuracy = _accuracy;
+        evasion = _evasion;
+        cost = _cost;
+    }
 
     // dictionary of heap index and unit itself.
 
@@ -22,12 +79,7 @@ public class Unit : MonoBehaviour {
     {
         // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
     }*/
-
-
-    void Update()
-    {
-        SelectNewUnitPosition();
-    }
+    
 
     public void SelectNewUnitPosition()
     {
@@ -43,7 +95,7 @@ public class Unit : MonoBehaviour {
                   if (Vector3.Distance(hit.point, transform.position) < 1)
                          return; // already at destination
                     
-                  PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound, Heuristic);
+                  PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound, heuristic);
               }
          }
     }
@@ -71,7 +123,7 @@ public class Unit : MonoBehaviour {
                     currentWaypoint = path[targetIndex];
                 }
 
-                transform.position = Vector3.MoveTowards(transform.position,currentWaypoint,speed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position,currentWaypoint,movementSpeed * Time.deltaTime);
             
                 yield return null;
             }
