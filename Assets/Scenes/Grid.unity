@@ -620,7 +620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  movementSpeed: 10
   canFly: 0
   isClicked: 0
 --- !u!136 &891132760
@@ -698,7 +698,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &999754433
 GameObject:
@@ -898,7 +898,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  movementSpeed: 10
   canFly: 0
   isClicked: 0
 --- !u!136 &1084916424
@@ -976,7 +976,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1115487956
 GameObject:
@@ -1117,7 +1117,7 @@ RectTransform:
   m_Children:
   - {fileID: 999754434}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1222,7 +1222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  movementSpeed: 10
   canFly: 0
   isClicked: 0
 --- !u!136 &1273640696
@@ -1300,7 +1300,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1305022474
 GameObject:
@@ -1538,7 +1538,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1596073719
 MonoBehaviour:
@@ -1552,7 +1552,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  movementSpeed: 10
   canFly: 0
   isClicked: 0
 --- !u!1 &1617636894
@@ -1839,7 +1839,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  movementSpeed: 10
   canFly: 0
   isClicked: 0
 --- !u!136 &1755316931
@@ -1917,7 +1917,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1764270283
 GameObject:

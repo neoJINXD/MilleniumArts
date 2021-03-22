@@ -44,6 +44,7 @@ public class MovementManager : Singleton<MovementManager>
                 if (unitSelected != null)
                 {
                     unitSelected.isClicked = false;
+                    
                 }
                 
                 unitSelected = selected.GetComponent<Unit>();
