@@ -5,11 +5,15 @@ using Zone.Core.Utils;
 
 public class MovementManager : Singleton<MovementManager>
 {
+    [SerializeField] private Material availablePosition;
+    [SerializeField] private Material defaultMaterial;
+
     private string unitTag = "Unit";
     private Unit unitSelected;
     private bool hasSelected = false;
     private Pathfinding pathfinding;
     private int depth;
+    private HashSet<Node> validMove;
     
     
     void Awake()
@@ -35,6 +39,8 @@ public class MovementManager : Singleton<MovementManager>
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
+        ResetMaterial();
+        
         if (Physics.Raycast(ray, out hit))
         {
             var selected = hit.transform;
@@ -50,27 +56,63 @@ public class MovementManager : Singleton<MovementManager>
                 unitSelected = selected.GetComponent<Unit>();
                 unitSelected.isClicked = true;
                 hasSelected = true;
+                
+                DrawAvailable();
             }
         }
     }
+    
 
-    private void OnDrawGizmos()
+    private void DrawAvailable()
     {
         if (unitSelected != null)
         {
             Vector3 initialPosition = unitSelected.transform.position;
             depth = pathfinding.depthLimit;
-            var temp = pathfinding.BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
+            validMove = pathfinding.BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
                 false, depth);
 
-            if (temp != null && temp.Count > 0)
+            if (validMove != null && validMove.Count > 0)
             {
-                foreach (var node in temp)
+                foreach (var node in validMove)
                 {
-                    Gizmos.color = Color.blue;
-                    Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
+                    Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+                    newMat.material = availablePosition;
                 }
             }
         }
     }
+
+    private void ResetMaterial()
+    {
+        if (validMove != null)
+        {
+            foreach (var node in validMove)
+            {
+                Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+                newMat.material = defaultMaterial;
+            }
+        }
+    }
+    
+    // For testing
+    // private void OnDrawGizmos()
+    // {
+    //     if (unitSelected != null)
+    //     {
+    //         Vector3 initialPosition = unitSelected.transform.position;
+    //         depth = pathfinding.depthLimit;
+    //         var temp = pathfinding.BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
+    //             false, depth);
+    //
+    //         if (temp != null && temp.Count > 0)
+    //         {
+    //             foreach (var node in temp)
+    //             {
+    //                 Gizmos.color = Color.blue;
+    //                 Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
+    //             }
+    //         }
+    //     }
+    // }
 }

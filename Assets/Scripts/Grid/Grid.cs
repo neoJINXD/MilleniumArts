@@ -11,6 +11,8 @@ public class Grid : MonoBehaviour
     [SerializeField] private float size;
     [SerializeField] private GameObject tilePrefab;
 
+    public static GameObject[,] tileTrack;
+
     private Vector3 newPosition;
 
     // implement dictionary class. ?
@@ -52,6 +54,7 @@ public class Grid : MonoBehaviour
     void CreateGrid()
     {
         grid = new Node[gridSizeX, gridSizeY];
+        tileTrack = new GameObject[gridSizeX, gridSizeY];
         Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
         
         for (int x = 0; x < gridSizeX; x++)
@@ -60,7 +63,7 @@ public class Grid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
 
-                Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                tileTrack[x, y] = Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0));
                 // returns true if collision
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unableToWalkHere));
 
