@@ -21,6 +21,6 @@ public /* abstract */ class Player : MonoBehaviour
         TurnComplete = true;
     }
 
-    public bool TurnComplete { get; private set; }
+    public bool TurnComplete { get; protected set; }
 }
 
