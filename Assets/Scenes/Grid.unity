@@ -353,6 +353,8 @@ MonoBehaviour:
   target: {fileID: 1737116090}
   unit: {fileID: 1764270284}
   size: 1
+  tilePrefab: {fileID: 8575106909883118114, guid: 77b0da9352ddaed4f8234b8da36dcde0,
+    type: 3}
   displayGridGizmos: 1
   unableToWalkHere:
     serializedVersion: 2
@@ -2169,7 +2171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1892301794
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2245,7 +2247,7 @@ Transform:
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2091695317
 GameObject:
@@ -2280,5 +2282,5 @@ Transform:
   - {fileID: 856230023}
   - {fileID: 1745271503}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

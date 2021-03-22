@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Grid : MonoBehaviour
@@ -8,9 +9,10 @@ public class Grid : MonoBehaviour
     [SerializeField] private Transform unit;
     // the size of the grid
     [SerializeField] private float size;
+    [SerializeField] private GameObject tilePrefab;
 
     private Vector3 newPosition;
-    
+
     // implement dictionary class. ?
 
     public bool displayGridGizmos;
@@ -51,14 +53,17 @@ public class Grid : MonoBehaviour
     {
         grid = new Node[gridSizeX, gridSizeY];
         Vector3 worldBottomLeft = transform.position - Vector3.right * gridWorldSize.x / 2 - Vector3.forward * gridWorldSize.y / 2;
-
+        
         for (int x = 0; x < gridSizeX; x++)
         {
             for (int y = 0; y < gridSizeX; y++)
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
+
+                Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0));
                 // returns true if collision
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unableToWalkHere));
+
                 grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
         }
@@ -122,12 +127,6 @@ public class Grid : MonoBehaviour
         return grid[x, y];
 
     }
-    
-    // List<Node> getAllUnitNodes() {returns a list of all unit nodes}
-    
-    // List<Node> getAllyUnitNodes() {returns a list of all ally nodes}
-    
-    // List<Node> getEnemyUnitNodes() {returns a list of all enemy nodes}
     
     void OnDrawGizmos() 
     {
