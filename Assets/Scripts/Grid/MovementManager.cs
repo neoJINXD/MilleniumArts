@@ -14,11 +14,15 @@ public class MovementManager : Singleton<MovementManager>
     private Pathfinding pathfinding;
     private int depth;
     private HashSet<Node> validMove;
+    private Camera mainCam;
+    private Ray ray;
+    private RaycastHit hit;
     
     
     void Awake()
     {
         pathfinding = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
+        mainCam = Camera.main;
     }
 
     private void Update()
@@ -36,8 +40,7 @@ public class MovementManager : Singleton<MovementManager>
     
     private void CheckDesiredUnit()
     {
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        ray = mainCam.ScreenPointToRay(Input.mousePosition);
 
         ResetMaterial();
         
@@ -62,7 +65,6 @@ public class MovementManager : Singleton<MovementManager>
         }
     }
     
-
     private void DrawAvailable()
     {
         if (unitSelected != null)
