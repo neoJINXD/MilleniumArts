@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 using UnityEditor;
@@ -7,7 +8,7 @@ public abstract class Unit : MonoBehaviour {
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
-    protected UnitTypes type;
+    protected UnitTypes unitType;
     protected int unitPlayerId;
     protected int maxHealth;
     protected int currentHealth;
@@ -20,6 +21,8 @@ public abstract class Unit : MonoBehaviour {
     protected int cost;
     protected Vector3[] path;
     protected int targetIndex;
+    private const int MAXValue = Int32.MaxValue;
+    private const int MINValue = 0;
     public bool isClicked = false;
 
     public enum UnitTypes //enum for unit types
@@ -40,7 +43,7 @@ public abstract class Unit : MonoBehaviour {
         movementSpeed = 10;
         canFly = false;
         heuristic = Pathfinding.Heuristic.TileDistance;
-        type = UnitTypes.Undefined;
+        unitType = UnitTypes.Undefined;
         unitPlayerId = -1;
         maxHealth = 0;
         currentHealth = 0;
@@ -60,7 +63,7 @@ public abstract class Unit : MonoBehaviour {
         movementSpeed = _movementSpeed;
         canFly = _canfly;
         heuristic = _hf;
-        type = _type;
+        unitType = _type;
         unitPlayerId = _unitPlayerId;
         maxHealth = _maxHealth;
         currentHealth = _currentHealth;
@@ -82,8 +85,278 @@ public abstract class Unit : MonoBehaviour {
     {
         // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
     }*/
-    
 
+    public virtual void SetMovementSpeed(float s)
+    {
+        movementSpeed = Mathf.Clamp(s, MINValue, MAXValue);
+    }
+
+    public virtual float GetMovementSpeed()
+    {
+        return movementSpeed;
+    }
+
+    public virtual float IncreaseMovementSpeed(float s)
+    {
+        movementSpeed += s;
+        movementSpeed = Mathf.Clamp(movementSpeed, MINValue, MAXValue);
+        return movementSpeed;
+    }
+    
+    public virtual float DecreaseMovementSpeed(float s)
+    {
+        movementSpeed -= s;
+        movementSpeed = Mathf.Clamp(movementSpeed, MINValue, MAXValue);
+        return movementSpeed;
+    }
+
+    public virtual void SetCanFly(bool cF)
+    {
+        canFly = cF;
+    }
+
+    public virtual bool GetCanFly()
+    {
+        return canFly;
+    }
+    
+    public virtual void SetUnitType(UnitTypes uT)
+    {
+        unitType = uT;
+    }
+    
+    public virtual UnitTypes GetUnitType()
+    {
+        return unitType;
+    }
+
+    public virtual void SetUnitPlayerID(int pID)
+    {
+        unitPlayerId = pID;
+    }
+    
+    public virtual int GetUnitPlayerID(int pID)
+    {
+        return unitPlayerId;
+    }
+    
+    public virtual void SetMaxHealth(int mH)
+    {
+        maxHealth = Mathf.Clamp(mH, MINValue, MAXValue);
+    }
+
+    public virtual int GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
+    public virtual int IncreaseMaxHealth(int mH)
+    {
+        maxHealth += mH;
+        maxHealth = Mathf.Clamp(maxHealth, MINValue, MAXValue);
+        return maxHealth;
+    }
+    
+    public virtual int DecreaseMaxHealth(int mH)
+    {
+        maxHealth -= mH;
+        maxHealth = Mathf.Clamp(maxHealth, MINValue, MAXValue);
+        return maxHealth;
+    }
+    
+    public virtual void SetCurrentHealth(int cH)
+    {
+        currentHealth = Mathf.Clamp(cH, MINValue, MAXValue);
+    }
+
+    public virtual int GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public virtual int IncreaseCurrentHealth(int cH)
+    {
+        currentHealth += cH;
+        currentHealth = Mathf.Clamp(currentHealth, MINValue, MAXValue);
+        return currentHealth;
+    }
+    
+    public virtual int DecreaseCurrentHealth(int cH)
+    {
+        currentHealth -= cH;
+        currentHealth = Mathf.Clamp(currentHealth, MINValue, MAXValue);
+        return currentHealth;
+    }
+    
+    public virtual void SetDamage(int dmg)
+    {
+        damage = Mathf.Clamp(dmg, MINValue, MAXValue);
+    }
+
+    public virtual int GetDamage()
+    {
+        return damage;
+    }
+
+    public virtual int IncreaseDamage(int dmg)
+    {
+        damage += dmg;
+        damage = Mathf.Clamp(damage, MINValue, MAXValue);
+        return damage;
+    }
+    
+    public virtual int DecreaseDamage(int dmg)
+    {
+        damage -= dmg;
+        damage = Mathf.Clamp(damage, MINValue, MAXValue);
+        return damage;
+    }
+    
+    public virtual void SetDefence(int def)
+    {
+        defense = Mathf.Clamp(def, MINValue, MAXValue);
+    }
+
+    public virtual int GetDefence()
+    {
+        return defense;
+    }
+
+    public virtual int IncreaseDefence(int def)
+    {
+        defense += def;
+        defense = Mathf.Clamp(defense, MINValue, MAXValue);
+        return defense;
+    }
+    
+    public virtual int DecreaseDefence(int def)
+    {
+        defense -= def;
+        defense = Mathf.Clamp(defense, MINValue, MAXValue);
+        return defense;
+    }
+    
+    public virtual void SetMinRange(int minR)
+    {
+        minRange = Mathf.Clamp(minR, MINValue, MAXValue);
+    }
+
+    public virtual int GetMinRange()
+    {
+        return minRange;
+    }
+
+    public virtual int IncreaseMinRange(int minR)
+    {
+        minRange += minR;
+        minRange = Mathf.Clamp(minRange, MINValue, MAXValue);
+        return minRange;
+    }
+    
+    public virtual int DecreaseMinRange(int minR)
+    {
+        minRange -= minR;
+        minRange = Mathf.Clamp(minRange, MINValue, MAXValue);
+        return minRange;
+    }
+    
+    public virtual void SetMaxRange(int maxR)
+    {
+        maxRange = Mathf.Clamp(maxR, MINValue, MAXValue);
+    }
+
+    public virtual int GetMaxRange()
+    {
+        return maxRange;
+    }
+
+    public virtual int IncreaseMaxRange(int maxR)
+    {
+        maxRange += maxR;
+        maxRange = Mathf.Clamp(maxRange, MINValue, MAXValue);
+        return maxRange;
+    }
+    
+    public virtual int DecreaseMaxRange(int maxR)
+    {
+        maxRange -= maxR;
+        maxRange = Mathf.Clamp(maxRange, MINValue, MAXValue);
+        return maxRange;
+    }
+    
+    public virtual void SetAccuracy(int ac)
+    {
+        accuracy = Mathf.Clamp(ac, MINValue, MAXValue);
+    }
+
+    public virtual int GetAccuracy()
+    {
+        return accuracy;
+    }
+
+    public virtual int IncreaseAccuracy(int ac)
+    {
+        accuracy += ac;
+        accuracy = Mathf.Clamp(accuracy, MINValue, MAXValue);
+        return accuracy;
+    }
+    
+    public virtual int DecreaseAccuracy(int ac)
+    {
+        accuracy -= ac;
+        accuracy = Mathf.Clamp(accuracy, MINValue, MAXValue);
+        return accuracy;
+    }
+    
+    public virtual void SetEvasion(int ev)
+    {
+        evasion = Mathf.Clamp(ev, MINValue, MAXValue);
+    }
+
+    public virtual int GetEvasion()
+    {
+        return evasion;
+    }
+
+    public virtual int IncreaseEvasion(int ev)
+    {
+        evasion += ev;
+        evasion = Mathf.Clamp(evasion, MINValue, MAXValue);
+        return evasion;
+    }
+    
+    public virtual int DecreaseEvasion(int ev)
+    {
+        evasion -= ev;
+        evasion = Mathf.Clamp(evasion, MINValue, MAXValue);
+        return evasion;
+    }
+    
+    public virtual void SetCost(int c)
+    {
+        cost = Mathf.Clamp(c, MINValue, MAXValue);
+    }
+
+    public virtual int GetCost()
+    {
+        return cost;
+    }
+
+    public virtual int IncreaseCost(int c)
+    {
+        cost += c;
+        cost = Mathf.Clamp(cost, MINValue, MAXValue);
+        return cost;
+    }
+    
+    public virtual int DecreaseCost(int c)
+    {
+        cost -= c;
+        cost = Mathf.Clamp(cost, MINValue, MAXValue);
+        return cost;
+    }
+
+    
     public void SelectNewUnitPosition()
     {
          if (Input.GetMouseButtonDown(0))
