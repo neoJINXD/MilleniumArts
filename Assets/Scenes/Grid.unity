@@ -2046,8 +2046,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keepAlive: 0
-  availablePosition: {fileID: 2100000, guid: ffde88c1661a54d4597096100dfef644, type: 2}
-  defaultMaterial: {fileID: 2100000, guid: 99b5b39de693d5d4ca2bcf0a4049587c, type: 2}
+  availablePosition: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
 --- !u!4 &1853401803
 Transform:
   m_ObjectHideFlags: 0
