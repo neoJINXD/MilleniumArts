@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class Item : MonoBehaviour
 {
+    protected int itemPlayerID;
     protected int itemHealth;
     protected int minRange;
     protected int maxRange;
@@ -22,14 +23,16 @@ public abstract class Item : MonoBehaviour
     //default abstract constructor
     protected Item()
     {
+        itemPlayerID = -1;
         itemHealth = 0;
         minRange = 0;
         maxRange = 0;
         itemType = ItemTypes.ItemUndefined;
     }
 
-    protected Item(int _itemHealth, int _minRange, int _maxRange, ItemTypes _itemType)
+    protected Item(int _itemPlayerID, int _itemHealth, int _minRange, int _maxRange, ItemTypes _itemType)
     {
+        itemPlayerID = _itemPlayerID;
         itemHealth = _itemHealth;
         minRange = _minRange;
         maxRange = _maxRange;

@@ -8,6 +8,7 @@ public abstract class Unit : MonoBehaviour {
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
     protected UnitTypes type;
+    protected int unitPlayerId;
     protected int maxHealth;
     protected int currentHealth;
     protected int damage;
@@ -40,6 +41,7 @@ public abstract class Unit : MonoBehaviour {
         canFly = false;
         heuristic = Pathfinding.Heuristic.TileDistance;
         type = UnitTypes.Undefined;
+        unitPlayerId = -1;
         maxHealth = 0;
         currentHealth = 0;
         damage = 0;
@@ -52,13 +54,14 @@ public abstract class Unit : MonoBehaviour {
     }
     
     // parameterized abstract constructor
-    protected Unit(float _movementSpeed, bool _canfly, Pathfinding.Heuristic _hf, UnitTypes _type, int _maxHealth,
+    protected Unit(float _movementSpeed, bool _canfly, Pathfinding.Heuristic _hf, UnitTypes _type, int _unitPlayerId, int _maxHealth,
         int _currentHealth, int _damage, int _defense, int _minRange, int _maxRange, int _accuracy, int _evasion, int _cost)
     {
         movementSpeed = _movementSpeed;
         canFly = _canfly;
         heuristic = _hf;
         type = _type;
+        unitPlayerId = _unitPlayerId;
         maxHealth = _maxHealth;
         currentHealth = _currentHealth;
         damage = _damage;
