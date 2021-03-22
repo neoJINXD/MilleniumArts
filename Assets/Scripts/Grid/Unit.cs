@@ -34,7 +34,7 @@ public abstract class Unit : MonoBehaviour {
         Priest,
         Archer,
         DragonRider,
-        Undefined
+        UnitUndefined
     }
 
     //default abstract constructor
@@ -43,7 +43,7 @@ public abstract class Unit : MonoBehaviour {
         movementSpeed = 10;
         canFly = false;
         heuristic = Pathfinding.Heuristic.TileDistance;
-        unitType = UnitTypes.Undefined;
+        unitType = UnitTypes.UnitUndefined;
         unitPlayerId = -1;
         maxHealth = 0;
         currentHealth = 0;
@@ -86,6 +86,7 @@ public abstract class Unit : MonoBehaviour {
         // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
     }*/
 
+    //set, get and update functions for movement speed
     public virtual void SetMovementSpeed(float s)
     {
         movementSpeed = Mathf.Clamp(s, MINValue, MAXValue);
@@ -110,6 +111,7 @@ public abstract class Unit : MonoBehaviour {
         return movementSpeed;
     }
 
+    //set and get functions for canFly
     public virtual void SetCanFly(bool cF)
     {
         canFly = cF;
@@ -120,6 +122,7 @@ public abstract class Unit : MonoBehaviour {
         return canFly;
     }
     
+    //set and get functions for unit type
     public virtual void SetUnitType(UnitTypes uT)
     {
         unitType = uT;
@@ -129,7 +132,8 @@ public abstract class Unit : MonoBehaviour {
     {
         return unitType;
     }
-
+    
+    //set and get functions for unit playerID
     public virtual void SetUnitPlayerID(int pID)
     {
         unitPlayerId = pID;
@@ -140,6 +144,7 @@ public abstract class Unit : MonoBehaviour {
         return unitPlayerId;
     }
     
+    //set, get and update functions for max health
     public virtual void SetMaxHealth(int mH)
     {
         maxHealth = Mathf.Clamp(mH, MINValue, MAXValue);
@@ -164,6 +169,7 @@ public abstract class Unit : MonoBehaviour {
         return maxHealth;
     }
     
+    //set, get and update functions for current health
     public virtual void SetCurrentHealth(int cH)
     {
         currentHealth = Mathf.Clamp(cH, MINValue, MAXValue);
@@ -188,6 +194,7 @@ public abstract class Unit : MonoBehaviour {
         return currentHealth;
     }
     
+    //set, get and update functions for damage
     public virtual void SetDamage(int dmg)
     {
         damage = Mathf.Clamp(dmg, MINValue, MAXValue);
@@ -212,6 +219,7 @@ public abstract class Unit : MonoBehaviour {
         return damage;
     }
     
+    //set, get and update functions for defense
     public virtual void SetDefence(int def)
     {
         defense = Mathf.Clamp(def, MINValue, MAXValue);
@@ -236,6 +244,7 @@ public abstract class Unit : MonoBehaviour {
         return defense;
     }
     
+    //set, get and update functions for min range
     public virtual void SetMinRange(int minR)
     {
         minRange = Mathf.Clamp(minR, MINValue, MAXValue);
@@ -260,6 +269,7 @@ public abstract class Unit : MonoBehaviour {
         return minRange;
     }
     
+    //set, get and update functions for max range
     public virtual void SetMaxRange(int maxR)
     {
         maxRange = Mathf.Clamp(maxR, MINValue, MAXValue);
@@ -284,6 +294,7 @@ public abstract class Unit : MonoBehaviour {
         return maxRange;
     }
     
+    //set, get and update functions for accuracy
     public virtual void SetAccuracy(int ac)
     {
         accuracy = Mathf.Clamp(ac, MINValue, MAXValue);
@@ -308,6 +319,7 @@ public abstract class Unit : MonoBehaviour {
         return accuracy;
     }
     
+    //set, get and update functions for evasion
     public virtual void SetEvasion(int ev)
     {
         evasion = Mathf.Clamp(ev, MINValue, MAXValue);
@@ -332,6 +344,7 @@ public abstract class Unit : MonoBehaviour {
         return evasion;
     }
     
+    //set, get and update functions for cost
     public virtual void SetCost(int c)
     {
         cost = Mathf.Clamp(c, MINValue, MAXValue);
@@ -375,6 +388,9 @@ public abstract class Unit : MonoBehaviour {
               }
          }
     }
+    
+    //passes this function when requesting for path
+    //function starts the coroutine if pathfinding is successful
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) 
     {
         if (pathSuccessful) {
@@ -385,6 +401,7 @@ public abstract class Unit : MonoBehaviour {
         }
     }
 
+    //updates unit position by following along the path
     IEnumerator FollowPath() 
     {
         if (isClicked)

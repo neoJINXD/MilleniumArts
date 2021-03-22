@@ -33,6 +33,7 @@ public abstract class Item : MonoBehaviour
         itemType = ItemTypes.ItemUndefined;
     }
 
+    //parameterized abstract constructor
     protected Item(int _itemPlayerID, int _itemHealth, int _minRange, int _maxRange, ItemTypes _itemType)
     {
         itemPlayerID = _itemPlayerID;
@@ -42,6 +43,7 @@ public abstract class Item : MonoBehaviour
         itemType = _itemType;
     }
     
+    //set and get functions for item type
     public virtual void SetItemType(ItemTypes iT)
     {
         itemType = iT;
@@ -52,6 +54,7 @@ public abstract class Item : MonoBehaviour
         return itemType;
     }
 
+    //set and get functions for item playerID
     public virtual void SetItemPlayerID(int pID)
     {
         itemPlayerID = pID;
@@ -62,6 +65,7 @@ public abstract class Item : MonoBehaviour
         return itemPlayerID;
     }
     
+    //set, get and update functions for item health
     public virtual void SetItemHealth(int iH)
     {
         itemHealth = Mathf.Clamp(iH, MINValue, MAXValue);
@@ -86,6 +90,7 @@ public abstract class Item : MonoBehaviour
         return itemHealth;
     }
     
+    //set, get and update functions for min range
     public virtual void SetMinRange(int minR)
     {
         minRange = Mathf.Clamp(minR, MINValue, MAXValue);
@@ -110,6 +115,7 @@ public abstract class Item : MonoBehaviour
         return minRange;
     }
     
+    //set, get and update functions for max range
     public virtual void SetMaxRange(int maxR)
     {
         maxRange = Mathf.Clamp(maxR, MINValue, MAXValue);
