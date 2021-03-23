@@ -97,14 +97,14 @@ public abstract class Unit : MonoBehaviour {
         return movementSpeed;
     }
 
-    public virtual float IncreaseMovementSpeed(float s)
+    public virtual float IncreaseMovementSpeedBy(float s)
     {
         movementSpeed += s;
         movementSpeed = Mathf.Clamp(movementSpeed, MINValue, MAXValue);
         return movementSpeed;
     }
     
-    public virtual float DecreaseMovementSpeed(float s)
+    public virtual float DecreaseMovementSpeedBy(float s)
     {
         movementSpeed -= s;
         movementSpeed = Mathf.Clamp(movementSpeed, MINValue, MAXValue);
@@ -155,14 +155,14 @@ public abstract class Unit : MonoBehaviour {
         return maxHealth;
     }
 
-    public virtual int IncreaseMaxHealth(int mH)
+    public virtual int IncreaseMaxHealthBy(int mH)
     {
         maxHealth += mH;
         maxHealth = Mathf.Clamp(maxHealth, MINValue, MAXValue);
         return maxHealth;
     }
     
-    public virtual int DecreaseMaxHealth(int mH)
+    public virtual int DecreaseMaxHealthBy(int mH)
     {
         maxHealth -= mH;
         maxHealth = Mathf.Clamp(maxHealth, MINValue, MAXValue);
@@ -180,14 +180,14 @@ public abstract class Unit : MonoBehaviour {
         return currentHealth;
     }
 
-    public virtual int IncreaseCurrentHealth(int cH)
+    public virtual int IncreaseCurrentHealthBy(int cH)
     {
         currentHealth += cH;
         currentHealth = Mathf.Clamp(currentHealth, MINValue, MAXValue);
         return currentHealth;
     }
     
-    public virtual int DecreaseCurrentHealth(int cH)
+    public virtual int DecreaseCurrentHealthBy(int cH)
     {
         currentHealth -= cH;
         currentHealth = Mathf.Clamp(currentHealth, MINValue, MAXValue);
@@ -205,14 +205,14 @@ public abstract class Unit : MonoBehaviour {
         return damage;
     }
 
-    public virtual int IncreaseDamage(int dmg)
+    public virtual int IncreaseDamageBy(int dmg)
     {
         damage += dmg;
         damage = Mathf.Clamp(damage, MINValue, MAXValue);
         return damage;
     }
     
-    public virtual int DecreaseDamage(int dmg)
+    public virtual int DecreaseDamageBy(int dmg)
     {
         damage -= dmg;
         damage = Mathf.Clamp(damage, MINValue, MAXValue);
@@ -230,14 +230,14 @@ public abstract class Unit : MonoBehaviour {
         return defense;
     }
 
-    public virtual int IncreaseDefence(int def)
+    public virtual int IncreaseDefenceBy(int def)
     {
         defense += def;
         defense = Mathf.Clamp(defense, MINValue, MAXValue);
         return defense;
     }
     
-    public virtual int DecreaseDefence(int def)
+    public virtual int DecreaseDefenceBy(int def)
     {
         defense -= def;
         defense = Mathf.Clamp(defense, MINValue, MAXValue);
@@ -255,14 +255,14 @@ public abstract class Unit : MonoBehaviour {
         return minRange;
     }
 
-    public virtual int IncreaseMinRange(int minR)
+    public virtual int IncreaseMinRangeBy(int minR)
     {
         minRange += minR;
         minRange = Mathf.Clamp(minRange, MINValue, MAXValue);
         return minRange;
     }
     
-    public virtual int DecreaseMinRange(int minR)
+    public virtual int DecreaseMinRangeBy(int minR)
     {
         minRange -= minR;
         minRange = Mathf.Clamp(minRange, MINValue, MAXValue);
@@ -280,14 +280,14 @@ public abstract class Unit : MonoBehaviour {
         return maxRange;
     }
 
-    public virtual int IncreaseMaxRange(int maxR)
+    public virtual int IncreaseMaxRangeBy(int maxR)
     {
         maxRange += maxR;
         maxRange = Mathf.Clamp(maxRange, MINValue, MAXValue);
         return maxRange;
     }
     
-    public virtual int DecreaseMaxRange(int maxR)
+    public virtual int DecreaseMaxRangeBy(int maxR)
     {
         maxRange -= maxR;
         maxRange = Mathf.Clamp(maxRange, MINValue, MAXValue);
@@ -305,14 +305,14 @@ public abstract class Unit : MonoBehaviour {
         return accuracy;
     }
 
-    public virtual int IncreaseAccuracy(int ac)
+    public virtual int IncreaseAccuracyBy(int ac)
     {
         accuracy += ac;
         accuracy = Mathf.Clamp(accuracy, MINValue, MAXValue);
         return accuracy;
     }
     
-    public virtual int DecreaseAccuracy(int ac)
+    public virtual int DecreaseAccuracyBy(int ac)
     {
         accuracy -= ac;
         accuracy = Mathf.Clamp(accuracy, MINValue, MAXValue);
@@ -330,14 +330,14 @@ public abstract class Unit : MonoBehaviour {
         return evasion;
     }
 
-    public virtual int IncreaseEvasion(int ev)
+    public virtual int IncreaseEvasionBy(int ev)
     {
         evasion += ev;
         evasion = Mathf.Clamp(evasion, MINValue, MAXValue);
         return evasion;
     }
     
-    public virtual int DecreaseEvasion(int ev)
+    public virtual int DecreaseEvasionBy(int ev)
     {
         evasion -= ev;
         evasion = Mathf.Clamp(evasion, MINValue, MAXValue);
@@ -355,14 +355,14 @@ public abstract class Unit : MonoBehaviour {
         return cost;
     }
 
-    public virtual int IncreaseCost(int c)
+    public virtual int IncreaseCostBy(int c)
     {
         cost += c;
         cost = Mathf.Clamp(cost, MINValue, MAXValue);
         return cost;
     }
     
-    public virtual int DecreaseCost(int c)
+    public virtual int DecreaseCostBy(int c)
     {
         cost -= c;
         cost = Mathf.Clamp(cost, MINValue, MAXValue);

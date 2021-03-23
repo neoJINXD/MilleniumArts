@@ -76,14 +76,14 @@ public abstract class Item : MonoBehaviour
         return itemHealth;
     }
 
-    public virtual int IncreaseItemHealth(int iH)
+    public virtual int IncreaseItemHealthBy(int iH)
     {
         itemHealth += iH;
         itemHealth = Mathf.Clamp(itemHealth, MINValue, MAXValue);
         return itemHealth;
     }
     
-    public virtual int DecreaseItemHealth(int iH)
+    public virtual int DecreaseItemHealthBy(int iH)
     {
         itemHealth -= iH;
         itemHealth = Mathf.Clamp(itemHealth, MINValue, MAXValue);
@@ -101,14 +101,14 @@ public abstract class Item : MonoBehaviour
         return minRange;
     }
 
-    public virtual int IncreaseMinRange(int minR)
+    public virtual int IncreaseMinRangeBy(int minR)
     {
         minRange += minR;
         minRange = Mathf.Clamp(minRange, MINValue, MAXValue);
         return minRange;
     }
     
-    public virtual int DecreaseMinRange(int minR)
+    public virtual int DecreaseMinRangeBy(int minR)
     {
         minRange -= minR;
         minRange = Mathf.Clamp(minRange, MINValue, MAXValue);
@@ -126,14 +126,14 @@ public abstract class Item : MonoBehaviour
         return maxRange;
     }
 
-    public virtual int IncreaseMaxRange(int maxR)
+    public virtual int IncreaseMaxRangeBy(int maxR)
     {
         maxRange += maxR;
         maxRange = Mathf.Clamp(maxRange, MINValue, MAXValue);
         return maxRange;
     }
     
-    public virtual int DecreaseMaxRange(int maxR)
+    public virtual int DecreaseMaxRangeBy(int maxR)
     {
         maxRange -= maxR;
         maxRange = Mathf.Clamp(maxRange, MINValue, MAXValue);
