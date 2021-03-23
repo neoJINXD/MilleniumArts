@@ -94,24 +94,32 @@ public class Pathfinding : MonoBehaviour
 	public HashSet<Node> GetNodesMinMaxRange(Vector3 startPos, bool canFly, int minRange, int maxRange)
 	{
 		Node startNode = null;
+
+		Node origin = null;
+		
 		
 		if (grid != null) // fixes null reference error, when terminating the game
 		{
 			startNode = grid.NodeFromWorldPoint(startPos);
+			origin = grid.NodeFromWorldPoint(startPos);
 		}
 
 		Queue<Node> queue = new Queue<Node>();
 		HashSet<Node> visited = new HashSet<Node>();
+		HashSet<Node> verify = new HashSet<Node>();
 
+		
 		queue.Enqueue(startNode);
 		queue.Enqueue(null);
+
+		int temp = 0;
 
 		int depthCounter = 0;
 
 		while (queue.Count != 0 && depthCounter <= maxRange)
 		{
 			Node currentNode = queue.Dequeue();
-
+			
 			// check for depth
 			if (currentNode == null)
 			{
@@ -126,30 +134,34 @@ public class Pathfinding : MonoBehaviour
 				}
 				continue;
 			}
-			
+
+
 			if (depthCounter >= minRange)
 				visited.Add(currentNode);
+			else
+				verify.Add(currentNode);
 			
 			var neighbours = grid.GetAdjacent(currentNode);
 			
 
 			foreach (var neighbour in neighbours)
 			{
-				if ((!canFly && !neighbour.canWalkHere) || visited.Contains(neighbour)) 
+				if ((!canFly && !neighbour.canWalkHere) || visited.Contains(neighbour))
 				{
-					
 					continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set
 					//considers unwalkable nodes if unit can fly, and ignores any node if in closed sets
 				}
 				
 				queue.Enqueue(neighbour);
 			}
-			
-			print(depthCounter);
-
-
 		}
 		
+		if (minRange != 0)
+			visited.Remove(origin);
+		
+		foreach (Node n in verify)
+			visited.Remove(n);
+			
 		return visited;
 	}
 	
