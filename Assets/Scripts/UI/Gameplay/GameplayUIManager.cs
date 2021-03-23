@@ -11,36 +11,61 @@ public class GameplayUIManager : MonoBehaviour
 
     public GameObject handSlot;
 
+    public GameObject endTurnButton;
+
     public int hardCap;
 
     private bool dynamicHandFilled;
+
+    private bool myTurn;
 
     // Start is called before the first frame update
     void Start()
     {
         handCount = 5;
         dynamicHandFilled = false;
+        myTurn = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         // used to test dynamic hand
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (handCount > 4)
-                handCount = 4;
-            else
-                handCount = 6;
+            handCount--;
+            dynamicHandFilled = false;
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            handCount++;
+            dynamicHandFilled = false;
         }
 
-        if(handCount > 4)
+        if (Input.GetKeyDown(KeyCode.E))
+            myTurn = true;
+
+        if (Input.GetKeyDown(KeyCode.R))
+            myTurn = false;
+
+
+        if (handCount > 5)
         {
             defaultHandPanel.SetActive(false);
             dynamicHandPanel.SetActive(true);
 
             if(!dynamicHandFilled)
                 fillDynamicHand();
+
+            foreach(RectTransform rt in dynamicHandPanel.GetComponentsInChildren<RectTransform>())
+            {
+                print(RectTransformUtility.RectangleContainsScreenPoint(rt, Input.mousePosition, Camera.main));
+                if(RectTransformUtility.RectangleContainsScreenPoint(rt, Input.mousePosition, Camera.main))
+                {
+                    rt.SetAsLastSibling();
+                }
+            }
+
         }
         else
         {
@@ -55,11 +80,16 @@ public class GameplayUIManager : MonoBehaviour
             dynamicHandFilled = false;
         }
 
+        if(myTurn)
+            endTurnButton.SetActive(true);
+        else
+            endTurnButton.SetActive(false);
+
+
     }
 
     void fillDynamicHand()
     {
-        handCount = 20;
         RectTransform handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
         float rectWidth = handPanelRT.rect.width;
 
@@ -78,5 +108,11 @@ public class GameplayUIManager : MonoBehaviour
         }
 
         dynamicHandFilled = true;
+    }
+
+    public void endTurn()
+    {
+        myTurn = false;
+        print("XD");
     }
 }
