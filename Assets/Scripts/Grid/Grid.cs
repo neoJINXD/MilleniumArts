@@ -51,6 +51,64 @@ public class Grid : MonoBehaviour
         unit.transform.position = newPosition;
     }
 
+    public List<Node> GetAllUnitNodes()
+    {
+        List<Node> allUnitNodes = new List<Node>();
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (grid[x,y].playerIDOfUnits == -1)
+                {
+                    continue;
+                }
+                
+                allUnitNodes.Add(grid[x,y]);
+            }
+        }
+
+        return allUnitNodes;
+    }
+
+    public List<Node> GetAllyUnitNodes(int callingPlayerID)
+    {
+        List<Node> allyUnitNodes = new List<Node>();
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if (grid[x,y].playerIDOfUnits == callingPlayerID)
+                {
+                    allyUnitNodes.Add(grid[x,y]);
+                }
+            }
+        }
+
+        return allyUnitNodes;
+    }
+
+    public List<Node> GetEnemyUnitNodes(int callingPlayerID)
+    {
+        List<Node> enemyUnitNodes = new List<Node>();
+
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                if ((grid[x,y].playerIDOfUnits == callingPlayerID)||(grid[x,y].playerIDOfUnits == -1))
+                {
+                    continue;
+                }
+                
+                enemyUnitNodes.Add(grid[x,y]);
+            }
+        }
+
+        return enemyUnitNodes;
+    }
+
     void CreateGrid()
     {
         grid = new Node[gridSizeX, gridSizeY];
