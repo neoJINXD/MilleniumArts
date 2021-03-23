@@ -51,6 +51,7 @@ public class Grid : MonoBehaviour
         unit.transform.position = newPosition;
     }
 
+    //returns a list of all unit nodes
     public List<Node> GetAllUnitNodes()
     {
         List<Node> allUnitNodes = new List<Node>();
@@ -71,6 +72,7 @@ public class Grid : MonoBehaviour
         return allUnitNodes;
     }
 
+    //returns a list of all ally unit nodes
     public List<Node> GetAllyUnitNodes(int callingPlayerID)
     {
         List<Node> allyUnitNodes = new List<Node>();
@@ -89,6 +91,8 @@ public class Grid : MonoBehaviour
         return allyUnitNodes;
     }
 
+    //returns a list of all enemy unit nodes
+    //pass the calling player's ID, NOT the enemy player ID
     public List<Node> GetEnemyUnitNodes(int callingPlayerID)
     {
         List<Node> enemyUnitNodes = new List<Node>();

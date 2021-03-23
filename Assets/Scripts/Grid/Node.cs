@@ -14,7 +14,8 @@ public class Node : IHeapItem<Node> {
     public Node parent;
     int heapIndex;
 
-    public int playerIDOfUnits = -1; //keep track of which player's units are stored here
+    public int playerIDOfUnits = -1;     //keep track of which player's units are stored here
+                                        //set to -1 if node contains no units
     private List<Unit> unitsInThisNode = new List<Unit>(); //the list of units stored here
 	
     public Node(bool canWalkHere, Vector3 worldPosition, int gridX, int gridY) {
@@ -51,6 +52,7 @@ public class Node : IHeapItem<Node> {
         return -compare;
     }
 
+    //setters and getters for list
     public void SetUnitList(List<Unit> uL)
     {
         unitsInThisNode = uL;
@@ -61,6 +63,7 @@ public class Node : IHeapItem<Node> {
         return unitsInThisNode;
     }
 
+    //check to see if unit can be added in the node
     public bool CanAddUnitCheck(Unit unitToAdd)
     {
         if ((unitToAdd.GetUnitPlayerID() == playerIDOfUnits)||(playerIDOfUnits == -1))
@@ -73,6 +76,7 @@ public class Node : IHeapItem<Node> {
         }
     }
 
+    //returns true if unit is added, else false if it fails to add
     public bool AddUnit(Unit unitToAdd)
     {
         bool check = CanAddUnitCheck(unitToAdd);
@@ -89,6 +93,7 @@ public class Node : IHeapItem<Node> {
         }
     }
 
+    //returns true if unit is removed, else false if it fails to remove
     public bool RemoveUnit(Unit unitToRemove)
     {
         if (unitsInThisNode.Contains(unitToRemove))
