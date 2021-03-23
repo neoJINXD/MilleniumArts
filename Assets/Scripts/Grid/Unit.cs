@@ -139,7 +139,7 @@ public abstract class Unit : MonoBehaviour {
         unitPlayerId = pID;
     }
     
-    public virtual int GetUnitPlayerID(int pID)
+    public virtual int GetUnitPlayerID()
     {
         return unitPlayerId;
     }
