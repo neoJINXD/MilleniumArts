@@ -65,6 +65,8 @@ public class MovementManager : Singleton<MovementManager>
         }
     }
     
+    
+    
     private void DrawAvailable()
     {
         if (unitSelected != null)
@@ -73,7 +75,7 @@ public class MovementManager : Singleton<MovementManager>
             depth = pathfinding.depthLimit;
             validMove = pathfinding.BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
                 false, depth);
-
+    
             if (validMove != null && validMove.Count > 0)
             {
                 foreach (var node in validMove)
@@ -113,6 +115,27 @@ public class MovementManager : Singleton<MovementManager>
     //             {
     //                 Gizmos.color = Color.blue;
     //                 Gizmos.DrawCube(node.worldPosition, Vector3.one * (1 - .1f));
+    //             }
+    //         }
+    //     }
+    // }
+    
+    // TESTING GetNodesMinMaxRange
+    // private void DrawAvailable()
+    // {
+    //     if (unitSelected != null)
+    //     {
+    //         Vector3 initialPosition = unitSelected.transform.position;
+    //         depth = pathfinding.depthLimit;
+    //         validMove = pathfinding.GetNodesMinMaxRange(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
+    //             false, 2, 2);
+    //
+    //         if (validMove != null && validMove.Count > 0)
+    //         {
+    //             foreach (var node in validMove)
+    //             {
+    //                 Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+    //                 newMat.material = availablePosition;
     //             }
     //         }
     //     }

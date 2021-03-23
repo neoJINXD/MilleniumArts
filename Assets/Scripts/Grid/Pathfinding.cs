@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class Pathfinding : MonoBehaviour 
 {
@@ -90,6 +91,67 @@ public class Pathfinding : MonoBehaviour
 		return visited;
 	}
 	
+	public HashSet<Node> GetNodesMinMaxRange(Vector3 startPos, bool canFly, int minRange, int maxRange)
+	{
+		Node startNode = null;
+		
+		if (grid != null) // fixes null reference error, when terminating the game
+		{
+			startNode = grid.NodeFromWorldPoint(startPos);
+		}
+
+		Queue<Node> queue = new Queue<Node>();
+		HashSet<Node> visited = new HashSet<Node>();
+
+		queue.Enqueue(startNode);
+		queue.Enqueue(null);
+
+		int depthCounter = 0;
+
+		while (queue.Count != 0 && depthCounter <= maxRange)
+		{
+			Node currentNode = queue.Dequeue();
+
+			// check for depth
+			if (currentNode == null)
+			{
+				depthCounter++;
+				queue.Enqueue(null);
+
+				if (queue.Peek() == null)
+				{
+					// TODO the BFS is done looking since 2 nulls are consecutive
+					// return result;
+					break;
+				}
+				continue;
+			}
+			
+			if (depthCounter >= minRange)
+				visited.Add(currentNode);
+			
+			var neighbours = grid.GetAdjacent(currentNode);
+			
+
+			foreach (var neighbour in neighbours)
+			{
+				if ((!canFly && !neighbour.canWalkHere) || visited.Contains(neighbour)) 
+				{
+					
+					continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set
+					//considers unwalkable nodes if unit can fly, and ignores any node if in closed sets
+				}
+				
+				queue.Enqueue(neighbour);
+			}
+			
+			print(depthCounter);
+
+
+		}
+		
+		return visited;
+	}
 	
 	
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, Heuristic desiredHeuristic) 
@@ -137,7 +199,6 @@ public class Pathfinding : MonoBehaviour
 		Node targetNode = grid.NodeFromWorldPoint(targetPos);
 
 		HashSet<Node> nodesInBfs = BFSLimitSearch(startPos, canFly, depthLimit);
-		
 		
 		if (startNode.canWalkHere && targetNode.canWalkHere && nodesInBfs.Contains(targetNode)) 
 		{
@@ -248,12 +309,11 @@ public class Pathfinding : MonoBehaviour
 	{
 		return 0;
 	}
-
 	
 	// WARNING currently commented out since only used for testing
 	// private void OnDrawGizmos()
 	// {
-	// 	initialPosition = unit.position;
+	// 	initialPosition = unit.transform.position;
 	// 	
 	//  	var temp = BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), false, depthLimit);
 	//
