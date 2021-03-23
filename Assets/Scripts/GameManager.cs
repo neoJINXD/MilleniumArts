@@ -13,8 +13,8 @@ public class GameManager : Singleton<GameManager>
 
     [SerializeField] private GameObject player1Spawn;
     [SerializeField] private GameObject player2Spawn;
-    [SerializeField]private GameObject player1;
-    [SerializeField]private GameObject player2;
+    [SerializeField] private GameObject player1;
+    [SerializeField] private GameObject player2;
     [SerializeField] Material player1Mat;
     [SerializeField] Material player2Mat;
 

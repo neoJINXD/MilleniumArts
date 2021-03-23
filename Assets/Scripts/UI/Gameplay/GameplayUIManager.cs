@@ -56,16 +56,6 @@ public class GameplayUIManager : MonoBehaviour
 
             if(!dynamicHandFilled)
                 fillDynamicHand();
-
-            foreach(RectTransform rt in dynamicHandPanel.GetComponentsInChildren<RectTransform>())
-            {
-                print(RectTransformUtility.RectangleContainsScreenPoint(rt, Input.mousePosition, Camera.main));
-                if(RectTransformUtility.RectangleContainsScreenPoint(rt, Input.mousePosition, Camera.main))
-                {
-                    rt.SetAsLastSibling();
-                }
-            }
-
         }
         else
         {
@@ -80,7 +70,7 @@ public class GameplayUIManager : MonoBehaviour
             dynamicHandFilled = false;
         }
 
-        if(myTurn)
+        if (myTurn)
             endTurnButton.SetActive(true);
         else
             endTurnButton.SetActive(false);
@@ -90,7 +80,15 @@ public class GameplayUIManager : MonoBehaviour
 
     void fillDynamicHand()
     {
+
+
         RectTransform handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
+
+        foreach (Transform child in dynamicHandPanel.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+
         float rectWidth = handPanelRT.rect.width;
 
         float initialX = 0;
@@ -110,9 +108,9 @@ public class GameplayUIManager : MonoBehaviour
         dynamicHandFilled = true;
     }
 
+    // temp end turn function
     public void endTurn()
     {
         myTurn = false;
-        print("XD");
     }
 }
