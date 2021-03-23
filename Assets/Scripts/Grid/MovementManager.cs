@@ -67,25 +67,25 @@ public class MovementManager : Singleton<MovementManager>
     
     
     
-    private void DrawAvailable()
-    {
-        if (unitSelected != null)
-        {
-            Vector3 initialPosition = unitSelected.transform.position;
-            depth = pathfinding.depthLimit;
-            validMove = pathfinding.BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
-                false, depth);
-    
-            if (validMove != null && validMove.Count > 0)
-            {
-                foreach (var node in validMove)
-                {
-                    Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-                    newMat.material = availablePosition;
-                }
-            }
-        }
-    }
+    // private void DrawAvailable()
+    // {
+    //     if (unitSelected != null)
+    //     {
+    //         Vector3 initialPosition = unitSelected.transform.position;
+    //         depth = pathfinding.depthLimit;
+    //         validMove = pathfinding.BFSLimitSearch(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
+    //             false, depth);
+    //
+    //         if (validMove != null && validMove.Count > 0)
+    //         {
+    //             foreach (var node in validMove)
+    //             {
+    //                 Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+    //                 newMat.material = availablePosition;
+    //             }
+    //         }
+    //     }
+    // }
 
     private void ResetMaterial()
     {
@@ -121,23 +121,23 @@ public class MovementManager : Singleton<MovementManager>
     // }
     
     // TESTING GetNodesMinMaxRange
-    // private void DrawAvailable()
-    // {
-    //     if (unitSelected != null)
-    //     {
-    //         Vector3 initialPosition = unitSelected.transform.position;
-    //         depth = pathfinding.depthLimit;
-    //         validMove = pathfinding.GetNodesMinMaxRange(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
-    //             false, 4, 5);
-    //
-    //         if (validMove != null && validMove.Count > 0)
-    //         {
-    //             foreach (var node in validMove)
-    //             {
-    //                 Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-    //                 newMat.material = availablePosition;
-    //             }
-    //         }
-    //     }
-    // }
+    private void DrawAvailable()
+    {
+        if (unitSelected != null)
+        {
+            Vector3 initialPosition = unitSelected.transform.position;
+            depth = pathfinding.depthLimit;
+            validMove = pathfinding.GetNodesMinMaxRange(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
+                false, 5, 11);
+    
+            if (validMove != null && validMove.Count > 0)
+            {
+                foreach (var node in validMove)
+                {
+                    Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+                    newMat.material = availablePosition;
+                }
+            }
+        }
+    }
 }

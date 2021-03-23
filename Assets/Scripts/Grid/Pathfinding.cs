@@ -158,6 +158,9 @@ public class Pathfinding : MonoBehaviour
 		
 		if (minRange != 0)
 			visited.Remove(origin);
+
+		if (minRange == 0 && maxRange == 0)
+			visited.Add(origin);
 		
 		foreach (Node n in verify)
 			visited.Remove(n);
