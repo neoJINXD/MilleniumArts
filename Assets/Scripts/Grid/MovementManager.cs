@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zone.Core.Utils;
 
@@ -7,6 +8,7 @@ public class MovementManager : Singleton<MovementManager>
 {
     [SerializeField] private Material availablePosition;
     [SerializeField] private Material defaultMaterial;
+    [SerializeField] private Material displayPath;
 
     private string unitTag = "Unit";
     private Unit unitSelected;
@@ -30,6 +32,8 @@ public class MovementManager : Singleton<MovementManager>
         if (Input.GetMouseButtonDown(0))
         {
             CheckDesiredUnit();
+            
+            
         }
 
         if (hasSelected)
@@ -56,6 +60,7 @@ public class MovementManager : Singleton<MovementManager>
                     
                 }
                 
+                
                 unitSelected = selected.GetComponent<Unit>();
                 unitSelected.isClicked = true;
                 hasSelected = true;
@@ -64,7 +69,6 @@ public class MovementManager : Singleton<MovementManager>
             }
         }
     }
-    
     
     
     private void DrawAvailable()
@@ -98,6 +102,7 @@ public class MovementManager : Singleton<MovementManager>
             }
         }
     }
+    
     
     // For testing
     // private void OnDrawGizmos()

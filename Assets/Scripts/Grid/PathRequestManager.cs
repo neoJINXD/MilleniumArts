@@ -5,6 +5,8 @@ using System;
 
 public class PathRequestManager : MonoBehaviour {
 
+    
+    
     Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
     PathRequest currentPathRequest;
 
@@ -18,8 +20,9 @@ public class PathRequestManager : MonoBehaviour {
         pathfinding = GetComponent<Pathfinding>();
     }
 
-    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, bool canFly, int unitPlayerID, Action<Node[], bool> callback, Pathfinding.Heuristic heuristic) 
+    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, bool canFly, int unitPlayerID, Action<Node[], bool> callback, Pathfinding.Heuristic heuristic)
     {
+        
         PathRequest newRequest = new PathRequest(pathStart, pathEnd, canFly, unitPlayerID, callback, heuristic);
         instance.pathRequestQueue.Enqueue(newRequest);
         instance.TryProcessNext();

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class Pathfinding : MonoBehaviour 
+public class Pathfinding : MonoBehaviour
 {
-	
+
 	PathRequestManager requestManager;
+	[SerializeField] private Material displayPath;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	Grid grid;
@@ -212,6 +213,7 @@ public class Pathfinding : MonoBehaviour
 		
 		Node startNode = grid.NodeFromWorldPoint(startPos);
 		Node targetNode = grid.NodeFromWorldPoint(targetPos);
+		
 
 		HashSet<Node> nodesInBfs = BFSLimitSearch(startPos, canFly, depthLimit);
 		
@@ -268,12 +270,23 @@ public class Pathfinding : MonoBehaviour
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
+			DrawPath(waypoints);
 		}
-		
+
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
-	Node[] RetracePath(Node startNode, Node endNode) {
+	private void DrawPath(Node[] path)
+	{
+		foreach (var node in path)
+		{
+			Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+			pathMat.material = displayPath;
+		}
+	}
+	
+	private Node[] RetracePath(Node startNode, Node endNode) 
+	{
 		List<Node> path = new List<Node>();
 		Node currentNode = endNode;
 		
@@ -288,7 +301,7 @@ public class Pathfinding : MonoBehaviour
 		return path.ToArray();
 		
 	}
-	
+
 	Vector3[] SimplifyPath(List<Node> path) {
 		List<Vector3> waypoints = new List<Vector3>();
 		Vector2 directionOld = Vector2.zero;

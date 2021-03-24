@@ -8,6 +8,8 @@ public abstract class Unit : MonoBehaviour {
 
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
+    [SerializeField] private Material displayPath;
+    
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
     protected UnitTypes unitType;
     protected int unitPlayerId;
@@ -373,7 +375,8 @@ public abstract class Unit : MonoBehaviour {
     
     public void SelectNewUnitPosition()
     {
-         if (Input.GetMouseButtonDown(0))
+        
+         if (Input.GetMouseButtonDown(0)) 
          {
               RaycastHit hit;
               Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -390,8 +393,10 @@ public abstract class Unit : MonoBehaviour {
          }
     }
     
-    //passes this function when requesting for path
-    //function starts the coroutine if pathfinding is successful
+    
+    
+    // passes this function when requesting for path
+    // function starts the coroutine if pathfinding is successful
     public void OnPathFound(Node[] newPath, bool pathSuccessful) 
     {
         if (pathSuccessful) {
@@ -401,6 +406,7 @@ public abstract class Unit : MonoBehaviour {
             StartCoroutine("FollowPath");
         }
     }
+    
 
     //updates unit position by following along the path
     IEnumerator FollowPath() 
