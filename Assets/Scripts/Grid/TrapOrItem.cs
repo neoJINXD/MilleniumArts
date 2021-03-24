@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public class TrapOrItem : MonoBehaviour
 {
     protected int itemPlayerID;
     protected int itemHealth;
@@ -24,7 +24,7 @@ public abstract class Item : MonoBehaviour
     }
     
     //default abstract constructor
-    protected Item()
+    protected TrapOrItem()
     {
         itemPlayerID = -1;
         itemHealth = 0;
@@ -34,7 +34,7 @@ public abstract class Item : MonoBehaviour
     }
 
     //parameterized abstract constructor
-    protected Item(int _itemPlayerID, int _itemHealth, int _minRange, int _maxRange, ItemTypes _itemType)
+    protected TrapOrItem(int _itemPlayerID, int _itemHealth, int _minRange, int _maxRange, ItemTypes _itemType)
     {
         itemPlayerID = _itemPlayerID;
         itemHealth = _itemHealth;
