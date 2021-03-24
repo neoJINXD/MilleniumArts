@@ -8,7 +8,6 @@ public abstract class Unit : MonoBehaviour {
 
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
-    [SerializeField] private Material displayPath;
     
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
     protected UnitTypes unitType;
@@ -402,8 +401,8 @@ public abstract class Unit : MonoBehaviour {
         if (pathSuccessful) {
             path = newPath;
             targetIndex = 0;
-            StopCoroutine("FollowPath");
-            StartCoroutine("FollowPath");
+            //StopCoroutine("FollowPath");
+            //StartCoroutine("FollowPath");
         }
     }
     

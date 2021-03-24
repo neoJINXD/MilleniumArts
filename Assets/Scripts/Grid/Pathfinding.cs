@@ -9,6 +9,7 @@ public class Pathfinding : MonoBehaviour
 
 	PathRequestManager requestManager;
 	[SerializeField] private Material displayPath;
+	[SerializeField] private Material defaultMat;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	Grid grid;
@@ -274,6 +275,8 @@ public class Pathfinding : MonoBehaviour
 		}
 
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
+		
+		// UnDrawPath(waypoints);
 	}
 	
 	private void DrawPath(Node[] path)
@@ -282,6 +285,15 @@ public class Pathfinding : MonoBehaviour
 		{
 			Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
 			pathMat.material = displayPath;
+		}
+	}
+
+	private void UnDrawPath(Node[] path)
+	{
+		foreach (var node in path)
+		{
+			Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+			pathMat.material = defaultMat;
 		}
 	}
 	

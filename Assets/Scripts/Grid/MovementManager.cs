@@ -8,7 +8,6 @@ public class MovementManager : Singleton<MovementManager>
 {
     [SerializeField] private Material availablePosition;
     [SerializeField] private Material defaultMaterial;
-    [SerializeField] private Material displayPath;
 
     private string unitTag = "Unit";
     private Unit unitSelected;

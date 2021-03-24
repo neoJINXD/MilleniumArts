@@ -625,7 +625,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
-  displayPath: {fileID: 0}
   isClicked: 0
 --- !u!136 &891132760
 CapsuleCollider:
@@ -904,7 +903,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
-  displayPath: {fileID: 0}
   isClicked: 0
 --- !u!136 &1084916424
 CapsuleCollider:
@@ -976,13 +974,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084916422}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.22, y: 1.32, z: 8.97}
+  m_LocalRotation: {x: -0.16192557, y: -0, z: -0, w: 0.98680305}
+  m_LocalPosition: {x: -2.83, y: 1.32, z: 8.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 11
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -18.637, y: 0, z: 0}
 --- !u!1 &1115487956
 GameObject:
   m_ObjectHideFlags: 0
@@ -1233,7 +1231,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
-  displayPath: {fileID: 0}
   isClicked: 0
 --- !u!136 &1273640696
 CapsuleCollider:
@@ -1564,7 +1561,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
-  displayPath: {fileID: 0}
   isClicked: 0
 --- !u!1 &1617636894
 GameObject:
@@ -1852,7 +1848,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
-  displayPath: {fileID: 0}
   isClicked: 0
 --- !u!136 &1755316931
 CapsuleCollider:
@@ -2058,7 +2053,6 @@ MonoBehaviour:
   keepAlive: 0
   availablePosition: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}
   defaultMaterial: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
-  displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
 --- !u!4 &1853401803
 Transform:
   m_ObjectHideFlags: 0
