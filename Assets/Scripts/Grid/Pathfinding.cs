@@ -207,7 +207,7 @@ public class Pathfinding : MonoBehaviour
 	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, bool canFly, HeuristicFunction heuristicFunc) 
 	{
 
-		Vector3[] waypoints = new Vector3[0];
+		Node[] waypoints = new Node[0];
 		bool pathSuccess = false;
 		
 		Node startNode = grid.NodeFromWorldPoint(startPos);
@@ -263,7 +263,7 @@ public class Pathfinding : MonoBehaviour
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
-	Vector3[] RetracePath(Node startNode, Node endNode) {
+	Node[] RetracePath(Node startNode, Node endNode) {
 		List<Node> path = new List<Node>();
 		Node currentNode = endNode;
 		
@@ -272,9 +272,10 @@ public class Pathfinding : MonoBehaviour
 			currentNode = currentNode.parent;
 		}
 		//Vector3[] waypoints = SimplifyPath(path);
-		Vector3[] waypoints = ConvertToArray(path);
-		Array.Reverse(waypoints);
-		return waypoints;
+		//Vector3[] waypoints = ConvertToArray(path);
+		//Array.Reverse(waypoints);
+		path.Reverse();
+		return path.ToArray();
 		
 	}
 	

@@ -19,7 +19,7 @@ public abstract class Unit : MonoBehaviour {
     protected int accuracy;
     protected int evasion;
     protected int cost;
-    protected Vector3[] path;
+    protected Node[] path;
     protected int targetIndex;
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
@@ -391,7 +391,7 @@ public abstract class Unit : MonoBehaviour {
     
     //passes this function when requesting for path
     //function starts the coroutine if pathfinding is successful
-    public void OnPathFound(Vector3[] newPath, bool pathSuccessful) 
+    public void OnPathFound(Node[] newPath, bool pathSuccessful) 
     {
         if (pathSuccessful) {
             path = newPath;
@@ -406,9 +406,9 @@ public abstract class Unit : MonoBehaviour {
     {
         if (isClicked)
         {
-            Vector3 currentWaypoint = path[0];
+            Node currentWaypoint = path[0];
             while (true) {
-                if (transform.position == currentWaypoint) {
+                if (transform.position == currentWaypoint.worldPosition) {
                     targetIndex++;
                     if (targetIndex >= path.Length) {
                         yield break;
@@ -416,7 +416,7 @@ public abstract class Unit : MonoBehaviour {
                     currentWaypoint = path[targetIndex];
                 }
 
-                transform.position = Vector3.MoveTowards(transform.position,currentWaypoint,movementSpeed * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,movementSpeed * Time.deltaTime);
             
                 yield return null;
             }
