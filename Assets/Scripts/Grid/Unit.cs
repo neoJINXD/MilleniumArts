@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 public abstract class Unit : MonoBehaviour {
 
@@ -26,6 +27,8 @@ public abstract class Unit : MonoBehaviour {
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
     public bool isClicked = false;
+    public bool startRoutine;
+    private Camera mainCam;
     
     #region UnitModifications
 
@@ -375,25 +378,27 @@ public abstract class Unit : MonoBehaviour {
     
     #endregion
 
+    void Awake()
+    {
+        mainCam = Camera.main;
+    }
+
     
     public void SelectNewUnitPosition()
     {
         
-        if (Input.GetMouseButtonDown(0)) 
-        {
-              RaycastHit hit;
-              Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                
+          RaycastHit hit;
+          Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
+            
 
-              if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-              {
-                  // fixes out of bounce error that occurs when unit selected.
-                  if (Vector3.Distance(hit.point, transform.position) < 1)
-                         return; // already at destination
-                    
-                  PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
-              }
-        }
+          if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+          {
+              // fixes out of bounce error that occurs when unit selected.
+              if (Vector3.Distance(hit.point, transform.position) < 1)
+                     return; // already at destination
+                
+              PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
+          }
     }
     
     
@@ -402,9 +407,10 @@ public abstract class Unit : MonoBehaviour {
     // function starts the coroutine if pathfinding is successful
     public void OnPathFound(Node[] newPath, bool pathSuccessful) 
     {
-        if (pathSuccessful) {
+        if (pathSuccessful && Input.GetMouseButtonDown(0)) {
             path = newPath;
             targetIndex = 0;
+
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }

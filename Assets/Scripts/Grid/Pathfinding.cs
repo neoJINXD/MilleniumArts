@@ -273,7 +273,7 @@ public class Pathfinding : MonoBehaviour
 		{
 			waypoints = RetracePath(startNode, targetNode);
 			
-			DrawPath(waypoints);
+			// DrawPath(waypoints);
 		}
 		
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);

@@ -32,7 +32,6 @@ public class MovementManager : Singleton<MovementManager>
         {
             CheckDesiredUnit();
             
-            
         }
 
         if (hasSelected)
@@ -44,11 +43,12 @@ public class MovementManager : Singleton<MovementManager>
     private void CheckDesiredUnit()
     {
         ray = mainCam.ScreenPointToRay(Input.mousePosition);
-
         ResetMaterial();
         
         if (Physics.Raycast(ray, out hit))
         {
+            
+            
             var selected = hit.transform;
 
             if (selected.CompareTag(unitTag))
@@ -68,7 +68,6 @@ public class MovementManager : Singleton<MovementManager>
             }
         }
     }
-    
     
     private void DrawAvailable()
     {

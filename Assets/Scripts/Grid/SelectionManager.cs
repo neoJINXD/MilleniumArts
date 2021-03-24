@@ -67,6 +67,7 @@ public class SelectionManager : Singleton<SelectionManager>
              }
          }
     }
+    
 
     private void SetObstaclesGrey()
     {

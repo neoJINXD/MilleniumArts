@@ -388,6 +388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
+  defaultMat: {fileID: 0}
   depthLimit: 7
 --- !u!114 &844824551
 MonoBehaviour:
@@ -626,6 +627,7 @@ MonoBehaviour:
   movementSpeed: 10
   canFly: 0
   isClicked: 0
+  startRoutine: 0
 --- !u!136 &891132760
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -904,6 +906,7 @@ MonoBehaviour:
   movementSpeed: 10
   canFly: 0
   isClicked: 0
+  startRoutine: 0
 --- !u!136 &1084916424
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1232,6 +1235,7 @@ MonoBehaviour:
   movementSpeed: 10
   canFly: 0
   isClicked: 0
+  startRoutine: 0
 --- !u!136 &1273640696
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1562,6 +1566,7 @@ MonoBehaviour:
   movementSpeed: 10
   canFly: 0
   isClicked: 0
+  startRoutine: 0
 --- !u!1 &1617636894
 GameObject:
   m_ObjectHideFlags: 0
@@ -1849,6 +1854,7 @@ MonoBehaviour:
   movementSpeed: 10
   canFly: 0
   isClicked: 0
+  startRoutine: 0
 --- !u!136 &1755316931
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2053,6 +2059,7 @@ MonoBehaviour:
   keepAlive: 0
   availablePosition: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}
   defaultMaterial: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
+  displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
 --- !u!4 &1853401803
 Transform:
   m_ObjectHideFlags: 0
