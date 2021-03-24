@@ -15,6 +15,7 @@ public class Node : IHeapItem<Node> {
     int heapIndex;
 
     public Unit unitInThisNode;
+    public List<TrapOrItem> trapsOrItemsInThisNode = new List<TrapOrItem>();
 	
     public Node(bool canWalkHere, Vector3 worldPosition, int gridX, int gridY) {
         this.canWalkHere = canWalkHere;
@@ -97,6 +98,34 @@ public class Node : IHeapItem<Node> {
         {
             unitInThisNode = null;
 
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void SetTrapOrItemList(List<TrapOrItem> toiList)
+    {
+        trapsOrItemsInThisNode = toiList;
+    }
+
+    public List<TrapOrItem> GetTrapOrItemList()
+    {
+        return trapsOrItemsInThisNode;
+    }
+
+    public void AddTrapOrItem(TrapOrItem toiToAdd)
+    {
+        trapsOrItemsInThisNode.Add(toiToAdd);
+    }
+
+    public bool RemoveTrapOrItem(TrapOrItem toiToRemove)
+    {
+        if (trapsOrItemsInThisNode.Contains(toiToRemove))
+        {
+            trapsOrItemsInThisNode.Remove(toiToRemove);
             return true;
         }
         else
