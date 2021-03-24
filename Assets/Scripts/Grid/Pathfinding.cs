@@ -231,9 +231,19 @@ public class Pathfinding : MonoBehaviour
 					break;
 				}
 				
-				foreach (Node neighbour in grid.GetNeighbours(currentNode)) 
+				foreach (Node neighbour in grid.GetNeighbours(currentNode))
 				{
-					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour) || neighbour.GetUnit().GetUnitPlayerID() != unitPlayerID) 
+					bool checkHostile = false;
+					
+					if (neighbour.GetUnit() != null)
+					{
+						if (neighbour.GetUnit().GetUnitPlayerID() != unitPlayerID)
+						{
+							checkHostile = true;
+						}
+					}
+					
+					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour) || checkHostile) 
 					{
 						continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set or if the unit in the node is hostile
 						//considers unwalkable nodes if unit can fly, and ignores any node if in closed set
