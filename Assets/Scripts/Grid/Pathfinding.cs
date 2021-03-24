@@ -268,15 +268,15 @@ public class Pathfinding : MonoBehaviour
 		
 		yield return null;
 
+		
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
+			
 			DrawPath(waypoints);
 		}
-
-		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 		
-		// UnDrawPath(waypoints);
+		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
 	private void DrawPath(Node[] path)

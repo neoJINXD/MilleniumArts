@@ -26,6 +26,8 @@ public abstract class Unit : MonoBehaviour {
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
     public bool isClicked = false;
+    
+    #region UnitModifications
 
     public enum UnitTypes //enum for unit types
     {
@@ -370,13 +372,15 @@ public abstract class Unit : MonoBehaviour {
         cost = Mathf.Clamp(cost, MINValue, MAXValue);
         return cost;
     }
+    
+    #endregion
 
     
     public void SelectNewUnitPosition()
     {
         
-         if (Input.GetMouseButtonDown(0)) 
-         {
+        if (Input.GetMouseButtonDown(0)) 
+        {
               RaycastHit hit;
               Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 
@@ -389,7 +393,7 @@ public abstract class Unit : MonoBehaviour {
                     
                   PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
               }
-         }
+        }
     }
     
     
@@ -401,8 +405,8 @@ public abstract class Unit : MonoBehaviour {
         if (pathSuccessful) {
             path = newPath;
             targetIndex = 0;
-            //StopCoroutine("FollowPath");
-            //StartCoroutine("FollowPath");
+            StopCoroutine("FollowPath");
+            StartCoroutine("FollowPath");
         }
     }
     
