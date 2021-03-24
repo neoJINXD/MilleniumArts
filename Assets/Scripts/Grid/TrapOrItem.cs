@@ -42,6 +42,13 @@ public class TrapOrItem : MonoBehaviour
         maxRange = _maxRange;
         trapOrItemType = _trapOrItemType;
     }
+
+    //function called when Unit triggers the Trap or Item in a Node
+    public virtual void TrapOrItemTriggeredByUnit()
+    {
+        //override per child class specification
+        throw new Exception("Override TrapOrItemTriggeredByUnit function");
+    }
     
     //set and get functions for item type
     public virtual void SetTrapOrItemType(TrapOrItemTypes toi)

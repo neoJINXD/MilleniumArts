@@ -51,7 +51,7 @@ public class Node : IHeapItem<Node> {
         return -compare;
     }
 
-    //setters and getters for list
+    //setters and getters for unit in this node
     public void SetUnit(Unit unit)
     {
         unitInThisNode = unit;
@@ -105,7 +105,8 @@ public class Node : IHeapItem<Node> {
             return false;
         }
     }
-
+    
+    // setters and getters for list of traps or items in this node
     public void SetTrapOrItemList(List<TrapOrItem> toiList)
     {
         trapsOrItemsInThisNode = toiList;
@@ -116,11 +117,13 @@ public class Node : IHeapItem<Node> {
         return trapsOrItemsInThisNode;
     }
 
+    //adds the trap or item to node
     public void AddTrapOrItem(TrapOrItem toiToAdd)
     {
         trapsOrItemsInThisNode.Add(toiToAdd);
     }
 
+    //returns true if given item or trap is in this node and removes it, or else returns false
     public bool RemoveTrapOrItem(TrapOrItem toiToRemove)
     {
         if (trapsOrItemsInThisNode.Contains(toiToRemove))
