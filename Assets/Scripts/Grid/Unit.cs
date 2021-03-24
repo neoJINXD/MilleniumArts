@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 
 public abstract class Unit : MonoBehaviour {
@@ -407,18 +408,39 @@ public abstract class Unit : MonoBehaviour {
         if (isClicked)
         {
             Node currentWaypoint = path[0];
-            while (true) {
-                if (transform.position == currentWaypoint.worldPosition) {
+            while (true)
+            {
+                if (transform.position == currentWaypoint.worldPosition) 
+                {
                     targetIndex++;
-                    if (targetIndex >= path.Length) {
+                    currentWaypoint.RemoveUnit(this);
+                    
+                    if (targetIndex >= path.Length) 
+                    {
                         yield break;
                     }
                     currentWaypoint = path[targetIndex];
+                    currentWaypoint.AddUnit(this);
                 }
 
                 transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,movementSpeed * Time.deltaTime);
-            
+
+                CheckHostileTrapOrItemInNode(currentWaypoint);
+
                 yield return null;
+            }
+        }
+    }
+
+    public void CheckHostileTrapOrItemInNode(Node waypoint)
+    {
+        List<TrapOrItem> toiList = waypoint.GetTrapOrItemList();
+
+        foreach (TrapOrItem toi in toiList)
+        {
+            if (toi.GetTrapOrItemPlayerID() != this.GetUnitPlayerID())
+            {
+                toi.TrapOrItemTriggeredByUnit();
             }
         }
     }

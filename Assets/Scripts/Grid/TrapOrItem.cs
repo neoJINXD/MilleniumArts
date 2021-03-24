@@ -67,7 +67,7 @@ public class TrapOrItem : MonoBehaviour
         trapOrItemPlayerID = pID;
     }
     
-    public virtual int GetTrapOrItemPlayerID(int pID)
+    public virtual int GetTrapOrItemPlayerID()
     {
         return trapOrItemPlayerID;
     }
