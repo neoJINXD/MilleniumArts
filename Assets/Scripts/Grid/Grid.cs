@@ -60,7 +60,7 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (grid[x,y].playerIDOfUnits == -1)
+                if (grid[x,y].GetUnit() == null)
                 {
                     continue;
                 }
@@ -81,7 +81,7 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (grid[x,y].playerIDOfUnits == callingPlayerID)
+                if (grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)
                 {
                     allyUnitNodes.Add(grid[x,y]);
                 }
@@ -101,7 +101,7 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if ((grid[x,y].playerIDOfUnits == callingPlayerID)||(grid[x,y].playerIDOfUnits == -1))
+                if ((grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)||(grid[x,y].GetUnit() == null))
                 {
                     continue;
                 }
