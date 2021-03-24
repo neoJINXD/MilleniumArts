@@ -24,7 +24,7 @@ public class Pathfinding : MonoBehaviour
 	public enum Heuristic
 	{
 		TileDistance,
-		EuclidieanDistance,
+		EuclideanDistance,
 		Dijkstra
 	}
 	void Awake() 
@@ -173,7 +173,7 @@ public class Pathfinding : MonoBehaviour
 	{
 		switch (desiredHeuristic)
 		{
-			case Heuristic.EuclidieanDistance:
+			case Heuristic.EuclideanDistance:
 			{
 				hf = new HeuristicFunction(GetEuclideanDistance);
 
