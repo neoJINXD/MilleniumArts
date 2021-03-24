@@ -7,9 +7,17 @@ public class SelectionManager : Singleton<SelectionManager>
 {
     [SerializeField] private Material selectedMaterial;
     [SerializeField] private Material defaultMaterial;
+    [SerializeField] private Material greyUnwalkableMaterial;
+    [SerializeField] private Material defaultUnwalkableMaterial;
     private string unitTag = "Unit";
     private Transform selection;
     private Renderer selectedRenderer;
+    private GameObject[] obstacles;
+
+    private void Awake()
+    {
+        obstacles = GameObject.FindGameObjectsWithTag("Unwalkable");
+    }
     
     private void Update()
     {
@@ -36,6 +44,8 @@ public class SelectionManager : Singleton<SelectionManager>
     {
          var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
          RaycastHit hit;
+         
+         DefaultObstacleColor();
 
          if (Physics.Raycast(ray, out hit))
          {
@@ -44,6 +54,8 @@ public class SelectionManager : Singleton<SelectionManager>
              if (selected.CompareTag(unitTag))
              {
                  ResetSelected();
+
+                 SetObstaclesGrey();
                  
                  selectedRenderer = selected.GetComponent<Renderer>();
 
@@ -54,5 +66,17 @@ public class SelectionManager : Singleton<SelectionManager>
                  selection = selected;
              }
          }
+    }
+
+    private void SetObstaclesGrey()
+    {
+        foreach (GameObject o in obstacles)
+            o.GetComponent<Renderer>().material = greyUnwalkableMaterial;
+    }
+
+    private void DefaultObstacleColor()
+    {
+        foreach (GameObject o in obstacles)
+            o.GetComponent<Renderer>().material = defaultUnwalkableMaterial;
     }
 }

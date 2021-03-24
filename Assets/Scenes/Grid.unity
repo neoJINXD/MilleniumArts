@@ -414,7 +414,7 @@ GameObject:
   - component: {fileID: 856230024}
   m_Layer: 3
   m_Name: Wall (3)
-  m_TagString: Untagged
+  m_TagString: Unwalkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 886293776}
   m_Layer: 3
   m_Name: Wall (2)
-  m_TagString: Untagged
+  m_TagString: Unwalkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1012,6 +1012,10 @@ MonoBehaviour:
   keepAlive: 0
   selectedMaterial: {fileID: 2100000, guid: e0b8b30d50c07a1449a2b7b2d4124ef5, type: 2}
   defaultMaterial: {fileID: 2100000, guid: cb1eac33b8f0d7645af326b28fde604d, type: 2}
+  greyUnwalkableMaterial: {fileID: 2100000, guid: 370a3be220ea9224a9dfb955e73905c8,
+    type: 2}
+  defaultUnwalkableMaterial: {fileID: 2100000, guid: 221792d73fbc42a42a3280ee4ade0a8d,
+    type: 2}
 --- !u!4 &1115487958
 Transform:
   m_ObjectHideFlags: 0
@@ -1318,7 +1322,7 @@ GameObject:
   - component: {fileID: 1305022475}
   m_Layer: 3
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Unwalkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1571,7 +1575,7 @@ GameObject:
   - component: {fileID: 1617636896}
   m_Layer: 3
   m_Name: Wall (1)
-  m_TagString: Untagged
+  m_TagString: Unwalkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1728,7 +1732,7 @@ GameObject:
   - component: {fileID: 1745271504}
   m_Layer: 3
   m_Name: Wall (4)
-  m_TagString: Untagged
+  m_TagString: Unwalkable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
