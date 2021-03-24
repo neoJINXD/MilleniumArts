@@ -385,7 +385,7 @@ public abstract class Unit : MonoBehaviour {
                   if (Vector3.Distance(hit.point, transform.position) < 1)
                          return; // already at destination
                     
-                  PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound, heuristic);
+                  PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
               }
          }
     }

@@ -18,9 +18,9 @@ public class PathRequestManager : MonoBehaviour {
         pathfinding = GetComponent<Pathfinding>();
     }
 
-    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, bool canFly, Action<Node[], bool> callback, Pathfinding.Heuristic heuristic) 
+    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, bool canFly, int unitPlayerID, Action<Node[], bool> callback, Pathfinding.Heuristic heuristic) 
     {
-        PathRequest newRequest = new PathRequest(pathStart, pathEnd, canFly, callback, heuristic);
+        PathRequest newRequest = new PathRequest(pathStart, pathEnd, canFly, unitPlayerID, callback, heuristic);
         instance.pathRequestQueue.Enqueue(newRequest);
         instance.TryProcessNext();
     }
@@ -29,7 +29,7 @@ public class PathRequestManager : MonoBehaviour {
         if (!isProcessingPath && pathRequestQueue.Count > 0) {
             currentPathRequest = pathRequestQueue.Dequeue();
             isProcessingPath = true;
-            pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd, currentPathRequest.canFLy, currentPathRequest.heuristic);
+            pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd, currentPathRequest.canFLy, currentPathRequest.unitPlayerID, currentPathRequest.heuristic);
         }
     }
 
@@ -45,13 +45,15 @@ public class PathRequestManager : MonoBehaviour {
         public bool canFLy;
         public Pathfinding.Heuristic heuristic;
         public Action<Node[], bool> callback;
+        public int unitPlayerID;
 
-        public PathRequest(Vector3 start, Vector3 end, bool canFly, Action<Node[], bool> callback, Pathfinding.Heuristic heuristic) {
+        public PathRequest(Vector3 start, Vector3 end, bool canFly, int unitPID, Action<Node[], bool> callback, Pathfinding.Heuristic heuristic) {
             this.pathStart = start;
             this.pathEnd = end;
             this.callback = callback;
             this.canFLy = canFly;
             this.heuristic = heuristic;
+            this.unitPlayerID = unitPID;
         }
     }
 }

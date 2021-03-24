@@ -169,7 +169,7 @@ public class Pathfinding : MonoBehaviour
 	}
 	
 	
-	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, Heuristic desiredHeuristic) 
+	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPID, Heuristic desiredHeuristic) 
 	{
 		switch (desiredHeuristic)
 		{
@@ -198,13 +198,13 @@ public class Pathfinding : MonoBehaviour
 			}
 		}
 		
-		StartCoroutine(FindPath(startPos,targetPos, canFly, hf));
+		StartCoroutine(FindPath(startPos,targetPos, canFly, unitPID, hf));
 		//pass the function to use to calculate hCost
 		//can pass boolean to determine flying or normal pathfinding 
 	}
 	
-	
-	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, bool canFly, HeuristicFunction heuristicFunc) 
+	//also takes in the calling unit's PID
+	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPlayerID, HeuristicFunction heuristicFunc) 
 	{
 
 		Node[] waypoints = new Node[0];
@@ -233,9 +233,9 @@ public class Pathfinding : MonoBehaviour
 				
 				foreach (Node neighbour in grid.GetNeighbours(currentNode)) 
 				{
-					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour)) 
+					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour) || neighbour.GetUnit().GetUnitPlayerID() != unitPlayerID) 
 					{
-						continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set
+						continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set or if the unit in the node is hostile
 						//considers unwalkable nodes if unit can fly, and ignores any node if in closed set
 					}
 					
