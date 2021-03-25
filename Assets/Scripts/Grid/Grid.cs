@@ -10,8 +10,10 @@ public class Grid : MonoBehaviour
     // the size of the grid
     [SerializeField] private float size;
     [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private GameObject tileUnwalkablePrefab;
 
     public static GameObject[,] tileTrack;
+    public static GameObject[] tileCollides;
 
     private Vector3 newPosition;
 
@@ -125,15 +127,27 @@ public class Grid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
 
-                tileTrack[x, y] = Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                
+
+                
+                
                 // returns true if collision
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unableToWalkHere));
-
+                
+                if (walkable)
+                {
+                    tileTrack[x, y] = Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                }
+                else
+                {
+                    tileTrack[x, y] = Instantiate(tileUnwalkablePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                }
+                
                 grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
         }
     }
-
+    
     // might have to use boolean, to change walkable nodes, based on flying and ground units.
     public List<Node> GetNeighbours(Node node)
     {

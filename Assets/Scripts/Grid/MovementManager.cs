@@ -63,11 +63,12 @@ public class MovementManager : Singleton<MovementManager>
                 unitSelected = selected.GetComponent<Unit>();
                 unitSelected.isClicked = true;
                 hasSelected = true;
-                
+
                 DrawAvailable();
             }
         }
     }
+    
     
     private void DrawAvailable()
     {

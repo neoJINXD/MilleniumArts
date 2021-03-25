@@ -10,6 +10,7 @@ public class Pathfinding : MonoBehaviour
 	PathRequestManager requestManager;
 	[SerializeField] private Material displayPath;
 	[SerializeField] private Material defaultMat;
+	public Node[] waypoints;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	Grid grid;
@@ -199,6 +200,7 @@ public class Pathfinding : MonoBehaviour
 				break;
 			}
 		}
+
 		
 		StartCoroutine(FindPath(startPos,targetPos, canFly, unitPID, hf));
 		//pass the function to use to calculate hCost
@@ -208,8 +210,7 @@ public class Pathfinding : MonoBehaviour
 	//also takes in the calling unit's PID
 	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPlayerID, HeuristicFunction heuristicFunc) 
 	{
-
-		Node[] waypoints = new Node[0];
+		waypoints = new Node[0];
 		bool pathSuccess = false;
 		
 		Node startNode = grid.NodeFromWorldPoint(startPos);
@@ -272,28 +273,32 @@ public class Pathfinding : MonoBehaviour
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
-			
-			// DrawPath(waypoints);
 		}
-		
+
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
-	private void DrawPath(Node[] path)
+	public void DrawPath()
 	{
-		foreach (var node in path)
+		if (waypoints != null)
 		{
-			Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-			pathMat.material = displayPath;
+			foreach (var node in waypoints)
+			{
+				Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+				pathMat.material = displayPath;
+			}
 		}
 	}
 
-	private void UnDrawPath(Node[] path)
+	public void UnDrawPath()
 	{
-		foreach (var node in path)
+		if (waypoints != null)
 		{
-			Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-			pathMat.material = defaultMat;
+			foreach (var node in waypoints)
+			{
+				Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+				pathMat.material = defaultMat;
+			}
 		}
 	}
 	

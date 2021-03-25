@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEditor;
 using UnityEngine.Serialization;
 
@@ -396,13 +397,15 @@ public abstract class Unit : MonoBehaviour {
               // fixes out of bounce error that occurs when unit selected.
               if (Vector3.Distance(hit.point, transform.position) < 1)
                      return; // already at destination
+              
                 
               PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
           }
     }
     
     
-    
+
+
     // passes this function when requesting for path
     // function starts the coroutine if pathfinding is successful
     public void OnPathFound(Node[] newPath, bool pathSuccessful) 
@@ -410,11 +413,12 @@ public abstract class Unit : MonoBehaviour {
         if (pathSuccessful && Input.GetMouseButtonDown(0)) {
             path = newPath;
             targetIndex = 0;
-
+            
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
     }
+    
     
 
     //updates unit position by following along the path

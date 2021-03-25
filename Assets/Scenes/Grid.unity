@@ -355,6 +355,8 @@ MonoBehaviour:
   size: 1
   tilePrefab: {fileID: 8575106909883118114, guid: 77b0da9352ddaed4f8234b8da36dcde0,
     type: 3}
+  tileUnwalkablePrefab: {fileID: 8575106909883118114, guid: cf64c95d92912a245ae2f2c570936dc1,
+    type: 3}
   displayGridGizmos: 1
   unableToWalkHere:
     serializedVersion: 2
@@ -388,7 +390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
-  defaultMat: {fileID: 0}
+  defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
   depthLimit: 7
 --- !u!114 &844824551
 MonoBehaviour:
@@ -2059,7 +2061,6 @@ MonoBehaviour:
   keepAlive: 0
   availablePosition: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}
   defaultMaterial: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
-  displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
 --- !u!4 &1853401803
 Transform:
   m_ObjectHideFlags: 0
