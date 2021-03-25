@@ -10,7 +10,7 @@ public class Pathfinding : MonoBehaviour
 	PathRequestManager requestManager;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
-	Grid grid;
+	public Grid grid;
 	HeuristicFunction hf;
 	
 	// for testing
