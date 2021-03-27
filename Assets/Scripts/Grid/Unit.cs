@@ -387,20 +387,19 @@ public abstract class Unit : MonoBehaviour {
     
     public void SelectNewUnitPosition()
     {
-        
-          RaycastHit hit;
-          Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-            
+        RaycastHit hit;
+        Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
 
-          if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-          {
-              // fixes out of bounce error that occurs when unit selected.
-              if (Vector3.Distance(hit.point, transform.position) < 1)
-                     return; // already at destination
-              
-                
-              PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
-          }
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+          // fixes out of bounce error that occurs when unit selected.
+          if (Vector3.Distance(hit.point, transform.position) < 1)
+                 return; // already at destination
+          
+            
+          PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
+        }
     }
     
     

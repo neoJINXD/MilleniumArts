@@ -10,6 +10,8 @@ public class Pathfinding : MonoBehaviour
 	PathRequestManager requestManager;
 	[SerializeField] private Material displayPath;
 	[SerializeField] private Material defaultMat;
+	[SerializeField] private Material selectedTile;
+	
 	private  Node[] waypoints;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
@@ -19,6 +21,8 @@ public class Pathfinding : MonoBehaviour
 	// for testing
 	// [SerializeField] private Transform unit;
 	private Vector3 initialPosition;
+	private Renderer hoverMat;
+	private Renderer unhoverMat;
 	
 	// unity crashes when depth is greater than 17, setting restriction.
 	// to move to unit class.
@@ -218,9 +222,8 @@ public class Pathfinding : MonoBehaviour
 
 		return allyUnitNodes;
 	}
-	
-	
 
+	
 
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPID, Heuristic desiredHeuristic) 
 	{
@@ -322,7 +325,7 @@ public class Pathfinding : MonoBehaviour
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
-			
+
 		}
 
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
@@ -351,6 +354,41 @@ public class Pathfinding : MonoBehaviour
 			}
 		}
 	}
+	
+	public void SetHoverTilePrefab()
+	{
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		
+
+		if (Physics.Raycast(ray, out hit))
+		{
+			Transform pos = hit.transform;
+
+			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
+			
+			hoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
+			hoverMat.material = selectedTile;
+		}
+	}
+	
+	public void UnHoverTilePrefab()
+	{
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		
+
+		if (Physics.Raycast(ray, out hit))
+		{
+			Transform pos = hit.transform;
+
+			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
+			
+			unhoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
+			unhoverMat.material = defaultMat;
+		}
+	}
+
 	
 	private Node[] RetracePath(Node startNode, Node endNode) 
 	{

@@ -28,27 +28,27 @@ public class MovementManager : Singleton<MovementManager>
 
     private void Update()
     {
+        
         if (Input.GetMouseButtonDown(0))
         {
             CheckDesiredUnit();
-            
         }
-
+        
         if (hasSelected)
         {
             unitSelected.SelectNewUnitPosition();
         }
     }
     
+    
     private void CheckDesiredUnit()
     {
         ray = mainCam.ScreenPointToRay(Input.mousePosition);
+        
         ResetMaterial();
         
         if (Physics.Raycast(ray, out hit))
         {
-            
-            
             var selected = hit.transform;
 
             if (selected.CompareTag(unitTag))
@@ -63,12 +63,13 @@ public class MovementManager : Singleton<MovementManager>
                 unitSelected = selected.GetComponent<Unit>();
                 unitSelected.isClicked = true;
                 hasSelected = true;
+                
+                
 
                 DrawAvailable();
             }
         }
     }
-    
     
     private void DrawAvailable()
     {

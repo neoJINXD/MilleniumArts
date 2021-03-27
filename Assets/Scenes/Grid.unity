@@ -363,6 +363,8 @@ MonoBehaviour:
     m_Bits: 8
   gridWorldSize: {x: 29.85, y: 29.5}
   nodeRadius: 0.5
+  gridSizeX: 0
+  gridSizeY: 0
 --- !u!4 &844824549
 Transform:
   m_ObjectHideFlags: 0
@@ -391,6 +393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
   defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
+  selectedTile: {fileID: 2100000, guid: 0027759dfc5935d4a99771f544d66a93, type: 2}
   depthLimit: 7
 --- !u!114 &844824551
 MonoBehaviour:

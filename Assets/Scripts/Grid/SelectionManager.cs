@@ -9,6 +9,7 @@ public class SelectionManager : Singleton<SelectionManager>
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material greyUnwalkableMaterial;
     [SerializeField] private Material defaultUnwalkableMaterial;
+    
     private string unitTag = "Unit";
     private Transform selection;
     private Renderer selectedRenderer;
@@ -67,7 +68,6 @@ public class SelectionManager : Singleton<SelectionManager>
              }
          }
     }
-    
 
     private void SetObstaclesGrey()
     {

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8575106909883118112}
   - component: {fileID: 8575106909883118113}
   m_Layer: 0
-  m_Name: TileBrick
+  m_Name: SelectGrassTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 66d4a708f1ce8fc448d6bd0d3daf56fe, type: 2}
+  - {fileID: 2100000, guid: 0027759dfc5935d4a99771f544d66a93, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
