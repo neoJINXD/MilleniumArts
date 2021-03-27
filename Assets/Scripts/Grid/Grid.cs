@@ -23,9 +23,9 @@ public class Grid : MonoBehaviour
     public LayerMask unableToWalkHere;
     public Vector2 gridWorldSize;
     public float nodeRadius;
-    private Node[,] grid;
+    public Node[,] grid;
     private float nodeDiameter;
-    private int gridSizeX, gridSizeY;
+    public int gridSizeX, gridSizeY;
 
     void Awake()
     {
@@ -92,6 +92,8 @@ public class Grid : MonoBehaviour
 
         return allyUnitNodes;
     }
+    
+    
 
     //returns a list of all enemy unit nodes
     //pass the calling player's ID, NOT the enemy player ID
@@ -114,6 +116,7 @@ public class Grid : MonoBehaviour
 
         return enemyUnitNodes;
     }
+    
 
     void CreateGrid()
     {
@@ -127,9 +130,6 @@ public class Grid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
 
-                
-
-                
                 
                 // returns true if collision
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unableToWalkHere));
