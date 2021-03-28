@@ -490,7 +490,7 @@ MonoBehaviour:
     m_SceneName: PhotonMain
   m_aiScene:
     m_SceneAsset: {fileID: 102900000, guid: 69478bf841688df4db060b1798c50db3, type: 3}
-    m_SceneName: AI
+    m_SceneName: LocalVsAI
 --- !u!1 &1087105258
 GameObject:
   m_ObjectHideFlags: 0
