@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zone.Core.Utils;
@@ -51,3 +51,4 @@ public class GameLoop : Singleton<GameLoop>
         players[index].EndTurn();
     }
 }
+
