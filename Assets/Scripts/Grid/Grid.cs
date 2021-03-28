@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Grid : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class Grid : MonoBehaviour
     [SerializeField] private Transform gridParent;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private GameObject tileUnwalkablePrefab;
+    [SerializeField] private GameObject kingPlayer1;
+    [SerializeField] private GameObject kingPlayer2;
+    [SerializeField] private Transform[] kingSpawnP1;
+    [SerializeField] private Transform[] kingSpawnP2;
 
     public static GameObject[,] tileTrack;
     public static GameObject[] tileCollides;
@@ -30,6 +35,7 @@ public class Grid : MonoBehaviour
 
     void Awake()
     {
+        
         nodeDiameter = nodeRadius * 2;
         // gives us how many nodes we can fit in our grid world size.
         gridSizeX = Mathf.RoundToInt(gridWorldSize.x / nodeDiameter);
@@ -146,8 +152,22 @@ public class Grid : MonoBehaviour
                 grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
         }
+
+        CreateKings();
     }
-    
+
+    private void CreateKings()
+    {
+        int randPos = Random.Range(0, kingSpawnP1.Length);
+        
+        Transform spawnPosP1 = kingSpawnP1[randPos];
+
+        Transform spawnPosP2 = kingSpawnP2[randPos];
+
+        Instantiate(kingPlayer1, spawnPosP1.transform, false);
+        Instantiate(kingPlayer1, spawnPosP2.transform, false);
+    }
+
     // might have to use boolean, to change walkable nodes, based on flying and ground units.
     public List<Node> GetNeighbours(Node node)
     {
