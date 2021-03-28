@@ -155,6 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab09d0c895c6d3a43b9db30a0fe4958d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepAlive: 0
+  networked: 1
   player1Spawn: {fileID: 1386001115}
   player2Spawn: {fileID: 1715940331}
   player1: {fileID: 0}

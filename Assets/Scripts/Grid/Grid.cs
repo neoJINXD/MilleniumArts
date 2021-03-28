@@ -9,6 +9,7 @@ public class Grid : MonoBehaviour
     [SerializeField] private Transform unit;
     // the size of the grid
     [SerializeField] private float size;
+    [SerializeField] private Transform gridParent;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private GameObject tileUnwalkablePrefab;
 
@@ -129,18 +130,17 @@ public class Grid : MonoBehaviour
             for (int y = 0; y < gridSizeX; y++)
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
-
                 
                 // returns true if collision
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unableToWalkHere));
                 
                 if (walkable)
                 {
-                    tileTrack[x, y] = Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                    tileTrack[x, y] = Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0), gridParent);
                 }
                 else
                 {
-                    tileTrack[x, y] = Instantiate(tileUnwalkablePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                    tileTrack[x, y] = Instantiate(tileUnwalkablePrefab, worldPoint, quaternion.Euler(0, 0, 0), gridParent);
                 }
                 
                 grid[x, y] = new Node(walkable, worldPoint, x, y);

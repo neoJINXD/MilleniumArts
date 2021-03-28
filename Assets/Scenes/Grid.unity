@@ -203,6 +203,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 327523578}
   m_CullTransparentMesh: 1
+--- !u!1 &377164646
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 377164647}
+  m_Layer: 0
+  m_Name: Grid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &377164647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 377164646}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 639.45154, y: 287.44116, z: 10.231931}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &411220035
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,6 +383,7 @@ MonoBehaviour:
   target: {fileID: 1737116090}
   unit: {fileID: 1764270284}
   size: 1
+  gridParent: {fileID: 377164647}
   tilePrefab: {fileID: 8575106909883118114, guid: 77b0da9352ddaed4f8234b8da36dcde0,
     type: 3}
   tileUnwalkablePrefab: {fileID: 8575106909883118114, guid: cf64c95d92912a245ae2f2c570936dc1,
@@ -1457,8 +1488,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keepAlive: 0
-  unitCreation: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
+  unitCreation: {fileID: -7898511546186060280, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
     type: 3}
+  cardEffectManager: {fileID: 0}
 --- !u!1 &1596073714
 GameObject:
   m_ObjectHideFlags: 0

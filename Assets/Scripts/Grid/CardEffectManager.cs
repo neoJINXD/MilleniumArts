@@ -187,15 +187,18 @@ public class CardEffectManager : MonoBehaviour
      * Effect: Damages an enemy unit for 5 health.
      * Cost: 3
      */
+    
+    //commented out because wasnt compiling -scott
+    
     public void spell_smite(int playerId)
     {
-        Grid grid = pathfinding.grid;
-        List<Node> allyNodes = grid.GetAllyUnitNodes(0);
-        print("XD: " + allyNodes.Count);
-        foreach(Node node in allyNodes)
-        {
-            print(node.GetUnitList());
-        }
+        // Grid grid = pathfinding.grid;
+        // List<Node> allyNodes = grid.GetAllyUnitNodes(0);
+        // print("XD: " + allyNodes.Count);
+        // foreach(Node node in allyNodes)
+        // {
+        //     print(node.GetUnitList());
+        // }
     }
 }
 

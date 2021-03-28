@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zone.Core.Utils;
 
+/*
+ *  Verify card placments and perform card actions
+ */
+
 public class PlacerManager : Singleton<PlacerManager>
 {
-    [SerializeField] private GameObject unitCreation;
+    [SerializeField] private Unit unitCreation;
     private bool placerClicked = false;
     private const float lockAxis = 27f;
+    private Player playerPlacing = default;
 
     public CardEffectManager cardEffectManager;
 
@@ -15,12 +20,29 @@ public class PlacerManager : Singleton<PlacerManager>
     {
     }
 
+    public void CreateUnit(Player player)
+    {
+        playerPlacing = player;
+        placerClicked = true;
+    }
+
+    public void PlaceCard(Player currentPlayer, Card card, int cardIndex, Vector3 targetLocation)
+    {
+        //TODO: replace with check for type of card instead of just using a unit (e.i. spells or traps too)
+        Unit unitPlaced = Instantiate(unitCreation, targetLocation, Quaternion.identity);
+        currentPlayer.RemoveCard(cardIndex);
+        currentPlayer.AddUnit(unitPlaced);
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(1) && placerClicked)
         {
-            Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-            Instantiate(unitCreation, areaToInstantiate, Quaternion.identity);
+            Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(
+                new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+            
+            //TODO: will have to use real card and real card index
+            PlaceCard(playerPlacing, new Card(), 0, areaToInstantiate); 
             placerClicked = false;
         }
 
@@ -115,11 +137,6 @@ public class PlacerManager : Singleton<PlacerManager>
             cardEffectManager.spell_smite(0);
         }
     }
-    public void CreateUnit()
-    {
-        placerClicked = true;
-    }
-
     // for testing, allows to drag a unit with mouse, but might not be needed as can just click on square and instantiate.
     // private Vector3 mOffSet;
     // private float mZCoord;
