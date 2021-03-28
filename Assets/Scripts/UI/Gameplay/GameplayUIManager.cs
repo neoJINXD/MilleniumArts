@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameplayUIManager : MonoBehaviour
 {
+    [SerializeField] private Player m_player;
+
     public int handCount;
 
     public GameObject defaultHandPanel;
@@ -108,9 +110,14 @@ public class GameplayUIManager : MonoBehaviour
         dynamicHandFilled = true;
     }
 
-    // temp end turn function
+    public void PlayCard(int cardIndex)
+    {
+        m_player.PlayCard(cardIndex);
+    }
+    
     public void endTurn()
     {
         myTurn = false;
+        m_player.EndTurn();
     }
 }
