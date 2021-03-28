@@ -5,6 +5,8 @@ using System;
 
 public class PathRequestManager : MonoBehaviour {
 
+    
+    
     Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
     PathRequest currentPathRequest;
 
@@ -18,9 +20,10 @@ public class PathRequestManager : MonoBehaviour {
         pathfinding = GetComponent<Pathfinding>();
     }
 
-    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, bool canFly, Action<Vector3[], bool> callback, Pathfinding.Heuristic heuristic) 
+    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, bool canFly, int unitPlayerID, Action<Node[], bool> callback, Pathfinding.Heuristic heuristic)
     {
-        PathRequest newRequest = new PathRequest(pathStart, pathEnd, canFly, callback, heuristic);
+        
+        PathRequest newRequest = new PathRequest(pathStart, pathEnd, canFly, unitPlayerID, callback, heuristic);
         instance.pathRequestQueue.Enqueue(newRequest);
         instance.TryProcessNext();
     }
@@ -29,11 +32,12 @@ public class PathRequestManager : MonoBehaviour {
         if (!isProcessingPath && pathRequestQueue.Count > 0) {
             currentPathRequest = pathRequestQueue.Dequeue();
             isProcessingPath = true;
-            pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd, currentPathRequest.canFLy, currentPathRequest.heuristic);
+            pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd, currentPathRequest.canFLy, currentPathRequest.unitPlayerID, currentPathRequest.heuristic);
+            
         }
     }
 
-    public void FinishedProcessingPath(Vector3[] path, bool success) {
+    public void FinishedProcessingPath(Node[] path, bool success) {
         currentPathRequest.callback(path,success);
         isProcessingPath = false;
         TryProcessNext();
@@ -44,14 +48,16 @@ public class PathRequestManager : MonoBehaviour {
         public Vector3 pathEnd;
         public bool canFLy;
         public Pathfinding.Heuristic heuristic;
-        public Action<Vector3[], bool> callback;
+        public Action<Node[], bool> callback;
+        public int unitPlayerID;
 
-        public PathRequest(Vector3 start, Vector3 end, bool canFly, Action<Vector3[], bool> callback, Pathfinding.Heuristic heuristic) {
+        public PathRequest(Vector3 start, Vector3 end, bool canFly, int unitPID, Action<Node[], bool> callback, Pathfinding.Heuristic heuristic) {
             this.pathStart = start;
             this.pathEnd = end;
             this.callback = callback;
             this.canFLy = canFly;
             this.heuristic = heuristic;
+            this.unitPlayerID = unitPID;
         }
     }
 }

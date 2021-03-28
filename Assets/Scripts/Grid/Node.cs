@@ -14,9 +14,8 @@ public class Node : IHeapItem<Node> {
     public Node parent;
     int heapIndex;
 
-    public int playerIDOfUnits = -1;     //keep track of which player's units are stored here
-                                        //set to -1 if node contains no units
-    private List<Unit> unitsInThisNode = new List<Unit>(); //the list of units stored here
+    public Unit unitInThisNode;
+    public List<TrapOrItem> trapsOrItemsInThisNode = new List<TrapOrItem>();
 	
     public Node(bool canWalkHere, Vector3 worldPosition, int gridX, int gridY) {
         this.canWalkHere = canWalkHere;
@@ -52,21 +51,21 @@ public class Node : IHeapItem<Node> {
         return -compare;
     }
 
-    //setters and getters for list
-    public void SetUnitList(List<Unit> uL)
+    //setters and getters for unit in this node
+    public void SetUnit(Unit unit)
     {
-        unitsInThisNode = uL;
+        unitInThisNode = unit;
     }
 
-    public List<Unit> GetUnitList()
+    public Unit GetUnit()
     {
-        return unitsInThisNode;
+        return unitInThisNode;
     }
 
     //check to see if unit can be added in the node
     public bool CanAddUnitCheck(Unit unitToAdd)
     {
-        if ((unitToAdd.GetUnitPlayerID() == playerIDOfUnits)||(playerIDOfUnits == -1))
+        if (unitInThisNode == null)
         {
             return true;
         }
@@ -83,8 +82,7 @@ public class Node : IHeapItem<Node> {
 
         if (check)
         {
-            unitsInThisNode.Add(unitToAdd);
-            playerIDOfUnits = unitToAdd.GetUnitPlayerID();
+            unitInThisNode = unitToAdd;
             return true;
         }
         else
@@ -96,15 +94,41 @@ public class Node : IHeapItem<Node> {
     //returns true if unit is removed, else false if it fails to remove
     public bool RemoveUnit(Unit unitToRemove)
     {
-        if (unitsInThisNode.Contains(unitToRemove))
+        if (unitInThisNode == unitToRemove)
         {
-            unitsInThisNode.Remove(unitToRemove);
+            unitInThisNode = null;
 
-            if (unitsInThisNode.Count == 0)
-            {
-                playerIDOfUnits = -1;
-            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    // setters and getters for list of traps or items in this node
+    public void SetTrapOrItemList(List<TrapOrItem> toiList)
+    {
+        trapsOrItemsInThisNode = toiList;
+    }
 
+    public List<TrapOrItem> GetTrapOrItemList()
+    {
+        return trapsOrItemsInThisNode;
+    }
+
+    //adds the trap or item to node
+    public void AddTrapOrItem(TrapOrItem toiToAdd)
+    {
+        trapsOrItemsInThisNode.Add(toiToAdd);
+    }
+
+    //returns true if given item or trap is in this node and removes it, or else returns false
+    public bool RemoveTrapOrItem(TrapOrItem toiToRemove)
+    {
+        if (trapsOrItemsInThisNode.Contains(toiToRemove))
+        {
+            trapsOrItemsInThisNode.Remove(toiToRemove);
             return true;
         }
         else

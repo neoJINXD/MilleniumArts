@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zone.Core.Utils;
 
@@ -27,21 +28,23 @@ public class MovementManager : Singleton<MovementManager>
 
     private void Update()
     {
+        
         if (Input.GetMouseButtonDown(0))
         {
             CheckDesiredUnit();
         }
-
+        
         if (hasSelected)
         {
             unitSelected.SelectNewUnitPosition();
         }
     }
     
+    
     private void CheckDesiredUnit()
     {
         ray = mainCam.ScreenPointToRay(Input.mousePosition);
-
+        
         ResetMaterial();
         
         if (Physics.Raycast(ray, out hit))
@@ -56,18 +59,19 @@ public class MovementManager : Singleton<MovementManager>
                     
                 }
                 
+                
                 unitSelected = selected.GetComponent<Unit>();
                 unitSelected.isClicked = true;
                 hasSelected = true;
                 
+                
+
                 DrawAvailable();
             }
         }
     }
     
-    
-    
-/*    private void DrawAvailable()
+    private void DrawAvailable()
     {
         if (unitSelected != null)
         {
@@ -86,7 +90,7 @@ public class MovementManager : Singleton<MovementManager>
             }
         }
     }
-*/
+
     private void ResetMaterial()
     {
         if (validMove != null)
@@ -98,7 +102,8 @@ public class MovementManager : Singleton<MovementManager>
             }
         }
     }
-
+    
+    
     // For testing
     // private void OnDrawGizmos()
     // {
@@ -119,25 +124,25 @@ public class MovementManager : Singleton<MovementManager>
     //         }
     //     }
     // }
-
-    // TESTING GetNodesMinMaxRange
-     private void DrawAvailable()
-     {
-         if (unitSelected != null)
-         {
-             Vector3 initialPosition = unitSelected.transform.position;
-             depth = pathfinding.depthLimit;
-             validMove = pathfinding.GetNodesMinMaxRange(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
-                 false, 2, 3);
     
-             if (validMove != null && validMove.Count > 0)
-             {
-                 foreach (var node in validMove)
-                 {
-                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-                     newMat.material = availablePosition;
-                 }
-             }
-         }
-    }
+    // TESTING GetNodesMinMaxRange
+    // private void DrawAvailable()
+    // {
+    //     if (unitSelected != null)
+    //     {
+    //         Vector3 initialPosition = unitSelected.transform.position;
+    //         depth = pathfinding.depthLimit;
+    //         validMove = pathfinding.GetNodesMinMaxRange(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
+    //             false, 5, 11);
+    //
+    //         if (validMove != null && validMove.Count > 0)
+    //         {
+    //             foreach (var node in validMove)
+    //             {
+    //                 Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+    //                 newMat.material = availablePosition;
+    //             }
+    //         }
+    //     }
+    // }
 }

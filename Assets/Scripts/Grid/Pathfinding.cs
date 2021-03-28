@@ -4,18 +4,25 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-public class Pathfinding : MonoBehaviour 
+public class Pathfinding : MonoBehaviour
 {
-	
+
 	PathRequestManager requestManager;
+	[SerializeField] private Material displayPath;
+	[SerializeField] private Material defaultMat;
+	[SerializeField] private Material selectedTile;
+	
+	private  Node[] waypoints;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
-	public Grid grid;
+	Grid gridRef;
 	HeuristicFunction hf;
 	
 	// for testing
 	// [SerializeField] private Transform unit;
 	private Vector3 initialPosition;
+	private Renderer hoverMat;
+	private Renderer unhoverMat;
 	
 	// unity crashes when depth is greater than 17, setting restriction.
 	// to move to unit class.
@@ -24,13 +31,13 @@ public class Pathfinding : MonoBehaviour
 	public enum Heuristic
 	{
 		TileDistance,
-		EuclidieanDistance,
+		EuclideanDistance,
 		Dijkstra
 	}
 	void Awake() 
 	{
 		requestManager = GetComponent<PathRequestManager>();
-		grid = GetComponent<Grid>();
+		gridRef = GetComponent<Grid>();
 	}
 	
 	/*
@@ -41,9 +48,9 @@ public class Pathfinding : MonoBehaviour
 	{
 		Node startNode = null;
 		
-		if (grid != null) // fixes null reference error, when terminating the game
+		if (gridRef != null) // fixes null reference error, when terminating the game
 		{
-			startNode = grid.NodeFromWorldPoint(startPos);
+			startNode = gridRef.NodeFromWorldPoint(startPos);
 		}
 
 		Queue<Node> queue = new Queue<Node>();
@@ -75,7 +82,7 @@ public class Pathfinding : MonoBehaviour
 
 
 			visited.Add(currentNode);
-			var neighbours = grid.GetAdjacent(currentNode);
+			var neighbours = gridRef.GetAdjacent(currentNode);
 
 			foreach (var neighbour in neighbours)
 			{
@@ -91,6 +98,7 @@ public class Pathfinding : MonoBehaviour
 		return visited;
 	}
 	
+	// get all nodes within a min/max range
 	public HashSet<Node> GetNodesMinMaxRange(Vector3 startPos, bool canFly, int minRange, int maxRange)
 	{
 		Node startNode = null;
@@ -98,10 +106,10 @@ public class Pathfinding : MonoBehaviour
 		Node origin = null;
 		
 		
-		if (grid != null) // fixes null reference error, when terminating the game
+		if (gridRef != null) // fixes null reference error, when terminating the game
 		{
-			startNode = grid.NodeFromWorldPoint(startPos);
-			origin = grid.NodeFromWorldPoint(startPos);
+			startNode = gridRef.NodeFromWorldPoint(startPos);
+			origin = gridRef.NodeFromWorldPoint(startPos);
 		}
 
 		Queue<Node> queue = new Queue<Node>();
@@ -141,7 +149,7 @@ public class Pathfinding : MonoBehaviour
 			else
 				verify.Add(currentNode);
 			
-			var neighbours = grid.GetAdjacent(currentNode);
+			var neighbours = gridRef.GetAdjacent(currentNode);
 			
 
 			foreach (var neighbour in neighbours)
@@ -168,12 +176,60 @@ public class Pathfinding : MonoBehaviour
 		return visited;
 	}
 	
+	// get all enemy nodes within a range
+	public List<Node> GetEnemyUnitNodesInRange(int callingPlayerID, Vector3 startPos, bool canFly, int minRange, int maxRange)
+	{
+		List<Node> enemyUnitNodes = new List<Node>();
+
+		HashSet<Node> inRange = GetNodesMinMaxRange(startPos, canFly, minRange, maxRange);
+			
+			
+		for (int x = 0; x < gridRef.gridSizeX; x++)
+		{
+			for (int y = 0; y < gridRef.gridSizeY; y++)
+			{
+				var currentNode = gridRef.grid[x, y];
+				if ((currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID)||(currentNode.GetUnit() == null) && !inRange.Contains(currentNode))
+				{
+					continue;
+				}
+                
+				enemyUnitNodes.Add(gridRef.grid[x,y]);
+			}
+		}
+
+		return enemyUnitNodes;
+	}
 	
-	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, Heuristic desiredHeuristic) 
+	
+	// get all ally nodes within a range
+	public List<Node> GetAllyUnitNodesInRange(int callingPlayerID, Vector3 startPos, bool canFly, int minRange, int maxRange)
+	{
+		List<Node> allyUnitNodes = new List<Node>();
+		HashSet<Node> inRange = GetNodesMinMaxRange(startPos, canFly, minRange, maxRange);
+
+		for (int x = 0; x < gridRef.gridSizeX; x++)
+		{
+			for (int y = 0; y < gridRef.gridSizeY; y++)
+			{
+				var currentNode = gridRef.grid[x, y];
+				if (currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID && inRange.Contains(currentNode))
+				{
+					allyUnitNodes.Add(currentNode);
+				}
+			}
+		}
+
+		return allyUnitNodes;
+	}
+
+	
+
+	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPID, Heuristic desiredHeuristic) 
 	{
 		switch (desiredHeuristic)
 		{
-			case Heuristic.EuclidieanDistance:
+			case Heuristic.EuclideanDistance:
 			{
 				hf = new HeuristicFunction(GetEuclideanDistance);
 
@@ -198,26 +254,26 @@ public class Pathfinding : MonoBehaviour
 			}
 		}
 		
-		StartCoroutine(FindPath(startPos,targetPos, canFly, hf));
+		StartCoroutine(FindPath(startPos,targetPos, canFly, unitPID, hf));
 		//pass the function to use to calculate hCost
 		//can pass boolean to determine flying or normal pathfinding 
 	}
 	
-	
-	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, bool canFly, HeuristicFunction heuristicFunc) 
+	//also takes in the calling unit's PID
+	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPlayerID, HeuristicFunction heuristicFunc) 
 	{
-
-		Vector3[] waypoints = new Vector3[0];
+		waypoints = new Node[0];
 		bool pathSuccess = false;
 		
-		Node startNode = grid.NodeFromWorldPoint(startPos);
-		Node targetNode = grid.NodeFromWorldPoint(targetPos);
+		Node startNode = gridRef.NodeFromWorldPoint(startPos);
+		Node targetNode = gridRef.NodeFromWorldPoint(targetPos);
+		
 
 		HashSet<Node> nodesInBfs = BFSLimitSearch(startPos, canFly, depthLimit);
 		
 		if (startNode.canWalkHere && targetNode.canWalkHere && nodesInBfs.Contains(targetNode)) 
 		{
-			Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
+			Heap<Node> openSet = new Heap<Node>(gridRef.MaxSize);
 			HashSet<Node> closedSet = new HashSet<Node>();
 			openSet.Add(startNode);
 			
@@ -231,11 +287,21 @@ public class Pathfinding : MonoBehaviour
 					break;
 				}
 				
-				foreach (Node neighbour in grid.GetNeighbours(currentNode)) 
+				foreach (Node neighbour in gridRef.GetNeighbours(currentNode))
 				{
-					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour)) 
+					bool checkHostile = false;
+					
+					if (neighbour.GetUnit() != null)
 					{
-						continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set
+						if (neighbour.GetUnit().GetUnitPlayerID() != unitPlayerID)
+						{
+							checkHostile = true;
+						}
+					}
+					
+					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour) || checkHostile) 
+					{
+						continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set or if the unit in the node is hostile
 						//considers unwalkable nodes if unit can fly, and ignores any node if in closed set
 					}
 					
@@ -255,29 +321,93 @@ public class Pathfinding : MonoBehaviour
 		
 		yield return null;
 
+		
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
+
 		}
-		
+
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
-	Vector3[] RetracePath(Node startNode, Node endNode) {
+	public void DrawPath()
+	{
+		if (waypoints != null)
+		{
+			foreach (var node in waypoints)
+			{
+				Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+				pathMat.material = displayPath;
+			}
+		}
+	}
+
+	public void UnDrawPath()
+	{
+		if (waypoints != null)
+		{
+			foreach (var node in waypoints)
+			{
+				Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+				pathMat.material = defaultMat;
+			}
+		}
+	}
+	
+	public void SetHoverTilePrefab()
+	{
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		
+
+		if (Physics.Raycast(ray, out hit))
+		{
+			Transform pos = hit.transform;
+
+			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
+			
+			hoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
+			hoverMat.material = selectedTile;
+		}
+	}
+	
+	public void UnHoverTilePrefab()
+	{
+		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		
+
+		if (Physics.Raycast(ray, out hit))
+		{
+			Transform pos = hit.transform;
+
+			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
+			
+			unhoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
+			unhoverMat.material = defaultMat;
+		}
+	}
+
+	
+	private Node[] RetracePath(Node startNode, Node endNode) 
+	{
 		List<Node> path = new List<Node>();
 		Node currentNode = endNode;
 		
-		while (currentNode != startNode) {
+		while (currentNode != startNode)
+		{
 			path.Add(currentNode);
 			currentNode = currentNode.parent;
 		}
 		//Vector3[] waypoints = SimplifyPath(path);
-		Vector3[] waypoints = ConvertToArray(path);
-		Array.Reverse(waypoints);
-		return waypoints;
+		//Vector3[] waypoints = ConvertToArray(path);
+		//Array.Reverse(waypoints);
+		path.Reverse();
+		return path.ToArray();
 		
 	}
-	
+
 	Vector3[] SimplifyPath(List<Node> path) {
 		List<Vector3> waypoints = new List<Vector3>();
 		Vector2 directionOld = Vector2.zero;

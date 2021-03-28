@@ -8,7 +8,7 @@ public class Dummy : Unit
     // Start is called before the first frame update
     private void Start()
     {
-        //movementSpeed = 5;
+        
     }
 
     // Update is called once per frame

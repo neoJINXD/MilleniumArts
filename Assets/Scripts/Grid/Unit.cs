@@ -1,12 +1,16 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using ExitGames.Client.Photon.StructWrapping;
 using UnityEditor;
+using UnityEngine.Serialization;
 
 public class Unit : MonoBehaviour {
 
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
+    
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
     protected UnitTypes unitType;
     protected int unitPlayerId;
@@ -19,11 +23,15 @@ public class Unit : MonoBehaviour {
     protected int accuracy;
     protected int evasion;
     protected int cost;
-    protected Vector3[] path;
+    protected Node[] path;
     protected int targetIndex;
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
     public bool isClicked = false;
+    public bool startRoutine;
+    private Camera mainCam;
+    
+    #region UnitModifications
 
     public enum UnitTypes //enum for unit types
     {
@@ -368,57 +376,89 @@ public class Unit : MonoBehaviour {
         cost = Mathf.Clamp(cost, MINValue, MAXValue);
         return cost;
     }
+    
+    #endregion
+
+    void Awake()
+    {
+        mainCam = Camera.main;
+    }
 
     
     public void SelectNewUnitPosition()
     {
-         if (Input.GetMouseButtonDown(0))
-         {
-              RaycastHit hit;
-              Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                
+        RaycastHit hit;
+        Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
 
-              if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-              {
-                  // fixes out of bounce error that occurs when unit selected.
-                  if (Vector3.Distance(hit.point, transform.position) < 1)
-                         return; // already at destination
-                    
-                  PathRequestManager.RequestPath(transform.position,hit.point, canFly, OnPathFound, heuristic);
-              }
-         }
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+          // fixes out of bounce error that occurs when unit selected.
+          if (Vector3.Distance(hit.point, transform.position) < 1)
+                 return; // already at destination
+          
+            
+          PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
+        }
     }
     
-    //passes this function when requesting for path
-    //function starts the coroutine if pathfinding is successful
-    public void OnPathFound(Vector3[] newPath, bool pathSuccessful) 
+    
+
+
+    // passes this function when requesting for path
+    // function starts the coroutine if pathfinding is successful
+    public void OnPathFound(Node[] newPath, bool pathSuccessful) 
     {
-        if (pathSuccessful) {
+        if (pathSuccessful && Input.GetMouseButtonDown(0)) {
             path = newPath;
             targetIndex = 0;
+            
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
     }
+    
+    
 
     //updates unit position by following along the path
     IEnumerator FollowPath() 
     {
         if (isClicked)
         {
-            Vector3 currentWaypoint = path[0];
-            while (true) {
-                if (transform.position == currentWaypoint) {
+            Node currentWaypoint = path[0];
+            while (true)
+            {
+                if (transform.position == currentWaypoint.worldPosition) 
+                {
                     targetIndex++;
-                    if (targetIndex >= path.Length) {
+                    currentWaypoint.RemoveUnit(this);
+                    
+                    if (targetIndex >= path.Length) 
+                    {
                         yield break;
                     }
                     currentWaypoint = path[targetIndex];
+                    currentWaypoint.AddUnit(this);
                 }
 
-                transform.position = Vector3.MoveTowards(transform.position,currentWaypoint,movementSpeed * Time.deltaTime);
-            
+                transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,movementSpeed * Time.deltaTime);
+
+                CheckHostileTrapOrItemInNode(currentWaypoint);
+
                 yield return null;
+            }
+        }
+    }
+
+    public void CheckHostileTrapOrItemInNode(Node waypoint)
+    {
+        List<TrapOrItem> toiList = waypoint.GetTrapOrItemList();
+
+        foreach (TrapOrItem toi in toiList)
+        {
+            if (toi.GetTrapOrItemPlayerID() != this.GetUnitPlayerID())
+            {
+                toi.TrapOrItemTriggeredByUnit();
             }
         }
     }

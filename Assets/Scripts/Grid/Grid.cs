@@ -10,8 +10,10 @@ public class Grid : MonoBehaviour
     // the size of the grid
     [SerializeField] private float size;
     [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private GameObject tileUnwalkablePrefab;
 
     public static GameObject[,] tileTrack;
+    public static GameObject[] tileCollides;
 
     private Vector3 newPosition;
 
@@ -21,9 +23,9 @@ public class Grid : MonoBehaviour
     public LayerMask unableToWalkHere;
     public Vector2 gridWorldSize;
     public float nodeRadius;
-    private Node[,] grid;
+    public Node[,] grid;
     private float nodeDiameter;
-    private int gridSizeX, gridSizeY;
+    public int gridSizeX, gridSizeY;
 
     void Awake()
     {
@@ -60,7 +62,7 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (grid[x,y].playerIDOfUnits == -1)
+                if (grid[x,y].GetUnit() == null)
                 {
                     continue;
                 }
@@ -81,7 +83,7 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (grid[x,y].playerIDOfUnits == callingPlayerID)
+                if (grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)
                 {
                     allyUnitNodes.Add(grid[x,y]);
                 }
@@ -90,6 +92,8 @@ public class Grid : MonoBehaviour
 
         return allyUnitNodes;
     }
+    
+    
 
     //returns a list of all enemy unit nodes
     //pass the calling player's ID, NOT the enemy player ID
@@ -101,7 +105,7 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if ((grid[x,y].playerIDOfUnits == callingPlayerID)||(grid[x,y].playerIDOfUnits == -1))
+                if ((grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)||(grid[x,y].GetUnit() == null))
                 {
                     continue;
                 }
@@ -112,6 +116,7 @@ public class Grid : MonoBehaviour
 
         return enemyUnitNodes;
     }
+    
 
     void CreateGrid()
     {
@@ -125,15 +130,24 @@ public class Grid : MonoBehaviour
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
 
-                tileTrack[x, y] = Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                
                 // returns true if collision
                 bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unableToWalkHere));
-
+                
+                if (walkable)
+                {
+                    tileTrack[x, y] = Instantiate(tilePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                }
+                else
+                {
+                    tileTrack[x, y] = Instantiate(tileUnwalkablePrefab, worldPoint, quaternion.Euler(0, 0, 0));
+                }
+                
                 grid[x, y] = new Node(walkable, worldPoint, x, y);
             }
         }
     }
-
+    
     // might have to use boolean, to change walkable nodes, based on flying and ground units.
     public List<Node> GetNeighbours(Node node)
     {

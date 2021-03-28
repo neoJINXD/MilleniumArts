@@ -3,17 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Item : MonoBehaviour
+public class TrapOrItem : MonoBehaviour
 {
-    protected int itemPlayerID;
-    protected int itemHealth;
+    protected int trapOrItemPlayerID;
+    protected int trapOrItemHealth;
     protected int minRange;
     protected int maxRange;
-    protected ItemTypes itemType;
+    protected TrapOrItemTypes trapOrItemType;
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
     
-    public enum ItemTypes //enum for item/trap types
+    public enum TrapOrItemTypes //enum for item/trap types
     {
         BearTrap,
         LandMine,
@@ -24,70 +24,77 @@ public abstract class Item : MonoBehaviour
     }
     
     //default abstract constructor
-    protected Item()
+    protected TrapOrItem()
     {
-        itemPlayerID = -1;
-        itemHealth = 0;
+        trapOrItemPlayerID = -1;
+        trapOrItemHealth = 0;
         minRange = 0;
         maxRange = 0;
-        itemType = ItemTypes.ItemUndefined;
+        trapOrItemType = TrapOrItemTypes.ItemUndefined;
     }
 
     //parameterized abstract constructor
-    protected Item(int _itemPlayerID, int _itemHealth, int _minRange, int _maxRange, ItemTypes _itemType)
+    protected TrapOrItem(int _trapOrItemPlayerID, int _trapOrItemHealth, int _minRange, int _maxRange, TrapOrItemTypes _trapOrItemType)
     {
-        itemPlayerID = _itemPlayerID;
-        itemHealth = _itemHealth;
+        trapOrItemPlayerID = _trapOrItemPlayerID;
+        trapOrItemHealth = _trapOrItemHealth;
         minRange = _minRange;
         maxRange = _maxRange;
-        itemType = _itemType;
+        trapOrItemType = _trapOrItemType;
+    }
+
+    //function called when Unit triggers the Trap or Item in a Node
+    public virtual void TrapOrItemTriggeredByUnit()
+    {
+        //override per child class specification
+        throw new Exception("Override TrapOrItemTriggeredByUnit function");
     }
     
     //set and get functions for item type
-    public virtual void SetItemType(ItemTypes iT)
+    public virtual void SetTrapOrItemType(TrapOrItemTypes toi)
     {
-        itemType = iT;
+        trapOrItemType = toi;
     }
     
-    public virtual ItemTypes GetItemType()
+    public virtual TrapOrItemTypes GetItemType()
     {
-        return itemType;
+        return trapOrItemType;
     }
 
     //set and get functions for item playerID
-    public virtual void SetItemPlayerID(int pID)
+    public virtual void SetTrapOrItemPlayerID(int pID)
     {
-        itemPlayerID = pID;
+        trapOrItemPlayerID = pID;
     }
     
-    public virtual int GetItemPlayerID(int pID)
+    public virtual int GetTrapOrItemPlayerID()
     {
-        return itemPlayerID;
+        return trapOrItemPlayerID;
     }
     
     //set, get and update functions for item health
-    public virtual void SetItemHealth(int iH)
+    public virtual void SetTrapOrItemHealth(int iH)
     {
-        itemHealth = Mathf.Clamp(iH, MINValue, MAXValue);
+        trapOrItemHealth = Mathf.Clamp(iH, MINValue, MAXValue);
     }
 
-    public virtual int GetItemHealth()
+    public virtual int GetTrapOrItemHealth()
     {
-        return itemHealth;
+        return trapOrItemHealth;
     }
 
-    public virtual int IncreaseItemHealthBy(int iH)
+    public virtual int IncreaseTrapOrItemHealthBy(int iH)
     {
-        itemHealth += iH;
-        itemHealth = Mathf.Clamp(itemHealth, MINValue, MAXValue);
-        return itemHealth;
+        trapOrItemHealth += iH;
+        trapOrItemHealth = Mathf.Clamp(trapOrItemHealth, MINValue, MAXValue);
+        return trapOrItemHealth;
     }
     
-    public virtual int DecreaseItemHealthBy(int iH)
+    public virtual int DecreaseTrapOrItemHealthBy(int iH)
     {
-        itemHealth -= iH;
-        itemHealth = Mathf.Clamp(itemHealth, MINValue, MAXValue);
-        return itemHealth;
+        trapOrItemHealth -= iH;
+        trapOrItemHealth = Mathf.Clamp(trapOrItemHealth, MINValue, MAXValue);
+        return trapOrItemHealth;
     }
     
     //set, get and update functions for min range
