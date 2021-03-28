@@ -165,7 +165,7 @@ public class Grid : MonoBehaviour
         Transform spawnPosP2 = kingSpawnP2[randPos];
 
         Instantiate(kingPlayer1, spawnPosP1.transform, false);
-        Instantiate(kingPlayer1, spawnPosP2.transform, false);
+        Instantiate(kingPlayer2, spawnPosP2.transform, false);
     }
 
     // might have to use boolean, to change walkable nodes, based on flying and ground units.

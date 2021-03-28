@@ -124,37 +124,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &176174471
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 176174472}
-  m_Layer: 0
-  m_Name: Kings
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &176174472
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 176174471}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -29.889557, y: -1.4691207, z: 16.443214}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1084266113}
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &373376742
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,7 +416,8 @@ MonoBehaviour:
   displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
   defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
   selectedTile: {fileID: 2100000, guid: 0027759dfc5935d4a99771f544d66a93, type: 2}
-  depthLimit: 7
+  minDepthLimit: 2
+  maxDepthLimit: 3
 --- !u!114 &844824551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -836,7 +806,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1084266113}
   m_Layer: 0
-  m_Name: Spawner
+  m_Name: KingSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -849,16 +819,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1084266112}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -29.889557, y: -1.4691207, z: 16.443214}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 596508712}
   - {fileID: 373376743}
   - {fileID: 1977095599}
   - {fileID: 965627753}
-  m_Father: {fileID: 176174472}
-  m_RootOrder: 0
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1084916422
 GameObject:
