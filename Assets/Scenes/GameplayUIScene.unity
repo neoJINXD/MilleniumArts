@@ -562,7 +562,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rt: {fileID: 0}
 --- !u!1 &426974723
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rt: {fileID: 0}
 --- !u!1 &519134276
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +738,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rt: {fileID: 0}
 --- !u!1 &616955415
 GameObject:
   m_ObjectHideFlags: 0
@@ -1416,7 +1413,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rt: {fileID: 0}
 --- !u!1 &1248598442
 GameObject:
   m_ObjectHideFlags: 0
@@ -1686,8 +1682,6 @@ MonoBehaviour:
     type: 3}
   endTurnButton: {fileID: 662157575}
   hardCap: 0
-  dynamicHandFilled: 0
-  myTurn: 0
 --- !u!114 &1492900001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1857,7 +1851,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rt: {fileID: 0}
 --- !u!1 &1680785971
 GameObject:
   m_ObjectHideFlags: 0
