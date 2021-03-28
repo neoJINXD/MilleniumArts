@@ -14,6 +14,12 @@ public class PlacerManager : Singleton<PlacerManager>
     private const float lockAxis = 27f;
     private Player playerPlacing = default;
 
+    public CardEffectManager cardEffectManager;
+
+    void Awake()
+    {
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(1) && placerClicked)
@@ -24,6 +30,97 @@ public class PlacerManager : Singleton<PlacerManager>
             //TODO: will have to use real card and real card index
             PlaceCard(playerPlacing, new Card(), 0, areaToInstantiate); 
             placerClicked = false;
+        }
+
+        // create for player 0: keys: 1,2,3,4,5,6,7
+        if (Input.GetKeyDown(KeyCode.Alpha1) && placerClicked)
+        {
+            cardEffectManager.createKingUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2) && placerClicked)
+        {
+            cardEffectManager.createSoldierUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3) && placerClicked)
+        {
+            cardEffectManager.createKnightUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4) && placerClicked)
+        {
+            cardEffectManager.createAssassinUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5) && placerClicked)
+        {
+            cardEffectManager.createPriestUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha6) && placerClicked)
+        {
+            cardEffectManager.createArcherUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha7) && placerClicked)
+        {
+            cardEffectManager.createDragonRiderUnit(0);
+            placerClicked = false;
+        }
+
+        // create for player 1 w: keys: q,w,e,r,t,y,u
+        if (Input.GetKeyDown(KeyCode.Q) && placerClicked)
+        {
+            cardEffectManager.createKingUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.W) && placerClicked)
+        {
+            cardEffectManager.createSoldierUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && placerClicked)
+        {
+            cardEffectManager.createKnightUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && placerClicked)
+        {
+            cardEffectManager.createAssassinUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.T) && placerClicked)
+        {
+            cardEffectManager.createPriestUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y) && placerClicked)
+        {
+            cardEffectManager.createArcherUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.U) && placerClicked)
+        {
+            cardEffectManager.createDragonRiderUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            cardEffectManager.spell_smite(0);
         }
     }
     public void CreateUnit(Player player)
@@ -66,4 +163,5 @@ public class PlacerManager : Singleton<PlacerManager>
     // {
     //     transform.position = GetMouseWorldPos() + mOffSet;
     // }
+
 }
