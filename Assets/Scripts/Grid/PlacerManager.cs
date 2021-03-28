@@ -5,22 +5,33 @@ using Zone.Core.Utils;
 
 public class PlacerManager : Singleton<PlacerManager>
 {
-    [SerializeField] private GameObject unitCreation;
+    [SerializeField] private Unit unitCreation;
     private bool placerClicked = false;
     private const float lockAxis = 27f;
+    private Player playerPlacing = default;
 
     private void Update()
     {
         if (Input.GetMouseButtonDown(1) && placerClicked)
         {
-            Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-            Instantiate(unitCreation, areaToInstantiate, Quaternion.identity);
+            Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(
+                new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+            
+            PlaceCard(playerPlacing, new Card(), areaToInstantiate); //TODO: will have to use real card
             placerClicked = false;
         }
     }
-    public void CreateUnit()
+    public void CreateUnit(Player player)
     {
+        playerPlacing = player;
         placerClicked = true;
+    }
+
+    public void PlaceCard(Player currentPlayer, Card card, Vector3 targetLocation)
+    {
+        //TODO: replace with check for type of card instead of just using a unit (e.i. spells or traps too)
+        Unit unitPlaced = Instantiate(unitCreation, targetLocation, Quaternion.identity);
+        currentPlayer.AddUnit(unitPlaced);
     }
 
     // for testing, allows to drag a unit with mouse, but might not be needed as can just click on square and instantiate.
