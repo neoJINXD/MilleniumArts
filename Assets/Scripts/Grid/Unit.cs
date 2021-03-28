@@ -6,7 +6,7 @@ using ExitGames.Client.Photon.StructWrapping;
 using UnityEditor;
 using UnityEngine.Serialization;
 
-public abstract class Unit : MonoBehaviour {
+public class Unit : MonoBehaviour {
 
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
@@ -479,4 +479,21 @@ public abstract class Unit : MonoBehaviour {
     //         }
     //     }
     // }
+
+    void OnMouseDown()
+    {
+        Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID());
+        Debug.Log("Type: " + GetComponent<Unit>().GetUnitType());
+        Debug.Log("Max HP: " + GetComponent<Unit>().GetMaxHealth());
+        Debug.Log("Current HP: " + GetComponent<Unit>().GetCurrentHealth());
+        Debug.Log("Damage: " + GetComponent<Unit>().GetDamage());
+        Debug.Log("Defence: " + GetComponent<Unit>().GetDefence());
+        Debug.Log("Min Range: " + GetComponent<Unit>().GetMinRange());
+        Debug.Log("Max Range: " + GetComponent<Unit>().GetMaxRange());
+        Debug.Log("Accuracy: " + GetComponent<Unit>().GetAccuracy());
+        Debug.Log("Evasion: " + GetComponent<Unit>().GetEvasion());
+        Debug.Log("MS: " + GetComponent<Unit>().GetMovementSpeed());
+        Debug.Log("Flying: " + GetComponent<Unit>().GetCanFly());
+    }
+
 }

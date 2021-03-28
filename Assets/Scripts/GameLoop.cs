@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zone.Core.Utils;
@@ -12,13 +12,18 @@ public class GameLoop : Singleton<GameLoop>
     private GameLoop()
     {}
 
-    private List<Player> players = new List<Player>();
+    [SerializeField] private List<Player> players = new List<Player>();
 
     private int index;
 
     //To be able to wait for local player, networked player, and AI player turns
     public IEnumerator Play()
     {
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].PlayerId = i;
+        }
+        
         while (true)
         {
             for (index = 0; index < players.Count; index++)
@@ -35,7 +40,7 @@ public class GameLoop : Singleton<GameLoop>
     {
         players.Add(toAdd);
     }
-
+    
     public Player AddReturnPlayer(Player toAdd)
     {
         players.Add(toAdd);

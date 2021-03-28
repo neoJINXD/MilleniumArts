@@ -11,10 +11,11 @@ public class GameManager : Singleton<GameManager>
 {
     private GameLoop gameLoop;
 
+    [SerializeField] private bool networked;
     [SerializeField] private GameObject player1Spawn;
     [SerializeField] private GameObject player2Spawn;
-    [SerializeField]private GameObject player1;
-    [SerializeField]private GameObject player2;
+    [SerializeField] private GameObject player1;
+    [SerializeField] private GameObject player2;
     [SerializeField] Material player1Mat;
     [SerializeField] Material player2Mat;
 
@@ -23,6 +24,23 @@ public class GameManager : Singleton<GameManager>
     void Start()
     {
         gameLoop = GameLoop.instance;
+        if (networked)
+        {
+            PhotonStart();
+        }
+        else
+        {
+            LocalStart();
+        }
+    }
+
+    private void LocalStart()
+    {
+        StartCoroutine(gameLoop.Play());
+    }
+
+    private void PhotonStart()
+    {
         view = GetComponent<PhotonView>();
 
         if (!PhotonNetwork.IsConnected)
@@ -48,9 +66,7 @@ public class GameManager : Singleton<GameManager>
             player2.GetComponent<Renderer>().material = player2Mat;
         }
 
-        // gameLoop.AddPlayer(gameObject.AddComponent<Player>());
         Player p1 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
-        // gameLoop.AddPlayer(gameObject.AddComponent<Player>());
         Player p2 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
         StartCoroutine(gameLoop.Play());
 
