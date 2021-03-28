@@ -7,9 +7,15 @@ public class AIPlayer : Player
     public override void StartTurn()
     {
         TurnComplete = false;
+        StartCoroutine(SimulateTurn());
+    }
+
+    private IEnumerator SimulateTurn()
+    {
         for (var i = 0; i < m_playerCards.Count; i++)
         {
             PlayCard(i);
+            yield return new WaitForSeconds(0.5f);
         }
         
         EndTurn();
@@ -20,10 +26,10 @@ public class AIPlayer : Player
         if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
         {
             Card cardToPlay = GetCard(cardIndex);
-            if (cardToPlay.ManaCost <= PlayerMana)
+            if (cardToPlay.cost <= PlayerMana)
             {
                 if(cardToPlay.Type == CardType.Unit)
-                    m_placerManager.PlaceCard(this, cardToPlay, 
+                    PlacerManager.instance.PlaceCard(this, cardToPlay, cardIndex,
                         new Vector3(Random.Range(-10, 10), 0, Random.Range(-10f, 10f)));
             }
             else
@@ -31,7 +37,6 @@ public class AIPlayer : Player
                 Debug.LogWarning("Not enough mana");
             }
             
-            RemoveCard(cardIndex);
         }
         else
         {

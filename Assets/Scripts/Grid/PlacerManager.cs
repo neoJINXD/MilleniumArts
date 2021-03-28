@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zone.Core.Utils;
 
+/*
+ *  Verify card placments and perform card actions
+ */
+
 public class PlacerManager : Singleton<PlacerManager>
 {
     [SerializeField] private Unit unitCreation;
@@ -17,7 +21,8 @@ public class PlacerManager : Singleton<PlacerManager>
             Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(
                 new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
             
-            PlaceCard(playerPlacing, new Card(), areaToInstantiate); //TODO: will have to use real card
+            //TODO: will have to use real card and real card index
+            PlaceCard(playerPlacing, new Card(), 0, areaToInstantiate); 
             placerClicked = false;
         }
     }
@@ -27,10 +32,11 @@ public class PlacerManager : Singleton<PlacerManager>
         placerClicked = true;
     }
 
-    public void PlaceCard(Player currentPlayer, Card card, Vector3 targetLocation)
+    public void PlaceCard(Player currentPlayer, Card card, int cardIndex, Vector3 targetLocation)
     {
         //TODO: replace with check for type of card instead of just using a unit (e.i. spells or traps too)
         Unit unitPlaced = Instantiate(unitCreation, targetLocation, Quaternion.identity);
+        currentPlayer.RemoveCard(cardIndex);
         currentPlayer.AddUnit(unitPlaced);
     }
 

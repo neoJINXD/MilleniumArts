@@ -1,10 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card : MonoBehaviour
+public enum CardType
 {
-    string cardName;
-    GameObject image;
-    int cost;
+    Unit = 0,
+    Spell = 1,
+    Trap = 2
+}
+
+[Serializable]
+public class Card
+{
+    public CardType Type;
+    public string cardName;
+    public GameObject image;
+    public int cost;
 }
