@@ -187,6 +187,9 @@ public class CardEffectManager : MonoBehaviour
      * Effect: Damages an enemy unit for 5 health.
      * Cost: 3
      */
+    
+    //commented out because wasnt compiling -scott
+    
     public void spell_smite(int playerId)
     {
         // Grid grid = pathfinding.grid;
