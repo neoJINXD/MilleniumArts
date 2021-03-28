@@ -20,6 +20,20 @@ public class PlacerManager : Singleton<PlacerManager>
     {
     }
 
+    public void CreateUnit(Player player)
+    {
+        playerPlacing = player;
+        placerClicked = true;
+    }
+
+    public void PlaceCard(Player currentPlayer, Card card, int cardIndex, Vector3 targetLocation)
+    {
+        //TODO: replace with check for type of card instead of just using a unit (e.i. spells or traps too)
+        Unit unitPlaced = Instantiate(unitCreation, targetLocation, Quaternion.identity);
+        currentPlayer.RemoveCard(cardIndex);
+        currentPlayer.AddUnit(unitPlaced);
+    }
+
     private void Update()
     {
         if (Input.GetMouseButtonDown(1) && placerClicked)
@@ -123,20 +137,6 @@ public class PlacerManager : Singleton<PlacerManager>
             cardEffectManager.spell_smite(0);
         }
     }
-    public void CreateUnit(Player player)
-    {
-        playerPlacing = player;
-        placerClicked = true;
-    }
-
-    public void PlaceCard(Player currentPlayer, Card card, int cardIndex, Vector3 targetLocation)
-    {
-        //TODO: replace with check for type of card instead of just using a unit (e.i. spells or traps too)
-        Unit unitPlaced = Instantiate(unitCreation, targetLocation, Quaternion.identity);
-        currentPlayer.RemoveCard(cardIndex);
-        currentPlayer.AddUnit(unitPlaced);
-    }
-
     // for testing, allows to drag a unit with mouse, but might not be needed as can just click on square and instantiate.
     // private Vector3 mOffSet;
     // private float mZCoord;

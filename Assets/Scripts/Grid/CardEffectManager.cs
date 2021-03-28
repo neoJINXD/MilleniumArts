@@ -189,13 +189,13 @@ public class CardEffectManager : MonoBehaviour
      */
     public void spell_smite(int playerId)
     {
-        Grid grid = pathfinding.grid;
-        List<Node> allyNodes = grid.GetAllyUnitNodes(0);
-        print("XD: " + allyNodes.Count);
-        foreach(Node node in allyNodes)
-        {
-            print(node.GetUnitList());
-        }
+        // Grid grid = pathfinding.grid;
+        // List<Node> allyNodes = grid.GetAllyUnitNodes(0);
+        // print("XD: " + allyNodes.Count);
+        // foreach(Node node in allyNodes)
+        // {
+        //     print(node.GetUnitList());
+        // }
     }
 }
 

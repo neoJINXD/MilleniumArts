@@ -39,4 +39,6 @@ public class PlayerUI : MonoBehaviour
     {
         m_player.PlayCard(cardIndex);
     }
+    
+    //TODO: read m_player cards and hide update card UI, likely on update
 }
