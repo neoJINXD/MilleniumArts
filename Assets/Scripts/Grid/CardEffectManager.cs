@@ -14,9 +14,12 @@ public class CardEffectManager : MonoBehaviour
     private Unit currentUnit;
     private Unit[] unitArray;
 
+    private Grid grid;
+
     void Awake()
     {
         pathfinding = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
+        grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
     // Update is called once per frame
@@ -71,6 +74,16 @@ public class CardEffectManager : MonoBehaviour
         soldierUnit.SetMaxRange(1);
         soldierUnit.SetAccuracy(80);
         soldierUnit.SetEvasion(20);
+        print(grid);
+        // create initial temp king
+        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
+        node.AddUnit(soldierUnit.GetComponent<Unit>());
+
+        //hardcoded color for test
+        if (playerId == 0)
+            soldierUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
+        else
+            soldierUnit.transform.GetComponent<Renderer>().material.color = Color.red;
     }
 
     // create Knight unit
@@ -177,7 +190,6 @@ public class CardEffectManager : MonoBehaviour
         dragonRiderUnit.SetAccuracy(85);
         dragonRiderUnit.SetEvasion(20);
     }
-
 
 
     /*

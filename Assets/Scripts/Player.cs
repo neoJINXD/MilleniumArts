@@ -37,8 +37,13 @@ public abstract class Player : MonoBehaviour
             Card cardToPlay = GetCard(cardIndex);
             if (cardToPlay.cost <= PlayerMana)
             {
-                if(cardToPlay.Type == CardType.Unit)
-                    PlacerManager.instance.CreateUnit(this);
+                if(cardToPlay.type == CardType.Unit)
+                {
+                    //PlacerManager.instance.CreateUnit(this);
+                    GameplayManager.instance.cardSelected = true;
+                    GameplayManager.instance.currentPlayer = this;
+
+                }
             }
             else
             {

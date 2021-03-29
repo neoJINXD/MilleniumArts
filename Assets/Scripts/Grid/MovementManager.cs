@@ -18,12 +18,15 @@ public class MovementManager : Singleton<MovementManager>
     private Camera mainCam;
     private Ray ray;
     private RaycastHit hit;
+
+    public PlacerManager placerManager;
     
     
     void Awake()
     {
         pathfinding = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         mainCam = Camera.main;
+        placerManager = GameObject.Find("PlacerManager").GetComponent<PlacerManager>();
     }
 
     private void Update()
@@ -36,7 +39,7 @@ public class MovementManager : Singleton<MovementManager>
         
         if (hasSelected)
         {
-            unitSelected.SelectNewUnitPosition();
+            //unitSelected.SelectNewUnitPosition();
         }
     }
     
@@ -44,9 +47,9 @@ public class MovementManager : Singleton<MovementManager>
     private void CheckDesiredUnit()
     {
         ray = mainCam.ScreenPointToRay(Input.mousePosition);
-        
+
         ResetMaterial();
-        
+
         if (Physics.Raycast(ray, out hit))
         {
             var selected = hit.transform;
@@ -56,15 +59,15 @@ public class MovementManager : Singleton<MovementManager>
                 if (unitSelected != null)
                 {
                     unitSelected.isClicked = false;
-                    
+
                 }
-                
-                
+
+
                 unitSelected = selected.GetComponent<Unit>();
                 unitSelected.isClicked = true;
                 hasSelected = true;
-                
-                
+
+
 
                 DrawAvailable();
             }
@@ -72,8 +75,7 @@ public class MovementManager : Singleton<MovementManager>
     }
     
     
-    
-/*    private void DrawAvailable()
+    private void DrawAvailable()
     {
         if (unitSelected != null)
         {
@@ -92,7 +94,7 @@ public class MovementManager : Singleton<MovementManager>
             }
         }
     }
-*/
+
     private void ResetMaterial()
     {
         if (validMove != null)
@@ -126,7 +128,7 @@ public class MovementManager : Singleton<MovementManager>
     // }
 
     // TESTING GetNodesMinMaxRange
-     private void DrawAvailable()
+/*     private void DrawAvailable()
      {
          if (unitSelected != null)
          {
@@ -144,5 +146,5 @@ public class MovementManager : Singleton<MovementManager>
                  }
              }
          }
-    }
+    }*/
 }

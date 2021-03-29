@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class SpellCard : Card
 {
-    string description;
-    SpellEffect[] effects;
+    public string description;
+
 }

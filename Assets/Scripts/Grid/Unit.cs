@@ -401,54 +401,89 @@ public class Unit : MonoBehaviour {
           PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
         }
     }
-    
-    
+
+
 
 
     // passes this function when requesting for path
     // function starts the coroutine if pathfinding is successful
-    public void OnPathFound(Node[] newPath, bool pathSuccessful) 
+    /*    public void OnPathFound(Node[] newPath, bool pathSuccessful) 
+        {
+            if (pathSuccessful && Input.GetMouseButtonDown(0)) {
+                path = newPath;
+                targetIndex = 0;
+
+                StopCoroutine("FollowPath");
+                StartCoroutine("FollowPath");
+            }
+        }
+    */
+    public void OnPathFound(Node[] newPath, bool pathSuccessful)
     {
-        if (pathSuccessful && Input.GetMouseButtonDown(0)) {
+        if (pathSuccessful)
+        {
             path = newPath;
             targetIndex = 0;
-            
+
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
     }
-    
-    
 
     //updates unit position by following along the path
-    IEnumerator FollowPath() 
+    IEnumerator FollowPath()
     {
-        if (isClicked)
+        Node currentWaypoint = path[0];
+        while (true)
         {
-            Node currentWaypoint = path[0];
-            while (true)
+            if (transform.position == currentWaypoint.worldPosition)
             {
-                if (transform.position == currentWaypoint.worldPosition) 
+                targetIndex++;
+                currentWaypoint.RemoveUnit(this);
+
+                if (targetIndex >= path.Length)
                 {
-                    targetIndex++;
-                    currentWaypoint.RemoveUnit(this);
-                    
-                    if (targetIndex >= path.Length) 
-                    {
-                        yield break;
-                    }
-                    currentWaypoint = path[targetIndex];
-                    currentWaypoint.AddUnit(this);
+                    yield break;
                 }
-
-                transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,movementSpeed * Time.deltaTime);
-
-                CheckHostileTrapOrItemInNode(currentWaypoint);
-
-                yield return null;
+                currentWaypoint = path[targetIndex];
+                currentWaypoint.AddUnit(this);
             }
+
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, movementSpeed * Time.deltaTime);
+
+            CheckHostileTrapOrItemInNode(currentWaypoint);
+
+            yield return null;
         }
     }
+    /*    IEnumerator FollowPath() 
+        {
+            if (isClicked)
+            {
+                Node currentWaypoint = path[0];
+                while (true)
+                {
+                    if (transform.position == currentWaypoint.worldPosition) 
+                    {
+                        targetIndex++;
+                        currentWaypoint.RemoveUnit(this);
+
+                        if (targetIndex >= path.Length) 
+                        {
+                            yield break;
+                        }
+                        currentWaypoint = path[targetIndex];
+                        currentWaypoint.AddUnit(this);
+                    }
+
+                    transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,movementSpeed * Time.deltaTime);
+
+                    CheckHostileTrapOrItemInNode(currentWaypoint);
+
+                    yield return null;
+                }
+            }
+        }*/
 
     public void CheckHostileTrapOrItemInNode(Node waypoint)
     {
@@ -482,18 +517,18 @@ public class Unit : MonoBehaviour {
 
     void OnMouseDown()
     {
-        Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID());
-        Debug.Log("Type: " + GetComponent<Unit>().GetUnitType());
-        Debug.Log("Max HP: " + GetComponent<Unit>().GetMaxHealth());
-        Debug.Log("Current HP: " + GetComponent<Unit>().GetCurrentHealth());
-        Debug.Log("Damage: " + GetComponent<Unit>().GetDamage());
-        Debug.Log("Defence: " + GetComponent<Unit>().GetDefence());
-        Debug.Log("Min Range: " + GetComponent<Unit>().GetMinRange());
-        Debug.Log("Max Range: " + GetComponent<Unit>().GetMaxRange());
-        Debug.Log("Accuracy: " + GetComponent<Unit>().GetAccuracy());
-        Debug.Log("Evasion: " + GetComponent<Unit>().GetEvasion());
-        Debug.Log("MS: " + GetComponent<Unit>().GetMovementSpeed());
-        Debug.Log("Flying: " + GetComponent<Unit>().GetCanFly());
+        Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID() + 
+            "\nType: " + GetComponent<Unit>().GetUnitType() + 
+            "\nMax HP: " + GetComponent<Unit>().GetMaxHealth() + 
+            "\nCurrent HP: " + GetComponent<Unit>().GetCurrentHealth() +
+            "\nDamage: " + GetComponent<Unit>().GetDamage() +
+            "\nDefence: " + GetComponent<Unit>().GetDefence() + 
+            "\nMin Range: " + GetComponent<Unit>().GetMinRange() +
+            "\nMax Range: " + GetComponent<Unit>().GetMaxRange() +
+            "\nAccuracy: " + GetComponent<Unit>().GetAccuracy() +
+            "\nEvasion: " + GetComponent<Unit>().GetEvasion() +
+            "\nMS: " + GetComponent<Unit>().GetMovementSpeed() +
+            "\nFlying: " + GetComponent<Unit>().GetCanFly());
     }
 
 }

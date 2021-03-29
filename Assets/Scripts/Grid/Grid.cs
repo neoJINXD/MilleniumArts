@@ -84,9 +84,12 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)
+                if (grid[x, y].GetUnit() != null)
                 {
-                    allyUnitNodes.Add(grid[x,y]);
+                    if (grid[x, y].GetUnit().GetUnitPlayerID() == callingPlayerID)
+                    {
+                        allyUnitNodes.Add(grid[x, y]);
+                    }
                 }
             }
         }
