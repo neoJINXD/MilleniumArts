@@ -47,6 +47,7 @@ public class TrapOrItem : MonoBehaviour
     public virtual void TrapOrItemTriggeredByUnit()
     {
         //override per child class specification
+        Debug.Log("Dummy TrapTriggeredByUnit function");
         throw new Exception("Override TrapOrItemTriggeredByUnit function");
     }
     

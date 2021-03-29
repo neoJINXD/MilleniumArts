@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine.Serialization;
 
 public class Pathfinding : MonoBehaviour
 {
@@ -26,7 +27,8 @@ public class Pathfinding : MonoBehaviour
 	
 	// unity crashes when depth is greater than 17, setting restriction.
 	// to move to unit class.
-	[Range(0,15)] public int depthLimit;
+	[Range(0,15)] public int minDepthLimit;
+	[Range(0,15)] public int maxDepthLimit;
 
 	public enum Heuristic
 	{
@@ -189,12 +191,16 @@ public class Pathfinding : MonoBehaviour
 			for (int y = 0; y < gridRef.gridSizeY; y++)
 			{
 				var currentNode = gridRef.grid[x, y];
-				if ((currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID)||(currentNode.GetUnit() == null) && !inRange.Contains(currentNode))
+
+				if (currentNode.GetUnit() != null)
 				{
-					continue;
-				}
+					if ((currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID)||(currentNode.GetUnit() == null) && !inRange.Contains(currentNode))
+					{
+						continue;
+					}
                 
-				enemyUnitNodes.Add(gridRef.grid[x,y]);
+					enemyUnitNodes.Add(gridRef.grid[x,y]);
+				}
 			}
 		}
 
@@ -213,9 +219,13 @@ public class Pathfinding : MonoBehaviour
 			for (int y = 0; y < gridRef.gridSizeY; y++)
 			{
 				var currentNode = gridRef.grid[x, y];
-				if (currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID && inRange.Contains(currentNode))
+
+				if (currentNode.GetUnit() != null)
 				{
-					allyUnitNodes.Add(currentNode);
+					if (currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID && inRange.Contains(currentNode))
+					{
+						allyUnitNodes.Add(currentNode);
+					}
 				}
 			}
 		}
@@ -268,10 +278,9 @@ public class Pathfinding : MonoBehaviour
 		Node startNode = gridRef.NodeFromWorldPoint(startPos);
 		Node targetNode = gridRef.NodeFromWorldPoint(targetPos);
 		
-
-		HashSet<Node> nodesInBfs = BFSLimitSearch(startPos, canFly, depthLimit);
+		HashSet<Node> nodesInBfsRange = GetNodesMinMaxRange(startPos, canFly, minDepthLimit, maxDepthLimit);
 		
-		if (startNode.canWalkHere && targetNode.canWalkHere && nodesInBfs.Contains(targetNode)) 
+		if (startNode.canWalkHere && targetNode.canWalkHere && nodesInBfsRange.Contains(targetNode)) 
 		{
 			Heap<Node> openSet = new Heap<Node>(gridRef.MaxSize);
 			HashSet<Node> closedSet = new HashSet<Node>();
