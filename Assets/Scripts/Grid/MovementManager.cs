@@ -133,9 +133,9 @@ public class MovementManager : Singleton<MovementManager>
          if (unitSelected != null)
          {
              Vector3 initialPosition = unitSelected.transform.position;
-             depth = pathfinding.maxDepthLimit;
+             depth = pathfinding.depthLimit;
              validMove = pathfinding.GetNodesMinMaxRange(new Vector3(initialPosition.x, initialPosition.y, initialPosition.z), 
-                 false, pathfinding.minDepthLimit, pathfinding.maxDepthLimit);
+                 false, 2, 3);
     
              if (validMove != null && validMove.Count > 0)
              {
