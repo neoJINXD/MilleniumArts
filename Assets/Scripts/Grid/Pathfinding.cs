@@ -191,12 +191,16 @@ public class Pathfinding : MonoBehaviour
 			for (int y = 0; y < gridRef.gridSizeY; y++)
 			{
 				var currentNode = gridRef.grid[x, y];
-				if ((currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID)||(currentNode.GetUnit() == null) && !inRange.Contains(currentNode))
+
+				if (currentNode.GetUnit() != null)
 				{
-					continue;
-				}
+					if ((currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID)||(currentNode.GetUnit() == null) && !inRange.Contains(currentNode))
+					{
+						continue;
+					}
                 
-				enemyUnitNodes.Add(gridRef.grid[x,y]);
+					enemyUnitNodes.Add(gridRef.grid[x,y]);
+				}
 			}
 		}
 
@@ -215,9 +219,13 @@ public class Pathfinding : MonoBehaviour
 			for (int y = 0; y < gridRef.gridSizeY; y++)
 			{
 				var currentNode = gridRef.grid[x, y];
-				if (currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID && inRange.Contains(currentNode))
+
+				if (currentNode.GetUnit() != null)
 				{
-					allyUnitNodes.Add(currentNode);
+					if (currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID && inRange.Contains(currentNode))
+					{
+						allyUnitNodes.Add(currentNode);
+					}
 				}
 			}
 		}

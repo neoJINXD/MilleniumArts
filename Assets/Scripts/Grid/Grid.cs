@@ -90,13 +90,15 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if (grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)
+                if (grid[x,y].GetUnit() != null)
                 {
-                    allyUnitNodes.Add(grid[x,y]);
+                    if (grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)
+                    {
+                        allyUnitNodes.Add(grid[x,y]);
+                    }
                 }
             }
         }
-
         return allyUnitNodes;
     }
     
@@ -112,12 +114,15 @@ public class Grid : MonoBehaviour
         {
             for (int y = 0; y < gridSizeY; y++)
             {
-                if ((grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)||(grid[x,y].GetUnit() == null))
+                if (grid[x, y].GetUnit() != null)
                 {
-                    continue;
-                }
+                    if ((grid[x,y].GetUnit().GetUnitPlayerID() == callingPlayerID)||(grid[x,y].GetUnit() == null))
+                    {
+                        continue;
+                    }
                 
-                enemyUnitNodes.Add(grid[x,y]);
+                    enemyUnitNodes.Add(grid[x,y]);
+                }
             }
         }
 
@@ -161,7 +166,7 @@ public class Grid : MonoBehaviour
         int randPos = Random.Range(0, kingSpawnP1.Length);
         
         Transform spawnPosP1 = kingSpawnP1[randPos];
-
+ 
         Transform spawnPosP2 = kingSpawnP2[randPos];
 
         Instantiate(kingPlayer1, spawnPosP1.transform, false);
