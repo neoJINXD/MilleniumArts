@@ -26,6 +26,8 @@ public class GameplayManager : Singleton<GameplayManager>
 
     public bool cardSelected;
 
+    public CardEffectManager cardEffectManager;
+
     enum TurnState
     {
         Waiting,
@@ -37,7 +39,7 @@ public class GameplayManager : Singleton<GameplayManager>
 
     [SerializeField] private TurnState currentTurnState;
 
-    void Awake()
+    void Start()
     {
         pf = pathfindingGameObject.GetComponent<Pathfinding>();
         grid = pf.gridRef;
@@ -67,8 +69,7 @@ public class GameplayManager : Singleton<GameplayManager>
         Node initialKingNode = grid.NodeFromWorldPoint(tempKingUnit.transform.position);
         initialKingNode.AddUnit(tempKingUnit.GetComponent<Unit>());
 
-        cardSelected = false;
-
+         cardSelected = false;
     }
 
     // Update is called once per frame
@@ -92,7 +93,10 @@ public class GameplayManager : Singleton<GameplayManager>
         }
         if(currentTurnState == TurnState.SelectingCardOrigin)
         {
-
+            if (Input.GetMouseButtonDown(1))
+            {
+                validateSelectTileClickCard();
+            }
         }
     }
 
@@ -213,5 +217,35 @@ public class GameplayManager : Singleton<GameplayManager>
         }
 
         currentTurnState = TurnState.SelectingCardOrigin;
+    }
+
+    void validateSelectTileClickCard()
+    {
+        print("i get here");
+        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+        Node selectedNode = grid.NodeFromWorldPoint(areaToInstantiate);
+        if (selectableNodes.Contains(selectedNode))
+        {
+            print("valid selection");
+            if (selectedNode.unitInThisNode == null)
+            {
+                cardEffectManager.createSoldierUnit(currentPlayer.PlayerId);
+                ResetMaterial();
+            }
+            else
+            {
+                print("There is already a unit on this node!");
+                ResetMaterial();
+            }
+        }
+        else
+        {
+            print("invalid selection");
+            ResetMaterial();
+        }
+
+        selectableNodes.Clear();
+        currentTurnState = TurnState.Free;
+        cardSelected = false;
     }
 }

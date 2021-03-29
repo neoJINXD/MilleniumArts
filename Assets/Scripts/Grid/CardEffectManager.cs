@@ -59,8 +59,9 @@ public class CardEffectManager : MonoBehaviour
     public void createSoldierUnit(int playerId)
     {
         Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
 
-        Unit soldierUnit = Object.Instantiate(unitCreation, areaToInstantiate, Quaternion.identity).GetComponent<Unit>();
+        Unit soldierUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         soldierUnit.SetMovementSpeed(4);
         soldierUnit.SetCanFly(false);
@@ -76,7 +77,6 @@ public class CardEffectManager : MonoBehaviour
         soldierUnit.SetEvasion(20);
         print(grid);
         // create initial temp king
-        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
         node.AddUnit(soldierUnit.GetComponent<Unit>());
 
         //hardcoded color for test
