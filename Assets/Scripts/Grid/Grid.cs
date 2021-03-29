@@ -13,8 +13,8 @@ public class Grid : MonoBehaviour
     [SerializeField] private Transform gridParent;
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private GameObject tileUnwalkablePrefab;
-    [SerializeField] private GameObject kingPlayer1;
-    [SerializeField] private GameObject kingPlayer2;
+    [SerializeField] private Unit kingPlayer1;
+    [SerializeField] private Unit kingPlayer2;
     [SerializeField] private Transform[] kingSpawnP1;
     [SerializeField] private Transform[] kingSpawnP2;
 
@@ -169,8 +169,13 @@ public class Grid : MonoBehaviour
  
         Transform spawnPosP2 = kingSpawnP2[randPos];
 
+        kingPlayer1.SetUnitPlayerID(0);
+        kingPlayer2.SetUnitPlayerID(1);
         Instantiate(kingPlayer1, spawnPosP1.transform, false);
         Instantiate(kingPlayer2, spawnPosP2.transform, false);
+        NodeFromWorldPoint(spawnPosP1.transform.position).AddUnit(kingPlayer1);
+        NodeFromWorldPoint(spawnPosP2.transform.position).AddUnit(kingPlayer2);
+        //adding the kings to their respective nodes
     }
 
     // might have to use boolean, to change walkable nodes, based on flying and ground units.
