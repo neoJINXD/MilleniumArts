@@ -6,7 +6,7 @@ using UnityEngine;
 public enum CardType
 {
     Unit = 0,
-    Spell = 1,
+    Active = 1,
     Trap = 2
 }
 

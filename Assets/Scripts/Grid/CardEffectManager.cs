@@ -28,33 +28,6 @@ public class CardEffectManager : MonoBehaviour
 
     }
 
-    // create King unit
-    public void createKingUnit(int playerId)
-    {
-        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-
-        Unit kingUnit = Object.Instantiate(unitCreation, areaToInstantiate, Quaternion.identity).GetComponent<Unit>();
-
-        kingUnit.SetMovementSpeed(5);
-        kingUnit.SetCanFly(false);
-        kingUnit.SetUnitType(Unit.UnitTypes.King);
-        kingUnit.SetUnitPlayerID(playerId);
-        kingUnit.SetMaxHealth(30);
-        kingUnit.SetCurrentHealth(30);
-        kingUnit.SetDamage(7);
-        kingUnit.SetDefence(2);
-        kingUnit.SetMinRange(1);
-        kingUnit.SetMaxRange(1);
-        kingUnit.SetAccuracy(90);
-        kingUnit.SetEvasion(30);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            kingUnit.transform.GetComponent<Renderer>().material.color =  Color.blue;
-        else
-            kingUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-    }
-
     // create Soldier unit
     public void createSoldierUnit(int playerId)
     {
@@ -75,8 +48,7 @@ public class CardEffectManager : MonoBehaviour
         soldierUnit.SetMaxRange(1);
         soldierUnit.SetAccuracy(80);
         soldierUnit.SetEvasion(20);
-        print(grid);
-        // create initial temp king
+
         node.AddUnit(soldierUnit.GetComponent<Unit>());
 
         //hardcoded color for test
@@ -90,8 +62,9 @@ public class CardEffectManager : MonoBehaviour
     public void createKnightUnit(int playerId)
     {
         Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
 
-        Unit knightUnit = Object.Instantiate(unitCreation, areaToInstantiate, Quaternion.identity).GetComponent<Unit>();
+        Unit knightUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         knightUnit.SetMovementSpeed(3);
         knightUnit.SetCanFly(false);
@@ -105,14 +78,23 @@ public class CardEffectManager : MonoBehaviour
         knightUnit.SetMaxRange(1);
         knightUnit.SetAccuracy(70);
         knightUnit.SetEvasion(10);
+
+        node.AddUnit(knightUnit.GetComponent<Unit>());
+
+        //hardcoded color for test
+        if (playerId == 0)
+            knightUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
+        else
+            knightUnit.transform.GetComponent<Renderer>().material.color = Color.red;
     }
 
     // create Assassin unit
     public void createAssassinUnit(int playerId)
     {
         Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
 
-        Unit assassinUnit = Object.Instantiate(unitCreation, areaToInstantiate, Quaternion.identity).GetComponent<Unit>();
+        Unit assassinUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         assassinUnit.SetMovementSpeed(8);
         assassinUnit.SetCanFly(false);
@@ -126,14 +108,23 @@ public class CardEffectManager : MonoBehaviour
         assassinUnit.SetMaxRange(1);
         assassinUnit.SetAccuracy(95);
         assassinUnit.SetEvasion(60);
+
+        node.AddUnit(assassinUnit.GetComponent<Unit>());
+
+        //hardcoded color for test
+        if (playerId == 0)
+            assassinUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
+        else
+            assassinUnit.transform.GetComponent<Renderer>().material.color = Color.red;
     }
 
     // create Priest unit
     public void createPriestUnit(int playerId)
     {
         Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
 
-        Unit priestUnit = Object.Instantiate(unitCreation, areaToInstantiate, Quaternion.identity).GetComponent<Unit>();
+        Unit priestUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         priestUnit.SetMovementSpeed(4);
         priestUnit.SetCanFly(false);
@@ -147,14 +138,23 @@ public class CardEffectManager : MonoBehaviour
         priestUnit.SetMaxRange(2);
         priestUnit.SetAccuracy(100);
         priestUnit.SetEvasion(30);
+
+        node.AddUnit(priestUnit.GetComponent<Unit>());
+
+        //hardcoded color for test
+        if (playerId == 0)
+            priestUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
+        else
+            priestUnit.transform.GetComponent<Renderer>().material.color = Color.red;
     }
 
     // create Archer unit
     public void createArcherUnit(int playerId)
     {
         Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
 
-        Unit archerUnit = Object.Instantiate(unitCreation, areaToInstantiate, Quaternion.identity).GetComponent<Unit>();
+        Unit archerUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         archerUnit.SetMovementSpeed(4);
         archerUnit.SetCanFly(false);
@@ -168,14 +168,23 @@ public class CardEffectManager : MonoBehaviour
         archerUnit.SetMaxRange(3);
         archerUnit.SetAccuracy(90);
         archerUnit.SetEvasion(30);
+
+        node.AddUnit(archerUnit.GetComponent<Unit>());
+
+        //hardcoded color for test
+        if (playerId == 0)
+            archerUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
+        else
+            archerUnit.transform.GetComponent<Renderer>().material.color = Color.red;
     }
 
     // create Dragon Rider unit
     public void createDragonRiderUnit(int playerId)
     {
         Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
 
-        Unit dragonRiderUnit = Object.Instantiate(unitCreation, areaToInstantiate, Quaternion.identity).GetComponent<Unit>();
+        Unit dragonRiderUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         dragonRiderUnit.SetMovementSpeed(6);
         dragonRiderUnit.SetCanFly(false);
@@ -189,6 +198,14 @@ public class CardEffectManager : MonoBehaviour
         dragonRiderUnit.SetMaxRange(1);
         dragonRiderUnit.SetAccuracy(85);
         dragonRiderUnit.SetEvasion(20);
+
+        node.AddUnit(dragonRiderUnit.GetComponent<Unit>());
+
+        //hardcoded color for test
+        if (playerId == 0)
+            dragonRiderUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
+        else
+            dragonRiderUnit.transform.GetComponent<Renderer>().material.color = Color.red;
     }
 
 
