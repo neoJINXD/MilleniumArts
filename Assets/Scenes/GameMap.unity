@@ -369,9 +369,9 @@ MonoBehaviour:
     type: 3}
   tileUnwalkablePrefab: {fileID: 8575106909883118114, guid: cf64c95d92912a245ae2f2c570936dc1,
     type: 3}
-  kingPlayer1: {fileID: 773502816797830287, guid: c40c20d39896da247aa011a41927d761,
+  kingPlayer1: {fileID: 2582366832510206918, guid: c40c20d39896da247aa011a41927d761,
     type: 3}
-  kingPlayer2: {fileID: 5099118144358900273, guid: b37af088f201ad6498c6af230a447ae4,
+  kingPlayer2: {fileID: -4268033155297961835, guid: b37af088f201ad6498c6af230a447ae4,
     type: 3}
   kingSpawnP1:
   - {fileID: 596508712}
