@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zone.Core.Utils;
 
-public class GameplayManager : Singleton<GameplayManager>
+public class TurnManager : Singleton<TurnManager>
 {
     public GameObject pathfindingGameObject;
 
@@ -21,6 +21,7 @@ public class GameplayManager : Singleton<GameplayManager>
     public Grid grid;
 
     public GameObject tempKingUnit; // temporary king
+    public GameObject tempKingUnitEnemy; // temporary king
 
     private Unit currentUnit;
 
@@ -50,7 +51,7 @@ public class GameplayManager : Singleton<GameplayManager>
 
         selectableNodes = new HashSet<Node>();
 
-        // create initial temp king
+        // create initial temp king P0
 
         Unit kingUnit = tempKingUnit.GetComponent<Unit>();
 
@@ -71,7 +72,29 @@ public class GameplayManager : Singleton<GameplayManager>
         Node initialKingNode = grid.NodeFromWorldPoint(tempKingUnit.transform.position);
         initialKingNode.AddUnit(tempKingUnit.GetComponent<Unit>());
 
-         cardSelected = false;
+        // create initial temp king P0
+
+        Unit kingUnitEnemy = tempKingUnitEnemy.GetComponent<Unit>();
+
+        kingUnitEnemy.SetMovementSpeed(5);
+        kingUnitEnemy.SetCanFly(false);
+        kingUnitEnemy.SetUnitType(Unit.UnitTypes.King);
+        kingUnitEnemy.SetUnitPlayerID(1);
+        kingUnitEnemy.SetMaxHealth(30);
+        kingUnitEnemy.SetCurrentHealth(30);
+        kingUnitEnemy.SetDamage(7);
+        kingUnitEnemy.SetDefence(2);
+        kingUnitEnemy.SetMinRange(1);
+        kingUnitEnemy.SetMaxRange(1);
+        kingUnitEnemy.SetAccuracy(90);
+        kingUnitEnemy.SetEvasion(30);
+
+        // create initial temp king
+        Node initialKingNodeEnemy = grid.NodeFromWorldPoint(tempKingUnitEnemy.transform.position);
+        print("enemy king x,y: " + initialKingNodeEnemy.gridX + ", " + initialKingNodeEnemy.gridY);
+        initialKingNodeEnemy.AddUnit(tempKingUnit.GetComponent<Unit>());
+
+        cardSelected = false;
     }
 
     // Update is called once per frame
@@ -80,25 +103,19 @@ public class GameplayManager : Singleton<GameplayManager>
         if (currentTurnState == TurnState.Free)
         {
             if (cardSelected)
-            {
                 PlaceCard(currentPlayer, new Card(), 0);
-            }
             else if (Input.GetMouseButtonDown(0))
                 checkBoardClick();
         }
-        if (currentTurnState == TurnState.SelectingTileMovement)
+        else if (currentTurnState == TurnState.SelectingTileMovement)
         {
-            if (Input.GetMouseButtonDown(1))
-            {
+            if (Input.GetMouseButtonDown(0))
                 validateSelectTileClickMove();
-            }
         }
-        if(currentTurnState == TurnState.SelectingCardOrigin)
+        else if (currentTurnState == TurnState.SelectingCardOrigin)
         {
-            if (Input.GetMouseButtonDown(1))
-            {
+            if (Input.GetMouseButtonDown(0))
                 validateSelectTileClickCard();
-            }
         }
     }
 
@@ -160,6 +177,7 @@ public class GameplayManager : Singleton<GameplayManager>
 
         if (selectedNode != null)
         {
+            print("selected node x,y: " + selectedNode.gridX + ", " + selectedNode.gridY);
             if (selectedNode.unitInThisNode == null)
             {
                 currentUnit.isClicked = true;
@@ -198,7 +216,7 @@ public class GameplayManager : Singleton<GameplayManager>
 
 
 
-        Card currentCard = unitCard_dragonRider;
+        Card currentCard = activeCard_smite;
         storedCard = currentCard;
 
 
@@ -264,7 +282,7 @@ public class GameplayManager : Singleton<GameplayManager>
             {
                 if (selectedNode.unitInThisNode == null)
                 {
-                    if(storedCard.id == 0) // spawn soldier
+                    if (storedCard.id == 0) // spawn soldier
                         cardEffectManager.createSoldierUnit(currentPlayer.PlayerId);
                     else if (storedCard.id == 1) // spawn Knight
                         cardEffectManager.createKnightUnit(currentPlayer.PlayerId);
@@ -276,21 +294,22 @@ public class GameplayManager : Singleton<GameplayManager>
                         cardEffectManager.createArcherUnit(currentPlayer.PlayerId);
                     else if (storedCard.id == 5) // spawn Dragon Rider
                         cardEffectManager.createDragonRiderUnit(currentPlayer.PlayerId);
-
-
-                    ResetMaterial();
                 }
-                else
-                    ResetMaterial();
             }
-            else
-                ResetMaterial();
+
         }
-        else if (storedCard.type == CardType.Unit)
+        else if (storedCard.type == CardType.Active)
         {
-
+            if (selectableNodes.Contains(selectedNode))
+            {
+                if (selectedNode.unitInThisNode != null)
+                {
+                    print("i get here"); 
+                    cardEffectManager.spell_smite(currentPlayer.PlayerId);
+                }
+            }
         }
-
+        ResetMaterial();
         selectableNodes.Clear();
         currentTurnState = TurnState.Free;
         cardSelected = false;

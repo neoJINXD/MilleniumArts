@@ -221,13 +221,20 @@ public class CardEffectManager : MonoBehaviour
     
     public void spell_smite(int playerId)
     {
-        // Grid grid = pathfinding.grid;
-        // List<Node> allyNodes = grid.GetAllyUnitNodes(0);
-        // print("XD: " + allyNodes.Count);
-        // foreach(Node node in allyNodes)
-        // {
-        //     print(node.GetUnitList());
-        // }
+        Vector3 clickedPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+        Node clickedNode = grid.NodeFromWorldPoint(clickedPosition);
+        print("1");
+        if (clickedNode.unitInThisNode != null) // check if there's a unit on this node
+        {
+            print("2");
+            if(clickedNode.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
+            {
+                print("3");
+                Unit targetUnit = clickedNode.unitInThisNode;
+                targetUnit.DecreaseCurrentHealthBy(5); // smite damage
+                print("Smited!");
+            }
+        }
     }
 }
 

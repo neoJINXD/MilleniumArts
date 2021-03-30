@@ -40,8 +40,8 @@ public abstract class Player : MonoBehaviour
                 if(cardToPlay.type == CardType.Unit)
                 {
                     //PlacerManager.instance.CreateUnit(this);
-                    GameplayManager.instance.cardSelected = true;
-                    GameplayManager.instance.currentPlayer = this;
+                    TurnManager.instance.cardSelected = true;
+                    TurnManager.instance.currentPlayer = this;
 
                 }
             }
