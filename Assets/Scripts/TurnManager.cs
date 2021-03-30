@@ -93,7 +93,7 @@ public class TurnManager : Singleton<TurnManager>
 
                     pf.minDepthLimit = 1;
                     pf.maxDepthLimit = unitMoveSpeed;
-                    selectableNodes = pf.GetNodesMinMaxRange(hit.transform.position, false, 0, unitMoveSpeed);
+                    selectableNodes = pf.GetNodesMinMaxRange(hit.transform.position, false, 1, unitMoveSpeed);
 
                     if (selectableNodes != null && selectableNodes.Count > 0)
                     {
