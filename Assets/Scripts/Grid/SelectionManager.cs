@@ -10,7 +10,7 @@ public class SelectionManager : Singleton<SelectionManager>
     [SerializeField] private Material greyUnwalkableMaterial;
     [SerializeField] private Material defaultUnwalkableMaterial;
     
-    private string unitTag = "Unit";
+    private const string unitTag = "Unit";
     private Transform selection;
     private Renderer selectedRenderer;
     private GameObject[] obstacles;
