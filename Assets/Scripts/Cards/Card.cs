@@ -6,15 +6,37 @@ using UnityEngine;
 public enum CardType
 {
     Unit = 0,
-    Spell = 1,
+    Active = 1,
     Trap = 2
 }
 
 [Serializable]
 public class Card
 {
-    public CardType Type;
-    public string cardName;
+
+    public int id;
+    public CardType type;
+    public string name;
     public GameObject image;
     public int cost;
+    public int minRange;
+    public int maxRange;
+
+    public Card()
+    {
+
+    }
+
+    public Card(int cardId, CardType cardType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax)
+    {
+        id = cardId;
+        type = cardType;
+        name = cardName;
+        //image = cardImage;
+        cost = cardCost;
+        minRange = cardMin;
+        maxRange = cardMax;
+    }
 }
+
+

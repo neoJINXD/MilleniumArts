@@ -580,9 +580,9 @@ MonoBehaviour:
     type: 3}
   tileUnwalkablePrefab: {fileID: 8575106909883118114, guid: cf64c95d92912a245ae2f2c570936dc1,
     type: 3}
-  kingPlayer1: {fileID: 2582366832510206918, guid: c40c20d39896da247aa011a41927d761,
+  kingPlayer1: {fileID: -63415353231536520, guid: c40c20d39896da247aa011a41927d761,
     type: 3}
-  kingPlayer2: {fileID: -4268033155297961835, guid: b37af088f201ad6498c6af230a447ae4,
+  kingPlayer2: {fileID: -4821333781483160718, guid: b37af088f201ad6498c6af230a447ae4,
     type: 3}
   kingSpawnP1:
   - {fileID: 596508712}
@@ -627,6 +627,7 @@ MonoBehaviour:
   displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
   defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
   selectedTile: {fileID: 2100000, guid: 0027759dfc5935d4a99771f544d66a93, type: 2}
+  gridRef: {fileID: 0}
   minDepthLimit: 2
   maxDepthLimit: 3
 --- !u!114 &844824551
@@ -641,6 +642,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de5b0dec804893744b96a6a0ef13d93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &854632274
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 854632275}
+  m_Layer: 0
+  m_Name: CardEffectsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &854632275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854632274}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1069956624}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &856230022
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,9 +1035,64 @@ Transform:
   - {fileID: 1853401803}
   - {fileID: 1115487958}
   - {fileID: 1352779998}
+  - {fileID: 1070599344}
+  - {fileID: 854632275}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1070599343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1070599344}
+  - component: {fileID: 1070599345}
+  m_Layer: 0
+  m_Name: TurnManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1070599344
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070599343}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1069956624}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1070599345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1070599343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4939b6e33448534b895fc0f0f8be111, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keepAlive: 0
+  pathfindingGameObject: {fileID: 844824547}
+  unitPrefab: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
+    type: 3}
+  availablePosition: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
+  currentPlayer: {fileID: 0}
+  cardSelected: 0
+  cardEffectManager: {fileID: 0}
+  currentTurnState: 0
 --- !u!1 &1084266112
 GameObject:
   m_ObjectHideFlags: 0
@@ -1170,7 +1256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1115487957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1529,7 +1615,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1352779998
 Transform:
   m_ObjectHideFlags: 0
@@ -2244,7 +2330,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1853401802
 MonoBehaviour:
   m_ObjectHideFlags: 0

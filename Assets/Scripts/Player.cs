@@ -58,7 +58,7 @@ public abstract class Player : MonoBehaviour
             Card cardToPlay = GetCard(cardIndex);
             if (SpendMana(cardToPlay.cost))
             {
-                if(cardToPlay.Type == CardType.Unit)
+                if(cardToPlay.type == CardType.Unit)
                     PlacerManager.instance.CreateUnit(this);
             }
             else
