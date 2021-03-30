@@ -91,6 +91,8 @@ public class TurnManager : Singleton<TurnManager>
                     int unitMoveSpeed = (int)currentUnit.GetMovementSpeed();
                     Node currentNode = grid.NodeFromWorldPoint(currentUnit.transform.position);
 
+                    pf.minDepthLimit = 1;
+                    pf.maxDepthLimit = unitMoveSpeed;
                     selectableNodes = pf.GetNodesMinMaxRange(hit.transform.position, false, 0, unitMoveSpeed);
 
                     if (selectableNodes != null && selectableNodes.Count > 0)
