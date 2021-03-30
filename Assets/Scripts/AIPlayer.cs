@@ -26,7 +26,7 @@ public class AIPlayer : Player
         if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
         {
             Card cardToPlay = GetCard(cardIndex);
-            if (cardToPlay.cost <= PlayerMana)
+            if (SpendMana(cardToPlay.cost))
             {
                 if(cardToPlay.Type == CardType.Unit)
                     PlacerManager.instance.PlaceCard(this, cardToPlay, cardIndex,

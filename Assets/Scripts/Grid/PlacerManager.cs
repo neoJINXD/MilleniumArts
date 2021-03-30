@@ -30,6 +30,7 @@ public class PlacerManager : Singleton<PlacerManager>
     {
         //TODO: replace with check for type of card instead of just using a unit (e.i. spells or traps too)
         Unit unitPlaced = Instantiate(unitCreation, targetLocation, Quaternion.identity);
+        unitPlaced.SetUnitPlayerID(currentPlayer.PlayerId);
         currentPlayer.RemoveCard(cardIndex);
         currentPlayer.AddUnit(unitPlaced);
     }

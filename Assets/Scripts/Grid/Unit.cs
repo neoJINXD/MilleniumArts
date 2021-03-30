@@ -11,18 +11,18 @@ public class Unit : MonoBehaviour {
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
     
-    protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
-    protected UnitTypes unitType;
-    protected int unitPlayerId;
-    protected int maxHealth;
-    protected int currentHealth;
-    protected int damage;
-    protected int defense;
-    protected int minRange;
-    protected int maxRange;
-    protected int accuracy;
-    protected int evasion;
-    protected int cost;
+    [SerializeField] protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
+    [SerializeField] protected UnitTypes unitType;
+    [SerializeField] protected int unitPlayerId;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] protected int currentHealth;
+    [SerializeField] protected int damage;
+    [SerializeField] protected int defense;
+    [SerializeField] protected int minRange;
+    [SerializeField] protected int maxRange;
+    [SerializeField] protected int accuracy;
+    [SerializeField] protected int evasion;
+    [SerializeField] protected int cost;
     protected Node[] path;
     protected int targetIndex;
     private const int MAXValue = Int32.MaxValue;
@@ -383,33 +383,38 @@ public class Unit : MonoBehaviour {
     {
         mainCam = Camera.main;
     }
-
     
     public void SelectNewUnitPosition()
     {
         RaycastHit hit;
         Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
-
-
+        
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
           // fixes out of bounce error that occurs when unit selected.
           if (Vector3.Distance(hit.point, transform.position) < 1)
                  return; // already at destination
           
-            
           PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
         }
     }
-    
-    
-
 
     // passes this function when requesting for path
     // function starts the coroutine if pathfinding is successful
     public void OnPathFound(Node[] newPath, bool pathSuccessful) 
     {
-        if (pathSuccessful && Input.GetMouseButtonDown(0)) {
+        if (pathSuccessful && Input.GetMouseButtonDown(0)) 
+        {
+            Player currentPlayer = GameLoop.instance.GetCurrentPlayer();
+        
+            if (GetUnitPlayerID() != currentPlayer.PlayerId)
+            {
+                return;
+            }
+
+            if (!currentPlayer.SpendMana(1))
+                return;
+            
             path = newPath;
             targetIndex = 0;
             
@@ -417,8 +422,6 @@ public class Unit : MonoBehaviour {
             StartCoroutine("FollowPath");
         }
     }
-    
-    
 
     //updates unit position by following along the path
     IEnumerator FollowPath() 
@@ -480,20 +483,22 @@ public class Unit : MonoBehaviour {
     //     }
     // }
 
-    void OnMouseDown()
-    {
-        Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID());
-        Debug.Log("Type: " + GetComponent<Unit>().GetUnitType());
-        Debug.Log("Max HP: " + GetComponent<Unit>().GetMaxHealth());
-        Debug.Log("Current HP: " + GetComponent<Unit>().GetCurrentHealth());
-        Debug.Log("Damage: " + GetComponent<Unit>().GetDamage());
-        Debug.Log("Defence: " + GetComponent<Unit>().GetDefence());
-        Debug.Log("Min Range: " + GetComponent<Unit>().GetMinRange());
-        Debug.Log("Max Range: " + GetComponent<Unit>().GetMaxRange());
-        Debug.Log("Accuracy: " + GetComponent<Unit>().GetAccuracy());
-        Debug.Log("Evasion: " + GetComponent<Unit>().GetEvasion());
-        Debug.Log("MS: " + GetComponent<Unit>().GetMovementSpeed());
-        Debug.Log("Flying: " + GetComponent<Unit>().GetCanFly());
-    }
+    
+    //Please dont dump to the console. it makes the console hard to read for others
+    // void OnMouseDown()
+    // {
+    //     Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID());
+    //     Debug.Log("Type: " + GetComponent<Unit>().GetUnitType());
+    //     Debug.Log("Max HP: " + GetComponent<Unit>().GetMaxHealth());
+    //     Debug.Log("Current HP: " + GetComponent<Unit>().GetCurrentHealth());
+    //     Debug.Log("Damage: " + GetComponent<Unit>().GetDamage());
+    //     Debug.Log("Defence: " + GetComponent<Unit>().GetDefence());
+    //     Debug.Log("Min Range: " + GetComponent<Unit>().GetMinRange());
+    //     Debug.Log("Max Range: " + GetComponent<Unit>().GetMaxRange());
+    //     Debug.Log("Accuracy: " + GetComponent<Unit>().GetAccuracy());
+    //     Debug.Log("Evasion: " + GetComponent<Unit>().GetEvasion());
+    //     Debug.Log("MS: " + GetComponent<Unit>().GetMovementSpeed());
+    //     Debug.Log("Flying: " + GetComponent<Unit>().GetCanFly());
+    // }
 
 }

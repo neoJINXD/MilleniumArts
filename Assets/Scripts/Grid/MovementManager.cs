@@ -19,7 +19,6 @@ public class MovementManager : Singleton<MovementManager>
     private Ray ray;
     private RaycastHit hit;
     
-    
     void Awake()
     {
         pathfinding = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
@@ -28,7 +27,6 @@ public class MovementManager : Singleton<MovementManager>
 
     private void Update()
     {
-        
         if (Input.GetMouseButtonDown(0))
         {
             CheckDesiredUnit();
@@ -39,7 +37,6 @@ public class MovementManager : Singleton<MovementManager>
             unitSelected.SelectNewUnitPosition();
         }
     }
-    
     
     private void CheckDesiredUnit()
     {
@@ -56,22 +53,16 @@ public class MovementManager : Singleton<MovementManager>
                 if (unitSelected != null)
                 {
                     unitSelected.isClicked = false;
-                    
                 }
-                
-                
+
                 unitSelected = selected.GetComponent<Unit>();
                 unitSelected.isClicked = true;
                 hasSelected = true;
                 
-                
-
                 DrawAvailable();
             }
         }
     }
-    
-    
     
 /*    private void DrawAvailable()
     {
@@ -145,4 +136,5 @@ public class MovementManager : Singleton<MovementManager>
              }
          }
     }
+
 }

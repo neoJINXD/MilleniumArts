@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 /*
@@ -8,11 +10,12 @@ using UnityEngine;
 public abstract class Player : MonoBehaviour
 {
     [HideInInspector] public int PlayerId;
-    public int PlayerMana;
+    [SerializeField] private int m_playerMana;
+    private int maxMana;
     [SerializeField] protected List<Card> m_playerCards = new List<Card>();
     [SerializeField] protected List<Unit> m_playerUnits = new List<Unit>();
     public bool TurnComplete { get; protected set; }
-
+    
     public Player()
     {
         TurnComplete = true;
@@ -28,6 +31,24 @@ public abstract class Player : MonoBehaviour
         TurnComplete = true;
     }
 
+    public void RoundManaUpdate(int newMana)
+    {
+        m_playerMana = newMana;
+        maxMana = newMana;
+    }
+
+    public bool SpendMana(int toSpend)
+    {
+        if (m_playerMana - toSpend < 0)
+        {
+            print("Not enough player mana!");
+            return false;
+        }
+
+        m_playerMana -= toSpend;
+        return true;
+    }
+
     #region Unit & Card Setters/Getters
 
     public virtual void PlayCard(int cardIndex)
@@ -35,7 +56,7 @@ public abstract class Player : MonoBehaviour
         if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
         {
             Card cardToPlay = GetCard(cardIndex);
-            if (cardToPlay.cost <= PlayerMana)
+            if (SpendMana(cardToPlay.cost))
             {
                 if(cardToPlay.Type == CardType.Unit)
                     PlacerManager.instance.CreateUnit(this);

@@ -16,6 +16,8 @@ public class GameLoop : Singleton<GameLoop>
 
     private int index;
 
+    private int roundNumber = 0;
+    
     //To be able to wait for local player, networked player, and AI player turns
     public IEnumerator Play()
     {
@@ -26,6 +28,11 @@ public class GameLoop : Singleton<GameLoop>
         
         while (true)
         {
+            foreach (var player in players)
+            {
+                player.RoundManaUpdate(roundNumber + 3);
+            }
+            
             for (index = 0; index < players.Count; index++)
             {
                 Player player = players[index];
