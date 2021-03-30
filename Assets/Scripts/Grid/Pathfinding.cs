@@ -16,7 +16,7 @@ public class Pathfinding : MonoBehaviour
 	private  Node[] waypoints;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
-	Grid gridRef;
+	public Grid gridRef;
 	HeuristicFunction hf;
 	
 	// for testing

@@ -46,12 +46,6 @@ public class PlacerManager : Singleton<PlacerManager>
             placerClicked = false;
         }
 
-        // create for player 0: keys: 1,2,3,4,5,6,7
-        if (Input.GetKeyDown(KeyCode.Alpha1) && placerClicked)
-        {
-            cardEffectManager.createKingUnit(0);
-            placerClicked = false;
-        }
 
         if (Input.GetKeyDown(KeyCode.Alpha2) && placerClicked)
         {
@@ -89,12 +83,6 @@ public class PlacerManager : Singleton<PlacerManager>
             placerClicked = false;
         }
 
-        // create for player 1 w: keys: q,w,e,r,t,y,u
-        if (Input.GetKeyDown(KeyCode.Q) && placerClicked)
-        {
-            cardEffectManager.createKingUnit(1);
-            placerClicked = false;
-        }
 
         if (Input.GetKeyDown(KeyCode.W) && placerClicked)
         {

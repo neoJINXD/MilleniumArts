@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 8575106909883118112}
   - component: {fileID: 8575106909883118113}
   m_Layer: 0
-  m_Name: tileStandard
-  m_TagString: Untagged
+  m_Name: TileGrass
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -169,13 +169,39 @@ public class Grid : MonoBehaviour
  
         Transform spawnPosP2 = kingSpawnP2[randPos];
 
-        kingPlayer1.SetUnitPlayerID(0);
-        kingPlayer2.SetUnitPlayerID(1);
-        Instantiate(kingPlayer1, spawnPosP1.transform, false);
-        Instantiate(kingPlayer2, spawnPosP2.transform, false);
+        Unit king1 = Instantiate(kingPlayer1, spawnPosP1.transform, false).GetComponent<Unit>();
+        Unit king2 = Instantiate(kingPlayer2, spawnPosP2.transform, false).GetComponent<Unit>();
         NodeFromWorldPoint(spawnPosP1.transform.position).AddUnit(kingPlayer1);
         NodeFromWorldPoint(spawnPosP2.transform.position).AddUnit(kingPlayer2);
         //adding the kings to their respective nodes
+
+        // assign units to kings
+
+        king1.SetMovementSpeed(5);
+        king1.SetCanFly(false);
+        king1.SetUnitType(Unit.UnitTypes.King);
+        king1.SetUnitPlayerID(0);
+        king1.SetMaxHealth(30);
+        king1.SetCurrentHealth(30);
+        king1.SetDamage(7);
+        king1.SetDefence(2);
+        king1.SetMinRange(1);
+        king1.SetMaxRange(1);
+        king1.SetAccuracy(90);
+        king1.SetEvasion(30);
+
+        king2.SetMovementSpeed(5);
+        king2.SetCanFly(false);
+        king2.SetUnitType(Unit.UnitTypes.King);
+        king2.SetUnitPlayerID(1);
+        king2.SetMaxHealth(30);
+        king2.SetCurrentHealth(30);
+        king2.SetDamage(7);
+        king2.SetDefence(2);
+        king2.SetMinRange(1);
+        king2.SetMaxRange(1);
+        king2.SetAccuracy(90);
+        king2.SetEvasion(30);
     }
 
     // might have to use boolean, to change walkable nodes, based on flying and ground units.
