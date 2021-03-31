@@ -31,8 +31,21 @@ public class CardEffectManager : MonoBehaviour
     // create Soldier unit
     public void createSoldierUnit(int playerId)
     {
-        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
+        Node node = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                node = grid.NodeFromWorldPoint(hit.transform.position);
+                break;
+            }
+        }
 
         Unit soldierUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
@@ -61,8 +74,21 @@ public class CardEffectManager : MonoBehaviour
     // create Knight unit
     public void createKnightUnit(int playerId)
     {
-        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
+        Node node = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                node = grid.NodeFromWorldPoint(hit.transform.position);
+                break;
+            }
+        }
 
         Unit knightUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
@@ -91,8 +117,21 @@ public class CardEffectManager : MonoBehaviour
     // create Assassin unit
     public void createAssassinUnit(int playerId)
     {
-        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
+        Node node = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                node = grid.NodeFromWorldPoint(hit.transform.position);
+                break;
+            }
+        }
 
         Unit assassinUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
@@ -121,8 +160,21 @@ public class CardEffectManager : MonoBehaviour
     // create Priest unit
     public void createPriestUnit(int playerId)
     {
-        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
+        Node node = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                node = grid.NodeFromWorldPoint(hit.transform.position);
+                break;
+            }
+        }
 
         Unit priestUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
@@ -151,8 +203,21 @@ public class CardEffectManager : MonoBehaviour
     // create Archer unit
     public void createArcherUnit(int playerId)
     {
-        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
+        Node node = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                node = grid.NodeFromWorldPoint(hit.transform.position);
+                break;
+            }
+        }
 
         Unit archerUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
@@ -181,8 +246,21 @@ public class CardEffectManager : MonoBehaviour
     // create Dragon Rider unit
     public void createDragonRiderUnit(int playerId)
     {
-        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-        Node node = grid.NodeFromWorldPoint(areaToInstantiate);
+        Node node = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                node = grid.NodeFromWorldPoint(hit.transform.position);
+                break;
+            }
+        }
 
         Unit dragonRiderUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
@@ -221,18 +299,28 @@ public class CardEffectManager : MonoBehaviour
 
     public void spell_smite(int playerId)
     {
-        Vector3 clickedPosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-        Node clickedNode = grid.NodeFromWorldPoint(clickedPosition);
-        print("1");
-        if (clickedNode.unitInThisNode != null) // check if there's a unit on this node
+        Node node = null;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
         {
-            print("2");
-            if (clickedNode.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
             {
-                print("3");
-                Unit targetUnit = clickedNode.unitInThisNode;
+                node = grid.NodeFromWorldPoint(hit.transform.position);
+                break;
+            }
+        }
+
+        if (node.unitInThisNode != null) // check if there's a unit on this node
+        {
+            if (node.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
+            {
+                Unit targetUnit = node.unitInThisNode;
                 targetUnit.DecreaseCurrentHealthBy(5); // smite damage
-                print("Smited!");
             }
         }
     }

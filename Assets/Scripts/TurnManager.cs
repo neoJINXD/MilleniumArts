@@ -224,11 +224,27 @@ public class TurnManager : Singleton<TurnManager>
 
     void validateSelectTileClickCard()
     {
-        Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
-        Node selectedNode = grid.NodeFromWorldPoint(areaToInstantiate);
+        Node selectedNode = null;
+        Vector3 selectedNodePosition = Vector3.zero;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
+                selectedNodePosition = hit.transform.position;
+                break;
+            }
+        }
+
+
         if (storedCard.type == CardType.Unit)
         {
-
             if (selectableNodes.Contains(selectedNode))
             {
                 if (selectedNode.unitInThisNode == null)
