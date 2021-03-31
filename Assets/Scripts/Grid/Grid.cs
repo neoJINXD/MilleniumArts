@@ -185,22 +185,34 @@ public class Grid : MonoBehaviour
 
         if (node.gridY + 1 < gridSizeY)
         {
-            neighbours.Add(grid[node.gridX, node.gridY + 1]);
+            if (grid[node.gridX, node.gridY + 1].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX, node.gridY + 1]);
+            }
         }
 
         if (node.gridY - 1 >= 0)
         {
-            neighbours.Add(grid[node.gridX, node.gridY - 1]);
+            if (grid[node.gridX, node.gridY - 1].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX, node.gridY - 1]);
+            }
         }
 
         if (node.gridX + 1 < gridSizeX)
         {
-            neighbours.Add(grid[node.gridX + 1, node.gridY]);
+            if (grid[node.gridX + 1, node.gridY].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX + 1, node.gridY]);
+            }
         }
 
         if (node.gridX - 1 >= 0)
         {
-            neighbours.Add(grid[node.gridX - 1, node.gridY]);
+            if (grid[node.gridX - 1, node.gridY].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX - 1, node.gridY]);
+            }
         }
 
         return neighbours;
