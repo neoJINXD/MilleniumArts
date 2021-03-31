@@ -49,6 +49,7 @@ public class TurnManager : Singleton<TurnManager>
         selectableNodes = new HashSet<Node>();
 
         cardSelected = false;
+        currentPlayer = GameLoop.instance.GetCurrentPlayer();
     }
 
     // Update is called once per frame
@@ -132,7 +133,6 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null)
         {
-            print("selected node x,y: " + selectedNode.gridX + ", " + selectedNode.gridY);
             if (selectedNode.unitInThisNode == null)
             {
                 currentUnit.isClicked = true;
@@ -158,7 +158,6 @@ public class TurnManager : Singleton<TurnManager>
 
     public void PlaceCard(Player currentPlayer, Card card, int cardIndex)
     {
-        print("running");
         // create temp card
         Card unitCard_soldier = new UnitCard(0, CardType.Unit, "Unit: Soldier",/* GameObject cardImage,*/ 1, 1, 2, 10, 5, 1, 1, 1, 4, 80, 20, false);
         Card unitCard_knight = new UnitCard(1, CardType.Unit, "Unit: Knight",/* GameObject cardImage,*/ 3, 1, 2, 30, 7, 4, 1, 1, 3, 70, 10, false);
@@ -171,19 +170,16 @@ public class TurnManager : Singleton<TurnManager>
 
 
 
-        Card currentCard = activeCard_smite;
+        Card currentCard = unitCard_soldier;
         storedCard = currentCard;
 
 
-        //temp set player id to 0
-        currentPlayer.PlayerId = 0;
         // for units
         if (currentCard.type == CardType.Unit)
         {
             if (grid != null)
             {
-                List<Node> allyNodes = grid.GetAllyUnitNodes(currentPlayer.PlayerId); // hard code player 0
-                print(allyNodes.Count);
+                List<Node> allyNodes = grid.GetAllyUnitNodes(currentPlayer.PlayerId);
                 foreach (Node node in allyNodes)
                 {
                     Vector3 nodePos = node.unitInThisNode.transform.position;
@@ -230,13 +226,14 @@ public class TurnManager : Singleton<TurnManager>
     {
         Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
         Node selectedNode = grid.NodeFromWorldPoint(areaToInstantiate);
-
         if (storedCard.type == CardType.Unit)
         {
+
             if (selectableNodes.Contains(selectedNode))
             {
                 if (selectedNode.unitInThisNode == null)
                 {
+                    print("spawning unit");
                     if (storedCard.id == 0) // spawn soldier
                         cardEffectManager.createSoldierUnit(currentPlayer.PlayerId);
                     else if (storedCard.id == 1) // spawn Knight
@@ -259,7 +256,7 @@ public class TurnManager : Singleton<TurnManager>
             {
                 if (selectedNode.unitInThisNode != null)
                 {
-                    print("i get here");
+                    print("i get here active");
                     cardEffectManager.spell_smite(currentPlayer.PlayerId);
                 }
             }

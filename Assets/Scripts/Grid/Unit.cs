@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour {
     
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
     protected UnitTypes unitType;
-    protected int unitPlayerId;
+    [SerializeField] protected int unitPlayerId;
     protected int maxHealth;
     protected int currentHealth;
     protected int damage;
