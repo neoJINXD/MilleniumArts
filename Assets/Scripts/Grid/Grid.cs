@@ -183,36 +183,24 @@ public class Grid : MonoBehaviour
     {
         List<Node> neighbours = new List<Node>();
 
-        int checkX = node.gridX + 1;
-        int checkY = node.gridY;
-
-        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+        if (node.gridY + 1 < gridSizeY)
         {
-            neighbours.Add(grid[checkX, checkY]);
+            neighbours.Add(grid[node.gridX, node.gridY + 1]);
         }
-        
-        checkX = node.gridX - 1;
-        checkY = node.gridY;
 
-        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+        if (node.gridY - 1 >= 0)
         {
-            neighbours.Add(grid[checkX, checkY]);
+            neighbours.Add(grid[node.gridX, node.gridY - 1]);
         }
-        
-        checkX = node.gridX;
-        checkY = node.gridY + 1;
 
-        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+        if (node.gridX + 1 < gridSizeX)
         {
-            neighbours.Add(grid[checkX, checkY]);
+            neighbours.Add(grid[node.gridX + 1, node.gridY]);
         }
-        
-        checkX = node.gridX;
-        checkY = node.gridY - 1;
 
-        if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
+        if (node.gridX - 1 >= 0)
         {
-            neighbours.Add(grid[checkX, checkY]);
+            neighbours.Add(grid[node.gridX - 1, node.gridY]);
         }
 
         return neighbours;
