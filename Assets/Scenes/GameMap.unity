@@ -1978,6 +1978,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 854632275}
+  - component: {fileID: 854632276}
   m_Layer: 0
   m_Name: CardEffectsManager
   m_TagString: Untagged
@@ -1999,6 +2000,20 @@ Transform:
   m_Father: {fileID: 1069956624}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &854632276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 854632274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f221f395d1e9574484e6679078bcc3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitCreation: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
+    type: 3}
 --- !u!1 &856230022
 GameObject:
   m_ObjectHideFlags: 0
@@ -2223,6 +2238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitPlayerId: -1
   isClicked: 0
   startRoutine: 0
 --- !u!136 &891132760
@@ -2418,7 +2434,7 @@ MonoBehaviour:
   defaultMaterial: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
   currentPlayer: {fileID: 0}
   cardSelected: 0
-  cardEffectManager: {fileID: 0}
+  cardEffectManager: {fileID: 854632276}
   currentTurnState: 0
 --- !u!1 &1084266112
 GameObject:
@@ -2488,6 +2504,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitPlayerId: -1
   isClicked: 0
   startRoutine: 0
 --- !u!136 &1084916424
@@ -3484,6 +3501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitPlayerId: -1
   isClicked: 0
   startRoutine: 0
 --- !u!136 &1273640696
@@ -4195,6 +4213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitPlayerId: -1
   isClicked: 0
   startRoutine: 0
 --- !u!1 &1617636894
@@ -4688,6 +4707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitPlayerId: -1
   isClicked: 0
   startRoutine: 0
 --- !u!136 &1755316931
