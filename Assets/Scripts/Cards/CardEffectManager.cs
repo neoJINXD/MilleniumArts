@@ -10,7 +10,7 @@ public class CardEffectManager : MonoBehaviour
     private const float lockAxis = 27f;
 
     private HashSet<Node> validMove;
-    private Pathfinding pathfinding;
+    private Pathfinding pf;
     private Unit currentUnit;
     private Unit[] unitArray;
 
@@ -18,7 +18,7 @@ public class CardEffectManager : MonoBehaviour
 
     void Awake()
     {
-        pathfinding = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
+        pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
@@ -294,12 +294,9 @@ public class CardEffectManager : MonoBehaviour
      * Effect: Damages an enemy unit for 5 health.
      * Cost: 3
      */
-
-    //commented out because wasnt compiling -scott
-
     public void spell_smite(int playerId)
     {
-        Node node = null;
+        Node selectedNode = null;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
@@ -310,18 +307,65 @@ public class CardEffectManager : MonoBehaviour
 
             if (hit.transform.CompareTag("Tile"))
             {
-                node = grid.NodeFromWorldPoint(hit.transform.position);
+                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
                 break;
             }
         }
 
-        if (node.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
         {
-            if (node.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
+            if (selectedNode.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
             {
-                Unit targetUnit = node.unitInThisNode;
+                Unit targetUnit = selectedNode.unitInThisNode;
                 targetUnit.DecreaseCurrentHealthBy(5); // smite damage
+                print("Card Effect Sucessful: Smite");
             }
+        }
+    }
+
+    /*
+     * Card Name: Heavenly Smite
+     * Type: Spell(Active)
+     * Cast Range: (0, 3) tiles from a friendly unit
+     * Effect: Damages all enemies within (0,1) tiles of the casting origin for 3 health.
+     * Cost: 3
+     */
+    public void spell_heavenlySmite(int playerId)
+    {
+        Node selectedNode = null;
+        Vector3 tilePosition = Vector3.zero;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
+                tilePosition = hit.transform.position;
+                break;
+            }
+        }
+
+        HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(tilePosition, false, 0, 1);
+        HashSet<Node> getEnemyNodesInRange = new HashSet<Node>();
+
+        foreach (Node node in allNodesInRange)
+        {
+            if(node.GetUnit() != null)
+            {
+                if (node.GetUnit().GetUnitPlayerID() != playerId)
+                    getEnemyNodesInRange.Add(node);
+            }
+        }
+
+        foreach (Node node in getEnemyNodesInRange)
+        {
+            node.GetUnit().DecreaseCurrentHealthBy(3);
+            print("Card Effect Sucessful: Heavenly Smite");
         }
     }
 }

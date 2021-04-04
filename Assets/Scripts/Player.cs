@@ -32,14 +32,21 @@ public abstract class Player : MonoBehaviour
 
     public virtual void PlayCard(int cardIndex)
     {
-        if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
+        // temporary changed this to simulate placing enemy unit for testing
+        // expecting to change some stuff to accomodate AI or networking
+        // - rey
+
+        TurnManager.instance.placingEnemyUnit = true;
+        TurnManager.instance.currentPlayer = this;
+
+        /*if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
         {
             Card cardToPlay = GetCard(cardIndex);
             if (cardToPlay.cost <= PlayerMana)
             {
                 if(cardToPlay.type == CardType.Unit)
                 {
-                    TurnManager.instance.cardSelected = true;
+                    TurnManager.instance.placingEnemyUnit = true;
                     TurnManager.instance.currentPlayer = this;
                 }
 
@@ -53,7 +60,7 @@ public abstract class Player : MonoBehaviour
         else
         {
             Debug.LogError("Player out of cards or bad card index");
-        }
+        }*/
     }
     
     public void RemoveCard(int index)

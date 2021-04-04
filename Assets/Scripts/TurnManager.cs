@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zone.Core.Utils;
+using UnityEngine.UI;
 
 public class TurnManager : Singleton<TurnManager>
 {
@@ -34,8 +35,11 @@ public class TurnManager : Singleton<TurnManager>
         Free,
         SelectingCardOrigin,
         SelectingTileMovement,
-        SelectingTileAttack
+        SelectingTileAttack,
+        PlacingEnemyUnit // temp for testing
     }
+
+    public bool placingEnemyUnit; // temp for testing
 
     [SerializeField] private TurnState currentTurnState;
 
@@ -49,6 +53,7 @@ public class TurnManager : Singleton<TurnManager>
         selectableNodes = new HashSet<Node>();
 
         cardSelected = false;
+        placingEnemyUnit = false;
         currentPlayer = GameLoop.instance.GetCurrentPlayer();
     }
 
@@ -58,7 +63,9 @@ public class TurnManager : Singleton<TurnManager>
         if (currentTurnState == TurnState.Free)
         {
             if (cardSelected)
-                PlaceCard(currentPlayer, new Card(), 0);
+                PlaceCard();
+            else if (placingEnemyUnit)
+                currentTurnState = TurnState.PlacingEnemyUnit;
             else if (Input.GetMouseButtonDown(0))
                 checkBoardClick();
         }
@@ -72,7 +79,45 @@ public class TurnManager : Singleton<TurnManager>
             if (Input.GetMouseButtonDown(0))
                 validateSelectTileClickCard();
         }
+        else if (currentTurnState == TurnState.PlacingEnemyUnit)
+        {
+            if (Input.GetMouseButtonDown(0))
+                placeEnemyUnit();
+        }
     }
+
+    // temp function to place enemy units
+    void placeEnemyUnit()
+    {
+        Node selectedNode = null;
+        Vector3 selectedNodePosition = Vector3.zero;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
+                selectedNodePosition = hit.transform.position;
+                break;
+            }
+        }
+
+        if (selectedNode != null)
+        {
+            if (selectedNode.unitInThisNode == null)
+            {
+                cardEffectManager.createSoldierUnit(1); // assuming enemy player id = 1
+            }
+        }
+        currentTurnState = TurnState.Free;
+        placingEnemyUnit = false;
+    }
+
 
     void checkBoardClick()
     {
@@ -156,23 +201,25 @@ public class TurnManager : Singleton<TurnManager>
         }
     }
 
-    public void PlaceCard(Player currentPlayer, Card card, int cardIndex)
+    public void PlaceCard()
     {
         // create temp card
-        Card unitCard_soldier = new UnitCard(0, CardType.Unit, "Unit: Soldier",/* GameObject cardImage,*/ 1, 1, 2, 10, 5, 1, 1, 1, 4, 80, 20, false);
-        Card unitCard_knight = new UnitCard(1, CardType.Unit, "Unit: Knight",/* GameObject cardImage,*/ 3, 1, 2, 30, 7, 4, 1, 1, 3, 70, 10, false);
-        Card unitCard_assassin = new UnitCard(2, CardType.Unit, "Unit: Assassin",/* GameObject cardImage,*/ 3, 1, 2, 15, 9, 0, 1, 1, 8, 95, 60, false);
-        Card unitCard_priest = new UnitCard(3, CardType.Unit, "Unit: Priest",/* GameObject cardImage,*/ 1, 1, 2, 15, 5, 0, 0, 2, 4, 100, 30, false);
-        Card unitCard_archer = new UnitCard(4, CardType.Unit, "Unit: Archer",/* GameObject cardImage,*/ 1, 1, 2, 15, 6, 0, 2, 3, 4, 90, 30, false);
-        Card unitCard_dragonRider = new UnitCard(5, CardType.Unit, "Unit: DragonRider",/* GameObject cardImage,*/ 1, 1, 2, 25, 6, 2, 1, 1, 6, 85, 20, true);
+        /*Card unitCard_soldier = new UnitCard(0, CardType.Unit, CastType.OnEmpty, "Unit: Soldier", GameObject cardImage, 1, 1, 2, 10, 5, 1, 1, 1, 4, 80, 20, false);
+        Card unitCard_knight = new UnitCard(1, CardType.Unit, CastType.OnEmpty, "Unit: Knight", GameObject cardImage, 3, 1, 2, 30, 7, 4, 1, 1, 3, 70, 10, false);
+        Card unitCard_assassin = new UnitCard(2, CardType.Unit, CastType.OnEmpty, "Unit: Assassin", GameObject cardImage, 3, 1, 2, 15, 9, 0, 1, 1, 8, 95, 60, false);
+        Card unitCard_priest = new UnitCard(3, CardType.Unit, CastType.OnEmpty, "Unit: Priest", GameObject cardImage, 1, 1, 2, 15, 5, 0, 0, 2, 4, 100, 30, false);
+        Card unitCard_archer = new UnitCard(4, CardType.Unit, CastType.OnEmpty, "Unit: Archer", GameObject cardImage, 1, 1, 2, 15, 6, 0, 2, 3, 4, 90, 30, false);
+        Card unitCard_dragonRider = new UnitCard(5, CardType.Unit, CastType.OnEmpty, "Unit: DragonRider", GameObject cardImage, 1, 1, 2, 25, 6, 2, 1, 1, 6, 85, 20, true);
 
-        Card activeCard_smite = new SpellCard(6, CardType.Active, "Smite", /*GameObject cardImage,*/ 1, 1, 1, "Damages an enemy unit for 5 health.");
+        Card activeCard_smite = new SpellCard(6, CardType.Active, CastType.OnEnemy, "Smite", GameObject cardImage, 1, 1, 1, "Damages an enemy unit for 5 health.");
 
 
 
-        Card currentCard = unitCard_soldier;
+        Card currentCard = unitCard_soldier;*/
+
+        GameObject clickedButtonGO = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject; // gets object that calls onClick
+        Card currentCard = clickedButtonGO.GetComponent<Card>();
         storedCard = currentCard;
-
 
         // for units
         if (currentCard.type == CardType.Unit)
@@ -201,7 +248,6 @@ public class TurnManager : Singleton<TurnManager>
             if (grid != null)
             {
                 List<Node> allyNodes = grid.GetAllyUnitNodes(currentPlayer.PlayerId); // hard code player 0
-                print(allyNodes.Count);
                 foreach (Node node in allyNodes)
                 {
                     Vector3 nodePos = node.unitInThisNode.transform.position;
@@ -249,7 +295,6 @@ public class TurnManager : Singleton<TurnManager>
             {
                 if (selectedNode.unitInThisNode == null)
                 {
-                    print("spawning unit");
                     if (storedCard.id == 0) // spawn soldier
                         cardEffectManager.createSoldierUnit(currentPlayer.PlayerId);
                     else if (storedCard.id == 1) // spawn Knight
@@ -270,13 +315,30 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (selectableNodes.Contains(selectedNode))
             {
-                if (selectedNode.unitInThisNode != null)
+                if (storedCard.castType == CastType.OnAlly)
                 {
-                    print("i get here active");
-                    cardEffectManager.spell_smite(currentPlayer.PlayerId);
+
+                }
+                else if (storedCard.castType == CastType.OnEnemy)
+                {
+                    if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
+                    {
+                        if(storedCard.id == 6)
+                            cardEffectManager.spell_smite(currentPlayer.PlayerId);
+                    }
+                }
+                else if (storedCard.castType == CastType.OnEmpty)
+                {
+
+                }
+                else if (storedCard.castType == CastType.OnAny)
+                {
+                   if (storedCard.id == 7)
+                        cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId);
                 }
             }
         }
+
         ResetMaterial();
         selectableNodes.Clear();
         currentTurnState = TurnState.Free;
