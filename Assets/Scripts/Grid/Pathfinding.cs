@@ -42,22 +42,6 @@ public class Pathfinding : MonoBehaviour
 		requestManager = GetComponent<PathRequestManager>();
 		gridRef = GetComponent<Grid>();
 	}
-
-	void Update()
-	{
-	}
-
-	void OnMouseEnter()
-	{
-		mouseOver = true;
-		//print("hover");
-	}
-
-	void OnMouseExit()
-	{
-		mouseOver = false;
-		//print("not hover");
-	}
 	
 	/*
 	* BFS function to add.
@@ -380,42 +364,7 @@ public class Pathfinding : MonoBehaviour
 			}
 		}
 	}
-	
-	public void SetHoverTilePrefab()
-	{
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		
 
-		if (Physics.Raycast(ray, out hit))
-		{
-			Transform pos = hit.transform;
-
-			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
-			
-			hoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
-			hoverMat.material = hoveredTile;
-		}
-	}
-	
-	public void UnHoverTilePrefab()
-	{
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		
-
-		if (Physics.Raycast(ray, out hit))
-		{
-			Transform pos = hit.transform;
-
-			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
-			
-			unhoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
-			unhoverMat.material = defaultMat;
-		}
-	}
-
-	
 	private Node[] RetracePath(Node startNode, Node endNode) 
 	{
 		List<Node> path = new List<Node>();
