@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 8575106909883118119}
   - component: {fileID: 8575106909883118112}
   - component: {fileID: 8575106909883118113}
+  - component: {fileID: -4563149280342923699}
   m_Layer: 0
-  m_Name: tileStandard
+  m_Name: TileGrass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,3 +96,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-4563149280342923699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8575106909883118114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b86db907a7d09b4983e85638b9a8a3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hoveredTile: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
+  defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}

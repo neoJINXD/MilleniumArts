@@ -575,7 +575,7 @@ MonoBehaviour:
   target: {fileID: 1737116090}
   unit: {fileID: 1764270284}
   size: 1
-  gridParent: {fileID: 377164647}
+  gridParent: {fileID: 0}
   tilePrefab: {fileID: 8575106909883118114, guid: 77b0da9352ddaed4f8234b8da36dcde0,
     type: 3}
   tileUnwalkablePrefab: {fileID: 8575106909883118114, guid: cf64c95d92912a245ae2f2c570936dc1,
@@ -624,11 +624,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc65fda1cf3c774ba64274e240d9c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
+  hoveredTile: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
   defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
   selectedTile: {fileID: 2100000, guid: 0027759dfc5935d4a99771f544d66a93, type: 2}
-  minDepthLimit: 2
-  maxDepthLimit: 3
+  minDepthLimit: 1
+  maxDepthLimit: 11
 --- !u!114 &844824551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1412,7 +1412,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273640694}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 18.008152, y: -0.004111171, z: -25.6183}
+  m_LocalPosition: {x: 18.84, y: -0.004111171, z: -24.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1230411179}

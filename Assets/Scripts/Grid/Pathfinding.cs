@@ -9,7 +9,7 @@ public class Pathfinding : MonoBehaviour
 {
 
 	PathRequestManager requestManager;
-	[SerializeField] private Material displayPath;
+	[SerializeField] private Material hoveredTile;
 	[SerializeField] private Material defaultMat;
 	[SerializeField] private Material selectedTile;
 	
@@ -24,6 +24,7 @@ public class Pathfinding : MonoBehaviour
 	private Vector3 initialPosition;
 	private Renderer hoverMat;
 	private Renderer unhoverMat;
+	private bool mouseOver = false;
 	
 	// unity crashes when depth is greater than 17, setting restriction.
 	// to move to unit class.
@@ -40,6 +41,22 @@ public class Pathfinding : MonoBehaviour
 	{
 		requestManager = GetComponent<PathRequestManager>();
 		gridRef = GetComponent<Grid>();
+	}
+
+	void Update()
+	{
+	}
+
+	void OnMouseEnter()
+	{
+		mouseOver = true;
+		//print("hover");
+	}
+
+	void OnMouseExit()
+	{
+		mouseOver = false;
+		//print("not hover");
 	}
 	
 	/*
@@ -347,7 +364,7 @@ public class Pathfinding : MonoBehaviour
 			foreach (var node in waypoints)
 			{
 				Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-				pathMat.material = displayPath;
+				pathMat.material = hoveredTile;
 			}
 		}
 	}
@@ -377,7 +394,7 @@ public class Pathfinding : MonoBehaviour
 			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
 			
 			hoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
-			hoverMat.material = selectedTile;
+			hoverMat.material = hoveredTile;
 		}
 	}
 	
