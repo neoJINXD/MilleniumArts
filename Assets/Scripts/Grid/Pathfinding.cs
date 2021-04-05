@@ -174,7 +174,18 @@ public class Pathfinding : MonoBehaviour
 		
 		foreach (Node n in verify)
 			visited.Remove(n);
-			
+
+		/*
+		foreach (Node n in gridRef.GetAllUnitNodes())
+		{
+			if (visited.Contains(n))
+			{
+				visited.Remove(n);
+			}
+		}
+		*/
+
+
 		return visited;
 	}
 	
@@ -232,9 +243,7 @@ public class Pathfinding : MonoBehaviour
 
 		return allyUnitNodes;
 	}
-
 	
-
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPID, Heuristic desiredHeuristic) 
 	{
 		switch (desiredHeuristic)
@@ -266,7 +275,7 @@ public class Pathfinding : MonoBehaviour
 		
 		StartCoroutine(FindPath(startPos,targetPos, canFly, unitPID, hf));
 		//pass the function to use to calculate hCost
-		//can pass boolean to determine flying or normal pathfinding 
+		//can pass boolean to determine flying or normal pathfinding
 	}
 	
 	//also takes in the calling unit's PID
@@ -334,7 +343,6 @@ public class Pathfinding : MonoBehaviour
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
-
 		}
 
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
