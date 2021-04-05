@@ -111,7 +111,7 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (selectedNode.unitInThisNode == null)
             {
-                cardEffectManager.createSoldierUnit(1); // assuming enemy player id = 1
+                cardEffectManager.createSoldierUnit(1, selectedNode); // assuming enemy player id = 1
             }
         }
         currentTurnState = TurnState.Free;
@@ -296,17 +296,17 @@ public class TurnManager : Singleton<TurnManager>
                 if (selectedNode.unitInThisNode == null)
                 {
                     if (storedCard.id == 0) // spawn soldier
-                        cardEffectManager.createSoldierUnit(currentPlayer.PlayerId);
+                        cardEffectManager.createSoldierUnit(currentPlayer.PlayerId, selectedNode);
                     else if (storedCard.id == 1) // spawn Knight
-                        cardEffectManager.createKnightUnit(currentPlayer.PlayerId);
+                        cardEffectManager.createKnightUnit(currentPlayer.PlayerId, selectedNode);
                     else if (storedCard.id == 2) // spawn Assassin
-                        cardEffectManager.createAssassinUnit(currentPlayer.PlayerId);
+                        cardEffectManager.createAssassinUnit(currentPlayer.PlayerId, selectedNode);
                     else if (storedCard.id == 3) // spawn Priest
-                        cardEffectManager.createPriestUnit(currentPlayer.PlayerId);
+                        cardEffectManager.createPriestUnit(currentPlayer.PlayerId, selectedNode);
                     else if (storedCard.id == 4) // spawn Archer
-                        cardEffectManager.createArcherUnit(currentPlayer.PlayerId);
+                        cardEffectManager.createArcherUnit(currentPlayer.PlayerId, selectedNode);
                     else if (storedCard.id == 5) // spawn Dragon Rider
-                        cardEffectManager.createDragonRiderUnit(currentPlayer.PlayerId);
+                        cardEffectManager.createDragonRiderUnit(currentPlayer.PlayerId, selectedNode);
                 }
             }
 
@@ -317,24 +317,26 @@ public class TurnManager : Singleton<TurnManager>
             {
                 if (storedCard.castType == CastType.OnAlly)
                 {
-
+                    if (storedCard.id == 8)
+                        cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
                 }
                 else if (storedCard.castType == CastType.OnEnemy)
                 {
                     if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
                     {
                         if(storedCard.id == 6)
-                            cardEffectManager.spell_smite(currentPlayer.PlayerId);
+                            cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
                     }
                 }
                 else if (storedCard.castType == CastType.OnEmpty)
                 {
-
+                    if (storedCard.id == 9)
+                        cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
                 }
                 else if (storedCard.castType == CastType.OnAny)
                 {
                    if (storedCard.id == 7)
-                        cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId);
+                        cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
                 }
             }
         }

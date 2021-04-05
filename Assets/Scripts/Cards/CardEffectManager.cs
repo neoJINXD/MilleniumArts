@@ -29,25 +29,9 @@ public class CardEffectManager : MonoBehaviour
     }
 
     // create Soldier unit
-    public void createSoldierUnit(int playerId)
+    public void createSoldierUnit(int playerId, Node selectedNode)
     {
-        Node node = null;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                node = grid.NodeFromWorldPoint(hit.transform.position);
-                break;
-            }
-        }
-
-        Unit soldierUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        Unit soldierUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         soldierUnit.SetMovementSpeed(4);
         soldierUnit.SetCanFly(false);
@@ -62,7 +46,7 @@ public class CardEffectManager : MonoBehaviour
         soldierUnit.SetAccuracy(80);
         soldierUnit.SetEvasion(20);
 
-        node.AddUnit(soldierUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(soldierUnit.GetComponent<Unit>());
 
         //hardcoded color for test
         if (playerId == 0)
@@ -72,25 +56,9 @@ public class CardEffectManager : MonoBehaviour
     }
 
     // create Knight unit
-    public void createKnightUnit(int playerId)
+    public void createKnightUnit(int playerId, Node selectedNode)
     {
-        Node node = null;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                node = grid.NodeFromWorldPoint(hit.transform.position);
-                break;
-            }
-        }
-
-        Unit knightUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        Unit knightUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         knightUnit.SetMovementSpeed(3);
         knightUnit.SetCanFly(false);
@@ -105,7 +73,7 @@ public class CardEffectManager : MonoBehaviour
         knightUnit.SetAccuracy(70);
         knightUnit.SetEvasion(10);
 
-        node.AddUnit(knightUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(knightUnit.GetComponent<Unit>());
 
         //hardcoded color for test
         if (playerId == 0)
@@ -115,25 +83,9 @@ public class CardEffectManager : MonoBehaviour
     }
 
     // create Assassin unit
-    public void createAssassinUnit(int playerId)
+    public void createAssassinUnit(int playerId, Node selectedNode)
     {
-        Node node = null;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                node = grid.NodeFromWorldPoint(hit.transform.position);
-                break;
-            }
-        }
-
-        Unit assassinUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        Unit assassinUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         assassinUnit.SetMovementSpeed(8);
         assassinUnit.SetCanFly(false);
@@ -148,7 +100,7 @@ public class CardEffectManager : MonoBehaviour
         assassinUnit.SetAccuracy(95);
         assassinUnit.SetEvasion(60);
 
-        node.AddUnit(assassinUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(assassinUnit.GetComponent<Unit>());
 
         //hardcoded color for test
         if (playerId == 0)
@@ -158,25 +110,9 @@ public class CardEffectManager : MonoBehaviour
     }
 
     // create Priest unit
-    public void createPriestUnit(int playerId)
+    public void createPriestUnit(int playerId, Node selectedNode)
     {
-        Node node = null;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                node = grid.NodeFromWorldPoint(hit.transform.position);
-                break;
-            }
-        }
-
-        Unit priestUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        Unit priestUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         priestUnit.SetMovementSpeed(4);
         priestUnit.SetCanFly(false);
@@ -191,7 +127,7 @@ public class CardEffectManager : MonoBehaviour
         priestUnit.SetAccuracy(100);
         priestUnit.SetEvasion(30);
 
-        node.AddUnit(priestUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(priestUnit.GetComponent<Unit>());
 
         //hardcoded color for test
         if (playerId == 0)
@@ -201,25 +137,9 @@ public class CardEffectManager : MonoBehaviour
     }
 
     // create Archer unit
-    public void createArcherUnit(int playerId)
+    public void createArcherUnit(int playerId, Node selectedNode)
     {
-        Node node = null;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                node = grid.NodeFromWorldPoint(hit.transform.position);
-                break;
-            }
-        }
-
-        Unit archerUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        Unit archerUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         archerUnit.SetMovementSpeed(4);
         archerUnit.SetCanFly(false);
@@ -234,7 +154,7 @@ public class CardEffectManager : MonoBehaviour
         archerUnit.SetAccuracy(90);
         archerUnit.SetEvasion(30);
 
-        node.AddUnit(archerUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(archerUnit.GetComponent<Unit>());
 
         //hardcoded color for test
         if (playerId == 0)
@@ -244,25 +164,9 @@ public class CardEffectManager : MonoBehaviour
     }
 
     // create Dragon Rider unit
-    public void createDragonRiderUnit(int playerId)
+    public void createDragonRiderUnit(int playerId, Node selectedNode)
     {
-        Node node = null;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                node = grid.NodeFromWorldPoint(hit.transform.position);
-                break;
-            }
-        }
-
-        Unit dragonRiderUnit = Object.Instantiate(unitCreation, node.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        Unit dragonRiderUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         dragonRiderUnit.SetMovementSpeed(6);
         dragonRiderUnit.SetCanFly(false);
@@ -277,7 +181,7 @@ public class CardEffectManager : MonoBehaviour
         dragonRiderUnit.SetAccuracy(85);
         dragonRiderUnit.SetEvasion(20);
 
-        node.AddUnit(dragonRiderUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(dragonRiderUnit.GetComponent<Unit>());
 
         //hardcoded color for test
         if (playerId == 0)
@@ -294,24 +198,8 @@ public class CardEffectManager : MonoBehaviour
      * Effect: Damages an enemy unit for 5 health.
      * Cost: 3
      */
-    public void spell_smite(int playerId)
+    public void spell_smite(int playerId, Node selectedNode)
     {
-        Node selectedNode = null;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
-                break;
-            }
-        }
-
         if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
         {
             if (selectedNode.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
@@ -330,32 +218,14 @@ public class CardEffectManager : MonoBehaviour
      * Effect: Damages all enemies within (0,1) tiles of the casting origin for 3 health.
      * Cost: 3
      */
-    public void spell_heavenlySmite(int playerId)
+    public void spell_heavenlySmite(int playerId, Node selectedNode, Vector3 nodePosition)
     {
-        Node selectedNode = null;
-        Vector3 tilePosition = Vector3.zero;
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
-        {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
-                tilePosition = hit.transform.position;
-                break;
-            }
-        }
-
-        HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(tilePosition, false, 0, 1);
+        HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(nodePosition, false, 0, 1);
         HashSet<Node> getEnemyNodesInRange = new HashSet<Node>();
 
         foreach (Node node in allNodesInRange)
         {
-            if(node.GetUnit() != null)
+            if (node.GetUnit() != null)
             {
                 if (node.GetUnit().GetUnitPlayerID() != playerId)
                     getEnemyNodesInRange.Add(node);
@@ -368,4 +238,146 @@ public class CardEffectManager : MonoBehaviour
             print("Card Effect Sucessful: Heavenly Smite");
         }
     }
+
+    /*
+     * Card Name: Vitality
+     * Type: Spell(Active)
+     * Cast Range: (0, 0) tiles from any friendly unit
+     * Effect: Increases an ally unit’s current and maximum Health by 5.
+     * Cost: 3
+     */
+    public void spell_vitality(int playerId, Node selectedNode)
+    {
+        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        {
+            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            {
+                Unit targetUnit = selectedNode.unitInThisNode;
+                targetUnit.IncreaseMaxHealthBy(5);
+                targetUnit.IncreaseCurrentHealthBy(5);
+                print("Card Effect Sucessful: Vitality");
+            }
+        }
+    }
+
+    /*
+     * Card Name: Endurance
+     * Type: Spell(Active)
+     * Cast Range: (0, 0) tiles from any friendly unit
+     * Effect: Increases an ally unit’s Defence by 2.
+     * Cost: 2
+     */
+    public void spell_endurance(int playerId, Node selectedNode)
+    {
+        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        {
+            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            {
+                Unit targetUnit = selectedNode.unitInThisNode;
+                targetUnit.IncreaseDefenceBy(2);
+                print("Card Effect Sucessful: Endurance");
+            }
+        }
+    }
+
+    /*
+     * Card Name: Vigor
+     * Type: Spell(Active)
+     * Cast Range: (0, 0) tiles from any friendly unit
+     * Effect: Increases an ally unit’s Damage by 3.
+     * Cost: 2
+     */
+    public void spell_vigor(int playerId, Node selectedNode)
+    {
+        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        {
+            print("1");
+            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            {
+                Unit targetUnit = selectedNode.unitInThisNode;
+                targetUnit.IncreaseDamageBy(3);
+                print("Card Effect Sucessful: Vigor");
+            }
+        }
+    }
+
+    /*
+     * Card Name: Nimbleness
+     * Type: Spell(Active)
+     * Cast Range: (0, 0) tiles from any friendly unit
+     * Effect: Increases an ally unit’s movement speed by 1.
+     * Cost: 2
+     */
+    public void spell_nimbleness(int playerId, Node selectedNode)
+    {
+        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        {
+            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            {
+                Unit targetUnit = selectedNode.unitInThisNode;
+                targetUnit.IncreaseMovementSpeedBy(1);
+                print("Card Effect Sucessful: Nimbleness");
+            }
+        }
+    }
+
+    /*
+     * Card Name: Agility
+     * Type: Spell(Active)
+     * Cast Range: (0, 0) tiles from any friendly unit
+     * Effect: Increases an ally unit’s Evasion by 10.
+     * Cost: 2
+     */
+    public void spell_agility(int playerId, Node selectedNode)
+    {
+        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        {
+            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            {
+                Unit targetUnit = selectedNode.unitInThisNode;
+                targetUnit.IncreaseEvasionBy(10);
+                print("Card Effect Sucessful: Agiliy");
+            }
+        }
+    }
+
+    /*
+     * Card Name: Precision
+     * Type: Spell(Active)
+     * Cast Range: (0, 0) tiles from any friendly unit
+     * Effect: Increases an ally unit’s current and Accuracy by 10.
+     * Cost: 2
+     */
+    public void spell_precision(int playerId, Node selectedNode)
+    {
+        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        {
+            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            {
+                Unit targetUnit = selectedNode.unitInThisNode;
+                targetUnit.IncreaseAccuracyBy(10);
+                print("Card Effect Sucessful: Precision");
+            }
+        }
+    }
+
+    /*
+     * Card Name: Bear Trap
+     * Type: Spell(Trap)
+     * Cast Range: (1, 2) tiles from any friendly unit
+     * Effect: Damages the triggering unit for 5 health.
+     * Cost: 3
+     */
+    public void spell_bearTrap(int playerId, Node selectedNode)
+    {
+        if (selectedNode.unitInThisNode == null) // check if there's a unit on this node
+        {
+            TrapOrItem bearTrap = new TrapOrItem(playerId, 0, 1, 1, TrapOrItem.TrapOrItemTypes.BearTrap);
+            selectedNode.AddTrapOrItem(bearTrap);
+
+            print("Card Effect Sucessful: Precision");
+
+        }
+    }
 }
+
