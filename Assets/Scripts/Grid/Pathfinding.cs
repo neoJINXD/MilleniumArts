@@ -11,7 +11,6 @@ public class Pathfinding : MonoBehaviour
 	PathRequestManager requestManager;
 	[SerializeField] private Material hoveredTile;
 	[SerializeField] private Material defaultMat;
-	[SerializeField] private Material selectedTile;
 	
 	private  Node[] waypoints;
 
@@ -341,6 +340,7 @@ public class Pathfinding : MonoBehaviour
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
+	// Using Hover.cs instead of functions below. Keeping for now, in case decide to use them/modify.
 	public void DrawPath()
 	{
 		if (waypoints != null)

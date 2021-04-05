@@ -110,3 +110,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoveredTile: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
   defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
+  moveMat: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}

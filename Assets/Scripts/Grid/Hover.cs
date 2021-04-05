@@ -5,10 +5,11 @@ using UnityEngine;
 public class Hover : MonoBehaviour
 {
     [SerializeField] private Material hoveredTile;
-    [SerializeField] private Material defaultMat;
     
     private Renderer hoverMat;
     private Renderer unhoverMat;
+    private Material prevMat;
+    
     private Grid gridRef;
     private RaycastHit hit;
     
@@ -29,12 +30,13 @@ public class Hover : MonoBehaviour
             Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
 			
             hoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
+            prevMat = hoverMat.material;
             hoverMat.material = hoveredTile;
         }
     }
 
     void OnMouseExit()
     {
-        hoverMat.material = defaultMat;
+        hoverMat.material = prevMat;
     }
 }
