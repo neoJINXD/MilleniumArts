@@ -74,6 +74,14 @@ public class GameManager : Singleton<GameManager>
         view.ObservedComponents.Add(p2);
     }
 
+    private void Update() 
+    {
+        if(networked && PhotonNetwork.PlayerList.Length != 2)
+        {
+            SceneManager.LoadScene("PhotonPrototyping");
+        }    
+    }
+
     public Player GetCurrentPlayer() => gameLoop.GetCurrentPlayer();
 
     [PunRPC]

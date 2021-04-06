@@ -13,6 +13,9 @@ public class SpriteBillboard : MonoBehaviour
     }
     private void LateUpdate()
     {
+        // in case cam reference gets lost
+        if (cam == null)
+            cam = Camera.main;
 
         if (isFacingUp)
         {

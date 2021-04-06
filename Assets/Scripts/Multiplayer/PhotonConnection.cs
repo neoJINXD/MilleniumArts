@@ -7,6 +7,9 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
 {
     [SerializeField] string roomName; // TODO should eventually not have this hardcoded
     private NetworkSettings settings;
+    private bool inRoom = false;
+
+    [SerializeField] private GameObject joinButton;
 
     private void Awake() 
     {
@@ -16,12 +19,26 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
     }
     private void Start()
     {
+        joinButton.SetActive(false);
         PlayerPrefs.DeleteAll();
         print("Attempting connection to Photon");
 
         PhotonNetwork.NickName = settings.Nickname;
         PhotonNetwork.GameVersion = settings.GameVersion;
         PhotonNetwork.ConnectUsingSettings();
+    }
+
+    private void Update() 
+    {
+        // TODO should add player count in room view
+        if (inRoom && PhotonNetwork.PlayerList.Length == 2 && PhotonNetwork.IsMasterClient)
+        {
+            joinButton.SetActive(true);
+        }
+        if (PhotonNetwork.PlayerList.Length != 2)
+        {
+            joinButton.SetActive(false);
+        }
     }
 
     public void JoinRoom()
@@ -33,8 +50,12 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
             options.MaxPlayers = 2;
             TypedLobby lobby = new TypedLobby(roomName, LobbyType.Default);
             PhotonNetwork.JoinOrCreateRoom(roomName, options, lobby);
-            
         }
+    }
+
+    public void JoinGame()
+    {
+        PhotonNetwork.LoadLevel("PhotonMain");
     }
 
     // Callbacks
@@ -59,7 +80,8 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
         MenuManager.instance.OpenMenu("ingame");
         // PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity);
         // TODO should use PhotonNetwork's LoadScene method with a waiting lobby
-        SceneManager.LoadScene("PhotonMain");
+        // SceneManager.LoadScene("PhotonMain");
+        inRoom = true;
     }
 
     public override void OnDisconnected(DisconnectCause cause)
