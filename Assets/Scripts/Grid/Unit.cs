@@ -30,6 +30,7 @@ public class Unit : MonoBehaviour {
     public bool isClicked = false;
     public bool startRoutine;
     private Camera mainCam;
+    private const int constantMovementSpeed = 7;
     
     #region UnitModifications
 
@@ -440,7 +441,7 @@ public class Unit : MonoBehaviour {
                 currentWaypoint.AddUnit(this);
             }
 
-            transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,movementSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
 
             CheckHostileTrapOrItemInNode(currentWaypoint);
 
