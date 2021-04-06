@@ -30,13 +30,15 @@ public class Card : MonoBehaviour
     public int cost;
     public int minRange;
     public int maxRange;
+    public int aoeMinRange;
+    public int aoeMaxRange;
 
     public Card()
     {
 
     }
 
-    public Card(int cardId, CardType cardType, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax)
+    public Card(int cardId, CardType cardType, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, int cardAOEMin, int cardAOEMax)
     {
         id = cardId;
         type = cardType;
@@ -46,6 +48,8 @@ public class Card : MonoBehaviour
         cost = cardCost;
         minRange = cardMin;
         maxRange = cardMax;
+        aoeMinRange = cardAOEMin;
+        aoeMinRange = cardAOEMax;
     }
 }
 

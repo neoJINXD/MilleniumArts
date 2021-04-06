@@ -9,14 +9,16 @@ public class TurnManager : Singleton<TurnManager>
     public GameObject pathfindingGameObject;
 
     [SerializeField] private GameObject unitPrefab;
-    [SerializeField] private Material availablePosition;
-    [SerializeField] private Material defaultMaterial;
+    [SerializeField] public Material availablePosition;
+    [SerializeField] public Material defaultMaterial;
+    [SerializeField] public Material targetMaterial;
+    [SerializeField] public Material AOEMaterial;
 
     private const float lockAxis = 27f;
 
     public Player currentPlayer = default;
 
-    private HashSet<Node> selectableNodes;
+    public HashSet<Node> selectableNodes;
 
     private Pathfinding pf;
     private Grid grid;
@@ -27,7 +29,9 @@ public class TurnManager : Singleton<TurnManager>
 
     public CardEffectManager cardEffectManager;
 
-    private Card storedCard;
+    public Card storedCard;
+
+    public List<Unit> allUnits;
 
     enum TurnState
     {
@@ -60,6 +64,7 @@ public class TurnManager : Singleton<TurnManager>
     // Update is called once per frame
     void Update()
     {
+
         if (currentTurnState == TurnState.Free)
         {
             if (cardSelected)
@@ -77,7 +82,9 @@ public class TurnManager : Singleton<TurnManager>
         else if (currentTurnState == TurnState.SelectingCardOrigin)
         {
             if (Input.GetMouseButtonDown(0))
+            {
                 validateSelectTileClickCard();
+            }
         }
         else if (currentTurnState == TurnState.PlacingEnemyUnit)
         {
@@ -237,8 +244,9 @@ public class TurnManager : Singleton<TurnManager>
                 {
                     foreach (var node in selectableNodes)
                     {
+                        Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                         Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-                        newMat.material = availablePosition;
+                        newMat.material = targetMaterial;
                     }
                 }
             }
@@ -258,12 +266,19 @@ public class TurnManager : Singleton<TurnManager>
                 {
                     foreach (var node in selectableNodes)
                     {
+                        Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                         Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-                        newMat.material = availablePosition;
+                        newMat.material = targetMaterial;
                     }
                 }
             }
         }
+
+        // set the units' layer to ignore raycast (used because the unit model stopped raycast from hitting tile, to show AOE)
+        List<Node> allUnitsNodes = grid.GetAllUnitNodes();
+
+        foreach (Node node in allUnitsNodes)
+            node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
         currentTurnState = TurnState.SelectingCardOrigin;
     }
@@ -317,15 +332,21 @@ public class TurnManager : Singleton<TurnManager>
             {
                 if (storedCard.castType == CastType.OnAlly)
                 {
-                    if (storedCard.id == 8)
-                        cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                    if (selectedNode.GetUnit() != null)
+                    {
+                        if (storedCard.id == 8)
+                            cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                    }
                 }
                 else if (storedCard.castType == CastType.OnEnemy)
-                {
-                    if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
+                { 
+                    if (selectedNode.GetUnit() != null)
                     {
-                        if(storedCard.id == 6)
-                            cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
+                        if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
+                        {
+                            if (storedCard.id == 6)
+                                cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
+                        }
                     }
                 }
                 else if (storedCard.castType == CastType.OnEmpty)
@@ -340,6 +361,28 @@ public class TurnManager : Singleton<TurnManager>
                 }
             }
         }
+
+
+        foreach (var node in selectableNodes)
+        {
+            Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<TileOnMouseOver>());
+        }
+
+        pf.minDepthLimit = storedCard.aoeMinRange;
+        pf.maxDepthLimit = storedCard.aoeMaxRange;
+
+        HashSet<Node> aoeNodes = pf.GetNodesMinMaxRange(selectedNodePosition, false, storedCard.aoeMinRange, storedCard.aoeMaxRange);
+        foreach (Node node in aoeNodes)
+        {
+            Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+            newMat.material = defaultMaterial;
+        }
+        
+        // set the units back to their original layer
+        List<Node> allUnitsNodes = grid.GetAllUnitNodes();
+
+        foreach (Node node in allUnitsNodes)
+            node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Unit");
 
         ResetMaterial();
         selectableNodes.Clear();

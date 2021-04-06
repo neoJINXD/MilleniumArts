@@ -6,7 +6,7 @@ public class SpellCard : Card
 {
     public string description;
 
-    public SpellCard(int cardId, CardType cardType, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, string cardDesc)
+    public SpellCard(int cardId, CardType cardType, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, string cardDesc, int cardAOEMin, int cardAOEMax)
     {
         id = cardId;
         type = cardType;
@@ -16,6 +16,8 @@ public class SpellCard : Card
         cost = cardCost;
         minRange = cardMin;
         maxRange = cardMax;
+        aoeMinRange = cardAOEMin;
+        aoeMinRange = cardAOEMax;
         description = cardDesc;
     }
 }

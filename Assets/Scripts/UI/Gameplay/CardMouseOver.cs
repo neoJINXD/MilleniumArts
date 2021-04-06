@@ -12,12 +12,6 @@ public class CardMouseOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         rt = this.GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     //Detect if the Cursor starts to pass over the GameObject
     public void OnPointerEnter(PointerEventData pointerEventData)
     {

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5099118144358900278}
   - component: {fileID: 5099118144358900279}
   - component: {fileID: -4821333781483160718}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: King2
   m_TagString: Unit
   m_Icon: {fileID: 0}
@@ -110,5 +110,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitPlayerId: -1
   isClicked: 0
   startRoutine: 0
