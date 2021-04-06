@@ -37,7 +37,94 @@ public class PlacerManager : Singleton<PlacerManager>
 
     private void Update()
     {
+        if (Input.GetMouseButtonDown(1) && placerClicked)
+        {
+            Vector3 areaToInstantiate = Camera.main.ScreenToWorldPoint(
+                new Vector3(Input.mousePosition.x, Input.mousePosition.y, lockAxis));
+            
+            //TODO: will have to use real card and real card index
+            PlaceCard(playerPlacing, new Card(), 0, areaToInstantiate); 
+            placerClicked = false;
+        }
 
+
+        if (Input.GetKeyDown(KeyCode.Alpha2) && placerClicked)
+        {
+            cardEffectManager.createSoldierUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3) && placerClicked)
+        {
+            cardEffectManager.createKnightUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4) && placerClicked)
+        {
+            cardEffectManager.createAssassinUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha5) && placerClicked)
+        {
+            cardEffectManager.createPriestUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha6) && placerClicked)
+        {
+            cardEffectManager.createArcherUnit(0);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha7) && placerClicked)
+        {
+            cardEffectManager.createDragonRiderUnit(0);
+            placerClicked = false;
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.W) && placerClicked)
+        {
+            cardEffectManager.createSoldierUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && placerClicked)
+        {
+            cardEffectManager.createKnightUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && placerClicked)
+        {
+            cardEffectManager.createAssassinUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.T) && placerClicked)
+        {
+            cardEffectManager.createPriestUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Y) && placerClicked)
+        {
+            cardEffectManager.createArcherUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.U) && placerClicked)
+        {
+            cardEffectManager.createDragonRiderUnit(1);
+            placerClicked = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            cardEffectManager.spell_smite(0);
+        }
     }
     // for testing, allows to drag a unit with mouse, but might not be needed as can just click on square and instantiate.
     // private Vector3 mOffSet;

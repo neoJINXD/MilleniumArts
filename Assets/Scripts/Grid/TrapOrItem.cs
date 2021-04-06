@@ -22,9 +22,9 @@ public class TrapOrItem : MonoBehaviour
         MetalBarricade,
         ItemUndefined
     }
-
+    
     //default abstract constructor
-    public TrapOrItem()
+    protected TrapOrItem()
     {
         trapOrItemPlayerID = -1;
         trapOrItemHealth = 0;
@@ -34,7 +34,7 @@ public class TrapOrItem : MonoBehaviour
     }
 
     //parameterized abstract constructor
-    public TrapOrItem(int _trapOrItemPlayerID, int _trapOrItemHealth, int _minRange, int _maxRange, TrapOrItemTypes _trapOrItemType)
+    protected TrapOrItem(int _trapOrItemPlayerID, int _trapOrItemHealth, int _minRange, int _maxRange, TrapOrItemTypes _trapOrItemType)
     {
         trapOrItemPlayerID = _trapOrItemPlayerID;
         trapOrItemHealth = _trapOrItemHealth;

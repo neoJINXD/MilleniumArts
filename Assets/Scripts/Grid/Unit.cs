@@ -11,18 +11,18 @@ public class Unit : MonoBehaviour {
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
     
-    protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
-    protected UnitTypes unitType;
+    [SerializeField] protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
+    [SerializeField] protected UnitTypes unitType;
     [SerializeField] protected int unitPlayerId;
-    protected int maxHealth;
-    protected int currentHealth;
-    protected int damage;
-    protected int defense;
-    protected int minRange;
-    protected int maxRange;
-    protected int accuracy;
-    protected int evasion;
-    protected int cost;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] protected int currentHealth;
+    [SerializeField] protected int damage;
+    [SerializeField] protected int defense;
+    [SerializeField] protected int minRange;
+    [SerializeField] protected int maxRange;
+    [SerializeField] protected int accuracy;
+    [SerializeField] protected int evasion;
+    [SerializeField] protected int cost;
     protected Node[] path;
     protected int targetIndex;
     private const int MAXValue = Int32.MaxValue;
@@ -30,7 +30,6 @@ public class Unit : MonoBehaviour {
     public bool isClicked = false;
     public bool startRoutine;
     private Camera mainCam;
-    private const int constantMovementSpeed = 7;
     
     #region UnitModifications
 
@@ -444,7 +443,7 @@ public class Unit : MonoBehaviour {
                 currentWaypoint.AddUnit(this);
             }
 
-            transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,movementSpeed * Time.deltaTime);
 
             CheckHostileTrapOrItemInNode(currentWaypoint);
 

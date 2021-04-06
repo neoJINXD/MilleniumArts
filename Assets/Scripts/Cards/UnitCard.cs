@@ -14,13 +14,12 @@ public class UnitCard : Card
     public int evasion;
     public bool flying;
 
-    public UnitCard(int cardId, CardType cardType, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax,
+    public UnitCard(int cardId, CardType cardType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax,
         int cardHealth, int cardDamage, int cardDefence, int cardMinARange, int cardMaxARange, int cardMoveSpeed, int cardAccuracy,
         int cardEvasion, bool cardFlying)
     {
         id = cardId;
         type = cardType;
-        castType = cardCastType;
         name = cardName;
         //image = cardImage;
         cost = cardCost;

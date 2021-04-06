@@ -10,21 +10,12 @@ public enum CardType
     Trap = 2
 }
 
-public enum CastType
-{
-    OnAlly = 0,
-    OnEnemy = 1,
-    OnEmpty = 2,
-    OnAny = 3
-}
-
 [Serializable]
-public class Card : MonoBehaviour
+public class Card
 {
 
     public int id;
     public CardType type;
-    public CastType castType;
     public string name;
     public GameObject image;
     public int cost;
@@ -36,11 +27,10 @@ public class Card : MonoBehaviour
 
     }
 
-    public Card(int cardId, CardType cardType, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax)
+    public Card(int cardId, CardType cardType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax)
     {
         id = cardId;
         type = cardType;
-        castType = cardCastType;
         name = cardName;
         //image = cardImage;
         cost = cardCost;

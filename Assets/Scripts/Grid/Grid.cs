@@ -171,8 +171,8 @@ public class Grid : MonoBehaviour
 
         Unit king1 = Instantiate(kingPlayer1, spawnPosP1.transform, false).GetComponent<Unit>();
         Unit king2 = Instantiate(kingPlayer2, spawnPosP2.transform, false).GetComponent<Unit>();
-        NodeFromWorldPoint(spawnPosP1.transform.position).AddUnit(king1);
-        NodeFromWorldPoint(spawnPosP2.transform.position).AddUnit(king2);
+        NodeFromWorldPoint(spawnPosP1.transform.position).AddUnit(kingPlayer1);
+        NodeFromWorldPoint(spawnPosP2.transform.position).AddUnit(kingPlayer2);
         //adding the kings to their respective nodes
 
         // assign units to kings
