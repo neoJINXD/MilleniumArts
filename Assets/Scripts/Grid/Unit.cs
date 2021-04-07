@@ -394,12 +394,15 @@ public class Unit : MonoBehaviour {
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-          // fixes out of bounce error that occurs when unit selected.
-          if (Vector3.Distance(hit.point, transform.position) < 1)
-                 return; // already at destination
-          
-            
-          PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
+            if (hit.transform.CompareTag("Tile"))
+            {
+                // fixes out of bounce error that occurs when unit selected.
+                if (Vector3.Distance(hit.point, transform.position) < 1)
+                    return; // already at destination
+
+
+                PathRequestManager.RequestPath(transform.position, hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
+            }
         }
     }
     
@@ -479,7 +482,7 @@ public class Unit : MonoBehaviour {
     //     }
     // }
 
-    void OnMouseDown()
+/*    void OnMouseDown()
     {
         Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID() +
             "\nType: " + GetComponent<Unit>().GetUnitType() +
@@ -493,5 +496,5 @@ public class Unit : MonoBehaviour {
             "\nEvasion: " + GetComponent<Unit>().GetEvasion() +
             "\nMS: " + GetComponent<Unit>().GetMovementSpeed() +
             "\nFlying: " + GetComponent<Unit>().GetCanFly());
-    }
+    }*/
 }

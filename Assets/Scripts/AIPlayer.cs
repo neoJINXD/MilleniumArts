@@ -28,9 +28,8 @@ public class AIPlayer : Player
             Card cardToPlay = GetCard(cardIndex);
             if (cardToPlay.cost <= PlayerMana)
             {
-                if(cardToPlay.type == CardType.Unit)
-                    PlacerManager.instance.PlaceCard(this, cardToPlay, cardIndex,
-                        new Vector3(Random.Range(-10, 10), 0, Random.Range(-10f, 10f)));
+                PlacerManager.instance.PlaceCard(this, cardToPlay, cardIndex,
+                    new Vector3(Random.Range(-10, 10), 0, Random.Range(-10f, 10f)));
             }
             else
             {

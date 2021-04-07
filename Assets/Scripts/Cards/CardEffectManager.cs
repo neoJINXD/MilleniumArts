@@ -375,7 +375,7 @@ public class CardEffectManager : MonoBehaviour
             TrapOrItem bearTrap = new TrapOrItem(playerId, 0, 1, 1, TrapOrItem.TrapOrItemTypes.BearTrap);
             selectedNode.AddTrapOrItem(bearTrap);
 
-            print("Card Effect Sucessful: Precision");
+            print("Card Effect Sucessful: Bear Trap");
 
         }
     }

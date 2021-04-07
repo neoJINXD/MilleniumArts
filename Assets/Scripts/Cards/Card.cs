@@ -3,13 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CardType
-{
-    Unit = 0,
-    Active = 1,
-    Trap = 2
-}
-
 public enum CastType
 {
     OnAlly = 0,
@@ -23,7 +16,6 @@ public class Card : MonoBehaviour
 {
 
     public int id;
-    public CardType type;
     public CastType castType;
     public string name;
     public GameObject image;
@@ -38,10 +30,9 @@ public class Card : MonoBehaviour
 
     }
 
-    public Card(int cardId, CardType cardType, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, int cardAOEMin, int cardAOEMax)
+    public Card(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, int cardAOEMin, int cardAOEMax)
     {
         id = cardId;
-        type = cardType;
         castType = cardCastType;
         name = cardName;
         //image = cardImage;

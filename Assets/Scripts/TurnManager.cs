@@ -9,7 +9,7 @@ public class TurnManager : Singleton<TurnManager>
     public GameObject pathfindingGameObject;
 
     [SerializeField] private GameObject unitPrefab;
-    [SerializeField] public Material availablePosition;
+    [SerializeField] public Material availableMaterial;
     [SerializeField] public Material defaultMaterial;
     [SerializeField] public Material targetMaterial;
     [SerializeField] public Material AOEMaterial;
@@ -23,7 +23,8 @@ public class TurnManager : Singleton<TurnManager>
     private Pathfinding pf;
     private Grid grid;
 
-    private Unit currentUnit;
+    public Unit currentUnit;
+    public Vector3 currentUnitPosition;
 
     public bool cardSelected;
 
@@ -33,7 +34,7 @@ public class TurnManager : Singleton<TurnManager>
 
     public List<Unit> allUnits;
 
-    enum TurnState
+    public enum TurnState
     {
         Waiting,
         Free,
@@ -45,7 +46,23 @@ public class TurnManager : Singleton<TurnManager>
 
     public bool placingEnemyUnit; // temp for testing
 
-    [SerializeField] private TurnState currentTurnState;
+    [SerializeField] public TurnState currentTurnState;
+
+    public bool unitSelected;
+
+    // Stat panel
+
+    public Text unitPlayerIDText;
+    public Text unitDamageText;
+    public Text unitDefenceText;
+    public Text unitARText;
+    public Text unitMSText;
+    public Text unitAccuracyText;
+    public Text unitEvasionText;
+    public Text unitHealthText;
+
+    // Option Menu
+    public GameObject optionPanel;
 
     void Start()
     {
@@ -72,19 +89,22 @@ public class TurnManager : Singleton<TurnManager>
             else if (placingEnemyUnit)
                 currentTurnState = TurnState.PlacingEnemyUnit;
             else if (Input.GetMouseButtonDown(0))
-                checkBoardClick();
+                checkBoardClickForUnit();
         }
         else if (currentTurnState == TurnState.SelectingTileMovement)
         {
             if (Input.GetMouseButtonDown(0))
                 validateSelectTileClickMove();
         }
+        else if (currentTurnState == TurnState.SelectingTileAttack)
+        {
+            if (Input.GetMouseButtonDown(0))
+                validateSelectTileClickAttack();
+        }
         else if (currentTurnState == TurnState.SelectingCardOrigin)
         {
             if (Input.GetMouseButtonDown(0))
-            {
                 validateSelectTileClickCard();
-            }
         }
         else if (currentTurnState == TurnState.PlacingEnemyUnit)
         {
@@ -125,8 +145,70 @@ public class TurnManager : Singleton<TurnManager>
         placingEnemyUnit = false;
     }
 
+    public void unitMove()
+    {
+        if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
+        {
+            // Display All Valid Tiles to move on
+            int unitMoveSpeed = (int)currentUnit.GetMovementSpeed();
+            Node currentNode = grid.NodeFromWorldPoint(currentUnitPosition);
 
-    void checkBoardClick()
+            pf.minDepthLimit = 1;
+            pf.maxDepthLimit = unitMoveSpeed;
+            selectableNodes = pf.GetNodesMinMaxRange(currentUnitPosition, false, 1, unitMoveSpeed);
+
+            if (selectableNodes != null && selectableNodes.Count > 0)
+            {
+                foreach (var node in selectableNodes)
+                {
+                    Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
+                    Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+                    newMat.material = availableMaterial;
+                }
+            }
+
+            // set the units' layer to ignore raycast (used because the unit model stopped raycast from hitting tile, to show AOE)
+            List<Node> allUnitsNodes = grid.GetAllUnitNodes();
+
+            foreach (Node node in allUnitsNodes)
+                node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+
+            currentTurnState = TurnState.SelectingTileMovement;
+        }
+    }
+
+    public void unitAttack()
+    {
+        if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
+        {
+            Node currentNode = grid.NodeFromWorldPoint(currentUnitPosition);
+
+            pf.minDepthLimit = currentUnit.GetMinRange();
+            pf.maxDepthLimit = currentUnit.GetMaxRange();
+            selectableNodes = pf.GetNodesMinMaxRange(currentUnitPosition, false, currentUnit.GetMinRange(), currentUnit.GetMaxRange());
+
+            if (selectableNodes != null && selectableNodes.Count > 0)
+            {
+                foreach (var node in selectableNodes)
+                {
+                    Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
+                    Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+                    newMat.material = targetMaterial;
+                }
+            }
+
+            // set the units' layer to ignore raycast (used because the unit model stopped raycast from hitting tile, to show AOE)
+            List<Node> allUnitsNodes = grid.GetAllUnitNodes();
+
+            foreach (Node node in allUnitsNodes)
+                node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+
+            currentTurnState = TurnState.SelectingTileAttack;
+        }
+    }
+
+
+    void checkBoardClickForUnit()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -136,29 +218,24 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (hit.transform.CompareTag("Unit")) // if board hits unit
             {
-                if (hit.transform.GetComponent<Unit>().GetUnitPlayerID() == 0) // check if unit belongs to current player
+                if (hit.transform.GetComponent<Unit>().GetUnitPlayerID() == currentPlayer.PlayerId) // check if unit belongs to current player
                 {
                     currentUnit = hit.transform.GetComponent<Unit>();
+                    currentUnitPosition = hit.transform.position;
 
-                    // Display All Valid Tiles to move on
-                    int unitMoveSpeed = (int)currentUnit.GetMovementSpeed();
-                    Node currentNode = grid.NodeFromWorldPoint(currentUnit.transform.position);
-
-                    pf.minDepthLimit = 1;
-                    pf.maxDepthLimit = unitMoveSpeed;
-                    selectableNodes = pf.GetNodesMinMaxRange(hit.transform.position, false, 1, unitMoveSpeed);
-
-                    if (selectableNodes != null && selectableNodes.Count > 0)
-                    {
-                        foreach (var node in selectableNodes)
-                        {
-                            Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-                            newMat.material = availablePosition;
-                        }
-                    }
-
-                    currentTurnState = TurnState.SelectingTileMovement;
+                    optionPanel.SetActive(true);
                 }
+                else
+                    optionPanel.SetActive(false);
+
+                unitPlayerIDText.text = "" + hit.transform.GetComponent<Unit>().GetUnitPlayerID();
+                unitDamageText.text = "" + hit.transform.GetComponent<Unit>().GetDamage();
+                unitDefenceText.text = "" + hit.transform.GetComponent<Unit>().GetDefence();
+                unitARText.text = "" + hit.transform.GetComponent<Unit>().GetMinRange() + " - " +  + hit.transform.GetComponent<Unit>().GetMaxRange();
+                unitMSText.text = "" + hit.transform.GetComponent<Unit>().GetMovementSpeed();
+                unitAccuracyText.text = "" + hit.transform.GetComponent<Unit>().GetAccuracy();
+                unitEvasionText.text = "" + hit.transform.GetComponent<Unit>().GetEvasion();
+                unitHealthText.text = "" + hit.transform.GetComponent<Unit>().GetCurrentHealth() + "/" + + hit.transform.GetComponent<Unit>().GetMaxHealth();
             }
         }
     }
@@ -185,15 +262,90 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null)
         {
-            if (selectedNode.unitInThisNode == null)
+            if (selectableNodes.Contains(selectedNode) && selectedNode.unitInThisNode == null)
             {
                 currentUnit.isClicked = true;
+                currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
             }
         }
+
+        foreach (var node in selectableNodes)
+        {
+            Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<TileOnMouseOver>());
+        }
+
+        // set the units back to their original layer
+        List<Node> allUnitsNodes = grid.GetAllUnitNodes();
+
+        foreach (Node node in allUnitsNodes)
+            node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Unit");
+
         ResetMaterial();
         selectableNodes.Clear();
+        unselectUnit();
         currentTurnState = TurnState.Free;
+    }
+
+    void validateSelectTileClickAttack()
+    {
+        Node selectedNode = null;
+        Vector3 selectedNodePosition = Vector3.zero;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
+                selectedNodePosition = hit.transform.position;
+                break;
+            }
+        }
+
+        if (selectedNode != null)
+        {
+            if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() != currentPlayer.PlayerId)
+                Attack(currentUnit, selectedNode.unitInThisNode);
+        }
+
+        foreach (var node in selectableNodes)
+        {
+            Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<TileOnMouseOver>());
+        }
+
+        // set the units back to their original layer
+        List<Node> allUnitsNodes = grid.GetAllUnitNodes();
+
+        foreach (Node node in allUnitsNodes)
+            node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Unit");
+
+        ResetMaterial();
+        selectableNodes.Clear();
+        unselectUnit();
+        currentTurnState = TurnState.Free;
+    }
+
+    void Attack(Unit attacker, Unit receiver)
+    {
+        int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
+
+        int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - 2 * receiver.GetDefence()));
+        int roll = Random.Range(0, 101); // generate 0-100
+
+        if(roll <= hitChance)
+        {
+            receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
+            print("Attack successful!");
+        }
+        else
+        {
+            print("Attack missed!");
+        }
     }
 
     private void ResetMaterial()
@@ -211,7 +363,8 @@ public class TurnManager : Singleton<TurnManager>
     public void PlaceCard()
     {
         // create temp card
-        /*Card unitCard_soldier = new UnitCard(0, CardType.Unit, CastType.OnEmpty, "Unit: Soldier", GameObject cardImage, 1, 1, 2, 10, 5, 1, 1, 1, 4, 80, 20, false);
+        /*
+        Card unitCard_soldier = new UnitCard(0, CardType.Unit, CastType.OnEmpty, "Unit: Soldier", GameObject cardImage, 1, 1, 2, 10, 5, 1, 1, 1, 4, 80, 20, false);
         Card unitCard_knight = new UnitCard(1, CardType.Unit, CastType.OnEmpty, "Unit: Knight", GameObject cardImage, 3, 1, 2, 30, 7, 4, 1, 1, 3, 70, 10, false);
         Card unitCard_assassin = new UnitCard(2, CardType.Unit, CastType.OnEmpty, "Unit: Assassin", GameObject cardImage, 3, 1, 2, 15, 9, 0, 1, 1, 8, 95, 60, false);
         Card unitCard_priest = new UnitCard(3, CardType.Unit, CastType.OnEmpty, "Unit: Priest", GameObject cardImage, 1, 1, 2, 15, 5, 0, 0, 2, 4, 100, 30, false);
@@ -220,56 +373,29 @@ public class TurnManager : Singleton<TurnManager>
 
         Card activeCard_smite = new SpellCard(6, CardType.Active, CastType.OnEnemy, "Smite", GameObject cardImage, 1, 1, 1, "Damages an enemy unit for 5 health.");
 
-
-
-        Card currentCard = unitCard_soldier;*/
+        Card currentCard = unitCard_soldier;
+        */
 
         GameObject clickedButtonGO = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject; // gets object that calls onClick
         Card currentCard = clickedButtonGO.GetComponent<Card>();
         storedCard = currentCard;
 
-        // for units
-        if (currentCard.type == CardType.Unit)
+        if (grid != null)
         {
-            if (grid != null)
+            List<Node> allyNodes = grid.GetAllyUnitNodes(currentPlayer.PlayerId); // hard code player 0
+            foreach (Node node in allyNodes)
             {
-                List<Node> allyNodes = grid.GetAllyUnitNodes(currentPlayer.PlayerId);
-                foreach (Node node in allyNodes)
-                {
-                    Vector3 nodePos = node.unitInThisNode.transform.position;
-                    selectableNodes.UnionWith(pf.GetNodesMinMaxRange(nodePos, false, 1, 2));
-                }
-
-                if (selectableNodes != null && selectableNodes.Count > 0)
-                {
-                    foreach (var node in selectableNodes)
-                    {
-                        Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
-                        Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-                        newMat.material = targetMaterial;
-                    }
-                }
+                Vector3 nodePos = node.unitInThisNode.transform.position;
+                selectableNodes.UnionWith(pf.GetNodesMinMaxRange(nodePos, false, currentCard.minRange, currentCard.maxRange));
             }
-        }
-        else if (currentCard.type == CardType.Active)
-        {
-            if (grid != null)
-            {
-                List<Node> allyNodes = grid.GetAllyUnitNodes(currentPlayer.PlayerId); // hard code player 0
-                foreach (Node node in allyNodes)
-                {
-                    Vector3 nodePos = node.unitInThisNode.transform.position;
-                    selectableNodes.UnionWith(pf.GetNodesMinMaxRange(nodePos, false, currentCard.minRange, currentCard.maxRange));
-                }
 
-                if (selectableNodes != null && selectableNodes.Count > 0)
+            if (selectableNodes != null && selectableNodes.Count > 0)
+            {
+                foreach (var node in selectableNodes)
                 {
-                    foreach (var node in selectableNodes)
-                    {
-                        Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
-                        Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-                        newMat.material = targetMaterial;
-                    }
+                    Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
+                    Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+                    newMat.material = targetMaterial;
                 }
             }
         }
@@ -303,10 +429,28 @@ public class TurnManager : Singleton<TurnManager>
             }
         }
 
-
-        if (storedCard.type == CardType.Unit)
+        if (selectableNodes.Contains(selectedNode))
         {
-            if (selectableNodes.Contains(selectedNode))
+            if (storedCard.castType == CastType.OnAlly)
+            {
+                if (selectedNode.GetUnit() != null)
+                {
+                    if (storedCard.id == 8)
+                        cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                }
+            }
+            else if (storedCard.castType == CastType.OnEnemy)
+            { 
+                if (selectedNode.GetUnit() != null)
+                {
+                    if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
+                    {
+                        if (storedCard.id == 6)
+                            cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
+                    }
+                }
+            }
+            else if (storedCard.castType == CastType.OnEmpty)
             {
                 if (selectedNode.unitInThisNode == null)
                 {
@@ -322,46 +466,16 @@ public class TurnManager : Singleton<TurnManager>
                         cardEffectManager.createArcherUnit(currentPlayer.PlayerId, selectedNode);
                     else if (storedCard.id == 5) // spawn Dragon Rider
                         cardEffectManager.createDragonRiderUnit(currentPlayer.PlayerId, selectedNode);
-                }
-            }
-
-        }
-        else if (storedCard.type == CardType.Active)
-        {
-            if (selectableNodes.Contains(selectedNode))
-            {
-                if (storedCard.castType == CastType.OnAlly)
-                {
-                    if (selectedNode.GetUnit() != null)
-                    {
-                        if (storedCard.id == 8)
-                            cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
-                    }
-                }
-                else if (storedCard.castType == CastType.OnEnemy)
-                { 
-                    if (selectedNode.GetUnit() != null)
-                    {
-                        if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
-                        {
-                            if (storedCard.id == 6)
-                                cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
-                        }
-                    }
-                }
-                else if (storedCard.castType == CastType.OnEmpty)
-                {
-                    if (storedCard.id == 9)
+                    else if (storedCard.id == 9)
                         cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
                 }
-                else if (storedCard.castType == CastType.OnAny)
-                {
-                   if (storedCard.id == 7)
-                        cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-                }
+            }
+            else if (storedCard.castType == CastType.OnAny)
+            {
+                if (storedCard.id == 7)
+                    cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
             }
         }
-
 
         foreach (var node in selectableNodes)
         {
@@ -386,7 +500,25 @@ public class TurnManager : Singleton<TurnManager>
 
         ResetMaterial();
         selectableNodes.Clear();
+        unselectUnit();
         currentTurnState = TurnState.Free;
         cardSelected = false;
+    }
+
+    public void unselectUnit()
+    {
+        currentUnit = null;
+        currentUnitPosition = Vector3.zero;
+
+        unitPlayerIDText.text = "-";
+        unitDamageText.text = "-";
+        unitDefenceText.text = "-";
+        unitARText.text = "x - x";
+        unitMSText.text = "-";
+        unitAccuracyText.text = "-";
+        unitEvasionText.text = "-";
+        unitHealthText.text = "-/-";
+
+        optionPanel.SetActive(false);
     }
 }
