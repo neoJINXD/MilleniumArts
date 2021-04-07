@@ -6,8 +6,6 @@ using UnityEngine.UI;
 
 public class TurnManager : Singleton<TurnManager>
 {
-    public GameObject pathfindingGameObject;
-
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] public Material availableMaterial;
     [SerializeField] public Material defaultMaterial;
@@ -66,8 +64,8 @@ public class TurnManager : Singleton<TurnManager>
 
     void Start()
     {
-        pf = pathfindingGameObject.GetComponent<Pathfinding>();
-        grid = pf.gridRef;
+        pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
+        grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
 
         currentTurnState = TurnState.Free;
 
@@ -428,15 +426,25 @@ public class TurnManager : Singleton<TurnManager>
                 break;
             }
         }
-
+        print("1");
         if (selectableNodes.Contains(selectedNode))
         {
+            print("2");
             if (storedCard.castType == CastType.OnAlly)
             {
+                print("3");
                 if (selectedNode.GetUnit() != null)
                 {
-                    if (storedCard.id == 8)
-                        cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                    print("4");
+                    if (selectedNode.GetUnit().GetUnitPlayerID() == currentPlayer.PlayerId)
+                    {
+                        print("5");
+                        if (storedCard.id == 8)
+                        { 
+                            print("6");
+                            cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                        }
+                    }
                 }
             }
             else if (storedCard.castType == CastType.OnEnemy)

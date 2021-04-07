@@ -401,7 +401,7 @@ public class Unit : MonoBehaviour {
                     return; // already at destination
 
 
-                PathRequestManager.RequestPath(transform.position, hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
+                PathRequestManager.RequestPath(transform.position, hit.transform.position, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
             }
         }
     }
@@ -429,24 +429,28 @@ public class Unit : MonoBehaviour {
     {
 
         Node currentWaypoint = path[0];
+        print(GameObject.Find("Pathfinding").GetComponent<Grid>().NodeFromWorldPoint(transform.position).RemoveUnit(this));// moved this
+
         while (true)
         {
             if (transform.position == currentWaypoint.worldPosition) 
             {
                 targetIndex++;
-                currentWaypoint.RemoveUnit(this);
                     
                 if (targetIndex >= path.Length) 
                 {
                     yield break;
                 }
+
+                currentWaypoint.RemoveUnit(this);// moved this
                 currentWaypoint = path[targetIndex];
                 currentWaypoint.AddUnit(this);
+                CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
             }
 
             transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
 
-            CheckHostileTrapOrItemInNode(currentWaypoint);
+            //CheckHostileTrapOrItemInNode(currentWaypoint);
 
             yield return null;
         }
@@ -456,13 +460,16 @@ public class Unit : MonoBehaviour {
     {
         List<TrapOrItem> toiList = waypoint.GetTrapOrItemList();
 
-        foreach (TrapOrItem toi in toiList)
-        {
+        foreach (TrapOrItem toi in toiList.ToArray())
+            toi.TrapOrItemTriggeredByUnit(waypoint);
+
+        // removed if statement to make player trigger their own traps
+        /*{
             if (toi.GetTrapOrItemPlayerID() != this.GetUnitPlayerID())
             {
                 toi.TrapOrItemTriggeredByUnit();
             }
-        }
+        }*/
     }
 
     // public void OnDrawGizmos() 

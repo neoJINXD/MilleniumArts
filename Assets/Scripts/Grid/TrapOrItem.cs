@@ -12,7 +12,16 @@ public class TrapOrItem : MonoBehaviour
     protected TrapOrItemTypes trapOrItemType;
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
-    
+
+    private Pathfinding pf;
+    private Grid grid;
+
+    void Start()
+    {
+        pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
+        grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
+    }
+
     public enum TrapOrItemTypes //enum for item/trap types
     {
         BearTrap,
@@ -44,11 +53,27 @@ public class TrapOrItem : MonoBehaviour
     }
 
     //function called when Unit triggers the Trap or Item in a Node
-    public virtual void TrapOrItemTriggeredByUnit()
+    public virtual void TrapOrItemTriggeredByUnit(Node triggeringOriginNode)
     {
-        //override per child class specification
-        Debug.Log("Dummy TrapTriggeredByUnit function");
-        throw new Exception("Override TrapOrItemTriggeredByUnit function");
+        if(trapOrItemType == TrapOrItemTypes.BearTrap)
+        {
+            print(triggeringOriginNode.GetUnit());
+            triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
+            print("Bear Trap triggered!");
+        }
+        else if(trapOrItemType == TrapOrItemTypes.LandMine)
+        {
+            HashSet<Node> affectedNodes = pf.GetNodesMinMaxRange(triggeringOriginNode.GetUnit().gameObject.transform.position, false, 0, 1);
+
+            foreach (Node node in affectedNodes)
+            {
+                if (node.GetUnit() != null)
+                    node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 3);
+            }
+            print("Land Mine triggered!");
+        }
+
+        triggeringOriginNode.RemoveTrapOrItem(this);
     }
     
     //set and get functions for item type

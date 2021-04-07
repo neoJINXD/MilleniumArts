@@ -46,7 +46,7 @@ public class CardEffectManager : MonoBehaviour
         soldierUnit.SetAccuracy(80);
         soldierUnit.SetEvasion(20);
 
-        selectedNode.AddUnit(soldierUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(soldierUnit);
 
         //hardcoded color for test
         if (playerId == 0)
@@ -100,7 +100,7 @@ public class CardEffectManager : MonoBehaviour
         assassinUnit.SetAccuracy(95);
         assassinUnit.SetEvasion(60);
 
-        selectedNode.AddUnit(assassinUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(assassinUnit);
 
         //hardcoded color for test
         if (playerId == 0)
@@ -127,7 +127,7 @@ public class CardEffectManager : MonoBehaviour
         priestUnit.SetAccuracy(100);
         priestUnit.SetEvasion(30);
 
-        selectedNode.AddUnit(priestUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(priestUnit);
 
         //hardcoded color for test
         if (playerId == 0)
@@ -154,7 +154,7 @@ public class CardEffectManager : MonoBehaviour
         archerUnit.SetAccuracy(90);
         archerUnit.SetEvasion(30);
 
-        selectedNode.AddUnit(archerUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(archerUnit);
 
         //hardcoded color for test
         if (playerId == 0)
@@ -181,7 +181,7 @@ public class CardEffectManager : MonoBehaviour
         dragonRiderUnit.SetAccuracy(85);
         dragonRiderUnit.SetEvasion(20);
 
-        selectedNode.AddUnit(dragonRiderUnit.GetComponent<Unit>());
+        selectedNode.AddUnit(dragonRiderUnit);
 
         //hardcoded color for test
         if (playerId == 0)
