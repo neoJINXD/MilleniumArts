@@ -426,22 +426,17 @@ public class TurnManager : Singleton<TurnManager>
                 break;
             }
         }
-        print("1");
+
         if (selectableNodes.Contains(selectedNode))
         {
-            print("2");
             if (storedCard.castType == CastType.OnAlly)
             {
-                print("3");
                 if (selectedNode.GetUnit() != null)
                 {
-                    print("4");
                     if (selectedNode.GetUnit().GetUnitPlayerID() == currentPlayer.PlayerId)
                     {
-                        print("5");
                         if (storedCard.id == 8)
                         { 
-                            print("6");
                             cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
                         }
                     }

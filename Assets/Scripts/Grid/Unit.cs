@@ -427,28 +427,33 @@ public class Unit : MonoBehaviour {
     //updates unit position by following along the path
     IEnumerator FollowPath() 
     {
-
         Node currentWaypoint = path[0];
-        print(GameObject.Find("Pathfinding").GetComponent<Grid>().NodeFromWorldPoint(transform.position).RemoveUnit(this));// moved this
+
+        Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
 
         while (true)
         {
+            grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
+
             if (transform.position == currentWaypoint.worldPosition) 
             {
                 targetIndex++;
-                    
-                if (targetIndex >= path.Length) 
-                {
-                    yield break;
-                }
-
-                currentWaypoint.RemoveUnit(this);// moved this
-                currentWaypoint = path[targetIndex];
                 currentWaypoint.AddUnit(this);
                 CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
+
+                if (targetIndex >= path.Length) 
+                    yield break;
+
+                currentWaypoint = path[targetIndex];
+                print("hello");
+                //currentWaypoint.RemoveUnit(this);// moved this
+                //currentWaypoint = path[targetIndex];
+                //currentWaypoint.AddUnit(this);
+                //CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
             }
 
-            transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
+            //transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
 
             //CheckHostileTrapOrItemInNode(currentWaypoint);
 

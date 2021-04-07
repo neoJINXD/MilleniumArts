@@ -48,6 +48,8 @@ public class CardEffectManager : MonoBehaviour
 
         selectedNode.AddUnit(soldierUnit);
 
+        soldierUnit.CheckHostileTrapOrItemInNode(selectedNode);
+
         //hardcoded color for test
         if (playerId == 0)
             soldierUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
@@ -74,6 +76,8 @@ public class CardEffectManager : MonoBehaviour
         knightUnit.SetEvasion(10);
 
         selectedNode.AddUnit(knightUnit.GetComponent<Unit>());
+
+        knightUnit.CheckHostileTrapOrItemInNode(selectedNode);
 
         //hardcoded color for test
         if (playerId == 0)
@@ -102,6 +106,8 @@ public class CardEffectManager : MonoBehaviour
 
         selectedNode.AddUnit(assassinUnit);
 
+        assassinUnit.CheckHostileTrapOrItemInNode(selectedNode);
+
         //hardcoded color for test
         if (playerId == 0)
             assassinUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
@@ -128,6 +134,8 @@ public class CardEffectManager : MonoBehaviour
         priestUnit.SetEvasion(30);
 
         selectedNode.AddUnit(priestUnit);
+
+        priestUnit.CheckHostileTrapOrItemInNode(selectedNode);
 
         //hardcoded color for test
         if (playerId == 0)
@@ -156,6 +164,8 @@ public class CardEffectManager : MonoBehaviour
 
         selectedNode.AddUnit(archerUnit);
 
+        archerUnit.CheckHostileTrapOrItemInNode(selectedNode);
+
         //hardcoded color for test
         if (playerId == 0)
             archerUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
@@ -182,6 +192,8 @@ public class CardEffectManager : MonoBehaviour
         dragonRiderUnit.SetEvasion(20);
 
         selectedNode.AddUnit(dragonRiderUnit);
+
+        dragonRiderUnit.CheckHostileTrapOrItemInNode(selectedNode);
 
         //hardcoded color for test
         if (playerId == 0)
@@ -373,6 +385,25 @@ public class CardEffectManager : MonoBehaviour
         if (selectedNode.unitInThisNode == null) // check if there's a unit on this node
         {
             TrapOrItem bearTrap = new TrapOrItem(playerId, 0, 1, 1, TrapOrItem.TrapOrItemTypes.BearTrap);
+            selectedNode.AddTrapOrItem(bearTrap);
+
+            print("Card Effect Sucessful: Bear Trap");
+
+        }
+    }
+
+    /*
+     * Card Name: Land Mine
+     * Type: Spell(Trap)
+     * Cast Range: (1, 2) tiles from any friendly unit
+     * Effect: Damages the triggering unit for 5 health.
+     * Cost: 3
+     */
+    public void spell_landMine(int playerId, Node selectedNode)
+    {
+        if (selectedNode.unitInThisNode == null) // check if there's a unit on this node
+        {
+            TrapOrItem bearTrap = new TrapOrItem(playerId, 0, 0, 0, TrapOrItem.TrapOrItemTypes.BearTrap);
             selectedNode.AddTrapOrItem(bearTrap);
 
             print("Card Effect Sucessful: Bear Trap");
