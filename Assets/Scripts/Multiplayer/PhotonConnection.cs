@@ -20,17 +20,27 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
     private void Start()
     {
         joinButton.SetActive(false);
-        PlayerPrefs.DeleteAll();
-        print("Attempting connection to Photon");
 
-        PhotonNetwork.NickName = settings.Nickname;
-        PhotonNetwork.GameVersion = settings.GameVersion;
-        PhotonNetwork.ConnectUsingSettings();
+        if (!PhotonNetwork.IsConnected)
+        {
+            PlayerPrefs.DeleteAll();
+            print("Attempting connection to Photon");
+
+            PhotonNetwork.NickName = settings.Nickname;
+            PhotonNetwork.GameVersion = settings.GameVersion;
+            PhotonNetwork.ConnectUsingSettings();
+        }
+        else 
+        {
+            MenuManager.instance.CloseMenu("loading");
+            MenuManager.instance.OpenMenu("main");
+        }
     }
 
     private void Update() 
     {
         // TODO should add player count in room view
+        print(PhotonNetwork.PlayerList.Length);
         if (inRoom && PhotonNetwork.PlayerList.Length == 2 && PhotonNetwork.IsMasterClient)
         {
             joinButton.SetActive(true);

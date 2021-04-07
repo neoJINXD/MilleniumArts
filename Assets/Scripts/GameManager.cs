@@ -20,6 +20,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Material player2Mat;
 
     public PhotonView view { get; private set; }
+
+    private bool isLeaving = false;
     
     void Start()
     {
@@ -32,6 +34,7 @@ public class GameManager : Singleton<GameManager>
         {
             LocalStart();
         }
+        isLeaving = false;
     }
 
     private void LocalStart()
@@ -41,14 +44,14 @@ public class GameManager : Singleton<GameManager>
 
     private void PhotonStart()
     {
-        view = GetComponent<PhotonView>();
-
         if (!PhotonNetwork.IsConnected)
         {
             // go back to 'menu'
             SceneManager.LoadScene("PhotonPrototyping");
             return;
         }
+        view = GetComponent<PhotonView>();
+
 
         // TODO change cube to king unit
         if (PhotonNetwork.IsMasterClient)
@@ -76,9 +79,13 @@ public class GameManager : Singleton<GameManager>
 
     private void Update() 
     {
-        if(networked && PhotonNetwork.PlayerList.Length != 2)
+        print(PhotonNetwork.PlayerList.Length);
+        if(networked && !isLeaving && PhotonNetwork.IsConnected && PhotonNetwork.PlayerList.Length != 2)
         {
-            SceneManager.LoadScene("PhotonPrototyping");
+            isLeaving = true;
+            NetworkRoom.LeaveRoom();
+            //     PhotonNetwork.LeaveRoom();
+            //     SceneManager.LoadScene("PhotonPrototyping");
         }    
     }
 
