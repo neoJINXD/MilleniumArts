@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Hover : MonoBehaviour
 {
-    [SerializeField] private Material hoveredTile;
+    public Material hoveredTile;
     
     private Renderer hoverMat;
     private Renderer unhoverMat;
@@ -37,6 +37,7 @@ public class Hover : MonoBehaviour
 
     void OnMouseExit()
     {
-        hoverMat.material = prevMat;
+        if(hoverMat != null)
+            hoverMat.material = prevMat;
     }
 }
