@@ -446,7 +446,6 @@ public class Unit : MonoBehaviour {
                     yield break;
 
                 currentWaypoint = path[targetIndex];
-                print("hello");
                 //currentWaypoint.RemoveUnit(this);// moved this
                 //currentWaypoint = path[targetIndex];
                 //currentWaypoint.AddUnit(this);

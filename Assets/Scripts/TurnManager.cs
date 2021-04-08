@@ -332,7 +332,7 @@ public class TurnManager : Singleton<TurnManager>
     {
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
-        int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - 2 * receiver.GetDefence()));
+        int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
         int roll = Random.Range(0, 101); // generate 0-100
 
         if(roll <= hitChance)
@@ -341,9 +341,7 @@ public class TurnManager : Singleton<TurnManager>
             print("Attack successful!");
         }
         else
-        {
             print("Attack missed!");
-        }
     }
 
     private void ResetMaterial()
