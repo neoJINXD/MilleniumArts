@@ -6,13 +6,13 @@ using ExitGames.Client.Photon.StructWrapping;
 using UnityEditor;
 using UnityEngine.Serialization;
 
-public class Unit : MonoBehaviour {
-
+public class Unit : MonoBehaviour 
+{
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
     
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
-    protected UnitTypes unitType;
+    public UnitTypes unitType { get; private set; }
     [SerializeField] protected int unitPlayerId;
     protected int maxHealth;
     protected int currentHealth;
@@ -28,7 +28,6 @@ public class Unit : MonoBehaviour {
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
     public bool isClicked = false;
-    public bool startRoutine;
     private Camera mainCam;
     private const int constantMovementSpeed = 7;
     
@@ -424,7 +423,7 @@ public class Unit : MonoBehaviour {
     
 
     //updates unit position by following along the path
-    IEnumerator FollowPath() 
+    public IEnumerator FollowPath() 
     {
         Node currentWaypoint = path[0];
 

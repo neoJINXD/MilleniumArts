@@ -9,8 +9,10 @@ public abstract class Player : MonoBehaviour
 {
     [HideInInspector] public int PlayerId;
     public int PlayerMana;
+	[SerializeField] protected Unit m_king;
     [SerializeField] protected List<Card> m_playerCards = new List<Card>();
     [SerializeField] protected List<Unit> m_playerUnits = new List<Unit>();
+	public List<Unit> Units => m_playerUnits;
     public bool TurnComplete { get; protected set; }
 
     public Player()
