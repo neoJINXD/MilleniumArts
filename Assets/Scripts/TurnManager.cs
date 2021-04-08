@@ -159,6 +159,10 @@ public class TurnManager : Singleton<TurnManager>
             {
                 foreach (var node in selectableNodes)
                 {
+                    //jon hover script
+                    Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>());
+
+                    //rey hover script
                     Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
                     newMat.material = availableMaterial;
@@ -189,6 +193,9 @@ public class TurnManager : Singleton<TurnManager>
             {
                 foreach (var node in selectableNodes)
                 {
+                    //jon hover script
+                    Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>());
+
                     Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
                     newMat.material = targetMaterial;
@@ -271,6 +278,11 @@ public class TurnManager : Singleton<TurnManager>
         foreach (var node in selectableNodes)
         {
             Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<TileOnMouseOver>());
+
+            //Jon hover script
+            Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(Hover));
+            Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>().hoveredTile = AOEMaterial;
+
         }
 
         // set the units back to their original layer
@@ -314,6 +326,10 @@ public class TurnManager : Singleton<TurnManager>
         foreach (var node in selectableNodes)
         {
             Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<TileOnMouseOver>());
+
+            //Jon hover script
+            Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(Hover));
+            Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>().hoveredTile = AOEMaterial;
         }
 
         // set the units back to their original layer
@@ -389,6 +405,9 @@ public class TurnManager : Singleton<TurnManager>
             {
                 foreach (var node in selectableNodes)
                 {
+                    //jon hover script
+                    Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>());
+
                     Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
                     newMat.material = targetMaterial;
@@ -481,6 +500,10 @@ public class TurnManager : Singleton<TurnManager>
         foreach (var node in selectableNodes)
         {
             Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<TileOnMouseOver>());
+
+            //Jon hover script
+            Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(Hover));
+            Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>().hoveredTile = AOEMaterial;
         }
 
         pf.minDepthLimit = storedCard.aoeMinRange;

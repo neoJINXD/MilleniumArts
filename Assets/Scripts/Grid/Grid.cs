@@ -209,20 +209,35 @@ public class Grid : MonoBehaviour
     {
         List<Node> neighbours = new List<Node>();
 
-        for (int x = -1; x <= 1; x++)
+        if (node.gridY + 1 < gridSizeY) //checking up
         {
-            for (int y = -1; y <= 1; y++)
+            if (grid[node.gridX, node.gridY + 1].unitInThisNode == null) //making sure no unit in the node
             {
-                if (x == 0 && y == 0)
-                    continue;
+                neighbours.Add(grid[node.gridX, node.gridY + 1]);
+            }
+        }
 
-                int checkX = node.gridX + x;
-                int checkY = node.gridY + y;
+        if (node.gridY - 1 >= 0) //checking down
+        {
+            if (grid[node.gridX, node.gridY - 1].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX, node.gridY - 1]);
+            }
+        }
 
-                if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
-                {
-                    neighbours.Add(grid[checkX, checkY]);
-                }
+        if (node.gridX + 1 < gridSizeX) //checking right
+        {
+            if (grid[node.gridX + 1, node.gridY].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX + 1, node.gridY]);
+            }
+        }
+
+        if (node.gridX - 1 >= 0) //checking left
+        {
+            if (grid[node.gridX - 1, node.gridY].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX - 1, node.gridY]);
             }
         }
 

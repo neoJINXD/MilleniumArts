@@ -2,21 +2,22 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using Zone.Core.Utils;
 
-public class PathRequestManager : MonoBehaviour {
+public class PathRequestManager : Singleton<PathRequestManager> {
 
     
     
     Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
     PathRequest currentPathRequest;
-
-    static PathRequestManager instance;
+    
     Pathfinding pathfinding;
 
     bool isProcessingPath;
 
-    void Awake() {
-        instance = this;
+    void Awake()
+    {
+        base.Awake();
         pathfinding = GetComponent<Pathfinding>();
     }
 
@@ -33,7 +34,6 @@ public class PathRequestManager : MonoBehaviour {
             currentPathRequest = pathRequestQueue.Dequeue();
             isProcessingPath = true;
             pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd, currentPathRequest.canFLy, currentPathRequest.unitPlayerID, currentPathRequest.heuristic);
-            
         }
     }
 
