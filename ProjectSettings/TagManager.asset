@@ -8,6 +8,7 @@ TagManager:
   - SelectionManager
   - Pathfinding
   - Unwalkable
+  - Tile
   layers:
   - Default
   - TransparentFX
