@@ -112,7 +112,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitPlayerId: -1
   isClicked: 0
+  startRoutine: 0
 --- !u!114 &7589532909933318529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,4 +129,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitPlayerId: -1
   isClicked: 0
+  startRoutine: 0

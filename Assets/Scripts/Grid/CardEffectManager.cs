@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardEffectManager : MonoBehaviour
+public class CardEffectsManager : MonoBehaviour
 {
     [SerializeField] private GameObject unitCreation;
 

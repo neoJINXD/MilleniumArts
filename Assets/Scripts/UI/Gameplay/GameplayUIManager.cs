@@ -118,6 +118,6 @@ public class GameplayUIManager : MonoBehaviour
     public void endTurn()
     {
         myTurn = false;
-        m_player.EndTurn();
+        //m_player.EndTurn();
     }
 }
