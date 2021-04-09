@@ -51,7 +51,7 @@ public class AIPlayer : Player
 		else if (m_behaviour == BehaviourType.Defensive)
 			kingHealthThreshold = 0.75f;
 		
-		if(m_king.GetCurrentHealth()/m_king.GetMaxHealth() < kingHealthThreshold)
+		if(m_king.GetCurrentHealth() / m_king.GetMaxHealth() < kingHealthThreshold)
 		{
 			List<Node> nearbyEnemyNodes = m_pathfinding.GetEnemyUnitNodesInRange(PlayerId, m_king.transform.position, 
 				false, 1, 10);

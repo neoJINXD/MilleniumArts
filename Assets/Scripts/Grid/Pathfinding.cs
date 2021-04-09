@@ -174,8 +174,7 @@ public class Pathfinding : MonoBehaviour
 		
 		foreach (Node n in verify)
 			visited.Remove(n);
-
-		/*
+		
 		foreach (Node n in gridRef.GetAllUnitNodes())
 		{
 			if (visited.Contains(n))
@@ -183,7 +182,6 @@ public class Pathfinding : MonoBehaviour
 				visited.Remove(n);
 			}
 		}
-		*/
 
 
 		return visited;
@@ -388,7 +386,6 @@ public class Pathfinding : MonoBehaviour
 		//Array.Reverse(waypoints);
 		path.Reverse();
 		return path.ToArray();
-		
 	}
 
 	Vector3[] SimplifyPath(List<Node> path) {
