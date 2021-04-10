@@ -75,7 +75,7 @@ public class AIPlayer : Player
 				{
 					if(CanHeal(closestAlly, m_king))
 					{
-						//TODO: Unit heal
+						// TODO: Unit heal
 						/*
 						 * Check if can move healer unit in range of king to heal.
 						 * If so, bring unit back in range:
@@ -93,7 +93,7 @@ public class AIPlayer : Player
 				{
 					if(CanAttack(closestAlly, GetCloesetEnemy(m_king.transform.position)))
 					{
-						//TODO: Unit attack
+						// TODO: Unit attack
 						/*
 						 * Move unit close to enemy unit near king.
 						 * Attack enemy unit.
@@ -104,7 +104,6 @@ public class AIPlayer : Player
 						yield return MoveUnit(closestAlly, m_king.transform.position);
 					}
 				}
-				
 			}
 		}
 	}
@@ -115,7 +114,7 @@ public class AIPlayer : Player
 		{
 			if (playerCard.cost < PlayerMana && CardIsValued(playerCard))
 			{
-				//TODO: yield return PlayCard() 
+				// TODO: yield return PlayCard() 
 				yield return new WaitForSeconds(0.2f);
 			}
 		}
@@ -130,24 +129,24 @@ public class AIPlayer : Player
 
 			if (card.GetType() == typeof(UnitCard))
 			{
-				//TODO: unit cards need type
-				//if((UnitCard)card.unitType != Unit.UnitTypes.Priest)
+				// TODO: unit cards need type
+				// if ((UnitCard)card.unitType != Unit.UnitTypes.Priest)
 				//	return true
 			}
 			
-			//TODO: account for traps
+			// TODO: account for traps
 		}
 		
 		if (m_behaviour == BehaviourType.Balanced)
 		{
-			//TODO determine behaviour, might be complex
-			//TODO: account for traps
+			// TODO determine behaviour, might be complex
+			// TODO: account for traps
 		}
 		
 		if (m_behaviour == BehaviourType.Defensive)
 		{
-			//TODO determine behaviour, might be complex
-			//TODO: account for traps
+			// TODO determine behaviour, might be complex
+			// TODO: account for traps
 		}
 		
 		return true;
@@ -157,17 +156,17 @@ public class AIPlayer : Player
 	{
 		if (m_behaviour == BehaviourType.Aggressive)
 		{
-			//TODO
+			// TODO
 		}
 		
 		if (m_behaviour == BehaviourType.Balanced)
 		{
-			//TODO determine behaviour, might be complex
+			// TODO determine behaviour, might be complex
 		}
 		
 		if (m_behaviour == BehaviourType.Defensive)
 		{
-			//TODO determine behaviour, might be complex
+			// TODO determine behaviour, might be complex
 		}
 
 		yield return null;
@@ -178,20 +177,20 @@ public class AIPlayer : Player
 	//Should be in Unit.cs
 	private bool CanHeal(Unit currentUnit, Unit targetUnit)
 	{
-		//TODO
+		// TODO
 		return false;
 	}
 	
 	//Should be in Unit.cs
 	private bool CanAttack(Unit currentUnit, Unit targetUnit)
 	{
-		//TODO
+		// TODO
 		return false;
 	}
 	
 	private IEnumerator MoveUnit(Unit unit, Vector3 targetLocation)
 	{
-		//TODO: get and set unit path
+		// TODO: get and set unit path
 		
 		yield return unit.FollowPath();
 	}
@@ -246,7 +245,6 @@ public class AIPlayer : Player
             {
                 Debug.LogWarning("Not enough mana");
             }
-            
         }
         else
         {
