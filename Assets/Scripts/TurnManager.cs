@@ -646,26 +646,30 @@ public class TurnManager : Singleton<TurnManager>
     {
         cardDrawPanel.SetActive(true);
 
+        UnitCard unitCard;
+        SpellCard spellCard;
+        GameObject cardGO;
+
         for (int x = 0; x < 5; x++)
         {
-            GameObject cardGO;
-
             int random = Random.Range(0, 27);
 
             switch (random)
             {
-                default:
+                case 0:
                     cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
                     cardGO.AddComponent(typeof(UnitCard));
-                    UnitCard unitCard = cardGO.GetComponent<UnitCard>();
+
+                    unitCard = cardGO.GetComponent<UnitCard>();
+
                     unitCard.id = 0;
                     unitCard.castType = CastType.OnEmpty;
                     unitCard.name = "Unit: Soldier";
                     unitCard.cost = 1;
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
-                    unitCard.aoeMinRange = 1;
-                    unitCard.aoeMinRange = 1;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMinRange = 0;
                     unitCard.health = 10;
                     unitCard.damage = 5;
                     unitCard.defence = 1;
@@ -674,6 +678,567 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.moveSpeed = 4;
                     unitCard.accuracy = 80;
                     unitCard.evasion = 20;
+                    unitCard.flying = false;
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 1:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(UnitCard));
+
+                    unitCard = cardGO.GetComponent<UnitCard>();
+
+                    unitCard.id = 1;
+                    unitCard.castType = CastType.OnEmpty;
+                    unitCard.name = "Unit: Knight";
+                    unitCard.cost = 3;
+                    unitCard.minRange = 1;
+                    unitCard.maxRange = 2;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.health = 20;
+                    unitCard.damage = 7;
+                    unitCard.defence = 3;
+                    unitCard.minAttackRange = 1;
+                    unitCard.maxAttackRange = 1;
+                    unitCard.moveSpeed = 3;
+                    unitCard.accuracy = 70;
+                    unitCard.evasion = 10;
+                    unitCard.flying = false;
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 2:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(UnitCard));
+
+                    unitCard = cardGO.GetComponent<UnitCard>();
+
+                    unitCard.id = 2;
+                    unitCard.castType = CastType.OnEmpty;
+                    unitCard.name = "Unit: Assassin";
+                    unitCard.cost = 3;
+                    unitCard.minRange = 1;
+                    unitCard.maxRange = 2;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.health = 15;
+                    unitCard.damage = 9;
+                    unitCard.defence = 0;
+                    unitCard.minAttackRange = 1;
+                    unitCard.maxAttackRange = 1;
+                    unitCard.moveSpeed = 6;
+                    unitCard.accuracy = 95;
+                    unitCard.evasion = 60;
+                    unitCard.flying = false;
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 3:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(UnitCard));
+
+                    unitCard = cardGO.GetComponent<UnitCard>();
+
+                    unitCard.id = 3;
+                    unitCard.castType = CastType.OnEmpty;
+                    unitCard.name = "Unit: Priest";
+                    unitCard.cost = 3;
+                    unitCard.minRange = 1;
+                    unitCard.maxRange = 2;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.health = 15;
+                    unitCard.damage = 5;
+                    unitCard.defence = 0;
+                    unitCard.minAttackRange = 0;
+                    unitCard.maxAttackRange = 2;
+                    unitCard.moveSpeed = 4;
+                    unitCard.accuracy = 100;
+                    unitCard.evasion = 30;
+                    unitCard.flying = false;
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 4:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(UnitCard));
+
+                    unitCard = cardGO.GetComponent<UnitCard>();
+
+                    unitCard.id = 4;
+                    unitCard.castType = CastType.OnEmpty;
+                    unitCard.name = "Unit: Archer";
+                    unitCard.cost = 3;
+                    unitCard.minRange = 1;
+                    unitCard.maxRange = 2;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.health = 15;
+                    unitCard.damage = 6;
+                    unitCard.defence = 0;
+                    unitCard.minAttackRange = 2;
+                    unitCard.maxAttackRange = 3;
+                    unitCard.moveSpeed = 4;
+                    unitCard.accuracy = 90;
+                    unitCard.evasion = 30;
+                    unitCard.flying = false;
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 5:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(UnitCard));
+
+                    unitCard = cardGO.GetComponent<UnitCard>();
+
+                    unitCard.id = 5;
+                    unitCard.castType = CastType.OnEmpty;
+                    unitCard.name = "Unit: Dragon Rider";
+                    unitCard.cost = 5;
+                    unitCard.minRange = 1;
+                    unitCard.maxRange = 2;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.health = 25;
+                    unitCard.damage = 6;
+                    unitCard.defence = 2;
+                    unitCard.minAttackRange = 1;
+                    unitCard.maxAttackRange = 1;
+                    unitCard.moveSpeed = 4;
+                    unitCard.accuracy = 85;
+                    unitCard.evasion = 20;
+                    unitCard.flying = false;
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 6:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 6;
+                    spellCard.castType = CastType.OnEnemy;
+                    spellCard.name = "Smite";
+                    spellCard.cost = 2;
+                    spellCard.minRange = 1;
+                    spellCard.maxRange = 1;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Damages an enemy unit for 5 health.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 7:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 7;
+                    spellCard.castType = CastType.OnEnemy;
+                    spellCard.name = "Snipe";
+                    spellCard.cost = 3;
+                    spellCard.minRange = 1;
+                    spellCard.maxRange = 3;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 10 health.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 8:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 8;
+                    spellCard.castType = CastType.OnAny;
+                    spellCard.name = "Heavenly Smite";
+                    spellCard.cost = 5;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 3;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 1;
+                    spellCard.description = "Damages all enemies within (0,1) tiles of the casting origin for 3 health.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 9:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 9;
+                    spellCard.castType = CastType.OnAny;
+                    spellCard.name = "Prayer";
+                    spellCard.cost = 4;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 2;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 1;
+                    spellCard.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 3 health.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 10:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 10;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Vitality";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Increases an ally unit’s current and maximum Health by 5.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 11:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 11;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Endurance";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Increases an ally unit’s Defence by 2.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 12:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 12;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Vigor";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Increases an ally unit’s Damage by 3.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 13:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 13;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Nimbleness";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Increases an ally unit’s movement speed by 1.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 14:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 14;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Agility";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Increases an ally unit’s Evasion by 10.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 15:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 15;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Precision";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Increases an ally unit’s Accuracy by 10.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 16:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 16;
+                    spellCard.castType = CastType.OnEmpty;
+                    spellCard.name = "Oracle";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 5;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 2;
+                    spellCard.description = "Reveals all traps within (0,2) tiles of the triggering origin.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 17:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 17;
+                    spellCard.castType = CastType.OnEmpty;
+                    spellCard.name = "Disarm Trap";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 1;
+                    spellCard.maxRange = 3;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Attempts to disarm an enemy trap on a tile.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 18:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 18;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Provisions";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Heals a unit for 5 health.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 19:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 19;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Reinforcements";
+                    spellCard.cost = 6;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Summons 4 Soldier units around an ally.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 20:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 20;
+                    spellCard.castType = CastType.OnAny;
+                    spellCard.name = "Reinforcements";
+                    spellCard.cost = 3;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Draw 2 cards.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 21:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 21;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Warcry";
+                    spellCard.cost = 4;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 1;
+                    spellCard.description = "Only castable from a friendly Knight unit. Increases the damage of all allies within (0,1) tiles of the casting origin by 2.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 22:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 22;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Rebirth";
+                    spellCard.cost = 4;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Fully heals an ally unit.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 23:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 23;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Assassinate";
+                    spellCard.cost = 5;
+                    spellCard.minRange = 1;
+                    spellCard.maxRange = 1;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Only castable from a friendly Assassin unit. Immediately kills and enemy unit (does not work on King unit).";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 24:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 24;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Teleport";
+                    spellCard.cost = 1;
+                    spellCard.minRange = 1;
+                    spellCard.maxRange = 2;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Teleports a unit (1,2) tiles.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 25:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 25;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Bear Trap";
+                    spellCard.cost = 2;
+                    spellCard.minRange = 1;
+                    spellCard.maxRange = 2;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.description = "Damages the triggering unit for 5 health.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 26:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 26;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Land Mine";
+                    spellCard.cost = 3;
+                    spellCard.minRange = 1;
+                    spellCard.maxRange = 2;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 1;
+                    spellCard.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                default:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(UnitCard));
+
+                    unitCard = cardGO.GetComponent<UnitCard>();
+
+                    unitCard.id = -1;
+                    unitCard.castType = CastType.OnEmpty;
+                    unitCard.name = "-";
+                    unitCard.cost = 0;
+                    unitCard.minRange = 0;
+                    unitCard.maxRange = 0;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMinRange = 0;
+                    unitCard.health = 0;
+                    unitCard.damage = 0;
+                    unitCard.defence = 0;
+                    unitCard.minAttackRange = 0;
+                    unitCard.maxAttackRange = 0;
+                    unitCard.moveSpeed = 0;
+                    unitCard.accuracy = 0;
+                    unitCard.evasion = 0;
                     unitCard.flying = false;
 
                     cardGO.AddComponent(typeof(CardUI));

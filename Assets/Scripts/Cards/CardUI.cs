@@ -60,9 +60,9 @@ public class CardUI : MonoBehaviour
             cardCostText = spellCardPanel.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
             cardNameText = spellCardPanel.transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
 
-            cardRangeText = unitCardPanel.transform.GetChild(3).transform.GetChild(0).GetComponent<Text>();
-            cardAOEText = unitCardPanel.transform.GetChild(4).transform.GetChild(0).GetComponent<Text>();
-            cardDescriptionText = unitCardPanel.transform.GetChild(5).transform.GetChild(0).GetComponent<Text>();
+            cardRangeText = spellCardPanel.transform.GetChild(3).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
+            cardAOEText = spellCardPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
+            cardDescriptionText = spellCardPanel.transform.GetChild(5).transform.GetChild(0).GetComponent<Text>();
 
         }       
     }

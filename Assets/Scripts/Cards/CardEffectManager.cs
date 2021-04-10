@@ -70,10 +70,10 @@ public class CardEffectManager : MonoBehaviour
         knightUnit.SetCanFly(false);
         knightUnit.SetUnitType(Unit.UnitTypes.Knight);
         knightUnit.SetUnitPlayerID(playerId);
-        knightUnit.SetMaxHealth(30);
-        knightUnit.SetCurrentHealth(30);
+        knightUnit.SetMaxHealth(20);
+        knightUnit.SetCurrentHealth(20);
         knightUnit.SetDamage(7);
-        knightUnit.SetDefence(1);
+        knightUnit.SetDefence(3);
         knightUnit.SetMinRange(1);
         knightUnit.SetMaxRange(1);
         knightUnit.SetAccuracy(70);
@@ -98,12 +98,12 @@ public class CardEffectManager : MonoBehaviour
 
         Unit assassinUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
-        assassinUnit.SetMovementSpeed(8);
+        assassinUnit.SetMovementSpeed(6);
         assassinUnit.SetCanFly(false);
         assassinUnit.SetUnitType(Unit.UnitTypes.Assassin);
         assassinUnit.SetUnitPlayerID(playerId);
-        assassinUnit.SetMaxHealth(30);
-        assassinUnit.SetCurrentHealth(30);
+        assassinUnit.SetMaxHealth(15);
+        assassinUnit.SetCurrentHealth(15);
         assassinUnit.SetDamage(9);
         assassinUnit.SetDefence(0);
         assassinUnit.SetMinRange(1);
@@ -222,7 +222,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (1,1) tiles from a friendly unit
      * Effect: Damages an enemy unit for 5 health.
-     * Cost: 3
+     * Cost: 2
      */
     public void spell_smite(int playerId, Node selectedNode)
     {
@@ -241,7 +241,7 @@ public class CardEffectManager : MonoBehaviour
      * Card ID: 7
      * Card Name: Snipe
      * Type: Spell(Active)
-     * Cast Range: (1,1) tiles from a friendly unit
+     * Cast Range: (1,3) tiles from a friendly unit
      * Effect: Damages an enemy unit for 10 health.
      * Cost: 3
      */
@@ -264,7 +264,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 3) tiles from a friendly unit
      * Effect: Damages all enemies within (0,1) tiles of the casting origin for 3 health.
-     * Cost: 3
+     * Cost: 5
      */
     public void spell_heavenlySmite(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
@@ -295,7 +295,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 2) tiles from a friendly priest
      * Effect: Heal all allies within (0,1) tiles of the casting origin for 3 health.
-     * Cost: 3
+     * Cost: 4
      */
     public void spell_prayer(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
@@ -326,7 +326,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
      * Effect: Increases an ally unit’s current and maximum Health by 5.
-     * Cost: 3
+     * Cost: 1
      */
     public void spell_vitality(int playerId, Node selectedNode)
     {
@@ -482,7 +482,7 @@ public class CardEffectManager : MonoBehaviour
      * Card ID: 17
      * Card Name: Disarm Trap
      * Type: Spell(Trap)
-     * Cast Range: (0, 3) tiles from any friendly unit
+     * Cast Range: (1, 3) tiles from any friendly unit
      * Effect: Attempts to disarm an enemy trap on a tile.
      * Cost: 1
      */
@@ -574,7 +574,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from a friendly Knight
      * Effect: Increases the damage of all allies within (0,1) tiles of the casting origin by 2
-     * Cost: 2
+     * Cost: 4
      */
     public void spell_warcry(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
@@ -609,7 +609,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
      * Effect: Fully heals an ally unit
-     * Cost: 5
+     * Cost: 4
      */
     public void spell_rebirth(int playerId, Node selectedNode)
     {
