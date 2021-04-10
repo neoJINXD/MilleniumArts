@@ -36,4 +36,24 @@ public class UnitCard : Card
         flying = cardFlying;
 
     }
+
+    public void copyUnitCard(UnitCard copyCard)
+    {
+        id = copyCard.id;
+        castType = copyCard.castType;
+        name = copyCard.name;
+        //image = cardImage;
+        cost = copyCard.cost;
+        minRange = copyCard.minRange;
+        maxRange = copyCard.maxRange;
+        health = copyCard.health;
+        damage = copyCard.damage;
+        defence = copyCard.defence;
+        minAttackRange = copyCard.minAttackRange;
+        maxAttackRange = copyCard.maxAttackRange;
+        moveSpeed = copyCard.moveSpeed;
+        accuracy = copyCard.accuracy;
+        evasion = copyCard.evasion;
+        flying = copyCard.flying;
+    }
 }

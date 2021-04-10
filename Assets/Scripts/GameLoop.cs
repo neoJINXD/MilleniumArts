@@ -55,5 +55,10 @@ public class GameLoop : Singleton<GameLoop>
     {
         players[index].EndTurn();
     }
+
+    public List<Player> GetPlayerList()
+    {
+        return players;
+    }
 }
 

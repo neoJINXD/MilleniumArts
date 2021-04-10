@@ -73,6 +73,16 @@ public abstract class Player : MonoBehaviour
         return m_playerCards[index];
     }
 
+    public List<Card> GetHand()
+    {
+        return m_playerCards;
+    }
+
+    public void AddCard(Card card)
+    {
+        m_playerCards.Add(card);
+    }
+
     public void AddUnit(Unit unit)
     {
         m_playerUnits.Add(unit);
@@ -81,7 +91,11 @@ public abstract class Player : MonoBehaviour
     public int CardCount => m_playerCards.Count;
     public int UnitCount => m_playerUnits.Count;
 
+    public void DrawCard()
+    {
+        TurnManager.instance.ShowCardSelection();
+    }
+
     #endregion
 
 }
-

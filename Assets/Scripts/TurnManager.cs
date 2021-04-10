@@ -15,6 +15,7 @@ public class TurnManager : Singleton<TurnManager>
     private const float lockAxis = 27f;
 
     public Player currentPlayer = default;
+    public Player localPlayer = default;
 
     public HashSet<Node> selectableNodes;
 
@@ -34,6 +35,7 @@ public class TurnManager : Singleton<TurnManager>
 
     public enum TurnState
     {
+        DrawingCard,
         Waiting,
         Free,
         SelectingCardOrigin,
@@ -62,6 +64,13 @@ public class TurnManager : Singleton<TurnManager>
     // Option Menu
     public GameObject optionPanel;
 
+    // Card Draw
+
+    [SerializeField] private GameObject cardPrefab;
+    [SerializeField] private GameObject cardDrawPanel;
+
+    [SerializeField] private GameObject handPanel;
+
     void Start()
     {
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
@@ -74,13 +83,25 @@ public class TurnManager : Singleton<TurnManager>
         cardSelected = false;
         placingEnemyUnit = false;
         currentPlayer = GameLoop.instance.GetCurrentPlayer();
+        localPlayer = null;
+
+        foreach(Player player in GameLoop.instance.GetPlayerList())
+        {
+            if (player is LocalPlayer)
+                localPlayer = player;
+        }
+
+        loadPlayerHand();
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (currentTurnState == TurnState.Free)
+        if(currentTurnState == TurnState.DrawingCard)
+        {
+            // do nothing
+        }
+        else if (currentTurnState == TurnState.Free)
         {
             if (cardSelected)
                 PlaceCard();
@@ -108,6 +129,79 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (Input.GetMouseButtonDown(0))
                 placeEnemyUnit();
+        }
+    }
+
+    public void loadPlayerHand()
+    {
+        if(localPlayer.GetHand().Count <= 5)
+        {
+            handPanel.transform.GetChild(0).gameObject.SetActive(true);
+            handPanel.transform.GetChild(1).gameObject.SetActive(false);
+
+            foreach (Transform child in handPanel.transform.GetChild(0).gameObject.transform)
+            {
+                if(child.gameObject.transform.childCount > 0)
+                    GameObject.Destroy(child.gameObject.transform.GetChild(0).gameObject);
+            }
+
+            for (int x = 0; x < localPlayer.GetHand().Count; x++)
+            {
+                Card card = localPlayer.GetCard(x);
+                GameObject cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+
+
+                if (card is UnitCard)
+                {
+                    cardGO.AddComponent(typeof(UnitCard));
+                    cardGO.GetComponent<UnitCard>().copyUnitCard((UnitCard)card);
+                }
+                else if (card is SpellCard)
+                {
+                    cardGO.AddComponent(typeof(SpellCard));
+                    cardGO.GetComponent<SpellCard>().copySpellCard((SpellCard)card);
+                }
+                cardGO.transform.SetParent(handPanel.transform.GetChild(0).transform.GetChild(x));
+                cardGO.AddComponent(typeof(CardUI));
+                cardGO.GetComponent<RectTransform>().offsetMax = Vector2.zero;
+                cardGO.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+                cardGO.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+                cardGO.GetComponent<Button>().onClick.AddListener(PlaceCard);
+            }
+        }
+        else if(localPlayer.GetHand().Count > 5)
+        {
+            handPanel.transform.GetChild(0).gameObject.SetActive(false);
+            handPanel.transform.GetChild(1).gameObject.SetActive(true);
+
+            GameplayUIManager.instance.handCount = localPlayer.GetHand().Count;
+            GameplayUIManager.instance.fillDynamicHand();
+
+            for (int i = 0; i < localPlayer.GetHand().Count; i++)
+            {
+                Card card = localPlayer.GetCard(i);
+                GameObject cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+
+                if (card is UnitCard)
+                {
+                    cardGO.AddComponent(typeof(UnitCard));
+                    cardGO.GetComponent<UnitCard>().copyUnitCard((UnitCard)card);
+                }
+                else if (card is SpellCard)
+                {
+                    cardGO.AddComponent(typeof(SpellCard));
+                    cardGO.GetComponent<SpellCard>().copySpellCard((SpellCard)card);
+                }
+
+                cardGO.AddComponent(typeof(CardUI));
+                cardGO.transform.SetParent(handPanel.transform.GetChild(1).transform.GetChild(i));
+
+                cardGO.GetComponent<RectTransform>().offsetMax = Vector2.zero;
+                cardGO.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+                cardGO.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+                cardGO.GetComponent<Button>().onClick.AddListener(PlaceCard);
+            }
         }
     }
 
@@ -522,6 +616,8 @@ public class TurnManager : Singleton<TurnManager>
         foreach (Node node in allUnitsNodes)
             node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Unit");
 
+
+        loadPlayerHand();
         ResetMaterial();
         selectableNodes.Clear();
         unselectUnit();
@@ -544,5 +640,52 @@ public class TurnManager : Singleton<TurnManager>
         unitHealthText.text = "-/-";
 
         optionPanel.SetActive(false);
+    }
+
+    public void ShowCardSelection()
+    {
+        cardDrawPanel.SetActive(true);
+
+        for (int x = 0; x < 5; x++)
+        {
+            GameObject cardGO;
+
+            int random = Random.Range(0, 27);
+
+            switch (random)
+            {
+                default:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(UnitCard));
+                    UnitCard unitCard = cardGO.GetComponent<UnitCard>();
+                    unitCard.id = 0;
+                    unitCard.castType = CastType.OnEmpty;
+                    unitCard.name = "Unit: Soldier";
+                    unitCard.cost = 1;
+                    unitCard.minRange = 1;
+                    unitCard.maxRange = 2;
+                    unitCard.aoeMinRange = 1;
+                    unitCard.aoeMinRange = 1;
+                    unitCard.health = 10;
+                    unitCard.damage = 5;
+                    unitCard.defence = 1;
+                    unitCard.minAttackRange = 1;
+                    unitCard.maxAttackRange = 1;
+                    unitCard.moveSpeed = 4;
+                    unitCard.accuracy = 80;
+                    unitCard.evasion = 20;
+                    unitCard.flying = false;
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+            }
+
+            cardGO.transform.SetParent(cardDrawPanel.transform.GetChild(0).transform.GetChild(x));
+            cardGO.GetComponent<RectTransform>().offsetMax = Vector2.zero;
+            cardGO.GetComponent<RectTransform>().offsetMin = Vector2.zero;
+            cardGO.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+            cardGO.GetComponent<Button>().onClick.AddListener(cardGO.GetComponent<CardUI>().addClickedCardToHand);
+        }
     }
 }
