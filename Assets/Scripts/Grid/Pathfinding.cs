@@ -175,13 +175,13 @@ public class Pathfinding : MonoBehaviour
 		foreach (Node n in verify)
 			visited.Remove(n);
 		
-		foreach (Node n in gridRef.GetAllUnitNodes())
+		/*foreach (Node n in gridRef.GetAllUnitNodes())
 		{
 			if (visited.Contains(n))
 			{
 				visited.Remove(n);
 			}
-		}
+		}*/
 
 
 		return visited;

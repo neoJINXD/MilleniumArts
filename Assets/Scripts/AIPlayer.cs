@@ -58,9 +58,14 @@ public class AIPlayer : Player
 			
 			if(nearbyEnemyNodes.Count > 1)
 			{
-				//TODO: Move king away
+				// TODO: Move king away
+				/*
+				 * Select King
+				 *		Move king away, depending on resources, how many tiles?
+				 *		Could maybe do it last on the player AIs turn with it's remaining resources.
+				 */
 				
-				//Bring closest ally to help
+				// Bring closest ally to help
 				Unit closestAlly = GetClosestAlly(m_king.transform.position);
 				
 				if(!closestAlly)
@@ -71,6 +76,13 @@ public class AIPlayer : Player
 					if(CanHeal(closestAlly, m_king))
 					{
 						//TODO: Unit heal
+						/*
+						 * Check if can move healer unit in range of king to heal.
+						 * If so, bring unit back in range:
+						 *		Heal King
+						 * Else
+						 *      Bring closer to king for next turn. Or, we can make it so that the AI always keeps a healer in its spawn
+						 */
 					}
 					else
 					{
@@ -82,6 +94,10 @@ public class AIPlayer : Player
 					if(CanAttack(closestAlly, GetCloesetEnemy(m_king.transform.position)))
 					{
 						//TODO: Unit attack
+						/*
+						 * Move unit close to enemy unit near king.
+						 * Attack enemy unit.
+						 */
 					}
 					else
 					{
