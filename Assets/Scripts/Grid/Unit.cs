@@ -413,7 +413,7 @@ public class Unit : MonoBehaviour
     {
         if (pathSuccessful) {
             path = newPath;
-            targetIndex = 0;
+            targetIndex = 1; //keeps track of the next node the unit is going to move to
             
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
@@ -423,20 +423,22 @@ public class Unit : MonoBehaviour
     
 
     //updates unit position by following along the path
-    public IEnumerator FollowPath() 
+    public IEnumerator FollowPath()
     {
-        Node currentWaypoint = path[0];
+        Node unitNode = path[0];//keeps track of the node the unit is currently on
+        Node currentWaypoint = path[1]; //keeps track of the next node the unit is going to move to
 
-        Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
+        //Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
 
         while (true)
         {
-            grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            //grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            unitNode.RemoveUnit(this);
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
 
             if (transform.position == currentWaypoint.worldPosition) 
             {
-                targetIndex++;
+                targetIndex++; //it starts from 1 now
                 currentWaypoint.AddUnit(this);
                 CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
 
@@ -444,6 +446,7 @@ public class Unit : MonoBehaviour
                     yield break;
 
                 currentWaypoint = path[targetIndex];
+                unitNode = path[targetIndex - 1];
                 //currentWaypoint.RemoveUnit(this);// moved this
                 //currentWaypoint = path[targetIndex];
                 //currentWaypoint.AddUnit(this);
