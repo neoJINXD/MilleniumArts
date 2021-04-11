@@ -89,6 +89,8 @@ public abstract class Player : MonoBehaviour
     public void AddCard(Card card)
     {
         m_playerCards.Add(card);
+        m_playerCards[m_playerCards.Count - 1].indexInHand = m_playerCards.Count - 1;
+        print(m_playerCards[m_playerCards.Count - 1].indexInHand + "DXDXD");
     }
 
     public void AddUnit(Unit unit)

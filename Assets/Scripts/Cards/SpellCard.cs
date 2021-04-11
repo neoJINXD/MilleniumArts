@@ -34,6 +34,8 @@ public class SpellCard : Card
         maxRange = copyCard.maxRange;
         aoeMinRange = copyCard.aoeMinRange;
         aoeMaxRange = copyCard.aoeMaxRange;
+        indexInHand = copyCard.indexInHand;
+
         description = copyCard.description;
     }
 }

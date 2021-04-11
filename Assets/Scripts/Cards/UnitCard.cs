@@ -25,6 +25,9 @@ public class UnitCard : Card
         cost = cardCost;
         minRange = cardMin;
         maxRange = cardMax;
+
+        indexInHand = 0;
+
         health = cardHealth;
         damage = cardDamage;
         defence = cardDefence;
@@ -47,7 +50,7 @@ public class UnitCard : Card
         minRange = copyCard.minRange;
         maxRange = copyCard.maxRange;
 
-        indexInHand = 0;
+        indexInHand = copyCard.indexInHand;
 
         health = copyCard.health;
         damage = copyCard.damage;
@@ -58,6 +61,5 @@ public class UnitCard : Card
         accuracy = copyCard.accuracy;
         evasion = copyCard.evasion;
         flying = copyCard.flying;
-
     }
 }

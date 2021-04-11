@@ -64,7 +64,34 @@ public class CardUI : MonoBehaviour
             cardAOEText = spellCardPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
             cardDescriptionText = spellCardPanel.transform.GetChild(5).transform.GetChild(0).GetComponent<Text>();
 
-        }       
+        }
+
+        int zoomInTextScaleValue = 3;
+        if (transform.parent.gameObject == GameplayUIManager.instance.cardZoomInPanel)
+        {
+            if (unitCard != null)
+            {
+                cardCostText.fontSize = cardCostText.fontSize * zoomInTextScaleValue;
+                cardNameText.fontSize = cardNameText.fontSize * zoomInTextScaleValue;
+
+                cardHealthText.fontSize = cardHealthText.fontSize * zoomInTextScaleValue;
+                cardDamageText.fontSize = cardDamageText.fontSize * zoomInTextScaleValue;
+                cardDefenceText.fontSize = cardDefenceText.fontSize * zoomInTextScaleValue;
+                cardARText.fontSize = cardARText.fontSize * zoomInTextScaleValue;
+                cardAccuracyText.fontSize = cardAccuracyText.fontSize * zoomInTextScaleValue;
+                cardEvasionText.fontSize = cardEvasionText.fontSize * zoomInTextScaleValue;
+                cardMSText.fontSize = cardMSText.fontSize * zoomInTextScaleValue;
+            }
+            else if (spellCard != null)
+            {
+                cardCostText.fontSize = cardCostText.fontSize * zoomInTextScaleValue;
+                cardNameText.fontSize = cardNameText.fontSize * zoomInTextScaleValue;
+
+                cardRangeText.fontSize = cardRangeText.fontSize * zoomInTextScaleValue;
+                cardAOEText.fontSize = cardAOEText.fontSize * zoomInTextScaleValue;
+                cardDescriptionText.fontSize = cardDescriptionText.fontSize * 2; //3 is too big
+            }
+        }
     }
 
     // Update is called once per frame
@@ -99,7 +126,6 @@ public class CardUI : MonoBehaviour
             cardAOEText.text = "" + spellCard.aoeMinRange + " - " + spellCard.aoeMaxRange;
             cardDescriptionText.text = "" + spellCard.description;
         }
-
     }
 
     public void addClickedCardToHand()
@@ -112,6 +138,7 @@ public class CardUI : MonoBehaviour
 
         TurnManager.instance.cardDrawPanel.SetActive(false);
         TurnManager.instance.currentTurnState = TurnManager.TurnState.Free;
+        Destroy(GameplayUIManager.instance.cardZoomInPanel.transform.GetChild(0).gameObject);
         TurnManager.instance.loadPlayerHand();
     }
 }

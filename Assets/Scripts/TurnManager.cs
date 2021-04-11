@@ -195,13 +195,14 @@ public class TurnManager : Singleton<TurnManager>
                     cardGO.AddComponent(typeof(SpellCard));
                     cardGO.GetComponent<SpellCard>().copySpellCard((SpellCard)card);
                 }
-
-                cardGO.AddComponent(typeof(CardUI));
+   
                 cardGO.transform.SetParent(handPanel.transform.GetChild(1).transform.GetChild(i));
 
                 cardGO.GetComponent<RectTransform>().offsetMax = Vector2.zero;
                 cardGO.GetComponent<RectTransform>().offsetMin = Vector2.zero;
                 cardGO.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+
+                cardGO.AddComponent(typeof(CardUI));
 
                 cardGO.GetComponent<Button>().onClick.AddListener(PlaceCard);
             }
@@ -715,7 +716,7 @@ public class TurnManager : Singleton<TurnManager>
 
                     unitCard.id = 0;
                     unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Unit: Soldier";
+                    unitCard.name = "Soldier";
                     unitCard.cost = 1;
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
@@ -731,7 +732,6 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.evasion = 20;
                     unitCard.flying = false;
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 1:
@@ -742,7 +742,7 @@ public class TurnManager : Singleton<TurnManager>
 
                     unitCard.id = 1;
                     unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Unit: Knight";
+                    unitCard.name = "Knight";
                     unitCard.cost = 3;
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
@@ -758,7 +758,6 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.evasion = 10;
                     unitCard.flying = false;
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 2:
@@ -769,7 +768,7 @@ public class TurnManager : Singleton<TurnManager>
 
                     unitCard.id = 2;
                     unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Unit: Assassin";
+                    unitCard.name = "Assassin";
                     unitCard.cost = 3;
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
@@ -785,7 +784,6 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.evasion = 60;
                     unitCard.flying = false;
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 3:
@@ -796,7 +794,7 @@ public class TurnManager : Singleton<TurnManager>
 
                     unitCard.id = 3;
                     unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Unit: Priest";
+                    unitCard.name = "Priest";
                     unitCard.cost = 3;
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
@@ -812,7 +810,6 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.evasion = 30;
                     unitCard.flying = false;
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 4:
@@ -823,7 +820,7 @@ public class TurnManager : Singleton<TurnManager>
 
                     unitCard.id = 4;
                     unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Unit: Archer";
+                    unitCard.name = "Archer";
                     unitCard.cost = 3;
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
@@ -839,7 +836,6 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.evasion = 30;
                     unitCard.flying = false;
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 5:
@@ -850,7 +846,7 @@ public class TurnManager : Singleton<TurnManager>
 
                     unitCard.id = 5;
                     unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Unit: Dragon Rider";
+                    unitCard.name = "Dragon Rider";
                     unitCard.cost = 5;
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
@@ -866,7 +862,6 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.evasion = 20;
                     unitCard.flying = false;
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 6:
@@ -885,7 +880,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Damages an enemy unit for 5 health.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 7:
@@ -904,7 +898,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 10 health.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 8:
@@ -923,7 +916,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 1;
                     spellCard.description = "Damages all enemies within (0,1) tiles of the casting origin for 3 health.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 9:
@@ -942,7 +934,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 1;
                     spellCard.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 3 health.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 10:
@@ -961,7 +952,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Increases an ally unit’s current and maximum Health by 5.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 11:
@@ -980,7 +970,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Increases an ally unit’s Defence by 2.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 12:
@@ -999,7 +988,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Increases an ally unit’s Damage by 3.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 13:
@@ -1018,7 +1006,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Increases an ally unit’s movement speed by 1.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 14:
@@ -1037,7 +1024,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Increases an ally unit’s Evasion by 10.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 15:
@@ -1056,7 +1042,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Increases an ally unit’s Accuracy by 10.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 16:
@@ -1075,7 +1060,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 2;
                     spellCard.description = "Reveals all traps within (0,2) tiles of the triggering origin.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 17:
@@ -1094,7 +1078,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Attempts to disarm an enemy trap on a tile.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 18:
@@ -1113,7 +1096,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Heals a unit for 5 health.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 19:
@@ -1132,7 +1114,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Summons 4 Soldier units around an ally.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 20:
@@ -1151,7 +1132,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Draw 2 cards.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 21:
@@ -1170,7 +1150,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 1;
                     spellCard.description = "Only castable from a friendly Knight unit. Increases the damage of all allies within (0,1) tiles of the casting origin by 2.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 22:
@@ -1189,7 +1168,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Fully heals an ally unit.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 23:
@@ -1208,7 +1186,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Only castable from a friendly Assassin unit. Immediately kills and enemy unit (does not work on King unit).";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 24:
@@ -1227,7 +1204,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Teleports a unit (1,2) tiles.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 25:
@@ -1246,7 +1222,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.description = "Damages the triggering unit for 5 health.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 26:
@@ -1265,7 +1240,6 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 1;
                     spellCard.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 case 27:
@@ -1278,13 +1252,12 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.castType = CastType.OnAlly;
                     spellCard.name = "Royal Pledge";
                     spellCard.cost = 3;
-                    spellCard.minRange = 1;
-                    spellCard.maxRange = 2;
+                    spellCard.minRange = 0;
+                    spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 1;
+                    spellCard.aoeMinRange = 0;
                     spellCard.description = "Only castable from a friendly King unit. Increases the damage, current health and max health of all allies within (1,1) tiles of the casting origin by 2.";
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
 
                 default:
@@ -1311,7 +1284,6 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.evasion = 0;
                     unitCard.flying = false;
 
-                    cardGO.AddComponent(typeof(CardUI));
                     break;
             }
 
@@ -1319,6 +1291,7 @@ public class TurnManager : Singleton<TurnManager>
             cardGO.GetComponent<RectTransform>().offsetMax = Vector2.zero;
             cardGO.GetComponent<RectTransform>().offsetMin = Vector2.zero;
             cardGO.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
+            cardGO.AddComponent(typeof(CardUI));
 
             cardGO.GetComponent<Button>().onClick.AddListener(cardGO.GetComponent<CardUI>().addClickedCardToHand);
         }

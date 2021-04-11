@@ -24,6 +24,9 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
 
     private RectTransform handPanelRT;
 
+    public GameObject cardZoomInPanel;
+    public GameObject cardPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
