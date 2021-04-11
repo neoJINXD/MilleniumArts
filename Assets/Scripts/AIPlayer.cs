@@ -13,11 +13,11 @@ public class AIPlayer : Player
 	
 	[SerializeField] private BehaviourType m_behaviour;
 	private Pathfinding m_pathfinding;
-		
+
 	private void Start()
 	{
 		m_pathfinding = GameObject.FindObjectOfType<Pathfinding>();
-			
+		
 		if(!m_pathfinding)
 			Debug.LogError("Pathfinding object not found!");
 	}
@@ -188,11 +188,13 @@ public class AIPlayer : Player
 		return false;
 	}
 	
-	private IEnumerator MoveUnit(Unit unit, Vector3 targetLocation)
+	private IEnumerator MoveUnit(Unit unit, Vector3 targetLocation) //not sure if this needs to be a coroutine
 	{
 		// TODO: get and set unit path
 		
-		yield return unit.FollowPath();
+		PathRequestManager.RequestPath(unit.transform.position, targetLocation, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.OnPathFound, Pathfinding.Heuristic.TileDistance);
+		//request path will create a coroutine itself and move the unit to the desired location accordingly 
+		yield return null;
 	}
 
 	private Unit GetClosestAlly(Vector3 startPos)
