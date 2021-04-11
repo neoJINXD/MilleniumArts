@@ -68,6 +68,14 @@ public abstract class Player : MonoBehaviour
         m_playerCards.RemoveAt(index);
     }
 
+    public void RemoveCard(Card card)
+    {
+        m_playerCards.RemoveAt(card.indexInHand);
+
+        for(int x = 0; x < m_playerCards.Count; x++)
+            m_playerCards[x].indexInHand = x;
+    }
+
     public Card GetCard(int index)
     {
         return m_playerCards[index];

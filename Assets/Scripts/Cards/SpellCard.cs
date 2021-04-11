@@ -17,6 +17,9 @@ public class SpellCard : Card
         maxRange = cardMax;
         aoeMinRange = cardAOEMin;
         aoeMinRange = cardAOEMax;
+
+        indexInHand = 0;
+
         description = cardDesc;
     }
 

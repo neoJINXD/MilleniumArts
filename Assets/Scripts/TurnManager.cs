@@ -31,6 +31,8 @@ public class TurnManager : Singleton<TurnManager>
 
     public Card storedCard;
 
+    public bool cardSuccessful;
+
     public List<Unit> allUnits;
 
     public enum TurnState
@@ -67,7 +69,7 @@ public class TurnManager : Singleton<TurnManager>
     // Card Draw
 
     [SerializeField] private GameObject cardPrefab;
-    [SerializeField] private GameObject cardDrawPanel;
+    [SerializeField] public GameObject cardDrawPanel;
 
     [SerializeField] private GameObject handPanel;
 
@@ -81,6 +83,7 @@ public class TurnManager : Singleton<TurnManager>
         selectableNodes = new HashSet<Node>();
 
         cardSelected = false;
+        cardSuccessful = false;
         placingEnemyUnit = false;
         currentPlayer = GameLoop.instance.GetCurrentPlayer();
         localPlayer = null;
@@ -546,10 +549,30 @@ public class TurnManager : Singleton<TurnManager>
                 {
                     if (selectedNode.GetUnit().GetUnitPlayerID() == currentPlayer.PlayerId)
                     {
-                        if (storedCard.id == 8)
-                        { 
+                        if (storedCard.id == 10)
+                            cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 11)
+                            cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 12)
                             cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
-                        }
+                        else if (storedCard.id == 13)
+                            cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 14)
+                            cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 15)
+                            cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 18)
+                            cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 19)
+                            cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                        else if (storedCard.id == 21)
+                            cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                        else if (storedCard.id == 22)
+                            cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 24)
+                            cardEffectManager.spell_teleport(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 27)
+                            cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
                     }
                 }
             }
@@ -561,6 +584,10 @@ public class TurnManager : Singleton<TurnManager>
                     {
                         if (storedCard.id == 6)
                             cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 7)
+                            cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode);
+                        else if (storedCard.id == 23)
+                            cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode);
                     }
                 }
             }
@@ -580,14 +607,24 @@ public class TurnManager : Singleton<TurnManager>
                         cardEffectManager.createArcherUnit(currentPlayer.PlayerId, selectedNode);
                     else if (storedCard.id == 5) // spawn Dragon Rider
                         cardEffectManager.createDragonRiderUnit(currentPlayer.PlayerId, selectedNode);
-                    else if (storedCard.id == 9)
+                    else if (storedCard.id == 16)
+                        cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    else if (storedCard.id == 17)
+                        cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    else if (storedCard.id == 25)
                         cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 26)
+                        cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode);
                 }
             }
             else if (storedCard.castType == CastType.OnAny)
             {
-                if (storedCard.id == 7)
+                if (storedCard.id == 8)
                     cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                else if (storedCard.id == 9)
+                    cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                else if (storedCard.id == 20)
+                    cardEffectManager.spell_greed(currentPlayer.PlayerId);
             }
         }
 
@@ -616,6 +653,10 @@ public class TurnManager : Singleton<TurnManager>
         foreach (Node node in allUnitsNodes)
             node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Unit");
 
+        if(cardSuccessful)
+            currentPlayer.RemoveCard(storedCard);
+
+        cardSuccessful = false;
 
         loadPlayerHand();
         ResetMaterial();
@@ -652,7 +693,17 @@ public class TurnManager : Singleton<TurnManager>
 
         for (int x = 0; x < 5; x++)
         {
-            int random = Random.Range(0, 27);
+            if(cardDrawPanel.transform.GetChild(0).transform.GetChild(x).childCount > 0)
+                Destroy(cardDrawPanel.transform.GetChild(0).transform.GetChild(x).transform.GetChild(0).gameObject);
+
+            RectTransform rt = cardDrawPanel.transform.GetChild(0).transform.GetChild(x).GetComponent<RectTransform>();
+
+            /*Top*/
+            rt.offsetMax = new Vector2(0, 0);
+            /*Bottom*/
+            rt.offsetMin = new Vector2(0, 0);
+
+            int random = Random.Range(0, 28);
 
             switch (random)
             {
@@ -1148,7 +1199,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard = cardGO.GetComponent<SpellCard>();
 
                     spellCard.id = 23;
-                    spellCard.castType = CastType.OnAlly;
+                    spellCard.castType = CastType.OnEnemy;
                     spellCard.name = "Assassinate";
                     spellCard.cost = 5;
                     spellCard.minRange = 1;
@@ -1186,7 +1237,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard = cardGO.GetComponent<SpellCard>();
 
                     spellCard.id = 25;
-                    spellCard.castType = CastType.OnAlly;
+                    spellCard.castType = CastType.OnEmpty;
                     spellCard.name = "Bear Trap";
                     spellCard.cost = 2;
                     spellCard.minRange = 1;
@@ -1205,7 +1256,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard = cardGO.GetComponent<SpellCard>();
 
                     spellCard.id = 26;
-                    spellCard.castType = CastType.OnAlly;
+                    spellCard.castType = CastType.OnEmpty;
                     spellCard.name = "Land Mine";
                     spellCard.cost = 3;
                     spellCard.minRange = 1;
@@ -1213,6 +1264,25 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.aoeMinRange = 0;
                     spellCard.aoeMinRange = 1;
                     spellCard.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
+
+                    cardGO.AddComponent(typeof(CardUI));
+                    break;
+
+                case 27:
+                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+                    cardGO.AddComponent(typeof(SpellCard));
+
+                    spellCard = cardGO.GetComponent<SpellCard>();
+
+                    spellCard.id = 27;
+                    spellCard.castType = CastType.OnAlly;
+                    spellCard.name = "Royal Pledge";
+                    spellCard.cost = 3;
+                    spellCard.minRange = 1;
+                    spellCard.maxRange = 2;
+                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMinRange = 1;
+                    spellCard.description = "Only castable from a friendly King unit. Increases the damage, current health and max health of all allies within (1,1) tiles of the casting origin by 2.";
 
                     cardGO.AddComponent(typeof(CardUI));
                     break;

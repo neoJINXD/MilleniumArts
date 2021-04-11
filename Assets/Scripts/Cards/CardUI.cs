@@ -110,6 +110,7 @@ public class CardUI : MonoBehaviour
         else if (spellCard != null)
             currentPlayer.AddCard(GetComponent<SpellCard>());
 
+        TurnManager.instance.cardDrawPanel.SetActive(false);
         TurnManager.instance.currentTurnState = TurnManager.TurnState.Free;
         TurnManager.instance.loadPlayerHand();
     }
