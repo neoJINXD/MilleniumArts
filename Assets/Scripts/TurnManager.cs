@@ -721,7 +721,7 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
                     unitCard.aoeMinRange = 0;
-                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMaxRange = 0;
                     unitCard.health = 10;
                     unitCard.damage = 5;
                     unitCard.defence = 1;
@@ -747,7 +747,7 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
                     unitCard.aoeMinRange = 0;
-                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMaxRange = 0;
                     unitCard.health = 20;
                     unitCard.damage = 7;
                     unitCard.defence = 3;
@@ -773,7 +773,7 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
                     unitCard.aoeMinRange = 0;
-                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMaxRange = 0;
                     unitCard.health = 15;
                     unitCard.damage = 9;
                     unitCard.defence = 0;
@@ -799,7 +799,7 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
                     unitCard.aoeMinRange = 0;
-                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMaxRange = 0;
                     unitCard.health = 15;
                     unitCard.damage = 5;
                     unitCard.defence = 0;
@@ -825,7 +825,7 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
                     unitCard.aoeMinRange = 0;
-                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMaxRange = 0;
                     unitCard.health = 15;
                     unitCard.damage = 6;
                     unitCard.defence = 0;
@@ -851,7 +851,7 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.minRange = 1;
                     unitCard.maxRange = 2;
                     unitCard.aoeMinRange = 0;
-                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMaxRange = 0;
                     unitCard.health = 25;
                     unitCard.damage = 6;
                     unitCard.defence = 2;
@@ -877,7 +877,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 1;
                     spellCard.maxRange = 1;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Damages an enemy unit for 5 health.";
 
                     break;
@@ -895,7 +895,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 1;
                     spellCard.maxRange = 3;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 10 health.";
 
                     break;
@@ -913,7 +913,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 3;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 1;
+                    spellCard.aoeMaxRange = 1;
                     spellCard.description = "Damages all enemies within (0,1) tiles of the casting origin for 3 health.";
 
                     break;
@@ -931,7 +931,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 2;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 1;
+                    spellCard.aoeMaxRange = 1;
                     spellCard.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 3 health.";
 
                     break;
@@ -949,7 +949,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Increases an ally unit’s current and maximum Health by 5.";
 
                     break;
@@ -967,7 +967,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Increases an ally unit’s Defence by 2.";
 
                     break;
@@ -985,7 +985,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Increases an ally unit’s Damage by 3.";
 
                     break;
@@ -1003,7 +1003,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Increases an ally unit’s movement speed by 1.";
 
                     break;
@@ -1021,7 +1021,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Increases an ally unit’s Evasion by 10.";
 
                     break;
@@ -1039,7 +1039,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Increases an ally unit’s Accuracy by 10.";
 
                     break;
@@ -1057,7 +1057,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 5;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 2;
+                    spellCard.aoeMaxRange = 2;
                     spellCard.description = "Reveals all traps within (0,2) tiles of the triggering origin.";
 
                     break;
@@ -1075,7 +1075,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 1;
                     spellCard.maxRange = 3;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Attempts to disarm an enemy trap on a tile.";
 
                     break;
@@ -1093,7 +1093,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Heals a unit for 5 health.";
 
                     break;
@@ -1111,7 +1111,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Summons 4 Soldier units around an ally.";
 
                     break;
@@ -1129,7 +1129,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Draw 2 cards.";
 
                     break;
@@ -1147,7 +1147,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 1;
+                    spellCard.aoeMaxRange = 1;
                     spellCard.description = "Only castable from a friendly Knight unit. Increases the damage of all allies within (0,1) tiles of the casting origin by 2.";
 
                     break;
@@ -1165,7 +1165,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Fully heals an ally unit.";
 
                     break;
@@ -1183,7 +1183,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 1;
                     spellCard.maxRange = 1;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Only castable from a friendly Assassin unit. Immediately kills and enemy unit (does not work on King unit).";
 
                     break;
@@ -1201,7 +1201,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 1;
                     spellCard.maxRange = 2;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Teleports a unit (1,2) tiles.";
 
                     break;
@@ -1219,7 +1219,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 1;
                     spellCard.maxRange = 2;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Damages the triggering unit for 5 health.";
 
                     break;
@@ -1237,7 +1237,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 1;
                     spellCard.maxRange = 2;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 1;
+                    spellCard.aoeMaxRange = 1;
                     spellCard.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
 
                     break;
@@ -1255,7 +1255,7 @@ public class TurnManager : Singleton<TurnManager>
                     spellCard.minRange = 0;
                     spellCard.maxRange = 0;
                     spellCard.aoeMinRange = 0;
-                    spellCard.aoeMinRange = 0;
+                    spellCard.aoeMaxRange = 0;
                     spellCard.description = "Only castable from a friendly King unit. Increases the damage, current health and max health of all allies within (1,1) tiles of the casting origin by 2.";
 
                     break;
@@ -1273,7 +1273,7 @@ public class TurnManager : Singleton<TurnManager>
                     unitCard.minRange = 0;
                     unitCard.maxRange = 0;
                     unitCard.aoeMinRange = 0;
-                    unitCard.aoeMinRange = 0;
+                    unitCard.aoeMaxRange = 0;
                     unitCard.health = 0;
                     unitCard.damage = 0;
                     unitCard.defence = 0;
