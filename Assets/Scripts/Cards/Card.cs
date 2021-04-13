@@ -3,18 +3,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CardType
+public enum CastType
 {
-    Unit = 0,
-    Spell = 1,
-    Trap = 2
+    OnAlly = 0,
+    OnEnemy = 1,
+    OnEmpty = 2,
+    OnAny = 3
 }
 
 [Serializable]
-public class Card
+public class Card : MonoBehaviour
 {
-    public CardType Type;
-    public string cardName;
+
+    public int id;
+    public CastType castType;
+    public string name;
     public GameObject image;
     public int cost;
+    public int minRange;
+    public int maxRange;
+    public int aoeMinRange;
+    public int aoeMaxRange;
+
+    public Card()
+    {
+
+    }
+
+    public Card(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, int cardAOEMin, int cardAOEMax)
+    {
+        id = cardId;
+        castType = cardCastType;
+        name = cardName;
+        //image = cardImage;
+        cost = cardCost;
+        minRange = cardMin;
+        maxRange = cardMax;
+        aoeMinRange = cardAOEMin;
+        aoeMinRange = cardAOEMax;
+    }
 }
+
+

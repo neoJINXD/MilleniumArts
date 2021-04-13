@@ -13,7 +13,7 @@ public class Unit : MonoBehaviour {
     
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
     protected UnitTypes unitType;
-    protected int unitPlayerId;
+    [SerializeField] protected int unitPlayerId;
     protected int maxHealth;
     protected int currentHealth;
     protected int damage;
@@ -30,6 +30,7 @@ public class Unit : MonoBehaviour {
     public bool isClicked = false;
     public bool startRoutine;
     private Camera mainCam;
+    private const int constantMovementSpeed = 7;
     
     #region UnitModifications
 
@@ -393,12 +394,14 @@ public class Unit : MonoBehaviour {
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
-          // fixes out of bounce error that occurs when unit selected.
-          if (Vector3.Distance(hit.point, transform.position) < 1)
-                 return; // already at destination
-          
-            
-          PathRequestManager.RequestPath(transform.position,hit.point, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
+            if (hit.transform.CompareTag("Tile"))
+            {
+                // fixes out of bounce error that occurs when unit selected.
+                if (Vector3.Distance(hit.point, transform.position) < 1)
+                    return; // already at destination
+
+                PathRequestManager.RequestPath(transform.position, hit.transform.position, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
+            }
         }
     }
     
@@ -409,7 +412,7 @@ public class Unit : MonoBehaviour {
     // function starts the coroutine if pathfinding is successful
     public void OnPathFound(Node[] newPath, bool pathSuccessful) 
     {
-        if (pathSuccessful && Input.GetMouseButtonDown(0)) {
+        if (pathSuccessful) {
             path = newPath;
             targetIndex = 0;
             
@@ -423,30 +426,36 @@ public class Unit : MonoBehaviour {
     //updates unit position by following along the path
     IEnumerator FollowPath() 
     {
-        if (isClicked)
+        Node currentWaypoint = path[0];
+
+        Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
+
+        while (true)
         {
-            Node currentWaypoint = path[0];
-            while (true)
+            grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
+
+            if (transform.position == currentWaypoint.worldPosition) 
             {
-                if (transform.position == currentWaypoint.worldPosition) 
-                {
-                    targetIndex++;
-                    currentWaypoint.RemoveUnit(this);
-                    
-                    if (targetIndex >= path.Length) 
-                    {
-                        yield break;
-                    }
-                    currentWaypoint = path[targetIndex];
-                    currentWaypoint.AddUnit(this);
-                }
+                targetIndex++;
+                currentWaypoint.AddUnit(this);
+                CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
 
-                transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,movementSpeed * Time.deltaTime);
+                if (targetIndex >= path.Length) 
+                    yield break;
 
-                CheckHostileTrapOrItemInNode(currentWaypoint);
-
-                yield return null;
+                currentWaypoint = path[targetIndex];
+                //currentWaypoint.RemoveUnit(this);// moved this
+                //currentWaypoint = path[targetIndex];
+                //currentWaypoint.AddUnit(this);
+                //CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
             }
+
+            //transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
+
+            //CheckHostileTrapOrItemInNode(currentWaypoint);
+
+            yield return null;
         }
     }
 
@@ -454,13 +463,16 @@ public class Unit : MonoBehaviour {
     {
         List<TrapOrItem> toiList = waypoint.GetTrapOrItemList();
 
-        foreach (TrapOrItem toi in toiList)
-        {
+        foreach (TrapOrItem toi in toiList.ToArray())
+            toi.TrapOrItemTriggeredByUnit(waypoint);
+
+        // removed if statement to make player trigger their own traps
+        /*{
             if (toi.GetTrapOrItemPlayerID() != this.GetUnitPlayerID())
             {
                 toi.TrapOrItemTriggeredByUnit();
             }
-        }
+        }*/
     }
 
     // public void OnDrawGizmos() 
@@ -480,20 +492,19 @@ public class Unit : MonoBehaviour {
     //     }
     // }
 
-    void OnMouseDown()
+/*    void OnMouseDown()
     {
-        Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID());
-        Debug.Log("Type: " + GetComponent<Unit>().GetUnitType());
-        Debug.Log("Max HP: " + GetComponent<Unit>().GetMaxHealth());
-        Debug.Log("Current HP: " + GetComponent<Unit>().GetCurrentHealth());
-        Debug.Log("Damage: " + GetComponent<Unit>().GetDamage());
-        Debug.Log("Defence: " + GetComponent<Unit>().GetDefence());
-        Debug.Log("Min Range: " + GetComponent<Unit>().GetMinRange());
-        Debug.Log("Max Range: " + GetComponent<Unit>().GetMaxRange());
-        Debug.Log("Accuracy: " + GetComponent<Unit>().GetAccuracy());
-        Debug.Log("Evasion: " + GetComponent<Unit>().GetEvasion());
-        Debug.Log("MS: " + GetComponent<Unit>().GetMovementSpeed());
-        Debug.Log("Flying: " + GetComponent<Unit>().GetCanFly());
-    }
-
+        Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID() +
+            "\nType: " + GetComponent<Unit>().GetUnitType() +
+            "\nMax HP: " + GetComponent<Unit>().GetMaxHealth() +
+            "\nCurrent HP: " + GetComponent<Unit>().GetCurrentHealth() +
+            "\nDamage: " + GetComponent<Unit>().GetDamage() +
+            "\nDefence: " + GetComponent<Unit>().GetDefence() +
+            "\nMin Range: " + GetComponent<Unit>().GetMinRange() +
+            "\nMax Range: " + GetComponent<Unit>().GetMaxRange() +
+            "\nAccuracy: " + GetComponent<Unit>().GetAccuracy() +
+            "\nEvasion: " + GetComponent<Unit>().GetEvasion() +
+            "\nMS: " + GetComponent<Unit>().GetMovementSpeed() +
+            "\nFlying: " + GetComponent<Unit>().GetCanFly());
+    }*/
 }

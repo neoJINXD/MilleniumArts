@@ -9,14 +9,13 @@ public class Pathfinding : MonoBehaviour
 {
 
 	PathRequestManager requestManager;
-	[SerializeField] private Material displayPath;
+	[SerializeField] private Material hoveredTile;
 	[SerializeField] private Material defaultMat;
-	[SerializeField] private Material selectedTile;
 	
 	private  Node[] waypoints;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
-	Grid gridRef;
+	public Grid gridRef;
 	HeuristicFunction hf;
 	
 	// for testing
@@ -24,6 +23,7 @@ public class Pathfinding : MonoBehaviour
 	private Vector3 initialPosition;
 	private Renderer hoverMat;
 	private Renderer unhoverMat;
+	private bool mouseOver = false;
 	
 	// unity crashes when depth is greater than 17, setting restriction.
 	// to move to unit class.
@@ -174,7 +174,18 @@ public class Pathfinding : MonoBehaviour
 		
 		foreach (Node n in verify)
 			visited.Remove(n);
-			
+
+		/*
+		foreach (Node n in gridRef.GetAllUnitNodes())
+		{
+			if (visited.Contains(n))
+			{
+				visited.Remove(n);
+			}
+		}
+		*/
+
+
 		return visited;
 	}
 	
@@ -232,9 +243,7 @@ public class Pathfinding : MonoBehaviour
 
 		return allyUnitNodes;
 	}
-
 	
-
 	public void StartFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPID, Heuristic desiredHeuristic) 
 	{
 		switch (desiredHeuristic)
@@ -266,7 +275,7 @@ public class Pathfinding : MonoBehaviour
 		
 		StartCoroutine(FindPath(startPos,targetPos, canFly, unitPID, hf));
 		//pass the function to use to calculate hCost
-		//can pass boolean to determine flying or normal pathfinding 
+		//can pass boolean to determine flying or normal pathfinding
 	}
 	
 	//also takes in the calling unit's PID
@@ -334,12 +343,12 @@ public class Pathfinding : MonoBehaviour
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
-
 		}
 
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
+	// Using Hover.cs instead of functions below. Keeping for now, in case decide to use them/modify.
 	public void DrawPath()
 	{
 		if (waypoints != null)
@@ -347,7 +356,7 @@ public class Pathfinding : MonoBehaviour
 			foreach (var node in waypoints)
 			{
 				Renderer pathMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-				pathMat.material = displayPath;
+				pathMat.material = hoveredTile;
 			}
 		}
 	}
@@ -363,42 +372,7 @@ public class Pathfinding : MonoBehaviour
 			}
 		}
 	}
-	
-	public void SetHoverTilePrefab()
-	{
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		
 
-		if (Physics.Raycast(ray, out hit))
-		{
-			Transform pos = hit.transform;
-
-			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
-			
-			hoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
-			hoverMat.material = selectedTile;
-		}
-	}
-	
-	public void UnHoverTilePrefab()
-	{
-		var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
-		
-
-		if (Physics.Raycast(ray, out hit))
-		{
-			Transform pos = hit.transform;
-
-			Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
-			
-			unhoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
-			unhoverMat.material = defaultMat;
-		}
-	}
-
-	
 	private Node[] RetracePath(Node startNode, Node endNode) 
 	{
 		List<Node> path = new List<Node>();

@@ -169,13 +169,39 @@ public class Grid : MonoBehaviour
  
         Transform spawnPosP2 = kingSpawnP2[randPos];
 
-        kingPlayer1.SetUnitPlayerID(0);
-        kingPlayer2.SetUnitPlayerID(1);
-        Instantiate(kingPlayer1, spawnPosP1.transform, false);
-        Instantiate(kingPlayer2, spawnPosP2.transform, false);
-        NodeFromWorldPoint(spawnPosP1.transform.position).AddUnit(kingPlayer1);
-        NodeFromWorldPoint(spawnPosP2.transform.position).AddUnit(kingPlayer2);
+        Unit king1 = Instantiate(kingPlayer1, spawnPosP1.transform, false).GetComponent<Unit>();
+        Unit king2 = Instantiate(kingPlayer2, spawnPosP2.transform, false).GetComponent<Unit>();
+        NodeFromWorldPoint(spawnPosP1.transform.position).AddUnit(king1);
+        NodeFromWorldPoint(spawnPosP2.transform.position).AddUnit(king2);
         //adding the kings to their respective nodes
+
+        // assign units to kings
+
+        king1.SetMovementSpeed(5);
+        king1.SetCanFly(false);
+        king1.SetUnitType(Unit.UnitTypes.King);
+        king1.SetUnitPlayerID(0);
+        king1.SetMaxHealth(30);
+        king1.SetCurrentHealth(30);
+        king1.SetDamage(7);
+        king1.SetDefence(2);
+        king1.SetMinRange(1);
+        king1.SetMaxRange(1);
+        king1.SetAccuracy(90);
+        king1.SetEvasion(30);
+
+        king2.SetMovementSpeed(5);
+        king2.SetCanFly(false);
+        king2.SetUnitType(Unit.UnitTypes.King);
+        king2.SetUnitPlayerID(1);
+        king2.SetMaxHealth(30);
+        king2.SetCurrentHealth(30);
+        king2.SetDamage(7);
+        king2.SetDefence(2);
+        king2.SetMinRange(1);
+        king2.SetMaxRange(1);
+        king2.SetAccuracy(90);
+        king2.SetEvasion(30);
     }
 
     // might have to use boolean, to change walkable nodes, based on flying and ground units.
@@ -183,20 +209,35 @@ public class Grid : MonoBehaviour
     {
         List<Node> neighbours = new List<Node>();
 
-        for (int x = -1; x <= 1; x++)
+        if (node.gridY + 1 < gridSizeY) //checking up
         {
-            for (int y = -1; y <= 1; y++)
+            if (grid[node.gridX, node.gridY + 1].unitInThisNode == null) //making sure no unit in the node
             {
-                if (x == 0 && y == 0)
-                    continue;
+                neighbours.Add(grid[node.gridX, node.gridY + 1]);
+            }
+        }
 
-                int checkX = node.gridX + x;
-                int checkY = node.gridY + y;
+        if (node.gridY - 1 >= 0) //checking down
+        {
+            if (grid[node.gridX, node.gridY - 1].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX, node.gridY - 1]);
+            }
+        }
 
-                if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY)
-                {
-                    neighbours.Add(grid[checkX, checkY]);
-                }
+        if (node.gridX + 1 < gridSizeX) //checking right
+        {
+            if (grid[node.gridX + 1, node.gridY].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX + 1, node.gridY]);
+            }
+        }
+
+        if (node.gridX - 1 >= 0) //checking left
+        {
+            if (grid[node.gridX - 1, node.gridY].unitInThisNode == null)
+            {
+                neighbours.Add(grid[node.gridX - 1, node.gridY]);
             }
         }
 
