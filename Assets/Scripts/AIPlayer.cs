@@ -51,9 +51,9 @@ public class AIPlayer : Player
 		else if (m_behaviour == BehaviourType.Defensive)
 			kingHealthThreshold = 0.75f;
 		
-		if(m_king.GetCurrentHealth() / m_king.GetMaxHealth() < kingHealthThreshold)
+		if(King.GetCurrentHealth() / King.GetMaxHealth() < kingHealthThreshold)
 		{
-			List<Node> nearbyEnemyNodes = m_pathfinding.GetEnemyUnitNodesInRange(PlayerId, m_king.transform.position, 
+			List<Node> nearbyEnemyNodes = m_pathfinding.GetEnemyUnitNodesInRange(PlayerId, King.transform.position, 
 				false, 1, 10);
 			
 			if(nearbyEnemyNodes.Count > 1)
@@ -66,14 +66,14 @@ public class AIPlayer : Player
 				 */
 				
 				// Bring closest ally to help
-				Unit closestAlly = GetClosestAlly(m_king.transform.position);
+				Unit closestAlly = GetClosestAlly(King.transform.position);
 				
 				if(!closestAlly)
 					yield break;
 				
 				if(closestAlly.unitType == Unit.UnitTypes.Priest)
 				{
-					if(CanHeal(closestAlly, m_king))
+					if(CanHeal(closestAlly, King))
 					{
 						// TODO: Unit heal
 						/*
@@ -86,12 +86,12 @@ public class AIPlayer : Player
 					}
 					else
 					{
-						yield return MoveUnit(closestAlly, m_king.transform.position);
+						yield return MoveUnit(closestAlly, King.transform.position);
 					}
 				}
 				else
 				{
-					if(CanAttack(closestAlly, GetCloesetEnemy(m_king.transform.position)))
+					if(CanAttack(closestAlly, GetCloesetEnemy(King.transform.position)))
 					{
 						// TODO: Unit attack
 						/*
@@ -101,7 +101,7 @@ public class AIPlayer : Player
 					}
 					else
 					{
-						yield return MoveUnit(closestAlly, m_king.transform.position);
+						yield return MoveUnit(closestAlly, King.transform.position);
 					}
 				}
 			}

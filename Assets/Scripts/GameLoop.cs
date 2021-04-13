@@ -52,6 +52,14 @@ public class GameLoop : Singleton<GameLoop>
         return players[index];
     }
 	
+	public Player GetPlayer(int incomingIndex)
+    {
+		if(incomingIndex < 0 && incomingIndex >= players.Count)
+			return players[0];
+		
+        return players[incomingIndex];
+    }
+	
 	public Player GetOtherPlayer(int currentPlayer)
 	{
 		if(currentPlayer == 1)
