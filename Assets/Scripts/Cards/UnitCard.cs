@@ -25,6 +25,9 @@ public class UnitCard : Card
         cost = cardCost;
         minRange = cardMin;
         maxRange = cardMax;
+
+        indexInHand = 0;
+
         health = cardHealth;
         damage = cardDamage;
         defence = cardDefence;
@@ -35,5 +38,28 @@ public class UnitCard : Card
         evasion = cardEvasion;
         flying = cardFlying;
 
+    }
+
+    public void copyUnitCard(UnitCard copyCard)
+    {
+        id = copyCard.id;
+        castType = copyCard.castType;
+        name = copyCard.name;
+        //image = cardImage;
+        cost = copyCard.cost;
+        minRange = copyCard.minRange;
+        maxRange = copyCard.maxRange;
+
+        indexInHand = copyCard.indexInHand;
+
+        health = copyCard.health;
+        damage = copyCard.damage;
+        defence = copyCard.defence;
+        minAttackRange = copyCard.minAttackRange;
+        maxAttackRange = copyCard.maxAttackRange;
+        moveSpeed = copyCard.moveSpeed;
+        accuracy = copyCard.accuracy;
+        evasion = copyCard.evasion;
+        flying = copyCard.flying;
     }
 }

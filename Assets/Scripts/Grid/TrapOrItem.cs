@@ -13,15 +13,6 @@ public class TrapOrItem : MonoBehaviour
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
 
-    private Pathfinding pf;
-    private Grid grid;
-
-    void Start()
-    {
-        pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
-        grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
-    }
-
     public enum TrapOrItemTypes //enum for item/trap types
     {
         BearTrap,
@@ -63,7 +54,7 @@ public class TrapOrItem : MonoBehaviour
         }
         else if(trapOrItemType == TrapOrItemTypes.LandMine)
         {
-            HashSet<Node> affectedNodes = pf.GetNodesMinMaxRange(triggeringOriginNode.GetUnit().gameObject.transform.position, false, 0, 1);
+            HashSet<Node> affectedNodes = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>().GetNodesMinMaxRange(triggeringOriginNode.worldPosition, false, 0, 1);
 
             foreach (Node node in affectedNodes)
             {

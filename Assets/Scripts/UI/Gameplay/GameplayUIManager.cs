@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zone.Core.Utils;
 
-public class GameplayUIManager : MonoBehaviour
+public class GameplayUIManager: Singleton<GameplayUIManager>
 {
     [SerializeField] private Player m_player;
 
@@ -21,57 +22,24 @@ public class GameplayUIManager : MonoBehaviour
 
     private bool myTurn;
 
+    private RectTransform handPanelRT;
+
+    public GameObject cardZoomInPanel;
+    public GameObject cardPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
         handCount = 5;
         dynamicHandFilled = false;
         myTurn = true;
+
+        handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // used to test dynamic hand
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            handCount--;
-            dynamicHandFilled = false;
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            handCount++;
-            dynamicHandFilled = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-            myTurn = true;
-
-        if (Input.GetKeyDown(KeyCode.R))
-            myTurn = false;
-
-
-        if (handCount > 5)
-        {
-            defaultHandPanel.SetActive(false);
-            dynamicHandPanel.SetActive(true);
-
-            if(!dynamicHandFilled)
-                fillDynamicHand();
-        }
-        else
-        {
-            defaultHandPanel.SetActive(true);
-            dynamicHandPanel.SetActive(false);
-
-            foreach (Transform child in dynamicHandPanel.transform)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
-
-            dynamicHandFilled = false;
-        }
-
         if (myTurn)
             endTurnButton.SetActive(true);
         else
@@ -80,16 +48,22 @@ public class GameplayUIManager : MonoBehaviour
 
     }
 
-    void fillDynamicHand()
+    public void fillDynamicHand()
     {
+        int x = 0;
 
-
-        RectTransform handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
+        GameObject[] children = new GameObject[dynamicHandPanel.transform.childCount];
 
         foreach (Transform child in dynamicHandPanel.transform)
         {
-            GameObject.Destroy(child.gameObject);
+            children[x] = child.gameObject;
+            x += 1;
         }
+
+
+        foreach (GameObject child in children)
+            GameObject.DestroyImmediate(child);
+
 
         float rectWidth = handPanelRT.rect.width;
 
