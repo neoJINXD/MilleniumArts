@@ -20,8 +20,6 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
 
     private bool dynamicHandFilled;
 
-    private bool myTurn;
-
     private RectTransform handPanelRT;
 
     public GameObject cardZoomInPanel;
@@ -32,7 +30,6 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
     {
         handCount = 5;
         dynamicHandFilled = false;
-        myTurn = true;
 
         handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
     }
@@ -40,12 +37,7 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
     // Update is called once per frame
     void Update()
     {
-        if (myTurn)
-            endTurnButton.SetActive(true);
-        else
-            endTurnButton.SetActive(false);
-
-
+		endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
     }
 
     public void fillDynamicHand()
@@ -91,7 +83,6 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
     
     public void endTurn()
     {
-        myTurn = false;
         GameLoop.instance.EndCurrentPlayer();
     }
 }
