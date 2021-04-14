@@ -480,11 +480,10 @@ public class TurnManager : Singleton<TurnManager>
         Card unitCard_priest = new UnitCard(3, CardType.Unit, CastType.OnEmpty, "Unit: Priest", GameObject cardImage, 1, 1, 2, 15, 5, 0, 0, 2, 4, 100, 30, false);
         Card unitCard_archer = new UnitCard(4, CardType.Unit, CastType.OnEmpty, "Unit: Archer", GameObject cardImage, 1, 1, 2, 15, 6, 0, 2, 3, 4, 90, 30, false);
         Card unitCard_dragonRider = new UnitCard(5, CardType.Unit, CastType.OnEmpty, "Unit: DragonRider", GameObject cardImage, 1, 1, 2, 25, 6, 2, 1, 1, 6, 85, 20, true);
-
         Card activeCard_smite = new SpellCard(6, CardType.Active, CastType.OnEnemy, "Smite", GameObject cardImage, 1, 1, 1, "Damages an enemy unit for 5 health.");
-
         Card currentCard = unitCard_soldier;
-        */
+		
+		*/
 
         GameObject clickedButtonGO = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject; // gets object that calls onClick
         Card currentCard = clickedButtonGO.GetComponent<Card>();
@@ -704,589 +703,25 @@ public class TurnManager : Singleton<TurnManager>
             /*Bottom*/
             rt.offsetMin = new Vector2(0, 0);
 
-            int random = Random.Range(0, 28);
-
-            switch (random)
-            {
-                case 0:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(UnitCard));
-
-                    unitCard = cardGO.GetComponent<UnitCard>();
-
-                    unitCard.id = 0;
-                    unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Soldier";
-                    unitCard.cost = 1;
-                    unitCard.minRange = 1;
-                    unitCard.maxRange = 2;
-                    unitCard.aoeMinRange = 0;
-                    unitCard.aoeMaxRange = 0;
-                    unitCard.health = 10;
-                    unitCard.damage = 5;
-                    unitCard.defence = 1;
-                    unitCard.minAttackRange = 1;
-                    unitCard.maxAttackRange = 1;
-                    unitCard.moveSpeed = 4;
-                    unitCard.accuracy = 80;
-                    unitCard.evasion = 20;
-                    unitCard.flying = false;
-
-                    break;
-
-                case 1:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(UnitCard));
-
-                    unitCard = cardGO.GetComponent<UnitCard>();
-
-                    unitCard.id = 1;
-                    unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Knight";
-                    unitCard.cost = 3;
-                    unitCard.minRange = 1;
-                    unitCard.maxRange = 2;
-                    unitCard.aoeMinRange = 0;
-                    unitCard.aoeMaxRange = 0;
-                    unitCard.health = 20;
-                    unitCard.damage = 7;
-                    unitCard.defence = 3;
-                    unitCard.minAttackRange = 1;
-                    unitCard.maxAttackRange = 1;
-                    unitCard.moveSpeed = 3;
-                    unitCard.accuracy = 70;
-                    unitCard.evasion = 10;
-                    unitCard.flying = false;
-
-                    break;
-
-                case 2:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(UnitCard));
-
-                    unitCard = cardGO.GetComponent<UnitCard>();
-
-                    unitCard.id = 2;
-                    unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Assassin";
-                    unitCard.cost = 3;
-                    unitCard.minRange = 1;
-                    unitCard.maxRange = 2;
-                    unitCard.aoeMinRange = 0;
-                    unitCard.aoeMaxRange = 0;
-                    unitCard.health = 15;
-                    unitCard.damage = 9;
-                    unitCard.defence = 0;
-                    unitCard.minAttackRange = 1;
-                    unitCard.maxAttackRange = 1;
-                    unitCard.moveSpeed = 6;
-                    unitCard.accuracy = 95;
-                    unitCard.evasion = 60;
-                    unitCard.flying = false;
-
-                    break;
-
-                case 3:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(UnitCard));
-
-                    unitCard = cardGO.GetComponent<UnitCard>();
-
-                    unitCard.id = 3;
-                    unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Priest";
-                    unitCard.cost = 3;
-                    unitCard.minRange = 1;
-                    unitCard.maxRange = 2;
-                    unitCard.aoeMinRange = 0;
-                    unitCard.aoeMaxRange = 0;
-                    unitCard.health = 15;
-                    unitCard.damage = 5;
-                    unitCard.defence = 0;
-                    unitCard.minAttackRange = 0;
-                    unitCard.maxAttackRange = 2;
-                    unitCard.moveSpeed = 4;
-                    unitCard.accuracy = 100;
-                    unitCard.evasion = 30;
-                    unitCard.flying = false;
-
-                    break;
-
-                case 4:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(UnitCard));
-
-                    unitCard = cardGO.GetComponent<UnitCard>();
-
-                    unitCard.id = 4;
-                    unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Archer";
-                    unitCard.cost = 3;
-                    unitCard.minRange = 1;
-                    unitCard.maxRange = 2;
-                    unitCard.aoeMinRange = 0;
-                    unitCard.aoeMaxRange = 0;
-                    unitCard.health = 15;
-                    unitCard.damage = 6;
-                    unitCard.defence = 0;
-                    unitCard.minAttackRange = 2;
-                    unitCard.maxAttackRange = 3;
-                    unitCard.moveSpeed = 4;
-                    unitCard.accuracy = 90;
-                    unitCard.evasion = 30;
-                    unitCard.flying = false;
-
-                    break;
-
-                case 5:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(UnitCard));
-
-                    unitCard = cardGO.GetComponent<UnitCard>();
-
-                    unitCard.id = 5;
-                    unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "Dragon Rider";
-                    unitCard.cost = 5;
-                    unitCard.minRange = 1;
-                    unitCard.maxRange = 2;
-                    unitCard.aoeMinRange = 0;
-                    unitCard.aoeMaxRange = 0;
-                    unitCard.health = 25;
-                    unitCard.damage = 6;
-                    unitCard.defence = 2;
-                    unitCard.minAttackRange = 1;
-                    unitCard.maxAttackRange = 1;
-                    unitCard.moveSpeed = 4;
-                    unitCard.accuracy = 85;
-                    unitCard.evasion = 20;
-                    unitCard.flying = false;
-
-                    break;
-
-                case 6:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 6;
-                    spellCard.castType = CastType.OnEnemy;
-                    spellCard.name = "Smite";
-                    spellCard.cost = 2;
-                    spellCard.minRange = 1;
-                    spellCard.maxRange = 1;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Damages an enemy unit for 5 health.";
-
-                    break;
-
-                case 7:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 7;
-                    spellCard.castType = CastType.OnEnemy;
-                    spellCard.name = "Snipe";
-                    spellCard.cost = 3;
-                    spellCard.minRange = 1;
-                    spellCard.maxRange = 3;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 10 health.";
-
-                    break;
-
-                case 8:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 8;
-                    spellCard.castType = CastType.OnAny;
-                    spellCard.name = "Heavenly Smite";
-                    spellCard.cost = 5;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 3;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 1;
-                    spellCard.description = "Damages all enemies within (0,1) tiles of the casting origin for 3 health.";
-
-                    break;
-
-                case 9:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 9;
-                    spellCard.castType = CastType.OnAny;
-                    spellCard.name = "Prayer";
-                    spellCard.cost = 4;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 2;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 1;
-                    spellCard.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 3 health.";
-
-                    break;
-
-                case 10:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 10;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Vitality";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Increases an ally unit’s current and maximum Health by 5.";
-
-                    break;
-
-                case 11:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 11;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Endurance";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Increases an ally unit’s Defence by 2.";
-
-                    break;
-
-                case 12:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 12;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Vigor";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Increases an ally unit’s Damage by 3.";
-
-                    break;
-
-                case 13:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 13;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Nimbleness";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Increases an ally unit’s movement speed by 1.";
-
-                    break;
-
-                case 14:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 14;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Agility";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Increases an ally unit’s Evasion by 10.";
-
-                    break;
-
-                case 15:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 15;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Precision";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Increases an ally unit’s Accuracy by 10.";
-
-                    break;
-
-                case 16:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 16;
-                    spellCard.castType = CastType.OnEmpty;
-                    spellCard.name = "Oracle";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 5;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 2;
-                    spellCard.description = "Reveals all traps within (0,2) tiles of the triggering origin.";
-
-                    break;
-
-                case 17:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 17;
-                    spellCard.castType = CastType.OnEmpty;
-                    spellCard.name = "Disarm Trap";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 1;
-                    spellCard.maxRange = 3;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Attempts to disarm an enemy trap on a tile.";
-
-                    break;
-
-                case 18:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 18;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Provisions";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Heals a unit for 5 health.";
-
-                    break;
-
-                case 19:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 19;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Reinforcements";
-                    spellCard.cost = 6;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Summons 4 Soldier units around an ally.";
-
-                    break;
-
-                case 20:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 20;
-                    spellCard.castType = CastType.OnAny;
-                    spellCard.name = "Reinforcements";
-                    spellCard.cost = 3;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Draw 2 cards.";
-
-                    break;
-
-                case 21:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 21;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Warcry";
-                    spellCard.cost = 4;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 1;
-                    spellCard.description = "Only castable from a friendly Knight unit. Increases the damage of all allies within (0,1) tiles of the casting origin by 2.";
-
-                    break;
-
-                case 22:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 22;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Rebirth";
-                    spellCard.cost = 4;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Fully heals an ally unit.";
-
-                    break;
-
-                case 23:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 23;
-                    spellCard.castType = CastType.OnEnemy;
-                    spellCard.name = "Assassinate";
-                    spellCard.cost = 5;
-                    spellCard.minRange = 1;
-                    spellCard.maxRange = 1;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Only castable from a friendly Assassin unit. Immediately kills and enemy unit (does not work on King unit).";
-
-                    break;
-
-                case 24:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 24;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Teleport";
-                    spellCard.cost = 1;
-                    spellCard.minRange = 1;
-                    spellCard.maxRange = 2;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Teleports a unit (1,2) tiles.";
-
-                    break;
-
-                case 25:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 25;
-                    spellCard.castType = CastType.OnEmpty;
-                    spellCard.name = "Bear Trap";
-                    spellCard.cost = 2;
-                    spellCard.minRange = 1;
-                    spellCard.maxRange = 2;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Damages the triggering unit for 5 health.";
-
-                    break;
-
-                case 26:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 26;
-                    spellCard.castType = CastType.OnEmpty;
-                    spellCard.name = "Land Mine";
-                    spellCard.cost = 3;
-                    spellCard.minRange = 1;
-                    spellCard.maxRange = 2;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 1;
-                    spellCard.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
-
-                    break;
-
-                case 27:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(SpellCard));
-
-                    spellCard = cardGO.GetComponent<SpellCard>();
-
-                    spellCard.id = 27;
-                    spellCard.castType = CastType.OnAlly;
-                    spellCard.name = "Royal Pledge";
-                    spellCard.cost = 3;
-                    spellCard.minRange = 0;
-                    spellCard.maxRange = 0;
-                    spellCard.aoeMinRange = 0;
-                    spellCard.aoeMaxRange = 0;
-                    spellCard.description = "Only castable from a friendly King unit. Increases the damage, current health and max health of all allies within (1,1) tiles of the casting origin by 2.";
-
-                    break;
-
-                default:
-                    cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-                    cardGO.AddComponent(typeof(UnitCard));
-
-                    unitCard = cardGO.GetComponent<UnitCard>();
-
-                    unitCard.id = -1;
-                    unitCard.castType = CastType.OnEmpty;
-                    unitCard.name = "-";
-                    unitCard.cost = 0;
-                    unitCard.minRange = 0;
-                    unitCard.maxRange = 0;
-                    unitCard.aoeMinRange = 0;
-                    unitCard.aoeMaxRange = 0;
-                    unitCard.health = 0;
-                    unitCard.damage = 0;
-                    unitCard.defence = 0;
-                    unitCard.minAttackRange = 0;
-                    unitCard.maxAttackRange = 0;
-                    unitCard.moveSpeed = 0;
-                    unitCard.accuracy = 0;
-                    unitCard.evasion = 0;
-                    unitCard.flying = false;
-
-                    break;
-            }
-
+			cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+			
+			Card randomCard = RandomCard();
+			
+			if(randomCard.GetType() == typeof(UnitCard))
+			{
+				UnitCard randomCardComponent = (UnitCard)cardGO.AddComponent(randomCard.GetType());
+				randomCardComponent.copyUnitCard((UnitCard)randomCard);
+			}
+			else if(randomCard.GetType() == typeof(SpellCard))
+			{
+				SpellCard randomCardComponent = (SpellCard)cardGO.AddComponent(randomCard.GetType());
+				randomCardComponent.copySpellCard((SpellCard)randomCard);
+			}
+			else
+			{
+				Debug.LogError("Card type error! : " + randomCard.GetType().ToString());
+			}
+			
             cardGO.transform.SetParent(cardDrawPanel.transform.GetChild(0).transform.GetChild(x));
             cardGO.GetComponent<RectTransform>().offsetMax = Vector2.zero;
             cardGO.GetComponent<RectTransform>().offsetMin = Vector2.zero;
@@ -1296,4 +731,514 @@ public class TurnManager : Singleton<TurnManager>
             cardGO.GetComponent<Button>().onClick.AddListener(cardGO.GetComponent<CardUI>().addClickedCardToHand);
         }
     }
+	
+	private Card RandomCard()
+	{
+		int random = Random.Range(0, 28);
+
+		if(random < 6)
+		{
+			UnitCard card = new UnitCard();
+			switch (random)
+			{
+				case 0:
+
+					card.id = 0;
+					card.castType = CastType.OnEmpty;
+					card.name = "Soldier";
+					card.cost = 1;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.health = 10;
+					card.damage = 5;
+					card.defence = 1;
+					card.minAttackRange = 1;
+					card.maxAttackRange = 1;
+					card.moveSpeed = 4;
+					card.accuracy = 80;
+					card.evasion = 20;
+					card.flying = false;
+
+					break;
+
+				case 1:
+
+					card.id = 1;
+					card.castType = CastType.OnEmpty;
+					card.name = "Knight";
+					card.cost = 3;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.health = 20;
+					card.damage = 7;
+					card.defence = 3;
+					card.minAttackRange = 1;
+					card.maxAttackRange = 1;
+					card.moveSpeed = 3;
+					card.accuracy = 70;
+					card.evasion = 10;
+					card.flying = false;
+
+					break;
+
+				case 2:
+
+					card.id = 2;
+					card.castType = CastType.OnEmpty;
+					card.name = "Assassin";
+					card.cost = 3;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.health = 15;
+					card.damage = 9;
+					card.defence = 0;
+					card.minAttackRange = 1;
+					card.maxAttackRange = 1;
+					card.moveSpeed = 6;
+					card.accuracy = 95;
+					card.evasion = 60;
+					card.flying = false;
+
+					break;
+
+				case 3:
+
+					card.id = 3;
+					card.castType = CastType.OnEmpty;
+					card.name = "Priest";
+					card.cost = 3;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.health = 15;
+					card.damage = 5;
+					card.defence = 0;
+					card.minAttackRange = 0;
+					card.maxAttackRange = 2;
+					card.moveSpeed = 4;
+					card.accuracy = 100;
+					card.evasion = 30;
+					card.flying = false;
+
+					break;
+
+				case 4:
+
+					card.id = 4;
+					card.castType = CastType.OnEmpty;
+					card.name = "Archer";
+					card.cost = 3;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.health = 15;
+					card.damage = 6;
+					card.defence = 0;
+					card.minAttackRange = 2;
+					card.maxAttackRange = 3;
+					card.moveSpeed = 4;
+					card.accuracy = 90;
+					card.evasion = 30;
+					card.flying = false;
+
+					break;
+
+				case 5:
+
+					card.id = 5;
+					card.castType = CastType.OnEmpty;
+					card.name = "Dragon Rider";
+					card.cost = 5;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.health = 25;
+					card.damage = 6;
+					card.defence = 2;
+					card.minAttackRange = 1;
+					card.maxAttackRange = 1;
+					card.moveSpeed = 4;
+					card.accuracy = 85;
+					card.evasion = 20;
+					card.flying = false;
+
+					break;
+			}
+			
+			return card;
+		}
+		else 
+		{
+			SpellCard card = new SpellCard();
+			switch (random)
+			{
+				case 6:
+
+
+
+					card.id = 6;
+					card.castType = CastType.OnEnemy;
+					card.name = "Smite";
+					card.cost = 2;
+					card.minRange = 1;
+					card.maxRange = 1;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Damages an enemy unit for 5 health.";
+
+					break;
+
+				case 7:
+
+
+
+					card.id = 7;
+					card.castType = CastType.OnEnemy;
+					card.name = "Snipe";
+					card.cost = 3;
+					card.minRange = 1;
+					card.maxRange = 3;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 10 health.";
+
+					break;
+
+				case 8:
+
+
+
+					card.id = 8;
+					card.castType = CastType.OnAny;
+					card.name = "Heavenly Smite";
+					card.cost = 5;
+					card.minRange = 0;
+					card.maxRange = 3;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 1;
+					card.description = "Damages all enemies within (0,1) tiles of the casting origin for 3 health.";
+
+					break;
+
+				case 9:
+
+
+
+					card.id = 9;
+					card.castType = CastType.OnAny;
+					card.name = "Prayer";
+					card.cost = 4;
+					card.minRange = 0;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 1;
+					card.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 3 health.";
+
+					break;
+
+				case 10:
+
+
+
+					card.id = 10;
+					card.castType = CastType.OnAlly;
+					card.name = "Vitality";
+					card.cost = 1;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Increases an ally unit’s current and maximum Health by 5.";
+
+					break;
+
+				case 11:
+
+
+
+					card.id = 11;
+					card.castType = CastType.OnAlly;
+					card.name = "Endurance";
+					card.cost = 1;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Increases an ally unit’s Defence by 2.";
+
+					break;
+
+				case 12:
+
+
+
+					card.id = 12;
+					card.castType = CastType.OnAlly;
+					card.name = "Vigor";
+					card.cost = 1;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Increases an ally unit’s Damage by 3.";
+
+					break;
+
+				case 13:
+
+
+
+					card.id = 13;
+					card.castType = CastType.OnAlly;
+					card.name = "Nimbleness";
+					card.cost = 1;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Increases an ally unit’s movement speed by 1.";
+
+					break;
+
+				case 14:
+
+
+
+					card.id = 14;
+					card.castType = CastType.OnAlly;
+					card.name = "Agility";
+					card.cost = 1;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Increases an ally unit’s Evasion by 10.";
+
+					break;
+
+				case 15:
+
+
+
+					card.id = 15;
+					card.castType = CastType.OnAlly;
+					card.name = "Precision";
+					card.cost = 1;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Increases an ally unit’s Accuracy by 10.";
+
+					break;
+
+				case 16:
+
+
+
+					card.id = 16;
+					card.castType = CastType.OnEmpty;
+					card.name = "Oracle";
+					card.cost = 1;
+					card.minRange = 0;
+					card.maxRange = 5;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 2;
+					card.description = "Reveals all traps within (0,2) tiles of the triggering origin.";
+
+					break;
+
+				case 17:
+
+
+
+					card.id = 17;
+					card.castType = CastType.OnEmpty;
+					card.name = "Disarm Trap";
+					card.cost = 1;
+					card.minRange = 1;
+					card.maxRange = 3;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Attempts to disarm an enemy trap on a tile.";
+
+					break;
+
+				case 18:
+
+
+
+					card.id = 18;
+					card.castType = CastType.OnAlly;
+					card.name = "Provisions";
+					card.cost = 1;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Heals a unit for 5 health.";
+
+					break;
+
+				case 19:
+
+
+
+					card.id = 19;
+					card.castType = CastType.OnAlly;
+					card.name = "Reinforcements";
+					card.cost = 6;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Summons 4 Soldier units around an ally.";
+
+					break;
+
+				case 20:
+
+
+
+					card.id = 20;
+					card.castType = CastType.OnAny;
+					card.name = "Reinforcements";
+					card.cost = 3;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Draw 2 cards.";
+
+					break;
+
+				case 21:
+
+
+
+					card.id = 21;
+					card.castType = CastType.OnAlly;
+					card.name = "Warcry";
+					card.cost = 4;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 1;
+					card.description = "Only castable from a friendly Knight unit. Increases the damage of all allies within (0,1) tiles of the casting origin by 2.";
+
+					break;
+
+				case 22:
+
+
+
+					card.id = 22;
+					card.castType = CastType.OnAlly;
+					card.name = "Rebirth";
+					card.cost = 4;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Fully heals an ally unit.";
+
+					break;
+
+				case 23:
+
+
+
+					card.id = 23;
+					card.castType = CastType.OnEnemy;
+					card.name = "Assassinate";
+					card.cost = 5;
+					card.minRange = 1;
+					card.maxRange = 1;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Only castable from a friendly Assassin unit. Immediately kills and enemy unit (does not work on King unit).";
+
+					break;
+
+				case 24:
+
+
+
+					card.id = 24;
+					card.castType = CastType.OnAlly;
+					card.name = "Teleport";
+					card.cost = 1;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Teleports a unit (1,2) tiles.";
+
+					break;
+
+				case 25:
+
+
+
+					card.id = 25;
+					card.castType = CastType.OnEmpty;
+					card.name = "Bear Trap";
+					card.cost = 2;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Damages the triggering unit for 5 health.";
+
+					break;
+
+				case 26:
+
+
+
+					card.id = 26;
+					card.castType = CastType.OnEmpty;
+					card.name = "Land Mine";
+					card.cost = 3;
+					card.minRange = 1;
+					card.maxRange = 2;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 1;
+					card.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
+
+					break;
+
+				case 27:
+
+
+
+					card.id = 27;
+					card.castType = CastType.OnAlly;
+					card.name = "Royal Pledge";
+					card.cost = 3;
+					card.minRange = 0;
+					card.maxRange = 0;
+					card.aoeMinRange = 0;
+					card.aoeMaxRange = 0;
+					card.description = "Only castable from a friendly King unit. Increases the damage, current health and max health of all allies within (1,1) tiles of the casting origin by 2.";
+
+					break;
+
+
+			}
+			
+			return card;
+		}
+		
+		return new Card();
+	}
 }

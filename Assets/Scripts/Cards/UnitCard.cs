@@ -14,6 +14,8 @@ public class UnitCard : Card
     public int evasion;
     public bool flying;
 
+	public UnitCard() {}
+
     public UnitCard(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax,
         int cardHealth, int cardDamage, int cardDefence, int cardMinARange, int cardMaxARange, int cardMoveSpeed, int cardAccuracy,
         int cardEvasion, bool cardFlying)

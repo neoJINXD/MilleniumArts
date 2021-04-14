@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class SpellCard : Card
 {
-    public string description;
-
+	public SpellCard() {}
+	
     public SpellCard(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, string cardDesc, int cardAOEMin, int cardAOEMax)
     {
         id = cardId;
