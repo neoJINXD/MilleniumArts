@@ -3716,7 +3716,6 @@ MonoBehaviour:
   canFly: 0
   unitPlayerId: -1
   isClicked: 0
-  startRoutine: 0
 --- !u!136 &891132760
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4314,7 +4313,6 @@ MonoBehaviour:
   canFly: 0
   unitPlayerId: -1
   isClicked: 0
-  startRoutine: 0
 --- !u!136 &1084916424
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5667,7 +5665,6 @@ MonoBehaviour:
   canFly: 0
   unitPlayerId: -1
   isClicked: 0
-  startRoutine: 0
 --- !u!136 &1273640696
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6305,10 +6302,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerId: 0
   PlayerMana: 0
-  m_playerCards:
-  - {fileID: 0}
-  - {fileID: 0}
+  King: {fileID: 0}
+  m_playerCards: []
   m_playerUnits: []
+  m_behaviour: 0
 --- !u!114 &1514034435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6323,6 +6320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerId: 0
   PlayerMana: 0
+  King: {fileID: 0}
   m_playerCards: []
   m_playerUnits: []
 --- !u!114 &1514034436
@@ -6839,7 +6837,6 @@ MonoBehaviour:
   canFly: 0
   unitPlayerId: -1
   isClicked: 0
-  startRoutine: 0
 --- !u!1 &1610506557
 GameObject:
   m_ObjectHideFlags: 0
@@ -7764,7 +7761,6 @@ MonoBehaviour:
   canFly: 0
   unitPlayerId: -1
   isClicked: 0
-  startRoutine: 0
 --- !u!136 &1755316931
 CapsuleCollider:
   m_ObjectHideFlags: 0

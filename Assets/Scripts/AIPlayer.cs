@@ -13,6 +13,8 @@ public class AIPlayer : Player
 	
 	[SerializeField] private BehaviourType m_behaviour;
 	private Pathfinding m_pathfinding;
+	
+	private GameObject cardHolder;
 
 	private void Start()
 	{
@@ -20,6 +22,10 @@ public class AIPlayer : Player
 		
 		if(!m_pathfinding)
 			Debug.LogError("Pathfinding object not found!");
+		
+		cardHolder = new GameObject();
+		cardHolder.transform.parent = transform;
+		cardHolder.name = "AI card hand";
 	}
 	
     public override void StartTurn()
@@ -45,13 +51,38 @@ public class AIPlayer : Player
 	
 	private void PickUpCards()
 	{
-		TurnManager tm = TurnManager.instance;
 		m_playerCards.Clear();
-		AddCard(tm.RandomCard());
-		AddCard(tm.RandomCard());
-		AddCard(tm.RandomCard());
-		AddCard(tm.RandomCard());
-		AddCard(tm.RandomCard());
+		AddCard(GenerateCard());
+		AddCard(GenerateCard());
+		AddCard(GenerateCard());
+		AddCard(GenerateCard());
+		AddCard(GenerateCard());
+	}
+	
+	private Card GenerateCard()
+	{		
+		TurnManager tm = TurnManager.instance;
+
+		Card randomCard = tm.RandomCard();
+		
+		if(randomCard.GetType() == typeof(UnitCard))
+		{
+			UnitCard randomCardComponent = (UnitCard)cardHolder.AddComponent(randomCard.GetType());
+			randomCardComponent.copyUnitCard((UnitCard)randomCard);
+			return randomCardComponent;
+		}
+		else if(randomCard.GetType() == typeof(SpellCard))
+		{
+			SpellCard randomCardComponent = (SpellCard)cardHolder.AddComponent(randomCard.GetType());
+			randomCardComponent.copySpellCard((SpellCard)randomCard);
+			return randomCardComponent;
+		}
+		else
+		{
+			Debug.LogError("Card type error! : " + randomCard.GetType().ToString());
+		}
+		
+		return new Card();
 	}
 	
 	#region AI Actions

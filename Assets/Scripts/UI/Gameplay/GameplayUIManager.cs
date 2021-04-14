@@ -92,6 +92,6 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
     public void endTurn()
     {
         myTurn = false;
-        //m_player.EndTurn();
+        GameLoop.instance.EndCurrentPlayer();
     }
 }
