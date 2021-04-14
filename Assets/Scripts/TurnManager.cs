@@ -732,7 +732,7 @@ public class TurnManager : Singleton<TurnManager>
         }
     }
 	
-	private Card RandomCard()
+	public Card RandomCard()
 	{
 		int random = Random.Range(0, 28);
 

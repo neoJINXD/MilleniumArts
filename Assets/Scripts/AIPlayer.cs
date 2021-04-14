@@ -30,6 +30,8 @@ public class AIPlayer : Player
 
     private IEnumerator SimulateTurn()
     {
+		PickUpCards();
+		
 		yield return CheckKingCondition();
 
 		if (PlayerMana > 0)
@@ -40,6 +42,17 @@ public class AIPlayer : Player
 		
         EndTurn();
     }
+	
+	private void PickUpCards()
+	{
+		TurnManager tm = TurnManager.instance;
+		m_playerCards.Clear();
+		AddCard(tm.RandomCard());
+		AddCard(tm.RandomCard());
+		AddCard(tm.RandomCard());
+		AddCard(tm.RandomCard());
+		AddCard(tm.RandomCard());
+	}
 	
 	#region AI Actions
 	

@@ -6,6 +6,8 @@ public class SpellCard : Card
 {
 	public SpellCard() {}
 	
+	public string description;
+	
     public SpellCard(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, string cardDesc, int cardAOEMin, int cardAOEMax)
     {
         id = cardId;
