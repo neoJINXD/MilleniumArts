@@ -102,13 +102,10 @@ public class AIPlayer : Player
 			
 			if(nearbyEnemyNodes.Count > 1)
 			{
-				// TODO: Move king away
-				/*
-				 * Select King
-				 *		Move king away, depending on resources, how many tiles?
-				 *		Could maybe do it last on the player AIs turn with it's remaining resources.
-				 */
-				
+				// move king away from closest enemy unit.
+				// need to figure out a way to cap depending on resources.
+				King.transform.position = nearbyEnemyNodes[0].worldPosition - King.transform.position;
+
 				// Bring closest ally to help
 				Unit closestAlly = GetClosestAlly(King.transform.position);
 				
