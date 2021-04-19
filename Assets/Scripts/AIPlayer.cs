@@ -235,14 +235,22 @@ public class AIPlayer : Player
 	//Should be in Unit.cs
 	private bool CanAttack(Unit currentUnit, Unit targetUnit)
 	{
-		// TODO
-		return false;
+		List<Node> nearbyEnemies = m_pathfinding.GetEnemyUnitNodesInRange(currentUnit.GetUnitPlayerID(),
+			currentUnit.transform.position, currentUnit.GetCanFly(), currentUnit.GetMinRange(),
+			currentUnit.GetMaxRange());
+		//Gets a list of nodes of nearby enemies and searches the target's node in this list
+		if (nearbyEnemies.Contains(m_pathfinding.gridRef.NodeFromWorldPoint(currentUnit.transform.position)))
+		{
+			return true; //return true if target's node is present, else false
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	private IEnumerator MoveUnit(Unit unit, Vector3 targetLocation) //not sure if this needs to be a coroutine
 	{
-		// TODO: get and set unit path
-		
 		PathRequestManager.RequestPath(unit.transform.position, targetLocation, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.OnPathFound, Pathfinding.Heuristic.TileDistance);
 		//request path will create a coroutine itself and move the unit to the desired location accordingly 
 		yield return null;
