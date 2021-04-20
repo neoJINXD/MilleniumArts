@@ -65,7 +65,8 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
 
     public void JoinGame()
     {
-        PhotonNetwork.LoadLevel("PhotonMain");
+        // PhotonNetwork.LoadLevel("PhotonMain");
+        PhotonNetwork.LoadLevel("PhotonGameMap");
     }
 
     // Callbacks
