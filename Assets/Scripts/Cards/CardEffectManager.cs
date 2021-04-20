@@ -45,10 +45,11 @@ public class CardEffectManager : Singleton<CardEffectManager>
         if (unit == Unit.UnitTypes.DragonRider)
             placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
-        placedUnit.CheckHostileTrapOrItemInNode(positionNode);
-
         int playerId = GameLoop.instance.GetCurrentPlayer().PlayerId;
-        
+        placedUnit.SetUnitPlayerID(playerId);
+
+        positionNode.AddUnit(placedUnit);
+
         //hardcoded color for test
         if (playerId == 0)
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
@@ -56,7 +57,11 @@ public class CardEffectManager : Singleton<CardEffectManager>
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.red;
         
         GameLoop.instance.GetCurrentPlayer().AddUnit(placedUnit);
-        
+
+        placedUnit.CheckHostileTrapOrItemInNode(positionNode);
+
+        TurnManager.instance.cardSuccessful = true;
+
         print(unit + " unit placed");
     }
     
@@ -425,6 +430,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
     public void spell_greed(int playerId)
     {
         // draw 2 cards
+        GameLoop.instance.GetCurrentPlayer().AddCard(TurnManager.instance.RandomCard());
+        GameLoop.instance.GetCurrentPlayer().AddCard(TurnManager.instance.RandomCard());
         TurnManager.instance.cardSuccessful = true;
     }
 
@@ -512,22 +519,9 @@ public class CardEffectManager : Singleton<CardEffectManager>
         }
     }
 
-    /*
-     * Card ID: 24
-     * Card Name: Teleport
-     * Type: Spell(Active)
-     * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Teleports a unit (1,2) tiles. 
-     * Cost: 2
-     */
-    public void spell_teleport(int playerId, Node selectedNode)
-    {
-        // teleport unit
-        TurnManager.instance.cardSuccessful = true;
-    }
 
     /*
-     * Card ID: 25
+     * Card ID: 24
      * Card ID: 
      * Card Name: Bear Trap
      * Type: Spell(Trap)
@@ -551,7 +545,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
     }
 
     /*
-     * Card ID: 26
+     * Card ID: 25
      * Card Name: Land Mine
      * Type: Spell(Trap)
      * Cast Range: (1, 2) tiles from any friendly unit
@@ -574,7 +568,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
     }
 
     /*
-     * Card ID: 27
+     * Card ID: 26
      * Card Name: Royal Pledge
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from a friendly King

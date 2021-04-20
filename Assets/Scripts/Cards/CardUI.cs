@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class CardUI : MonoBehaviour
 {
@@ -11,24 +12,24 @@ public class CardUI : MonoBehaviour
     public GameObject unitCardPanel;
     public GameObject spellCardPanel;
 
-    public Text cardCostText;
-    public Text cardNameText;
+    public TextMeshProUGUI cardCostText;
+    public TextMeshProUGUI cardNameText;
 
     // unit card specific
-    public Text cardHealthText;
-    public Text cardDamageText;
-    public Text cardDefenceText;
-    public Text cardAccuracyText;
-    public Text cardEvasionText;
-    public Text cardMSText;
-    public Text cardARText;
+    public TextMeshProUGUI cardHealthText;
+    public TextMeshProUGUI cardDamageText;
+    public TextMeshProUGUI cardDefenceText;
+    public TextMeshProUGUI cardAccuracyText;
+    public TextMeshProUGUI cardEvasionText;
+    public TextMeshProUGUI cardMSText;
+    public TextMeshProUGUI cardARText;
     public GameObject flyingPanel;
 
     // spell card specific
 
-    public Text cardRangeText;
-    public Text cardAOEText;
-    public Text cardDescriptionText;
+    public TextMeshProUGUI cardRangeText;
+    public TextMeshProUGUI cardAOEText;
+    public TextMeshProUGUI cardDescriptionText;
 
     void Awake()
     {
@@ -39,17 +40,17 @@ public class CardUI : MonoBehaviour
 
             unitCardPanel.SetActive(true);
 
-            cardCostText = unitCardPanel.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-            cardNameText = unitCardPanel.transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
+            cardCostText = unitCardPanel.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardNameText = unitCardPanel.transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
-            cardHealthText = unitCardPanel.transform.GetChild(2).transform.GetChild(0).GetComponent<Text>();
+            cardHealthText = unitCardPanel.transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
             flyingPanel = unitCardPanel.transform.GetChild(3).transform.GetChild(0).gameObject;
-            cardDamageText = unitCardPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
-            cardDefenceText = unitCardPanel.transform.GetChild(5).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
-            cardAccuracyText = unitCardPanel.transform.GetChild(6).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
-            cardEvasionText = unitCardPanel.transform.GetChild(7).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
-            cardMSText = unitCardPanel.transform.GetChild(8).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
-            cardARText = unitCardPanel.transform.GetChild(9).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
+            cardDamageText = unitCardPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardDefenceText = unitCardPanel.transform.GetChild(5).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardAccuracyText = unitCardPanel.transform.GetChild(6).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardEvasionText = unitCardPanel.transform.GetChild(7).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardMSText = unitCardPanel.transform.GetChild(8).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardARText = unitCardPanel.transform.GetChild(9).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 }
         else if (this.GetComponent<SpellCard>() != null)
         {
@@ -57,40 +58,13 @@ public class CardUI : MonoBehaviour
             spellCardPanel = this.transform.GetChild(1).gameObject;
 
             spellCardPanel.SetActive(true);
-            cardCostText = spellCardPanel.transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-            cardNameText = spellCardPanel.transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
+            cardCostText = spellCardPanel.transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardNameText = spellCardPanel.transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
-            cardRangeText = spellCardPanel.transform.GetChild(3).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
-            cardAOEText = spellCardPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<Text>();
-            cardDescriptionText = spellCardPanel.transform.GetChild(5).transform.GetChild(0).GetComponent<Text>();
+            cardRangeText = spellCardPanel.transform.GetChild(3).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardAOEText = spellCardPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+            cardDescriptionText = spellCardPanel.transform.GetChild(5).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
-        }
-
-        int zoomInTextScaleValue = 3;
-        if (transform.parent.gameObject == GameplayUIManager.instance.cardZoomInPanel)
-        {
-            if (unitCard != null)
-            {
-                cardCostText.fontSize = cardCostText.fontSize * zoomInTextScaleValue;
-                cardNameText.fontSize = cardNameText.fontSize * zoomInTextScaleValue;
-
-                cardHealthText.fontSize = cardHealthText.fontSize * zoomInTextScaleValue;
-                cardDamageText.fontSize = cardDamageText.fontSize * zoomInTextScaleValue;
-                cardDefenceText.fontSize = cardDefenceText.fontSize * zoomInTextScaleValue;
-                cardARText.fontSize = cardARText.fontSize * zoomInTextScaleValue;
-                cardAccuracyText.fontSize = cardAccuracyText.fontSize * zoomInTextScaleValue;
-                cardEvasionText.fontSize = cardEvasionText.fontSize * zoomInTextScaleValue;
-                cardMSText.fontSize = cardMSText.fontSize * zoomInTextScaleValue;
-            }
-            else if (spellCard != null)
-            {
-                cardCostText.fontSize = cardCostText.fontSize * zoomInTextScaleValue;
-                cardNameText.fontSize = cardNameText.fontSize * zoomInTextScaleValue;
-
-                cardRangeText.fontSize = cardRangeText.fontSize * zoomInTextScaleValue;
-                cardAOEText.fontSize = cardAOEText.fontSize * zoomInTextScaleValue;
-                cardDescriptionText.fontSize = cardDescriptionText.fontSize * 2; //3 is too big
-            }
         }
     }
 
