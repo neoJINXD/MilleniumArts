@@ -394,7 +394,7 @@ public class Unit : MonoBehaviour
 
         if (currentHealth < 1)
         {
-            GameLoop.instance.GetCurrentPlayer().RemoveUnit(this);
+            GameLoop.instance.GetPlayer(unitPlayerId).RemoveUnit(this);
             Destroy(gameObject);
         }
     }
