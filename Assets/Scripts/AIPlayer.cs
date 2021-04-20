@@ -151,11 +151,12 @@ public class AIPlayer : Player
 
 	private IEnumerator CheckCards()
 	{
-		foreach (Card playerCard in m_playerCards)
+		for (var i = 0; i < m_playerCards.Count; i++)
 		{
+			Card playerCard = m_playerCards[i];
 			if (playerCard.cost < PlayerMana && CardIsValued(playerCard))
 			{
-				// TODO: yield return PlayCard() 
+				PlayCard(i); 
 				yield return new WaitForSeconds(0.2f);
 			}
 		}
@@ -163,6 +164,8 @@ public class AIPlayer : Player
 
 	private bool CardIsValued(Card card)
 	{
+		return true;
+		
 		if (m_behaviour == BehaviourType.Aggressive)
 		{
 			if (card.castType == CastType.OnEnemy)
@@ -193,6 +196,27 @@ public class AIPlayer : Player
 		return true;
 	}
 
+	public override void PlayCard(int cardIndex)
+	{
+		if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
+		{
+			Card cardToPlay = GetCard(cardIndex);
+			if (cardToPlay.cost <= PlayerMana)
+			{
+				PlacerManager.instance.PlaceCard(this, cardToPlay, cardIndex,
+					new Vector3(Random.Range(-10, 10), 0, Random.Range(-10f, 10f)));
+			}
+			else
+			{
+				Debug.LogWarning("Not enough mana");
+			}
+		}
+		else
+		{
+			Debug.LogError("Player out of cards or bad card index");
+		}
+	}
+	
 	private IEnumerator AttackWithUnits()
 	{
 		if (m_behaviour == BehaviourType.Aggressive)
@@ -291,25 +315,5 @@ public class AIPlayer : Player
 		
 		return closestUnit;
 	}
-
-    public override void PlayCard(int cardIndex)
-    {
-        if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
-        {
-            Card cardToPlay = GetCard(cardIndex);
-            if (cardToPlay.cost <= PlayerMana)
-            {
-                PlacerManager.instance.PlaceCard(this, cardToPlay, cardIndex,
-                    new Vector3(Random.Range(-10, 10), 0, Random.Range(-10f, 10f)));
-            }
-            else
-            {
-                Debug.LogWarning("Not enough mana");
-            }
-        }
-        else
-        {
-            Debug.LogError("Player out of cards or bad card index");
-        }
-    }
+	
 }

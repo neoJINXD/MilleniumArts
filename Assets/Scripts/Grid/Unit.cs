@@ -8,23 +8,22 @@ using UnityEngine.Serialization;
 
 public class Unit : MonoBehaviour 
 {
+    protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
+    public UnitTypes unitType;
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
-    
-    protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
-    public UnitTypes unitType { get; private set; }
     [SerializeField] protected int unitPlayerId;
-    protected int maxHealth;
-    protected int currentHealth;
-    protected int damage;
-    protected int defense;
-    protected int minRange;
-    protected int maxRange;
-    protected int accuracy;
-    protected int evasion;
-    protected int cost;
-    protected Node[] path;
-    protected int targetIndex;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] protected int currentHealth;
+    [SerializeField] protected int damage;
+    [SerializeField] protected int defense;
+    [SerializeField] protected int minRange;
+    [SerializeField] protected int maxRange;
+    [SerializeField] protected int accuracy;
+    [SerializeField] protected int evasion;
+    [SerializeField] protected int cost;
+    [SerializeField] protected Node[] path;
+    [SerializeField] protected int targetIndex;
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
     public bool isClicked = false;

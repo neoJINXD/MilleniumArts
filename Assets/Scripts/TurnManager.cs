@@ -234,7 +234,7 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (selectedNode.unitInThisNode == null)
             {
-                cardEffectManager.createSoldierUnit(1, selectedNode); // assuming enemy player id = 1
+                cardEffectManager.CreateUnit(Unit.UnitTypes.Soldier, selectedNode); // assuming enemy player id = 1
             }
         }
         currentTurnState = TurnState.Free;
@@ -593,29 +593,27 @@ public class TurnManager : Singleton<TurnManager>
             }
             else if (storedCard.castType == CastType.OnEmpty)
             {
-                if (selectedNode.unitInThisNode == null)
-                {
-                    if (storedCard.id == 0) // spawn soldier
-                        cardEffectManager.createSoldierUnit(currentPlayer.PlayerId, selectedNode);
-                    else if (storedCard.id == 1) // spawn Knight
-                        cardEffectManager.createKnightUnit(currentPlayer.PlayerId, selectedNode);
-                    else if (storedCard.id == 2) // spawn Assassin
-                        cardEffectManager.createAssassinUnit(currentPlayer.PlayerId, selectedNode);
-                    else if (storedCard.id == 3) // spawn Priest
-                        cardEffectManager.createPriestUnit(currentPlayer.PlayerId, selectedNode);
-                    else if (storedCard.id == 4) // spawn Archer
-                        cardEffectManager.createArcherUnit(currentPlayer.PlayerId, selectedNode);
-                    else if (storedCard.id == 5) // spawn Dragon Rider
-                        cardEffectManager.createDragonRiderUnit(currentPlayer.PlayerId, selectedNode);
-                    else if (storedCard.id == 16)
-                        cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-                    else if (storedCard.id == 17)
-                        cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-                    else if (storedCard.id == 25)
-                        cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
-                    else if (storedCard.id == 26)
-                        cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode);
-                }
+	            if (storedCard as UnitCard)
+	            {
+		            if (selectedNode.unitInThisNode == null)
+		            {
+			            cardEffectManager.CreateUnit(((UnitCard)storedCard).UnitType, selectedNode);
+		            }
+	            }
+	            else
+	            {
+		            if (selectedNode.unitInThisNode == null)
+		            {
+			            if (storedCard.id == 16)
+				            cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+			            else if (storedCard.id == 17)
+				            cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+			            else if (storedCard.id == 25)
+				            cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
+			            else if (storedCard.id == 26)
+				            cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode);
+		            }
+	            }
             }
             else if (storedCard.castType == CastType.OnAny)
             {
@@ -732,6 +730,9 @@ public class TurnManager : Singleton<TurnManager>
         }
     }
 	
+    //Would be much easier if this was modular and hardcoding all the unit stats wasnt a requirement. I would suggets 
+    //copying unit data from a Unit prefab or a spell prefab. Otherwise if you change any unit stats you have to change
+    //it in multiple places
 	public Card RandomCard()
 	{
 		int random = Random.Range(0, 28);
@@ -742,7 +743,7 @@ public class TurnManager : Singleton<TurnManager>
 			switch (random)
 			{
 				case 0:
-
+					card.UnitType = Unit.UnitTypes.Soldier;
 					card.id = 0;
 					card.castType = CastType.OnEmpty;
 					card.name = "Soldier";
@@ -764,7 +765,7 @@ public class TurnManager : Singleton<TurnManager>
 					break;
 
 				case 1:
-
+					card.UnitType = Unit.UnitTypes.Knight;
 					card.id = 1;
 					card.castType = CastType.OnEmpty;
 					card.name = "Knight";
@@ -786,7 +787,7 @@ public class TurnManager : Singleton<TurnManager>
 					break;
 
 				case 2:
-
+					card.UnitType = Unit.UnitTypes.Assassin;
 					card.id = 2;
 					card.castType = CastType.OnEmpty;
 					card.name = "Assassin";
@@ -808,7 +809,7 @@ public class TurnManager : Singleton<TurnManager>
 					break;
 
 				case 3:
-
+					card.UnitType = Unit.UnitTypes.Priest;
 					card.id = 3;
 					card.castType = CastType.OnEmpty;
 					card.name = "Priest";
@@ -830,7 +831,7 @@ public class TurnManager : Singleton<TurnManager>
 					break;
 
 				case 4:
-
+					card.UnitType = Unit.UnitTypes.Archer;
 					card.id = 4;
 					card.castType = CastType.OnEmpty;
 					card.name = "Archer";
@@ -852,7 +853,7 @@ public class TurnManager : Singleton<TurnManager>
 					break;
 
 				case 5:
-
+					card.UnitType = Unit.UnitTypes.DragonRider;
 					card.id = 5;
 					card.castType = CastType.OnEmpty;
 					card.name = "Dragon Rider";
@@ -957,7 +958,7 @@ public class TurnManager : Singleton<TurnManager>
 					card.maxRange = 0;
 					card.aoeMinRange = 0;
 					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s current and maximum Health by 5.";
+					card.description = "Increases an ally unitâ€™s current and maximum Health by 5.";
 
 					break;
 
@@ -973,7 +974,7 @@ public class TurnManager : Singleton<TurnManager>
 					card.maxRange = 0;
 					card.aoeMinRange = 0;
 					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s Defence by 2.";
+					card.description = "Increases an ally unitâ€™s Defence by 2.";
 
 					break;
 
@@ -989,7 +990,7 @@ public class TurnManager : Singleton<TurnManager>
 					card.maxRange = 0;
 					card.aoeMinRange = 0;
 					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s Damage by 3.";
+					card.description = "Increases an ally unitâ€™s Damage by 3.";
 
 					break;
 
@@ -1005,7 +1006,7 @@ public class TurnManager : Singleton<TurnManager>
 					card.maxRange = 0;
 					card.aoeMinRange = 0;
 					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s movement speed by 1.";
+					card.description = "Increases an ally unitâ€™s movement speed by 1.";
 
 					break;
 
@@ -1021,7 +1022,7 @@ public class TurnManager : Singleton<TurnManager>
 					card.maxRange = 0;
 					card.aoeMinRange = 0;
 					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s Evasion by 10.";
+					card.description = "Increases an ally unitâ€™s Evasion by 10.";
 
 					break;
 
@@ -1037,7 +1038,7 @@ public class TurnManager : Singleton<TurnManager>
 					card.maxRange = 0;
 					card.aoeMinRange = 0;
 					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s Accuracy by 10.";
+					card.description = "Increases an ally unitâ€™s Accuracy by 10.";
 
 					break;
 

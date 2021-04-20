@@ -110,5 +110,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 10
   canFly: 0
+  unitType: 7
   unitPlayerId: -1
+  maxHealth: 30
+  currentHealth: 30
+  damage: 7
+  defense: 2
+  minRange: 1
+  maxRange: 1
+  accuracy: 90
+  evasion: 30
+  cost: 0
+  targetIndex: 0
   isClicked: 0

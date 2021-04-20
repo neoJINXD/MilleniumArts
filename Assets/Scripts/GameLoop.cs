@@ -15,6 +15,7 @@ public class GameLoop : Singleton<GameLoop>
     [SerializeField] private List<Player> players = new List<Player>();
 
     private int index;
+    private int turnMana = 3;
 
     //To be able to wait for local player, networked player, and AI player turns
     public IEnumerator Play()
@@ -26,12 +27,18 @@ public class GameLoop : Singleton<GameLoop>
         
         while (true)
         {
+            foreach (var player in players)
+            {
+                player.PlayerMana = turnMana;
+            }
+            
             for (index = 0; index < players.Count; index++)
             {
                 Player player = players[index];
                 player.StartTurn();
                 Debug.Log("Player " + index + "'s turn.");
                 yield return new WaitUntil(() => player.TurnComplete);
+                turnMana++;
             }
         }
     }

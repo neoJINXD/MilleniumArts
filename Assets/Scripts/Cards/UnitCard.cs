@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UnitCard : Card
 {
+    public Unit.UnitTypes UnitType;
     public int health;
     public int damage;
     public int defence;
@@ -44,6 +45,7 @@ public class UnitCard : Card
 
     public void copyUnitCard(UnitCard copyCard)
     {
+        UnitType = copyCard.UnitType;
         id = copyCard.id;
         castType = copyCard.castType;
         name = copyCard.name;

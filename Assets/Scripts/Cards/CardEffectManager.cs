@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class CardEffectManager : MonoBehaviour
 {
-    [SerializeField] private GameObject unitCreation;
-
+    [SerializeField] private Unit m_soldier;
+    [SerializeField] private Unit m_knight;
+    [SerializeField] private Unit m_assassin;
+    [SerializeField] private Unit m_priest;
+    [SerializeField] private Unit m_archer;
+    [SerializeField] private Unit m_dragonRider;
+    
     private bool placerClicked = false;
     private const float lockAxis = 27f;
 
@@ -22,212 +27,34 @@ public class CardEffectManager : MonoBehaviour
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
     {
+        Unit placedUnit = null;
+        
+        if (unit == Unit.UnitTypes.Soldier)
+            placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.Knight)
+            placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.Assassin)
+            placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.Priest)
+            placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.Archer)
+            placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.DragonRider)
+            placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
-    }
-    // Card ID = 0
-    // create Soldier unit
-    public void createSoldierUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Soldier.");
-        Unit soldierUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        placedUnit.CheckHostileTrapOrItemInNode(positionNode);
 
-        soldierUnit.SetMovementSpeed(4);
-        soldierUnit.SetCanFly(false);
-        soldierUnit.SetUnitType(Unit.UnitTypes.Soldier);
-        soldierUnit.SetUnitPlayerID(playerId);
-        soldierUnit.SetMaxHealth(10);
-        soldierUnit.SetCurrentHealth(10);
-        soldierUnit.SetDamage(5);
-        soldierUnit.SetDefence(1);
-        soldierUnit.SetMinRange(1);
-        soldierUnit.SetMaxRange(1);
-        soldierUnit.SetAccuracy(80);
-        soldierUnit.SetEvasion(20);
-
-        selectedNode.AddUnit(soldierUnit);
-
-        soldierUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
+        int playerId = GameLoop.instance.GetCurrentPlayer().PlayerId;
+        
         //hardcoded color for test
         if (playerId == 0)
-            soldierUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
+            placedUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
         else
-            soldierUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-
-        TurnManager.instance.cardSuccessful = true;
+            placedUnit.transform.GetComponent<Renderer>().material.color = Color.red;
     }
-
-    // Card ID = 1
-    // create Knight unit
-    public void createKnightUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Knight.");
-
-        Unit knightUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        knightUnit.SetMovementSpeed(3);
-        knightUnit.SetCanFly(false);
-        knightUnit.SetUnitType(Unit.UnitTypes.Knight);
-        knightUnit.SetUnitPlayerID(playerId);
-        knightUnit.SetMaxHealth(20);
-        knightUnit.SetCurrentHealth(20);
-        knightUnit.SetDamage(7);
-        knightUnit.SetDefence(3);
-        knightUnit.SetMinRange(1);
-        knightUnit.SetMaxRange(1);
-        knightUnit.SetAccuracy(70);
-        knightUnit.SetEvasion(10);
-
-        selectedNode.AddUnit(knightUnit.GetComponent<Unit>());
-
-        knightUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            knightUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            knightUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-
-        TurnManager.instance.cardSuccessful = true;
-    }
-
-    // Card ID = 2
-    // create Assassin unit
-    public void createAssassinUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Assassin.");
-
-        Unit assassinUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        assassinUnit.SetMovementSpeed(6);
-        assassinUnit.SetCanFly(false);
-        assassinUnit.SetUnitType(Unit.UnitTypes.Assassin);
-        assassinUnit.SetUnitPlayerID(playerId);
-        assassinUnit.SetMaxHealth(15);
-        assassinUnit.SetCurrentHealth(15);
-        assassinUnit.SetDamage(9);
-        assassinUnit.SetDefence(0);
-        assassinUnit.SetMinRange(1);
-        assassinUnit.SetMaxRange(1);
-        assassinUnit.SetAccuracy(95);
-        assassinUnit.SetEvasion(60);
-
-        selectedNode.AddUnit(assassinUnit);
-
-        assassinUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            assassinUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            assassinUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-
-        TurnManager.instance.cardSuccessful = true;
-    }
-
-    // Card ID = 3
-    // create Priest unit
-    public void createPriestUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Priest.");
-        Unit priestUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        priestUnit.SetMovementSpeed(4);
-        priestUnit.SetCanFly(false);
-        priestUnit.SetUnitType(Unit.UnitTypes.Priest);
-        priestUnit.SetUnitPlayerID(playerId);
-        priestUnit.SetMaxHealth(15);
-        priestUnit.SetCurrentHealth(15);
-        priestUnit.SetDamage(5);
-        priestUnit.SetDefence(0);
-        priestUnit.SetMinRange(0);
-        priestUnit.SetMaxRange(2);
-        priestUnit.SetAccuracy(100);
-        priestUnit.SetEvasion(30);
-
-        selectedNode.AddUnit(priestUnit);
-
-        priestUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            priestUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            priestUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-
-        TurnManager.instance.cardSuccessful = true;
-    }
-
-    // Card ID = 4
-    // create Archer unit
-    public void createArcherUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Archer.");
-        Unit archerUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        archerUnit.SetMovementSpeed(4);
-        archerUnit.SetCanFly(false);
-        archerUnit.SetUnitType(Unit.UnitTypes.Archer);
-        archerUnit.SetUnitPlayerID(playerId);
-        archerUnit.SetMaxHealth(15);
-        archerUnit.SetCurrentHealth(15);
-        archerUnit.SetDamage(6);
-        archerUnit.SetDefence(0);
-        archerUnit.SetMinRange(2);
-        archerUnit.SetMaxRange(3);
-        archerUnit.SetAccuracy(90);
-        archerUnit.SetEvasion(30);
-
-        selectedNode.AddUnit(archerUnit);
-
-        archerUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            archerUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            archerUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-
-        TurnManager.instance.cardSuccessful = true;
-    }
-
-    // Card ID = 5
-    // create Dragon Rider unit
-    public void createDragonRiderUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Dragon Rider.");
-        Unit dragonRiderUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        dragonRiderUnit.SetMovementSpeed(6);
-        dragonRiderUnit.SetCanFly(false);
-        dragonRiderUnit.SetUnitType(Unit.UnitTypes.DragonRider);
-        dragonRiderUnit.SetUnitPlayerID(playerId);
-        dragonRiderUnit.SetMaxHealth(25);
-        dragonRiderUnit.SetCurrentHealth(25);
-        dragonRiderUnit.SetDamage(6);
-        dragonRiderUnit.SetDefence(2);
-        dragonRiderUnit.SetMinRange(1);
-        dragonRiderUnit.SetMaxRange(1);
-        dragonRiderUnit.SetAccuracy(85);
-        dragonRiderUnit.SetEvasion(20);
-
-        selectedNode.AddUnit(dragonRiderUnit);
-
-        dragonRiderUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            dragonRiderUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            dragonRiderUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-
-        TurnManager.instance.cardSuccessful = true;
-    }
-
-
+    
     /*
      * Card ID: 6
      * Card Name: Smite
@@ -341,7 +168,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Vitality
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s current and maximum Health by 5.
+     * Effect: Increases an ally unitâ€™s current and maximum Health by 5.
      * Cost: 1
      */
     public void spell_vitality(int playerId, Node selectedNode)
@@ -365,7 +192,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Endurance
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s Defence by 2.
+     * Effect: Increases an ally unitâ€™s Defence by 2.
      * Cost: 2
      */
     public void spell_endurance(int playerId, Node selectedNode)
@@ -388,7 +215,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Vigor
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s Damage by 3.
+     * Effect: Increases an ally unitâ€™s Damage by 3.
      * Cost: 2
      */
     public void spell_vigor(int playerId, Node selectedNode)
@@ -410,7 +237,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Nimbleness
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s movement speed by 1.
+     * Effect: Increases an ally unitâ€™s movement speed by 1.
      * Cost: 2
      */
     public void spell_nimbleness(int playerId, Node selectedNode)
@@ -433,7 +260,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Agility
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s Evasion by 10.
+     * Effect: Increases an ally unitâ€™s Evasion by 10.
      * Cost: 2
      */
     public void spell_agility(int playerId, Node selectedNode)
@@ -455,7 +282,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Precision
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s current and Accuracy by 10.
+     * Effect: Increases an ally unitâ€™s current and Accuracy by 10.
      * Cost: 2
      */
     public void spell_precision(int playerId, Node selectedNode)
@@ -573,7 +400,7 @@ public class CardEffectManager : MonoBehaviour
         if(unitCountAroundOrigin == 0)
         {
             foreach (Node node in allNodesInRange)
-                createSoldierUnit(playerId, node);
+                CreateUnit(Unit.UnitTypes.Soldier, node);
             TurnManager.instance.cardSuccessful = true;
             print("Player " + playerId + " used Provisions!");
         }

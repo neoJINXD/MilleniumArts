@@ -29,9 +29,17 @@ public class PlacerManager : Singleton<PlacerManager>
     public void PlaceCard(Player currentPlayer, Card card, int cardIndex, Vector3 targetLocation)
     {
         //TODO: replace with check for type of card instead of just using a unit (e.i. spells or traps too)
-        Unit unitPlaced = Instantiate(unitCreation, targetLocation, Quaternion.identity);
+        if (card.GetType() == typeof(SpellCard))
+        {
+            
+        }
+        else
+        {
+            //Unit unitPlaced = Instantiate(, targetLocation, Quaternion.identity);
+           // currentPlayer.AddUnit(unitPlaced);
+        }
+        
         currentPlayer.RemoveCard(cardIndex);
-        currentPlayer.AddUnit(unitPlaced);
     }
 
     private void Update()
