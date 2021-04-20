@@ -666,9 +666,7 @@ public class TurnManager : Singleton<TurnManager>
 	            if (storedCard as UnitCard)
 	            {
 		            if (selectedNode.unitInThisNode == null)
-		            {
 			            cardEffectManager.CreateUnit(((UnitCard)storedCard).UnitType, selectedNode);
-		            }
 	            }
 	            else
 	            {

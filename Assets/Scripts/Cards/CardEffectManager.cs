@@ -60,6 +60,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
         placedUnit.CheckHostileTrapOrItemInNode(positionNode);
 
+        TurnManager.instance.cardSuccessful = true;
+
         print(unit + " unit placed");
     }
     
