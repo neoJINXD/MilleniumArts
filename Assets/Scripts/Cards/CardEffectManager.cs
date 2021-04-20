@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zone.Core.Utils;
 
-public class CardEffectManager : MonoBehaviour
+public class CardEffectManager : Singleton<CardEffectManager>
 {
-    [SerializeField] private GameObject unitCreation;
-
+    [SerializeField] private Unit m_soldier;
+    [SerializeField] private Unit m_knight;
+    [SerializeField] private Unit m_assassin;
+    [SerializeField] private Unit m_priest;
+    [SerializeField] private Unit m_archer;
+    [SerializeField] private Unit m_dragonRider;
+    
     private bool placerClicked = false;
     private const float lockAxis = 27f;
 
@@ -22,207 +28,45 @@ public class CardEffectManager : MonoBehaviour
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
     {
+        Unit placedUnit = null;
+        
+        if (unit == Unit.UnitTypes.Soldier)
+            placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.Knight)
+            placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.Assassin)
+            placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.Priest)
+            placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.Archer)
+            placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        if (unit == Unit.UnitTypes.DragonRider)
+            placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
-    }
-    // Card ID = 0
-    // create Soldier unit
-    public void createSoldierUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Soldier.");
-        Unit soldierUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+        placedUnit.CheckHostileTrapOrItemInNode(positionNode);
 
-        soldierUnit.SetMovementSpeed(4);
-        soldierUnit.SetCanFly(false);
-        soldierUnit.SetUnitType(Unit.UnitTypes.Soldier);
-        soldierUnit.SetUnitPlayerID(playerId);
-        soldierUnit.SetMaxHealth(10);
-        soldierUnit.SetCurrentHealth(10);
-        soldierUnit.SetDamage(5);
-        soldierUnit.SetDefence(1);
-        soldierUnit.SetMinRange(1);
-        soldierUnit.SetMaxRange(1);
-        soldierUnit.SetAccuracy(80);
-        soldierUnit.SetEvasion(20);
-
-        selectedNode.AddUnit(soldierUnit);
-
-        soldierUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
+        int playerId = GameLoop.instance.GetCurrentPlayer().PlayerId;
+        
         //hardcoded color for test
         if (playerId == 0)
-            soldierUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
+            placedUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
         else
-            soldierUnit.transform.GetComponent<Renderer>().material.color = Color.red;
+            placedUnit.transform.GetComponent<Renderer>().material.color = Color.red;
+        
+        GameLoop.instance.GetCurrentPlayer().AddUnit(placedUnit);
+        
+        print(unit + " unit placed");
     }
-
-    // Card ID = 1
-    // create Knight unit
-    public void createKnightUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Knight.");
-
-        Unit knightUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        knightUnit.SetMovementSpeed(3);
-        knightUnit.SetCanFly(false);
-        knightUnit.SetUnitType(Unit.UnitTypes.Knight);
-        knightUnit.SetUnitPlayerID(playerId);
-        knightUnit.SetMaxHealth(30);
-        knightUnit.SetCurrentHealth(30);
-        knightUnit.SetDamage(7);
-        knightUnit.SetDefence(1);
-        knightUnit.SetMinRange(1);
-        knightUnit.SetMaxRange(1);
-        knightUnit.SetAccuracy(70);
-        knightUnit.SetEvasion(10);
-
-        selectedNode.AddUnit(knightUnit.GetComponent<Unit>());
-
-        knightUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            knightUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            knightUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-    }
-
-    // Card ID = 2
-    // create Assassin unit
-    public void createAssassinUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Assassin.");
-
-        Unit assassinUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        assassinUnit.SetMovementSpeed(8);
-        assassinUnit.SetCanFly(false);
-        assassinUnit.SetUnitType(Unit.UnitTypes.Assassin);
-        assassinUnit.SetUnitPlayerID(playerId);
-        assassinUnit.SetMaxHealth(30);
-        assassinUnit.SetCurrentHealth(30);
-        assassinUnit.SetDamage(9);
-        assassinUnit.SetDefence(0);
-        assassinUnit.SetMinRange(1);
-        assassinUnit.SetMaxRange(1);
-        assassinUnit.SetAccuracy(95);
-        assassinUnit.SetEvasion(60);
-
-        selectedNode.AddUnit(assassinUnit);
-
-        assassinUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            assassinUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            assassinUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-    }
-
-    // Card ID = 3
-    // create Priest unit
-    public void createPriestUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Priest.");
-        Unit priestUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        priestUnit.SetMovementSpeed(4);
-        priestUnit.SetCanFly(false);
-        priestUnit.SetUnitType(Unit.UnitTypes.Priest);
-        priestUnit.SetUnitPlayerID(playerId);
-        priestUnit.SetMaxHealth(15);
-        priestUnit.SetCurrentHealth(15);
-        priestUnit.SetDamage(5);
-        priestUnit.SetDefence(0);
-        priestUnit.SetMinRange(0);
-        priestUnit.SetMaxRange(2);
-        priestUnit.SetAccuracy(100);
-        priestUnit.SetEvasion(30);
-
-        selectedNode.AddUnit(priestUnit);
-
-        priestUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            priestUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            priestUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-    }
-
-    // Card ID = 4
-    // create Archer unit
-    public void createArcherUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Archer.");
-        Unit archerUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        archerUnit.SetMovementSpeed(4);
-        archerUnit.SetCanFly(false);
-        archerUnit.SetUnitType(Unit.UnitTypes.Archer);
-        archerUnit.SetUnitPlayerID(playerId);
-        archerUnit.SetMaxHealth(15);
-        archerUnit.SetCurrentHealth(15);
-        archerUnit.SetDamage(6);
-        archerUnit.SetDefence(0);
-        archerUnit.SetMinRange(2);
-        archerUnit.SetMaxRange(3);
-        archerUnit.SetAccuracy(90);
-        archerUnit.SetEvasion(30);
-
-        selectedNode.AddUnit(archerUnit);
-
-        archerUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            archerUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            archerUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-    }
-
-    // Card ID = 5
-    // create Dragon Rider unit
-    public void createDragonRiderUnit(int playerId, Node selectedNode)
-    {
-        print("Player " + playerId + " used Unit: Dragon Rider.");
-        Unit dragonRiderUnit = Object.Instantiate(unitCreation, selectedNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-
-        dragonRiderUnit.SetMovementSpeed(6);
-        dragonRiderUnit.SetCanFly(false);
-        dragonRiderUnit.SetUnitType(Unit.UnitTypes.DragonRider);
-        dragonRiderUnit.SetUnitPlayerID(playerId);
-        dragonRiderUnit.SetMaxHealth(25);
-        dragonRiderUnit.SetCurrentHealth(25);
-        dragonRiderUnit.SetDamage(6);
-        dragonRiderUnit.SetDefence(2);
-        dragonRiderUnit.SetMinRange(1);
-        dragonRiderUnit.SetMaxRange(1);
-        dragonRiderUnit.SetAccuracy(85);
-        dragonRiderUnit.SetEvasion(20);
-
-        selectedNode.AddUnit(dragonRiderUnit);
-
-        dragonRiderUnit.CheckHostileTrapOrItemInNode(selectedNode);
-
-        //hardcoded color for test
-        if (playerId == 0)
-            dragonRiderUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
-        else
-            dragonRiderUnit.transform.GetComponent<Renderer>().material.color = Color.red;
-    }
-
-
+    
     /*
      * Card ID: 6
      * Card Name: Smite
      * Type: Spell(Active)
      * Cast Range: (1,1) tiles from a friendly unit
      * Effect: Damages an enemy unit for 5 health.
-     * Cost: 3
+     * Cost: 2
      */
     public void spell_smite(int playerId, Node selectedNode)
     {
@@ -232,6 +76,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
             {
                 selectedNode.unitInThisNode.DecreaseCurrentHealthBy(5); // smite damage
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Smite");
             }
         }
@@ -241,7 +86,7 @@ public class CardEffectManager : MonoBehaviour
      * Card ID: 7
      * Card Name: Snipe
      * Type: Spell(Active)
-     * Cast Range: (1,1) tiles from a friendly unit
+     * Cast Range: (1,3) tiles from a friendly unit
      * Effect: Damages an enemy unit for 10 health.
      * Cost: 3
      */
@@ -253,6 +98,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
             {
                 selectedNode.unitInThisNode.DecreaseCurrentHealthBy(10); // smite damage
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Smite");
             }
         }
@@ -264,7 +110,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 3) tiles from a friendly unit
      * Effect: Damages all enemies within (0,1) tiles of the casting origin for 3 health.
-     * Cost: 3
+     * Cost: 5
      */
     public void spell_heavenlySmite(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
@@ -285,6 +131,7 @@ public class CardEffectManager : MonoBehaviour
         foreach (Node node in getEnemyNodesInRange)
         {
             node.GetUnit().DecreaseCurrentHealthBy(3);
+            TurnManager.instance.cardSuccessful = true;
             print("Card Effect Sucessful: Heavenly Smite");
         }
     }
@@ -295,7 +142,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 2) tiles from a friendly priest
      * Effect: Heal all allies within (0,1) tiles of the casting origin for 3 health.
-     * Cost: 3
+     * Cost: 4
      */
     public void spell_prayer(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
@@ -316,6 +163,7 @@ public class CardEffectManager : MonoBehaviour
         foreach (Node node in getAllyNodesInRange)
         {
             node.GetUnit().IncreaseCurrentHealthBy(3);
+            TurnManager.instance.cardSuccessful = true;
             print("Card Effect Sucessful: Prayer");
         }
     }
@@ -325,8 +173,8 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Vitality
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s current and maximum Health by 5.
-     * Cost: 3
+     * Effect: Increases an ally unitâ€™s current and maximum Health by 5.
+     * Cost: 1
      */
     public void spell_vitality(int playerId, Node selectedNode)
     {
@@ -338,6 +186,7 @@ public class CardEffectManager : MonoBehaviour
             {
                 selectedNode.unitInThisNode.IncreaseMaxHealthBy(5);
                 selectedNode.unitInThisNode.IncreaseCurrentHealthBy(5);
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Vitality");
             }
         }
@@ -348,7 +197,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Endurance
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s Defence by 2.
+     * Effect: Increases an ally unitâ€™s Defence by 2.
      * Cost: 2
      */
     public void spell_endurance(int playerId, Node selectedNode)
@@ -360,6 +209,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
                 selectedNode.unitInThisNode.IncreaseDefenceBy(2);
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Endurance");
             }
         }
@@ -370,7 +220,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Vigor
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s Damage by 3.
+     * Effect: Increases an ally unitâ€™s Damage by 3.
      * Cost: 2
      */
     public void spell_vigor(int playerId, Node selectedNode)
@@ -381,6 +231,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
                 selectedNode.unitInThisNode.IncreaseDamageBy(3);
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Vigor");
             }
         }
@@ -391,7 +242,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Nimbleness
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s movement speed by 1.
+     * Effect: Increases an ally unitâ€™s movement speed by 1.
      * Cost: 2
      */
     public void spell_nimbleness(int playerId, Node selectedNode)
@@ -403,6 +254,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
                 selectedNode.unitInThisNode.IncreaseMovementSpeedBy(1);
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Nimbleness");
             }
         }
@@ -413,7 +265,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Agility
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s Evasion by 10.
+     * Effect: Increases an ally unitâ€™s Evasion by 10.
      * Cost: 2
      */
     public void spell_agility(int playerId, Node selectedNode)
@@ -424,6 +276,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
                 selectedNode.unitInThisNode.IncreaseEvasionBy(10);
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Agility");
             }
         }
@@ -434,7 +287,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Precision
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
-     * Effect: Increases an ally unit’s current and Accuracy by 10.
+     * Effect: Increases an ally unitâ€™s current and Accuracy by 10.
      * Cost: 2
      */
     public void spell_precision(int playerId, Node selectedNode)
@@ -446,6 +299,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
                 selectedNode.unitInThisNode.IncreaseAccuracyBy(10);
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Precision");
             }
         }
@@ -459,7 +313,7 @@ public class CardEffectManager : MonoBehaviour
      * Effect: Reveals all traps within (0,2) tiles of the triggering origin
      * Cost: 2
      */
-    public void Oracle(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    public void spell_oracle(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
         print("Player " + playerId + " used Oracle!");
 
@@ -476,17 +330,19 @@ public class CardEffectManager : MonoBehaviour
                 }
             }
         }
+
+        TurnManager.instance.cardSuccessful = true;
     }
 
     /*
      * Card ID: 17
      * Card Name: Disarm Trap
      * Type: Spell(Trap)
-     * Cast Range: (0, 3) tiles from any friendly unit
+     * Cast Range: (1, 3) tiles from any friendly unit
      * Effect: Attempts to disarm an enemy trap on a tile.
      * Cost: 1
      */
-    public void disarmTrap(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    public void spell_disarmTrap(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
         print("Player " + playerId + " used Disarm Trap!");
 
@@ -501,6 +357,7 @@ public class CardEffectManager : MonoBehaviour
                 }
             }
         }
+        TurnManager.instance.cardSuccessful = true;
     }
 
     /*
@@ -520,6 +377,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
                 selectedNode.GetUnit().IncreaseCurrentHealthBy(5);
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Provisions");
             }
         }
@@ -547,7 +405,8 @@ public class CardEffectManager : MonoBehaviour
         if(unitCountAroundOrigin == 0)
         {
             foreach (Node node in allNodesInRange)
-                createSoldierUnit(playerId, node);
+                CreateUnit(Unit.UnitTypes.Soldier, node);
+            TurnManager.instance.cardSuccessful = true;
             print("Player " + playerId + " used Provisions!");
         }
         else
@@ -566,6 +425,7 @@ public class CardEffectManager : MonoBehaviour
     public void spell_greed(int playerId)
     {
         // draw 2 cards
+        TurnManager.instance.cardSuccessful = true;
     }
 
     /*
@@ -574,7 +434,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from a friendly Knight
      * Effect: Increases the damage of all allies within (0,1) tiles of the casting origin by 2
-     * Cost: 2
+     * Cost: 4
      */
     public void spell_warcry(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
@@ -597,6 +457,7 @@ public class CardEffectManager : MonoBehaviour
                 if (node.GetUnit().GetUnitPlayerID() == playerId)
                     selectedNode.unitInThisNode.IncreaseDamageBy(2);
             }
+            TurnManager.instance.cardSuccessful = true;
             print("Player " + playerId + " used Warcry!");
         }
         else
@@ -609,7 +470,7 @@ public class CardEffectManager : MonoBehaviour
      * Type: Spell(Active)
      * Cast Range: (0, 0) tiles from any friendly unit
      * Effect: Fully heals an ally unit
-     * Cost: 5
+     * Cost: 4
      */
     public void spell_rebirth(int playerId, Node selectedNode)
     {
@@ -622,7 +483,8 @@ public class CardEffectManager : MonoBehaviour
                 if (selectedNode.unitInThisNode.GetCurrentHealth() != selectedNode.unitInThisNode.GetMaxHealth())
                 {
                     selectedNode.unitInThisNode.SetCurrentHealth(selectedNode.unitInThisNode.GetMaxHealth());
-                    print("Card Effect Sucessful: Provisions");
+                    TurnManager.instance.cardSuccessful = true;
+                    print("Card Effect Sucessful: Rebirth");
                 }
             }
         }
@@ -633,7 +495,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Assassinate
      * Type: Spell(Active)
      * Cast Range: (1,1) tiles from any friendly Assassin unit
-     * Effect: Damages an enemy unit for 5 health. Does not work on King unit.
+     * Effect: Immediately kills and enemy unit. Does not work on King unit.
      * Cost: 5
      */
     public void spell_assassinate(int playerId, Node selectedNode)
@@ -644,6 +506,7 @@ public class CardEffectManager : MonoBehaviour
             if (selectedNode.unitInThisNode.GetUnitPlayerID() != playerId && selectedNode.unitInThisNode.GetUnitType() != Unit.UnitTypes.King) // confirm that the unit is not ours
             {
                 selectedNode.RemoveUnit(selectedNode.unitInThisNode); // smite damage
+                TurnManager.instance.cardSuccessful = true;
                 print("Card Effect Sucessful: Assassinate");
             }
         }
@@ -660,6 +523,7 @@ public class CardEffectManager : MonoBehaviour
     public void spell_teleport(int playerId, Node selectedNode)
     {
         // teleport unit
+        TurnManager.instance.cardSuccessful = true;
     }
 
     /*
@@ -680,6 +544,7 @@ public class CardEffectManager : MonoBehaviour
             TrapOrItem bearTrap = new TrapOrItem(playerId, 0, 0, 0, TrapOrItem.TrapOrItemTypes.BearTrap);
             selectedNode.AddTrapOrItem(bearTrap);
 
+            TurnManager.instance.cardSuccessful = true;
             print("Card Effect Sucessful: Bear Trap");
 
         }
@@ -690,7 +555,7 @@ public class CardEffectManager : MonoBehaviour
      * Card Name: Land Mine
      * Type: Spell(Trap)
      * Cast Range: (1, 2) tiles from any friendly unit
-     * Effect: Damages the triggering unit for 5 health.
+     * Effect: Damages all units from (0,1) tiles from the detonation origin for 3 health.
      * Cost: 3
      */
     public void spell_landMine(int playerId, Node selectedNode)
@@ -702,9 +567,50 @@ public class CardEffectManager : MonoBehaviour
             TrapOrItem landMine = new TrapOrItem(playerId, 0, 0, 0, TrapOrItem.TrapOrItemTypes.LandMine);
             selectedNode.AddTrapOrItem(landMine);
 
+            TurnManager.instance.cardSuccessful = true;
             print("Card Effect Sucessful: Land Mine");
 
         }
+    }
+
+    /*
+     * Card ID: 27
+     * Card Name: Royal Pledge
+     * Type: Spell(Active)
+     * Cast Range: (0, 0) tiles from a friendly King
+     * Effect: Increases the damage, current health and maximum health of all allies within (1,1) tiles of the casting origin by 2 
+     * Cost: 4
+     */
+    public void spell_royalPledge(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    {
+        HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 1, 1);
+
+        int allyCountAroundOrigin = 0;
+        foreach (Node node in allNodesInRange)
+        {
+            if (node.GetUnit() != null)
+            {
+                if (node.GetUnit().GetUnitPlayerID() == playerId)
+                    allyCountAroundOrigin++;
+            }
+        }
+
+        if (allyCountAroundOrigin == 0)
+        {
+            foreach (Node node in allNodesInRange)
+            {
+                if (node.GetUnit().GetUnitPlayerID() == playerId)
+                {
+                    selectedNode.unitInThisNode.IncreaseDamageBy(2);
+                    selectedNode.unitInThisNode.IncreaseMaxHealthBy(2);
+                    selectedNode.unitInThisNode.IncreaseCurrentHealthBy(2);
+                }
+            }
+            TurnManager.instance.cardSuccessful = true;
+            print("Player " + playerId + " used Royal Pledge!");
+        }
+        else
+            print("No allies surrounding the origin!");
     }
 }
 

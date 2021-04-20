@@ -28,6 +28,8 @@ public class Hover : MonoBehaviour
             Transform pos = hit.transform;
 
             Node hoverNode = gridRef.NodeFromWorldPoint(new Vector3(pos.position.x, pos.position.y, pos.position.z));
+            
+            // check if have unit on node.
 			
             hoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
             prevMat = hoverMat.material;

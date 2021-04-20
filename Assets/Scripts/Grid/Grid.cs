@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Zone.Core.Utils;
 using Random = UnityEngine.Random;
 
-public class Grid : MonoBehaviour
+public class Grid : Singleton<Grid>
 {
     [SerializeField] private Transform target;
     [SerializeField] private Transform unit;
@@ -22,6 +23,9 @@ public class Grid : MonoBehaviour
     public static GameObject[] tileCollides;
 
     private Vector3 newPosition;
+	
+	private Unit king1;
+	private Unit king2;
 
     // implement dictionary class. ?
 
@@ -42,6 +46,12 @@ public class Grid : MonoBehaviour
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / nodeDiameter);
         CreateGrid();
     }
+	
+	private void Start()
+	{
+		GameLoop.instance.GetPlayer(0).King = king1;
+		GameLoop.instance.GetPlayer(1).King = king2;
+	}
 
     public int MaxSize
     {
@@ -101,8 +111,23 @@ public class Grid : MonoBehaviour
         }
         return allyUnitNodes;
     }
-    
-    
+
+    public HashSet<Node> GetPlaceableNodes(Card currentCard)
+    {
+        HashSet<Node> placeableNodes = new HashSet<Node>();
+        List<Node> allyNodes = GetAllyUnitNodes(GameLoop.instance.GetCurrentPlayer().PlayerId);
+        foreach (Node node in allyNodes)
+        {
+            Vector3 nodePos = node.unitInThisNode.transform.position;
+            placeableNodes.UnionWith(Pathfinding.instance.GetNodesMinMaxRange(
+                nodePos, 
+                false, 
+                currentCard.minRange, 
+                currentCard.maxRange));
+        }
+
+        return placeableNodes;
+    }
 
     //returns a list of all enemy unit nodes
     //pass the calling player's ID, NOT the enemy player ID
@@ -169,8 +194,9 @@ public class Grid : MonoBehaviour
  
         Transform spawnPosP2 = kingSpawnP2[randPos];
 
-        Unit king1 = Instantiate(kingPlayer1, spawnPosP1.transform, false).GetComponent<Unit>();
-        Unit king2 = Instantiate(kingPlayer2, spawnPosP2.transform, false).GetComponent<Unit>();
+        king1 = Instantiate(kingPlayer1, spawnPosP1.transform, false).GetComponent<Unit>();
+        king2 = Instantiate(kingPlayer2, spawnPosP2.transform, false).GetComponent<Unit>();
+		
         NodeFromWorldPoint(spawnPosP1.transform.position).AddUnit(king1);
         NodeFromWorldPoint(spawnPosP2.transform.position).AddUnit(king2);
         //adding the kings to their respective nodes

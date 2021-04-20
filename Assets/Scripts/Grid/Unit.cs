@@ -6,29 +6,27 @@ using ExitGames.Client.Photon.StructWrapping;
 using UnityEditor;
 using UnityEngine.Serialization;
 
-public class Unit : MonoBehaviour {
-
+public class Unit : MonoBehaviour 
+{
+    protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
+    public UnitTypes unitType;
     [SerializeField] protected float movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
-    
-    protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
-    protected UnitTypes unitType;
     [SerializeField] protected int unitPlayerId;
-    protected int maxHealth;
-    protected int currentHealth;
-    protected int damage;
-    protected int defense;
-    protected int minRange;
-    protected int maxRange;
-    protected int accuracy;
-    protected int evasion;
-    protected int cost;
-    protected Node[] path;
-    protected int targetIndex;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] protected int currentHealth;
+    [SerializeField] protected int damage;
+    [SerializeField] protected int defense;
+    [SerializeField] protected int minRange;
+    [SerializeField] protected int maxRange;
+    [SerializeField] protected int accuracy;
+    [SerializeField] protected int evasion;
+    [SerializeField] protected int cost;
+    [SerializeField] protected Node[] path;
+    [SerializeField] protected int targetIndex;
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
     public bool isClicked = false;
-    public bool startRoutine;
     private Camera mainCam;
     private const int constantMovementSpeed = 7;
     
@@ -414,30 +412,30 @@ public class Unit : MonoBehaviour {
     {
         if (pathSuccessful) {
             path = newPath;
-            targetIndex = 0;
+            targetIndex = 1; //keeps track of the next node the unit is going to move to
             
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
     }
-    
-    
 
     //updates unit position by following along the path
-    IEnumerator FollowPath() 
+    public IEnumerator FollowPath()
     {
-        Node currentWaypoint = path[0];
+        Node unitNode = path[0];//keeps track of the node the unit is currently on
+        Node currentWaypoint = path[1]; //keeps track of the next node the unit is going to move to
 
-        Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
+        //Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
 
         while (true)
         {
-            grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            //grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            unitNode.RemoveUnit(this);
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
 
             if (transform.position == currentWaypoint.worldPosition) 
             {
-                targetIndex++;
+                targetIndex++; //it starts from 1 now
                 currentWaypoint.AddUnit(this);
                 CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
 
@@ -445,6 +443,48 @@ public class Unit : MonoBehaviour {
                     yield break;
 
                 currentWaypoint = path[targetIndex];
+                unitNode = path[targetIndex - 1];
+                //currentWaypoint.RemoveUnit(this);// moved this
+                //currentWaypoint = path[targetIndex];
+                //currentWaypoint.AddUnit(this);
+                //CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
+            }
+
+            //transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
+
+            //CheckHostileTrapOrItemInNode(currentWaypoint);
+
+            yield return null;
+        }
+    }
+    
+    public IEnumerator AIFollowPath(Node[] newPath)
+    {
+        if (newPath.Length < 2)
+            yield break;
+        
+        Node unitNode = newPath[0];//keeps track of the node the unit is currently on
+        Node currentWaypoint = newPath[1]; //keeps track of the next node the unit is going to move to
+
+        //Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
+
+        while (true)
+        {
+            //grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            unitNode.RemoveUnit(this);
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
+
+            if (transform.position == currentWaypoint.worldPosition) 
+            {
+                targetIndex++; //it starts from 1 now
+                currentWaypoint.AddUnit(this);
+                CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
+
+                if (targetIndex >= newPath.Length) 
+                    yield break;
+
+                currentWaypoint = newPath[targetIndex];
+                unitNode = newPath[targetIndex - 1];
                 //currentWaypoint.RemoveUnit(this);// moved this
                 //currentWaypoint = path[targetIndex];
                 //currentWaypoint.AddUnit(this);

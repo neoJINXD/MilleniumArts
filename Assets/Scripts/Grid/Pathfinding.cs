@@ -2,10 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using System.Linq;
 using UnityEngine.Serialization;
+using Zone.Core.Utils;
 
-public class Pathfinding : MonoBehaviour
+public class Pathfinding : Singleton<Pathfinding>
 {
 
 	PathRequestManager requestManager;
@@ -174,16 +176,14 @@ public class Pathfinding : MonoBehaviour
 		
 		foreach (Node n in verify)
 			visited.Remove(n);
-
-		/*
-		foreach (Node n in gridRef.GetAllUnitNodes())
+		
+		/*foreach (Node n in gridRef.GetAllUnitNodes())
 		{
 			if (visited.Contains(n))
 			{
 				visited.Remove(n);
 			}
-		}
-		*/
+		}*/
 
 
 		return visited;
@@ -348,6 +348,70 @@ public class Pathfinding : MonoBehaviour
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
+	//for Ai
+	public Node[] AIFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPlayerID, int minRange, int maxRange) 
+	{
+		bool pathSuccess = false;
+		HeuristicFunction heuristicFunction = new HeuristicFunction(GetDistance);
+		Node startNode = gridRef.NodeFromWorldPoint(startPos);
+		Node targetNode = gridRef.NodeFromWorldPoint(targetPos);
+
+		if (startNode.canWalkHere && targetNode.canWalkHere) 
+		{
+			Heap<Node> openSet = new Heap<Node>(gridRef.MaxSize);
+			HashSet<Node> closedSet = new HashSet<Node>();
+			openSet.Add(startNode);
+			
+			while (openSet.Count > 0) 
+			{
+				Node currentNode = openSet.RemoveFirst();
+				closedSet.Add(currentNode);
+				
+				if (currentNode == targetNode) {
+					pathSuccess = true;
+					break;
+				}
+				
+				foreach (Node neighbour in gridRef.GetNeighbours(currentNode))
+				{
+					bool checkHostile = false;
+					
+					if (neighbour.GetUnit() != null)
+					{
+						if (neighbour.GetUnit().GetUnitPlayerID() != unitPlayerID)
+						{
+							checkHostile = true;
+						}
+					}
+					
+					if ((!canFly && !neighbour.canWalkHere) || closedSet.Contains(neighbour) || checkHostile) 
+					{
+						continue; //Skips unwalkable nodes when unit cannot fly, or if any node in closed set or if the unit in the node is hostile
+						//considers unwalkable nodes if unit can fly, and ignores any node if in closed set
+					}
+					
+					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+					if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+					{
+						neighbour.gCost = newMovementCostToNeighbour;
+						neighbour.hCost = heuristicFunction(neighbour, targetNode);
+						neighbour.parent = currentNode;
+						
+						if (!openSet.Contains(neighbour))
+							openSet.Add(neighbour);
+					}
+				}
+			}
+		}
+
+		if (pathSuccess) 
+		{
+			return RetracePath(startNode, targetNode);
+		}
+
+		return new[] {startNode};
+	}
+	
 	// Using Hover.cs instead of functions below. Keeping for now, in case decide to use them/modify.
 	public void DrawPath()
 	{
@@ -383,12 +447,13 @@ public class Pathfinding : MonoBehaviour
 			path.Add(currentNode);
 			currentNode = currentNode.parent;
 		}
+		
+		path.Add(startNode);
 		//Vector3[] waypoints = SimplifyPath(path);
 		//Vector3[] waypoints = ConvertToArray(path);
 		//Array.Reverse(waypoints);
 		path.Reverse();
 		return path.ToArray();
-		
 	}
 
 	Vector3[] SimplifyPath(List<Node> path) {

@@ -25,6 +25,8 @@ public class Card : MonoBehaviour
     public int aoeMinRange;
     public int aoeMaxRange;
 
+    public int indexInHand;
+
     public Card()
     {
 
@@ -41,6 +43,7 @@ public class Card : MonoBehaviour
         maxRange = cardMax;
         aoeMinRange = cardAOEMin;
         aoeMinRange = cardAOEMax;
+        indexInHand = 0;
     }
 }
 
