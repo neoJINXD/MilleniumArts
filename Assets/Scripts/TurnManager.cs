@@ -491,12 +491,7 @@ public class TurnManager : Singleton<TurnManager>
 
         if (grid != null)
         {
-            List<Node> allyNodes = grid.GetAllyUnitNodes(currentPlayer.PlayerId); // hard code player 0
-            foreach (Node node in allyNodes)
-            {
-                Vector3 nodePos = node.unitInThisNode.transform.position;
-                selectableNodes.UnionWith(pf.GetNodesMinMaxRange(nodePos, false, currentCard.minRange, currentCard.maxRange));
-            }
+            selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard));
 
             if (selectableNodes != null && selectableNodes.Count > 0)
             {

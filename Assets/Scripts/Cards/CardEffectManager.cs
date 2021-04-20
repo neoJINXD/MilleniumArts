@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zone.Core.Utils;
 
-public class CardEffectManager : MonoBehaviour
+public class CardEffectManager : Singleton<CardEffectManager>
 {
     [SerializeField] private Unit m_soldier;
     [SerializeField] private Unit m_knight;
@@ -53,6 +54,10 @@ public class CardEffectManager : MonoBehaviour
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
         else
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.red;
+        
+        GameLoop.instance.GetCurrentPlayer().AddUnit(placedUnit);
+        
+        print(unit + " unit placed");
     }
     
     /*

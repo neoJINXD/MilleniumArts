@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using Zone.Core.Utils;
 using Random = UnityEngine.Random;
 
-public class Grid : MonoBehaviour
+public class Grid : Singleton<Grid>
 {
     [SerializeField] private Transform target;
     [SerializeField] private Transform unit;
@@ -110,8 +111,23 @@ public class Grid : MonoBehaviour
         }
         return allyUnitNodes;
     }
-    
-    
+
+    public HashSet<Node> GetPlaceableNodes(Card currentCard)
+    {
+        HashSet<Node> placeableNodes = new HashSet<Node>();
+        List<Node> allyNodes = GetAllyUnitNodes(GameLoop.instance.GetCurrentPlayer().PlayerId);
+        foreach (Node node in allyNodes)
+        {
+            Vector3 nodePos = node.unitInThisNode.transform.position;
+            placeableNodes.UnionWith(Pathfinding.instance.GetNodesMinMaxRange(
+                nodePos, 
+                false, 
+                currentCard.minRange, 
+                currentCard.maxRange));
+        }
+
+        return placeableNodes;
+    }
 
     //returns a list of all enemy unit nodes
     //pass the calling player's ID, NOT the enemy player ID

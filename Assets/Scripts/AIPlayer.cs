@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class AIPlayer : Player
@@ -52,6 +54,10 @@ public class AIPlayer : Player
 	private void PickUpCards()
 	{
 		m_playerCards.Clear();
+		Destroy(cardHolder);
+		cardHolder = new GameObject();
+		cardHolder.transform.parent = transform;
+		cardHolder.name = "AI card hand";
 		AddCard(GenerateCard());
 		AddCard(GenerateCard());
 		AddCard(GenerateCard());
@@ -203,8 +209,23 @@ public class AIPlayer : Player
 			Card cardToPlay = GetCard(cardIndex);
 			if (cardToPlay.cost <= PlayerMana)
 			{
-				PlacerManager.instance.PlaceCard(this, cardToPlay, cardIndex,
-					new Vector3(Random.Range(-10, 10), 0, Random.Range(-10f, 10f)));
+				if (cardToPlay.GetType() == typeof(SpellCard))
+				{
+            
+				}
+				else if (cardToPlay.GetType() == typeof(UnitCard))
+				{
+					Node[] placeableNodes = Grid.instance.GetPlaceableNodes(cardToPlay).ToArray();
+					Node nodeToPlaceIn = placeableNodes[Random.Range(0, placeableNodes.Length - 1)];
+					CardEffectManager.instance.CreateUnit(((UnitCard)cardToPlay).UnitType, nodeToPlaceIn);
+					RemoveCard(cardIndex);
+					PlayerMana -= cardToPlay.cost;
+					print("AI played a unit");
+				}
+				else
+				{
+					Debug.LogError("Bad card type");
+				}
 			}
 			else
 			{

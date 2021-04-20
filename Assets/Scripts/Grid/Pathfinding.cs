@@ -2,10 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.IO;
 using System.Linq;
 using UnityEngine.Serialization;
+using Zone.Core.Utils;
 
-public class Pathfinding : MonoBehaviour
+public class Pathfinding : Singleton<Pathfinding>
 {
 
 	PathRequestManager requestManager;
