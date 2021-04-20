@@ -45,10 +45,11 @@ public class CardEffectManager : Singleton<CardEffectManager>
         if (unit == Unit.UnitTypes.DragonRider)
             placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
-        placedUnit.CheckHostileTrapOrItemInNode(positionNode);
-
         int playerId = GameLoop.instance.GetCurrentPlayer().PlayerId;
-        
+        placedUnit.SetUnitPlayerID(playerId);
+
+        positionNode.AddUnit(placedUnit);
+
         //hardcoded color for test
         if (playerId == 0)
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
@@ -56,7 +57,9 @@ public class CardEffectManager : Singleton<CardEffectManager>
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.red;
         
         GameLoop.instance.GetCurrentPlayer().AddUnit(placedUnit);
-        
+
+        placedUnit.CheckHostileTrapOrItemInNode(positionNode);
+
         print(unit + " unit placed");
     }
     

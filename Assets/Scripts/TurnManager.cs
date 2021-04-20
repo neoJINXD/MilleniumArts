@@ -43,6 +43,7 @@ public class TurnManager : Singleton<TurnManager>
         SelectingCardOrigin,
         SelectingTileMovement,
         SelectingTileAttack,
+        SelectingTileHeal,
         PlacingEnemyUnit // temp for testing
     }
 
@@ -65,6 +66,9 @@ public class TurnManager : Singleton<TurnManager>
 
     // Option Menu
     public GameObject optionPanel;
+
+    public GameObject attackButtonRef;
+    public GameObject healButtonRef;
 
     // Card Draw
 
@@ -117,6 +121,11 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (Input.GetMouseButtonDown(0))
                 validateSelectTileClickMove();
+        }
+        else if (currentTurnState == TurnState.SelectingTileHeal)
+        {
+            if (Input.GetMouseButtonDown(0))
+                validateSelectTileClickHeal();
         }
         else if (currentTurnState == TurnState.SelectingTileAttack)
         {
@@ -296,7 +305,11 @@ public class TurnManager : Singleton<TurnManager>
 
                     Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
-                    newMat.material = targetMaterial;
+
+                    if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
+                        newMat.material = availableMaterial;
+                    else
+                        newMat.material = targetMaterial;
                 }
             }
 
@@ -306,7 +319,11 @@ public class TurnManager : Singleton<TurnManager>
             foreach (Node node in allUnitsNodes)
                 node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-            currentTurnState = TurnState.SelectingTileAttack;
+
+            if(currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
+                currentTurnState = TurnState.SelectingTileHeal;
+            else
+                currentTurnState = TurnState.SelectingTileAttack;
         }
     }
 
@@ -327,6 +344,17 @@ public class TurnManager : Singleton<TurnManager>
                     currentUnitPosition = hit.transform.position;
 
                     optionPanel.SetActive(true);
+
+                    if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
+                    {
+                        attackButtonRef.SetActive(false);
+                        healButtonRef.SetActive(true);
+                    }
+                    else
+                    {
+                        attackButtonRef.SetActive(true);
+                        healButtonRef.SetActive(false);
+                    }
                 }
                 else
                     optionPanel.SetActive(false);
@@ -381,6 +409,53 @@ public class TurnManager : Singleton<TurnManager>
             Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(Hover));
             Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>().hoveredTile = AOEMaterial;
 
+        }
+
+        // set the units back to their original layer
+        List<Node> allUnitsNodes = grid.GetAllUnitNodes();
+
+        foreach (Node node in allUnitsNodes)
+            node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Unit");
+
+        ResetMaterial();
+        selectableNodes.Clear();
+        unselectUnit();
+        currentTurnState = TurnState.Free;
+    }
+
+    void validateSelectTileClickHeal()
+    {
+        Node selectedNode = null;
+        Vector3 selectedNodePosition = Vector3.zero;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+
+            if (hit.transform.CompareTag("Tile"))
+            {
+                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
+                selectedNodePosition = hit.transform.position;
+                break;
+            }
+        }
+
+        if (selectedNode != null)
+        {
+            if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() == currentPlayer.PlayerId)
+                selectedNode.unitInThisNode.IncreaseCurrentHealthBy(currentUnit.GetDamage());
+        }
+
+        foreach (var node in selectableNodes)
+        {
+            Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<TileOnMouseOver>());
+
+            //Jon hover script
+            Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(Hover));
+            Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>().hoveredTile = AOEMaterial;
         }
 
         // set the units back to their original layer
