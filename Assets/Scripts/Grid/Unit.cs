@@ -391,6 +391,12 @@ public class Unit : MonoBehaviour
     private void Update()
     {
         m_healthBar.value = (float) currentHealth / maxHealth;
+
+        if (currentHealth < 1)
+        {
+            GameLoop.instance.GetCurrentPlayer().RemoveUnit(this);
+            Destroy(gameObject);
+        }
     }
 
     public void SelectNewUnitPosition()

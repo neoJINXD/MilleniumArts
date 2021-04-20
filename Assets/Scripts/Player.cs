@@ -99,6 +99,15 @@ public abstract class Player : MonoBehaviour
     {
         m_playerUnits.Add(unit);
     }
+    
+    public void RemoveUnit(Unit unit)
+    {
+        foreach (Unit u in m_playerUnits)
+        {
+            if (u.gameObject == unit.gameObject)
+                m_playerUnits.Remove(u);
+        }
+    }
 
     public int CardCount => m_playerCards.Count;
     public int UnitCount => m_playerUnits.Count;
