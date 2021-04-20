@@ -295,6 +295,8 @@ public class AIPlayer : Player
 					PlayerMana--;
 				}
 			}
+
+			yield return null;
 		}
 	}
 	
