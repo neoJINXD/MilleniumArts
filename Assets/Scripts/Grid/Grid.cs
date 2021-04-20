@@ -129,6 +129,32 @@ public class Grid : Singleton<Grid>
         return placeableNodes;
     }
 
+    // overload for explicit unit types
+    public HashSet<Node> GetPlaceableNodes(Card currentCard, Unit.UnitTypes unitType)
+    {
+        HashSet<Node> placeableNodes = new HashSet<Node>();
+        List<Node> allyNodes = GetAllyUnitNodes(GameLoop.instance.GetCurrentPlayer().PlayerId);
+        List<Node> filteredNodes = new List<Node>();
+
+        foreach (Node node in allyNodes)
+        {
+            if (node.GetUnit().GetUnitType() == unitType)
+                filteredNodes.Add(node);
+        }
+
+        foreach (Node node in filteredNodes)
+        {
+            Vector3 nodePos = node.unitInThisNode.transform.position;
+            placeableNodes.UnionWith(Pathfinding.instance.GetNodesMinMaxRange(
+                nodePos,
+                false,
+                currentCard.minRange,
+                currentCard.maxRange));
+        }
+
+        return placeableNodes;
+    }
+
     //returns a list of all enemy unit nodes
     //pass the calling player's ID, NOT the enemy player ID
     public List<Node> GetEnemyUnitNodes(int callingPlayerID)

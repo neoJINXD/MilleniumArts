@@ -548,26 +548,38 @@ public class TurnManager : Singleton<TurnManager>
 
     public void PlaceCard()
     {
-        // create temp card
-        /*
-        Card unitCard_soldier = new UnitCard(0, CardType.Unit, CastType.OnEmpty, "Unit: Soldier", GameObject cardImage, 1, 1, 2, 10, 5, 1, 1, 1, 4, 80, 20, false);
-        Card unitCard_knight = new UnitCard(1, CardType.Unit, CastType.OnEmpty, "Unit: Knight", GameObject cardImage, 3, 1, 2, 30, 7, 4, 1, 1, 3, 70, 10, false);
-        Card unitCard_assassin = new UnitCard(2, CardType.Unit, CastType.OnEmpty, "Unit: Assassin", GameObject cardImage, 3, 1, 2, 15, 9, 0, 1, 1, 8, 95, 60, false);
-        Card unitCard_priest = new UnitCard(3, CardType.Unit, CastType.OnEmpty, "Unit: Priest", GameObject cardImage, 1, 1, 2, 15, 5, 0, 0, 2, 4, 100, 30, false);
-        Card unitCard_archer = new UnitCard(4, CardType.Unit, CastType.OnEmpty, "Unit: Archer", GameObject cardImage, 1, 1, 2, 15, 6, 0, 2, 3, 4, 90, 30, false);
-        Card unitCard_dragonRider = new UnitCard(5, CardType.Unit, CastType.OnEmpty, "Unit: DragonRider", GameObject cardImage, 1, 1, 2, 25, 6, 2, 1, 1, 6, 85, 20, true);
-        Card activeCard_smite = new SpellCard(6, CardType.Active, CastType.OnEnemy, "Smite", GameObject cardImage, 1, 1, 1, "Damages an enemy unit for 5 health.");
-        Card currentCard = unitCard_soldier;
-		
-		*/
-
         GameObject clickedButtonGO = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject; // gets object that calls onClick
         Card currentCard = clickedButtonGO.GetComponent<Card>();
         storedCard = currentCard;
 
+        if(storedCard.id == 20) // greed card
+        {
+            cardEffectManager.spell_greed(currentPlayer.PlayerId);
+            if (cardSuccessful)
+                currentPlayer.RemoveCard(storedCard);
+
+            cardSuccessful = false;
+
+            loadPlayerHand();
+            currentTurnState = TurnState.Free;
+            cardSelected = false;
+            return;
+        }
+
         if (grid != null)
         {
-            selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard));
+            if(storedCard.id  == 7) // snipe     
+                selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard, Unit.UnitTypes.Archer));
+            else if (storedCard.id == 9) // prayer
+                selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard, Unit.UnitTypes.Priest));
+            else if (storedCard.id == 21) // Warcry
+                selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard, Unit.UnitTypes.Knight));
+            else if (storedCard.id == 23) // Assassinate
+                selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard, Unit.UnitTypes.Assassin));
+            else if (storedCard.id == 26) // Royal Pledge
+                selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard, Unit.UnitTypes.King));
+            else
+                selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard));
 
             if (selectableNodes != null && selectableNodes.Count > 0)
             {
@@ -640,9 +652,7 @@ public class TurnManager : Singleton<TurnManager>
                             cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
                         else if (storedCard.id == 22)
                             cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 24)
-                            cardEffectManager.spell_teleport(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 27)
+                        else if (storedCard.id == 26)
                             cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
                     }
                 }
@@ -677,11 +687,11 @@ public class TurnManager : Singleton<TurnManager>
 				            cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
 			            else if (storedCard.id == 17)
 				            cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-			            else if (storedCard.id == 25)
+			            else if (storedCard.id == 24)
 				            cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
-			            else if (storedCard.id == 26)
+			            else if (storedCard.id == 25)
 				            cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode);
-		            }
+                    }
 	            }
             }
             else if (storedCard.castType == CastType.OnAny)
@@ -690,8 +700,6 @@ public class TurnManager : Singleton<TurnManager>
                     cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
                 else if (storedCard.id == 9)
                     cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-                else if (storedCard.id == 20)
-                    cardEffectManager.spell_greed(currentPlayer.PlayerId);
             }
         }
 
@@ -804,7 +812,7 @@ public class TurnManager : Singleton<TurnManager>
     //it in multiple places
 	public Card RandomCard()
 	{
-		int random = Random.Range(0, 28);
+		int random = Random.Range(0, 27);
 
 		if(random < 6)
 		{
@@ -1181,7 +1189,7 @@ public class TurnManager : Singleton<TurnManager>
 
 					card.id = 20;
 					card.castType = CastType.OnAny;
-					card.name = "Reinforcements";
+					card.name = "Greed";
 					card.cost = 3;
 					card.minRange = 0;
 					card.maxRange = 0;
@@ -1244,22 +1252,6 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 24;
-					card.castType = CastType.OnAlly;
-					card.name = "Teleport";
-					card.cost = 1;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Teleports a unit (1,2) tiles.";
-
-					break;
-
-				case 25:
-
-
-
-					card.id = 25;
 					card.castType = CastType.OnEmpty;
 					card.name = "Bear Trap";
 					card.cost = 2;
@@ -1271,11 +1263,11 @@ public class TurnManager : Singleton<TurnManager>
 
 					break;
 
-				case 26:
+				case 25:
 
 
 
-					card.id = 26;
+					card.id = 25;
 					card.castType = CastType.OnEmpty;
 					card.name = "Land Mine";
 					card.cost = 3;
@@ -1287,11 +1279,11 @@ public class TurnManager : Singleton<TurnManager>
 
 					break;
 
-				case 27:
+				case 26:
 
 
 
-					card.id = 27;
+					card.id = 26;
 					card.castType = CastType.OnAlly;
 					card.name = "Royal Pledge";
 					card.cost = 3;
