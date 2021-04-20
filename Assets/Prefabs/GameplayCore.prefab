@@ -5753,17 +5753,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keepAlive: 0
-  m_soldier: {fileID: 2707563004269996457, guid: b634fc80bd6fb2a42b90b1c17aee7b19,
+  m_soldier: {fileID: 4543276117718722888, guid: a24f35e84a403f9439dfefbc6a6e6666,
     type: 3}
-  m_knight: {fileID: 3785353376548170867, guid: c9bdbfa47df6ba142bcc7bdbf995c0d2,
+  m_knight: {fileID: 4543276117718722888, guid: a34622c6506cec849a066200ae289208,
     type: 3}
-  m_assassin: {fileID: 1766047700511905240, guid: ff0369e3e9d125c4aa5249b8868e8102,
+  m_assassin: {fileID: 6591155802452142813, guid: 64d1f8246d53b804d8a50170fa01281e,
     type: 3}
-  m_priest: {fileID: 7298798893623600908, guid: 503bb3bf2f9ee1e4fb5eb091c2808f06,
+  m_priest: {fileID: 4543276117718722888, guid: 6e1e3c3fe3273d84a90cd88a5cd852eb,
     type: 3}
-  m_archer: {fileID: 8679720966997015186, guid: 204a57c0fac44e1459d3a16d5ff71a37,
+  m_archer: {fileID: 4543276117718722888, guid: ed2906e0ac2202f4f93f1dac96ab2f4c,
     type: 3}
-  m_dragonRider: {fileID: 923244102488716245, guid: 0bc4852b621a841439f914ec562e659d,
+  m_dragonRider: {fileID: 557146629312656060, guid: 795a204b449bd8d41908d488c3f096c9,
     type: 3}
 --- !u!1 &5066473961083304728
 GameObject:
