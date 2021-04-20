@@ -5837,8 +5837,8 @@ MonoBehaviour:
   unitEvasionText: {fileID: 6436951585734471538}
   unitHealthText: {fileID: 811807063128553110}
   optionPanel: {fileID: 5066473960705795052}
-  attackButtonRef: {fileID: 0}
-  healButtonRef: {fileID: 0}
+  attackButtonRef: {fileID: 5066473960373448385}
+  healButtonRef: {fileID: 5066473960514718417}
   cardPrefab: {fileID: 2029850991681697623, guid: c23dd6b41858043488b6b597af7395bf,
     type: 3}
   cardDrawPanel: {fileID: 5066473959855896976}
