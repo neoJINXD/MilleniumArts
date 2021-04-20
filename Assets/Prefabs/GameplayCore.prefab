@@ -260,53 +260,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: '-'
---- !u!1 &5066473959391969130
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5066473959391969129}
-  - component: {fileID: 5066473959391969128}
-  m_Layer: 0
-  m_Name: PlacerManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &5066473959391969129
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5066473959391969130}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 5066473961084471719}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5066473959391969128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5066473959391969130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a34a80b807c51d4fbc5e41fb30f5475, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  keepAlive: 0
-  unitCreation: {fileID: -7898511546186060280, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
-    type: 3}
-  cardEffectManager: {fileID: 5066473961030832355}
 --- !u!1 &5066473959404932950
 GameObject:
   m_ObjectHideFlags: 0
@@ -1501,7 +1454,7 @@ RectTransform:
   m_Children:
   - {fileID: 5066473961001227036}
   m_Father: {fileID: 5066473961084471719}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -5306,7 +5259,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5066473961084471719}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5066473961030832355
 MonoBehaviour:
@@ -5320,6 +5273,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85155e89e2d14014295e768b8c2d93ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepAlive: 0
   m_soldier: {fileID: 2707563004269996457, guid: b634fc80bd6fb2a42b90b1c17aee7b19,
     type: 3}
   m_knight: {fileID: 3785353376548170867, guid: c9bdbfa47df6ba142bcc7bdbf995c0d2,
@@ -5361,7 +5315,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5066473961084471719}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5066473961083304710
 MonoBehaviour:
@@ -5437,7 +5391,6 @@ Transform:
   - {fileID: 1514034438}
   - {fileID: 5066473960301550972}
   - {fileID: 5066473959697811809}
-  - {fileID: 5066473959391969129}
   - {fileID: 5066473961083304711}
   - {fileID: 5066473961030832356}
   - {fileID: 5066473959696421397}

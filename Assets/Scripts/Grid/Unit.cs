@@ -418,8 +418,6 @@ public class Unit : MonoBehaviour
             StartCoroutine("FollowPath");
         }
     }
-    
-    
 
     //updates unit position by following along the path
     public IEnumerator FollowPath()
@@ -446,6 +444,47 @@ public class Unit : MonoBehaviour
 
                 currentWaypoint = path[targetIndex];
                 unitNode = path[targetIndex - 1];
+                //currentWaypoint.RemoveUnit(this);// moved this
+                //currentWaypoint = path[targetIndex];
+                //currentWaypoint.AddUnit(this);
+                //CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
+            }
+
+            //transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
+
+            //CheckHostileTrapOrItemInNode(currentWaypoint);
+
+            yield return null;
+        }
+    }
+    
+    public IEnumerator AIFollowPath(Node[] newPath)
+    {
+        if (newPath.Length < 2)
+            yield break;
+        
+        Node unitNode = newPath[0];//keeps track of the node the unit is currently on
+        Node currentWaypoint = newPath[1]; //keeps track of the next node the unit is going to move to
+
+        //Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
+
+        while (true)
+        {
+            //grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            unitNode.RemoveUnit(this);
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
+
+            if (transform.position == currentWaypoint.worldPosition) 
+            {
+                targetIndex++; //it starts from 1 now
+                currentWaypoint.AddUnit(this);
+                CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
+
+                if (targetIndex >= newPath.Length) 
+                    yield break;
+
+                currentWaypoint = newPath[targetIndex];
+                unitNode = newPath[targetIndex - 1];
                 //currentWaypoint.RemoveUnit(this);// moved this
                 //currentWaypoint = path[targetIndex];
                 //currentWaypoint.AddUnit(this);

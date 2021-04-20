@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class AIPlayer : Player
@@ -46,7 +47,7 @@ public class AIPlayer : Player
 			yield return CheckCards();
 		
 		if (PlayerMana > 0)
-			yield return AttackWithUnits();
+			yield return UseActiveUnits();
 		
         EndTurn();
     }
@@ -138,7 +139,7 @@ public class AIPlayer : Player
 				}
 				else
 				{
-					if(CanAttack(closestAlly, GetCloesetEnemy(King.transform.position)))
+					if(CanAttack(closestAlly, GetClosetEnemy(King.transform.position)))
 					{
 						// TODO: Unit attack
 						/*
@@ -238,27 +239,64 @@ public class AIPlayer : Player
 		}
 	}
 	
-	private IEnumerator AttackWithUnits()
-	{
-		if (m_behaviour == BehaviourType.Aggressive)
-		{
-			// TODO
-		}
-		
-		if (m_behaviour == BehaviourType.Balanced)
-		{
-			// TODO determine behaviour, might be complex
-		}
-		
-		if (m_behaviour == BehaviourType.Defensive)
-		{
-			// TODO determine behaviour, might be complex
-		}
-
-		yield return null;
-	}
-	
 	#endregion
+
+	private IEnumerator UseActiveUnits()
+	{
+		if (m_playerUnits.Count < 1)
+			yield break;
+
+		while (PlayerMana > 0)
+		{
+			Unit chosenUnit = m_playerUnits[Random.Range(0, m_playerUnits.Count - 1)]; //TODO: make not random
+		
+			if (m_behaviour == BehaviourType.Aggressive)
+			{
+				// TODO: choose unit with the most potential for damage (including distance to nearest enemies)
+				// if (CanAttack(chosenUnit, nearestEnemy)
+				//		yield return AttackWithUnit();
+			}
+		
+			if (m_behaviour == BehaviourType.Balanced)
+			{
+				// TODO random?
+			}
+		
+			if (m_behaviour == BehaviourType.Defensive)
+			{
+				// TODO: ??
+			}
+
+			if (chosenUnit.unitType == Unit.UnitTypes.Priest)
+			{
+				Unit ally = GetClosestAlly(chosenUnit.transform.position);
+				if (ally && CanHeal(chosenUnit, ally) && ally.GetCurrentHealth() < ally.GetMaxHealth())
+				{
+					//TODO: heal unit??
+					ally.SetCurrentHealth(ally.GetCurrentHealth() + chosenUnit.GetDamage());
+					PlayerMana--;
+				}
+			}
+			else
+			{
+				Unit enemy = GetClosetEnemy(chosenUnit.transform.position);
+				
+				if (!enemy)
+					yield break;
+				
+				if (enemy && CanAttack(chosenUnit, enemy))
+				{
+					enemy.SetCurrentHealth(enemy.GetCurrentHealth() - chosenUnit.GetDamage());
+					PlayerMana--;
+				}
+				else
+				{
+					yield return MoveUnit(chosenUnit, enemy.transform.position);
+					PlayerMana--;
+				}
+			}
+		}
+	}
 	
 	//Should be in Unit.cs
 	private bool CanHeal(Unit currentUnit, Unit targetUnit)
@@ -294,11 +332,28 @@ public class AIPlayer : Player
 		}
 	}
 	
-	private IEnumerator MoveUnit(Unit unit, Vector3 targetLocation) //not sure if this needs to be a coroutine
+	private IEnumerator MoveUnit(Unit unit, Vector3 targetLocation)
 	{
-		PathRequestManager.RequestPath(unit.transform.position, targetLocation, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.OnPathFound, Pathfinding.Heuristic.TileDistance);
-		//request path will create a coroutine itself and move the unit to the desired location accordingly 
-		yield return null;
+		Node closestNodeToTarget = null;
+		float closetDist = Mathf.Infinity;
+		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
+			unit.GetMinRange(), unit.GetMaxRange()).ToArray();
+		
+		if(movableNodes.Length < 1)
+			yield break;
+
+		for (int i = 0; i < movableNodes.Length; i++)
+		{
+			float currentDist = Vector3.Distance(targetLocation, movableNodes[i].worldPosition);
+			if (currentDist < closetDist)
+			{
+				closestNodeToTarget = movableNodes[i];
+				closetDist = currentDist;
+			}
+		}
+
+		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
+			closestNodeToTarget.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.GetMinRange(), unit.GetMaxRange()));
 	}
 
 	private Unit GetClosestAlly(Vector3 startPos)
@@ -318,7 +373,7 @@ public class AIPlayer : Player
 		return closestUnit;
 	}
 	
-	private Unit GetCloesetEnemy(Vector3 startPos)
+	private Unit GetClosetEnemy(Vector3 startPos)
 	{
 		List<Unit> enemyUnits = GameLoop.instance.GetOtherPlayer(PlayerId).Units;
 		

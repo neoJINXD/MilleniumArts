@@ -148,7 +148,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 373376742}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 63.7, y: 1.63, z: -50.6}
+  m_LocalPosition: {x: 39.97, y: 1.63, z: -26.87}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1084266113}
@@ -668,7 +668,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596508711}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 63.6, y: 1.63, z: 17}
+  m_LocalPosition: {x: 39.97, y: 1.63, z: -6.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1084266113}
@@ -1282,7 +1282,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965627752}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.18, y: 1.63, z: 17.5}
+  m_LocalPosition: {x: 19.75, y: 1.63, z: -6.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1084266113}
@@ -2930,7 +2930,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1977095598}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.18, y: 1.63, z: -50.6}
+  m_LocalPosition: {x: 19.25, y: 1.63, z: -27.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1084266113}
@@ -3044,6 +3044,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc65fda1cf3c774ba64274e240d9c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepAlive: 0
   hoveredTile: {fileID: 0}
   defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
   gridRef: {fileID: 0}
@@ -3061,6 +3062,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26c70af5c0b69ce48820eeef079fe2de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepAlive: 0
   target: {fileID: 1737116090}
   unit: {fileID: 1764270284}
   size: 1
@@ -3083,7 +3085,7 @@ MonoBehaviour:
   unableToWalkHere:
     serializedVersion: 2
     m_Bits: 8
-  gridWorldSize: {x: 75, y: 75}
+  gridWorldSize: {x: 25, y: 25}
   nodeRadius: 0.5
   gridSizeX: 0
   gridSizeY: 0
