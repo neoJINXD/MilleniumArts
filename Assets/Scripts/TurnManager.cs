@@ -35,6 +35,8 @@ public class TurnManager : Singleton<TurnManager>
     public bool cardSuccessful;
 
     public List<Unit> allUnits;
+    
+    public int currentMana;
 
     public enum TurnState
     {
@@ -78,6 +80,9 @@ public class TurnManager : Singleton<TurnManager>
 
     [SerializeField] private GameObject handPanel;
 
+    // Mana Panel
+    public TextMeshProUGUI manaText;
+
     void Start()
     {
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
@@ -105,7 +110,10 @@ public class TurnManager : Singleton<TurnManager>
     // Update is called once per frame
     void Update()
     {
-        if(currentTurnState == TurnState.DrawingCard)
+        currentMana = GameLoop.instance.GetCurrentPlayer().PlayerMana;
+        manaText.text = "Mana " + currentMana + "/" + GameLoop.instance.GetCurrentPlayer().PlayerMana;
+
+        if (currentTurnState == TurnState.DrawingCard)
         {
             // do nothing
         }
