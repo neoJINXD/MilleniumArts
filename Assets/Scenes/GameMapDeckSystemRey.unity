@@ -124,6 +124,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &121053390 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8863701874134791574, guid: e4857921910c9f242a6803656d2a979b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5066473960744613815}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &373376742
 GameObject:
   m_ObjectHideFlags: 0
@@ -3200,6 +3212,16 @@ PrefabInstance:
       propertyPath: kingSpawnP2.Array.data[1]
       value: 
       objectReference: {fileID: 965627753}
+    - target: {fileID: 425242347578269721, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.0015563965
+      objectReference: {fileID: 0}
+    - target: {fileID: 425242347578269721, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.0002441
+      objectReference: {fileID: 0}
     - target: {fileID: 5066473960514718416, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3282,6 +3304,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
+      propertyPath: manaText
+      value: 
+      objectReference: {fileID: 121053390}
+    - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
       propertyPath: healButtonRef
       value: 
       objectReference: {fileID: 1958855452}
@@ -3349,6 +3376,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameplayCore
+      objectReference: {fileID: 0}
+    - target: {fileID: 7327157762736729472, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7327157762736729472, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1.4993286
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4857921910c9f242a6803656d2a979b, type: 3}
