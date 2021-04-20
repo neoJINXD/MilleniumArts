@@ -19,6 +19,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Material player1Mat;
     [SerializeField] Material player2Mat;
 
+    [SerializeField] string gameHistory;
+
     public PhotonView view { get; private set; }
     
     void Start()

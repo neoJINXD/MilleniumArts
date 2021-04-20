@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zone.Core.Utils;
 using UnityEngine.UI;
+using TMPro;
 
 public class TurnManager : Singleton<TurnManager>
 {
@@ -55,14 +56,14 @@ public class TurnManager : Singleton<TurnManager>
 
     // Stat panel
 
-    public Text unitPlayerIDText;
-    public Text unitDamageText;
-    public Text unitDefenceText;
-    public Text unitARText;
-    public Text unitMSText;
-    public Text unitAccuracyText;
-    public Text unitEvasionText;
-    public Text unitHealthText;
+    public TextMeshProUGUI unitPlayerIDText;
+    public TextMeshProUGUI unitDamageText;
+    public TextMeshProUGUI unitDefenceText;
+    public TextMeshProUGUI unitARText;
+    public TextMeshProUGUI unitMSText;
+    public TextMeshProUGUI unitAccuracyText;
+    public TextMeshProUGUI unitEvasionText;
+    public TextMeshProUGUI unitHealthText;
 
     // Option Menu
     public GameObject optionPanel;
