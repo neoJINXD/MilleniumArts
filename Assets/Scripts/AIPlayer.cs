@@ -163,7 +163,7 @@ public class AIPlayer : Player
 			Card playerCard = m_playerCards[i];
 			if (playerCard.cost < PlayerMana && CardIsValued(playerCard))
 			{
-				PlayCard(i); 
+				PlayCard(playerCard); 
 				yield return new WaitForSeconds(0.2f);
 			}
 		}
@@ -203,11 +203,10 @@ public class AIPlayer : Player
 		return true;
 	}
 
-	public override void PlayCard(int cardIndex)
+	public override void PlayCard(Card cardToPlay)
 	{
-		if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
+		if (CardCount > 0)
 		{
-			Card cardToPlay = GetCard(cardIndex);
 			if (cardToPlay.cost <= PlayerMana)
 			{
 				if (cardToPlay.GetType() == typeof(SpellCard))
@@ -219,9 +218,10 @@ public class AIPlayer : Player
 					Node[] placeableNodes = Grid.instance.GetPlaceableNodes(cardToPlay).ToArray();
 					Node nodeToPlaceIn = placeableNodes[Random.Range(0, placeableNodes.Length - 1)];
 					CardEffectManager.instance.CreateUnit(((UnitCard)cardToPlay).UnitType, nodeToPlaceIn);
-					RemoveCard(cardIndex);
+					RemoveCard(cardToPlay);
 					PlayerMana -= cardToPlay.cost;
 					print("AI played a unit");
+					TurnManager.instance.cardSuccessful = false;
 				}
 				else
 				{
@@ -269,18 +269,26 @@ public class AIPlayer : Player
 
 			if (chosenUnit.unitType == Unit.UnitTypes.Priest)
 			{
-				Unit ally = GetClosestAlly(chosenUnit.transform.position);
+				Unit ally = GetAllyInNeed();
+				
+				if (!ally)
+					yield break;
+				
 				if (ally && CanHeal(chosenUnit, ally) && ally.GetCurrentHealth() < ally.GetMaxHealth())
 				{
-					//TODO: heal unit??
-					ally.SetCurrentHealth(ally.GetCurrentHealth() + chosenUnit.GetDamage());
+					ally.SetCurrentHealth(Mathf.Max(ally.GetCurrentHealth() + chosenUnit.GetDamage(), ally.GetMaxHealth()));
+					PlayerMana--;
+				}
+				else
+				{
+					yield return MoveUnit(chosenUnit, ally.transform.position);
 					PlayerMana--;
 				}
 			}
 			else
 			{
 				Unit enemy = GetClosetEnemy(chosenUnit.transform.position);
-				
+
 				if (!enemy)
 					yield break;
 				
@@ -356,6 +364,8 @@ public class AIPlayer : Player
 
 		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
 			closestNodeToTarget.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.GetMinRange(), unit.GetMaxRange()));
+
+		PlayerMana--;
 	}
 
 	private Unit GetClosestAlly(Vector3 startPos)
@@ -373,6 +383,23 @@ public class AIPlayer : Player
 		}
 		
 		return closestUnit;
+	}
+	
+	private Unit GetAllyInNeed()
+	{		
+		Unit allyInNeed = null;
+		int leastHealth = int.MaxValue;
+		foreach(Unit unit in m_playerUnits)
+		{
+			int currentHealth = unit.GetCurrentHealth();
+			if(currentHealth < leastHealth && currentHealth < unit.GetMaxHealth())
+			{
+				leastHealth = currentHealth;
+				allyInNeed = unit;
+			}
+		}
+		
+		return allyInNeed;
 	}
 	
 	private Unit GetClosetEnemy(Vector3 startPos)

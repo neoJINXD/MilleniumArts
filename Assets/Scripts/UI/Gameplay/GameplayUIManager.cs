@@ -21,11 +21,17 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
     private bool dynamicHandFilled;
 
     private RectTransform handPanelRT;
+    private Animator animator;
+    private static readonly int k_notEnoughMana = Animator.StringToHash("NotEnoughMana");
 
     public GameObject cardZoomInPanel;
     public GameObject cardPrefab;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+    
     void Start()
     {
         handCount = 5;
@@ -38,6 +44,11 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
     void Update()
     {
 		endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
+    }
+
+    public void NotEnoughMana()
+    {
+        animator.SetTrigger(k_notEnoughMana);
     }
 
     public void fillDynamicHand()
@@ -76,11 +87,6 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
         dynamicHandFilled = true;
     }
 
-    public void PlayCard(int cardIndex)
-    {
-        m_player.PlayCard(cardIndex);
-    }
-    
     public void endTurn()
     {
         GameLoop.instance.EndCurrentPlayer();

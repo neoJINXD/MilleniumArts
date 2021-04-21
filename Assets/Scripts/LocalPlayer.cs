@@ -4,5 +4,9 @@ using UnityEngine;
 
 public class LocalPlayer : Player
 {
-
+    public override void StartTurn()
+    {
+        base.StartTurn();
+        TurnManager.instance.ShowCardSelection();
+    }
 }

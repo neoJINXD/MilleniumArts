@@ -110,8 +110,8 @@ public class TurnManager : Singleton<TurnManager>
     // Update is called once per frame
     void Update()
     {
-        currentMana = GameLoop.instance.GetCurrentPlayer().PlayerMana;
-        manaText.text = "Mana " + currentMana + "/" + GameLoop.instance.GetCurrentPlayer().PlayerMana;
+	    Player thisPlayer = GameLoop.instance.GetPlayer(0);
+        manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
 
         if (currentTurnState == TurnState.DrawingCard)
         {
@@ -400,13 +400,14 @@ public class TurnManager : Singleton<TurnManager>
             }
         }
 
-        if (selectedNode != null)
+        if (selectedNode != null && currentPlayer.ManaCheck(1))
         {
             if (selectableNodes.Contains(selectedNode) && selectedNode.unitInThisNode == null)
             {
                 currentUnit.isClicked = true;
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
+                currentPlayer.PlayerMana--;
             }
         }
 
@@ -634,6 +635,9 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectableNodes.Contains(selectedNode))
         {
+	        if (!currentPlayer.ManaCheck(storedCard.cost))
+		        return;
+	        
             if (storedCard.castType == CastType.OnAlly)
             {
                 if (selectedNode.GetUnit() != null)
@@ -736,8 +740,10 @@ public class TurnManager : Singleton<TurnManager>
         foreach (Node node in allUnitsNodes)
             node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Unit");
 
-        if(cardSuccessful)
-            currentPlayer.RemoveCard(storedCard);
+        if (cardSuccessful)
+        {
+			currentPlayer.PlayCard(storedCard);
+        }
 
         cardSuccessful = false;
 

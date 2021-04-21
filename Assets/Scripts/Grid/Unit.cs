@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
 using UnityEditor;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Unit : MonoBehaviour 
 {
@@ -24,9 +25,13 @@ public class Unit : MonoBehaviour
     [SerializeField] protected int cost;
     [SerializeField] protected Node[] path;
     [SerializeField] protected int targetIndex;
+    public bool isClicked = false;
+
+    [Header("UI")]
+    [SerializeField] private Slider m_healthBar;
+
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
-    public bool isClicked = false;
     private Camera mainCam;
     private const int constantMovementSpeed = 7;
     
@@ -383,7 +388,17 @@ public class Unit : MonoBehaviour
         mainCam = Camera.main;
     }
 
-    
+    private void Update()
+    {
+        m_healthBar.value = (float) currentHealth / maxHealth;
+
+        if (currentHealth < 1)
+        {
+            GameLoop.instance.GetPlayer(unitPlayerId).RemoveUnit(this);
+            Destroy(gameObject);
+        }
+    }
+
     public void SelectNewUnitPosition()
     {
         RaycastHit hit;
