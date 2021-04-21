@@ -541,6 +541,8 @@ public class TurnManager : Singleton<TurnManager>
         }
         else
             print("Attack missed!");
+
+        currentPlayer.PlayerMana--;
     }
 
     private void ResetMaterial()

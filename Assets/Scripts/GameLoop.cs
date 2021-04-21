@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zone.Core.Utils;
@@ -13,9 +14,13 @@ public class GameLoop : Singleton<GameLoop>
     {}
 
     [SerializeField] private List<Player> players = new List<Player>();
+    [SerializeField] private GameObject m_gameOverUI;
+    [SerializeField] private TMPro.TMP_Text m_winningPlayerText;
 
     private int index;
     private int turnMana = 3;
+    private bool winCondition = false;
+    private int winningId;
 
     //To be able to wait for local player, networked player, and AI player turns
     public IEnumerator Play()
@@ -25,7 +30,7 @@ public class GameLoop : Singleton<GameLoop>
             players[i].PlayerId = i;
         }
         
-        while (true)
+        while (!winCondition)
         {
             foreach (var player in players)
             {
@@ -40,6 +45,23 @@ public class GameLoop : Singleton<GameLoop>
                 Debug.Log("Player " + index + "'s turn.");
                 yield return new WaitUntil(() => player.TurnComplete);
                 turnMana++;
+            }
+        }
+
+
+    }
+
+    private void Update()
+    {
+        foreach (var player in players)
+        {
+            if (!player.KingAlive)
+            {
+                winCondition = true;
+                winningId = GetOtherPlayer(player.PlayerId).PlayerId;
+                
+                m_gameOverUI.SetActive(true);
+                m_winningPlayerText.SetText($"Player {winningId} wins!");
             }
         }
     }
