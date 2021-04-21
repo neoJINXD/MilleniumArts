@@ -135,7 +135,7 @@ public class AIPlayer : Player
 					}
 					else
 					{
-						yield return MoveUnitTowardsInRange(closestAlly, King.transform.position);
+						yield return MoveUnitTowards(closestAlly, King.transform.position);
 						print("AI moving " + closestAlly.name + " towards king to aheal");
 					}
 				}
@@ -154,7 +154,7 @@ public class AIPlayer : Player
 					}
 					else
 					{
-						yield return MoveUnitTowardsInRange(closestAlly, King.transform.position);
+						yield return MoveUnitTowards(closestAlly, King.transform.position);
 						print("AI moving " + closestAlly.name + " towards king to attack nearby enemies");
 					}
 				}
@@ -289,7 +289,7 @@ public class AIPlayer : Player
 				}
 				else
 				{
-					yield return MoveUnitTowardsInRange(chosenUnit, ally.transform.position);
+					yield return MoveUnitTowards(chosenUnit, ally.transform.position);
 					print("AI unit moving " + chosenUnit.name + " to heal " + ally.name);
 				}
 			}
@@ -308,7 +308,7 @@ public class AIPlayer : Player
 				}
 				else
 				{
-					yield return MoveUnitTowardsInRange(chosenUnit, enemy.transform.position);
+					yield return MoveUnitTowards(chosenUnit, enemy.transform.position);
 					print("AI unit moving " + chosenUnit.name + " to attack " + enemy.name);
 				}
 			}
@@ -351,7 +351,7 @@ public class AIPlayer : Player
 		}
 	}
 	
-	private IEnumerator MoveUnitTowardsInRange(Unit unit, Vector3 targetLocation)
+	private IEnumerator MoveUnitTowards(Unit unit, Vector3 targetLocation)
 	{
 		Node closestNodeToTarget = null;
 		float closetDist = Mathf.Infinity;
