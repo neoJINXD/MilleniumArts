@@ -4,9 +4,11 @@ using UnityEngine;
 using Zone.Core.Utils;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class TurnManager : Singleton<TurnManager>
 {
+	[SerializeField] private GameObject attackAnimation;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] public Material availableMaterial;
     [SerializeField] public Material defaultMaterial;
@@ -525,10 +527,15 @@ public class TurnManager : Singleton<TurnManager>
         currentTurnState = TurnState.Free;
     }
 
-    [SerializeField] private GameObject test;
+    
     void Attack(Unit attacker, Unit receiver)
     {
-	    print("ANIMATION HERE");
+	    Instantiate(attackAnimation, currentUnit.transform, false);
+	    Destroy(attackAnimation);
+	    // if (attackAnimation.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Done"))
+	    // {
+		   //  
+	    // }
 	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
