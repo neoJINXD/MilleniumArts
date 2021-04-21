@@ -131,12 +131,12 @@ public class AIPlayer : Player
 					{
 						King.SetCurrentHealth(Mathf.Max(King.GetCurrentHealth() + closestAlly.GetDamage(), King.GetMaxHealth()));
 						PlayerMana--;
-						print("AI unit " + closestAlly.name + "healed king");
+						Debug.Log("<color=green>AI unit " + closestAlly.name + "healed king" + "</color>");
 					}
 					else
 					{
 						yield return MoveUnitTowards(closestAlly, King.transform.position);
-						print("AI moving " + closestAlly.name + " towards king to aheal");
+						Debug.Log("AI moving " + closestAlly.name + " towards king to aheal");
 					}
 				}
 				else
@@ -150,12 +150,12 @@ public class AIPlayer : Player
 					{
 						enemy.SetCurrentHealth(enemy.GetCurrentHealth() - closestAlly.GetDamage());
 						PlayerMana--;
-						print("AI attacking " + enemy.name + " to defend king");
+						Debug.Log("<color=red>AI attacking " + enemy.name + " to defend king" + "</color>");
 					}
 					else
 					{
 						yield return MoveUnitTowards(closestAlly, King.transform.position);
-						print("AI moving " + closestAlly.name + " towards king to attack nearby enemies");
+						Debug.Log("AI moving " + closestAlly.name + " towards king to attack nearby enemies");
 					}
 				}
 			}
@@ -283,14 +283,14 @@ public class AIPlayer : Player
 				if (ally && CanHeal(chosenUnit, ally) && ally.GetCurrentHealth() < ally.GetMaxHealth())
 				{
 					ally.SetCurrentHealth(Mathf.Max(ally.GetCurrentHealth() + chosenUnit.GetDamage(), ally.GetMaxHealth()));
-					print("AI unit " + chosenUnit.name + " healed " + ally.name);
+					Debug.Log("<color=green>AI unit " + chosenUnit.name + " healed " + ally.name + "</color>");
 
 					PlayerMana--;
 				}
 				else
 				{
 					yield return MoveUnitTowards(chosenUnit, ally.transform.position);
-					print("AI unit moving " + chosenUnit.name + " to heal " + ally.name);
+					Debug.Log("AI unit moving " + chosenUnit.name + " to heal " + ally.name);
 				}
 			}
 			else
@@ -303,13 +303,13 @@ public class AIPlayer : Player
 				if (enemy && CanAttack(chosenUnit, enemy))
 				{
 					enemy.SetCurrentHealth(enemy.GetCurrentHealth() - chosenUnit.GetDamage());
-					print("AI unit " + chosenUnit.name + " attacked " + enemy.name);
+					Debug.Log("<color=red>AI unit " + chosenUnit.name + " attacked " + enemy.name + "</color>");
 					PlayerMana--;
 				}
 				else
 				{
 					yield return MoveUnitTowards(chosenUnit, enemy.transform.position);
-					print("AI unit moving " + chosenUnit.name + " to attack " + enemy.name);
+					Debug.Log("AI unit moving " + chosenUnit.name + " to attack " + enemy.name);
 				}
 			}
 
@@ -341,7 +341,7 @@ public class AIPlayer : Player
 			currentUnit.transform.position, currentUnit.GetCanFly(), currentUnit.GetMinRange(),
 			currentUnit.GetMaxRange());
 		//Gets a list of nodes of nearby enemies and searches the target's node in this list
-		if (nearbyEnemies.Contains(m_pathfinding.gridRef.NodeFromWorldPoint(currentUnit.transform.position)))
+		if (nearbyEnemies.Contains(m_pathfinding.gridRef.NodeFromWorldPoint(targetUnit.transform.position)))
 		{
 			return true; //return true if target's node is present, else false
 		}
