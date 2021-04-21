@@ -394,7 +394,12 @@ public class Unit : MonoBehaviour
 
         if (currentHealth < 1)
         {
-            GameLoop.instance.GetPlayer(unitPlayerId).RemoveUnit(this);
+            Player owningPlayer = GameLoop.instance.GetPlayer(unitPlayerId);
+            
+            if (unitType == UnitTypes.King)
+                owningPlayer.KingAlive = false;
+            
+            owningPlayer.RemoveUnit(this);
             Destroy(gameObject);
         }
     }

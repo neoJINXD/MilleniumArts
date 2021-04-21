@@ -205,15 +205,16 @@ public class Pathfinding : Singleton<Pathfinding>
 
 				if (currentNode.GetUnit() != null)
 				{
-					if ((currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID)||(currentNode.GetUnit() == null) && !inRange.Contains(currentNode))
+					if ((currentNode.GetUnit().GetUnitPlayerID() == callingPlayerID)||(currentNode.GetUnit() == null) || !inRange.Contains(currentNode))
 					{
 						continue;
 					}
-                
 					enemyUnitNodes.Add(gridRef.grid[x,y]);
 				}
 			}
 		}
+		
+		print(enemyUnitNodes.Count);
 
 		return enemyUnitNodes;
 	}

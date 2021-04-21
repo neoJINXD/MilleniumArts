@@ -482,6 +482,9 @@ public class TurnManager : Singleton<TurnManager>
 
     void validateSelectTileClickAttack()
     {
+	    if (!currentPlayer.ManaCheck(1))
+		    return;
+	    
         Node selectedNode = null;
         Vector3 selectedNodePosition = Vector3.zero;
 
@@ -500,7 +503,7 @@ public class TurnManager : Singleton<TurnManager>
             }
         }
 
-        if (selectedNode != null)
+        if (selectedNode != null && selectableNodes.Contains(selectedNode))
         {
             if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() != currentPlayer.PlayerId)
                 Attack(currentUnit, selectedNode.unitInThisNode);
@@ -541,6 +544,8 @@ public class TurnManager : Singleton<TurnManager>
         }
         else
             print("Attack missed!");
+
+        currentPlayer.PlayerMana--;
     }
 
     private void ResetMaterial()
@@ -619,18 +624,18 @@ public class TurnManager : Singleton<TurnManager>
         Vector3 selectedNodePosition = Vector3.zero;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
+        RaycastHit hit;
+        if (Physics.Raycast(ray.origin, ray.direction, out hit))
         {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
-                selectedNodePosition = hit.transform.position;
-                break;
-            }
+	        if (hit.transform.CompareTag("Tile"))
+	        {
+		        selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
+		        selectedNodePosition = hit.transform.position;
+	        }
+        }
+        else
+        {
+	        return;
         }
 
         if (selectableNodes.Contains(selectedNode))
