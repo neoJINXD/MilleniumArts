@@ -482,6 +482,9 @@ public class TurnManager : Singleton<TurnManager>
 
     void validateSelectTileClickAttack()
     {
+	    if (!currentPlayer.ManaCheck(1))
+		    return;
+	    
         Node selectedNode = null;
         Vector3 selectedNodePosition = Vector3.zero;
 
