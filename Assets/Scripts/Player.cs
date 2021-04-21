@@ -36,8 +36,6 @@ public abstract class Player : MonoBehaviour
 
     public virtual void PlayCard(Card cardToPlay)
     {
-        TurnManager.instance.currentPlayer = this;
-
         if (CardCount > 0)
         {
             if (cardToPlay.cost <= PlayerMana)
@@ -102,11 +100,7 @@ public abstract class Player : MonoBehaviour
     
     public void RemoveUnit(Unit unit)
     {
-        foreach (Unit u in m_playerUnits)
-        {
-            if (u.gameObject == unit.gameObject)
-                m_playerUnits.Remove(u);
-        }
+        m_playerUnits.Remove(unit);
     }
 
     public int CardCount => m_playerCards.Count;

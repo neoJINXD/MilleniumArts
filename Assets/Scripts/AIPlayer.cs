@@ -439,7 +439,7 @@ public class AIPlayer : Player
 	
 	private Unit GetClosetEnemy(Vector3 startPos)
 	{
-		List<Unit> enemyUnits = GameLoop.instance.GetOtherPlayer(PlayerId).Units;
+		List<Unit> enemyUnits = new List<Unit>(GameLoop.instance.GetOtherPlayer(PlayerId).Units);
 		enemyUnits.Add(GameLoop.instance.GetOtherPlayer(PlayerId).King);
 		
 		Unit closestUnit = null;

@@ -110,6 +110,8 @@ public class TurnManager : Singleton<TurnManager>
     // Update is called once per frame
     void Update()
     {
+	    currentPlayer = GameLoop.instance.GetCurrentPlayer();
+	    
 	    Player thisPlayer = GameLoop.instance.GetPlayer(0);
         manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
 

@@ -214,8 +214,6 @@ public class Pathfinding : Singleton<Pathfinding>
 			}
 		}
 		
-		print(enemyUnitNodes.Count);
-
 		return enemyUnitNodes;
 	}
 	
