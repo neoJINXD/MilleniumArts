@@ -96,6 +96,9 @@ public class AIPlayer : Player
 	
 	private IEnumerator CheckKingCondition()
 	{
+		if (!ManaCheck(1))
+			yield break;
+
 		float kingHealthThreshold = 0.5f;
 		if (m_behaviour == BehaviourType.Aggressive)
 			kingHealthThreshold = 0.25f;
@@ -111,8 +114,11 @@ public class AIPlayer : Player
 			{
 				// move king away from closest enemy unit.
 				// need to figure out a way to cap depending on resources.
-				King.transform.position = nearbyEnemyNodes[0].worldPosition - King.transform.position;
+				yield return MoveUnitAway(King, GetClosetEnemy(King.transform.position));
 
+				if (!ManaCheck(1))
+					yield break;
+				
 				// Bring closest ally to help
 				Unit closestAlly = GetClosestAlly(King.transform.position);
 				
@@ -123,33 +129,33 @@ public class AIPlayer : Player
 				{
 					if(CanHeal(closestAlly, King))
 					{
-						// TODO: Unit heal
-						/*
-						 * Check if can move healer unit in range of king to heal.
-						 * If so, bring unit back in range:
-						 *		Heal King
-						 * Else
-						 *      Bring closer to king for next turn. Or, we can make it so that the AI always keeps a healer in its spawn
-						 */
+						King.SetCurrentHealth(Mathf.Max(King.GetCurrentHealth() + closestAlly.GetDamage(), King.GetMaxHealth()));
+						PlayerMana--;
+						print("AI unit " + closestAlly.name + "healed king");
 					}
 					else
 					{
-						yield return MoveUnit(closestAlly, King.transform.position);
+						yield return MoveUnitTowardsInRange(closestAlly, King.transform.position);
+						print("AI moving " + closestAlly.name + " towards king to aheal");
 					}
 				}
 				else
 				{
-					if(CanAttack(closestAlly, GetClosetEnemy(King.transform.position)))
+					Unit enemy = GetClosetEnemy(King.transform.position);
+					
+					if (!enemy)
+						yield break;
+					
+					if(CanAttack(closestAlly, enemy))
 					{
-						// TODO: Unit attack
-						/*
-						 * Move unit close to enemy unit near king.
-						 * Attack enemy unit.
-						 */
+						enemy.SetCurrentHealth(enemy.GetCurrentHealth() - closestAlly.GetDamage());
+						PlayerMana--;
+						print("AI attacking " + enemy.name + " to defend king");
 					}
 					else
 					{
-						yield return MoveUnit(closestAlly, King.transform.position);
+						yield return MoveUnitTowardsInRange(closestAlly, King.transform.position);
+						print("AI moving " + closestAlly.name + " towards king to attack nearby enemies");
 					}
 				}
 			}
@@ -220,7 +226,7 @@ public class AIPlayer : Player
 					CardEffectManager.instance.CreateUnit(((UnitCard)cardToPlay).UnitType, nodeToPlaceIn);
 					RemoveCard(cardToPlay);
 					PlayerMana -= cardToPlay.cost;
-					print("AI played a unit");
+					print("AI placed " + cardToPlay.name + " unit");
 					TurnManager.instance.cardSuccessful = false;
 				}
 				else
@@ -277,12 +283,14 @@ public class AIPlayer : Player
 				if (ally && CanHeal(chosenUnit, ally) && ally.GetCurrentHealth() < ally.GetMaxHealth())
 				{
 					ally.SetCurrentHealth(Mathf.Max(ally.GetCurrentHealth() + chosenUnit.GetDamage(), ally.GetMaxHealth()));
+					print("AI unit " + chosenUnit.name + " healed " + ally.name);
+
 					PlayerMana--;
 				}
 				else
 				{
-					yield return MoveUnit(chosenUnit, ally.transform.position);
-					PlayerMana--;
+					yield return MoveUnitTowardsInRange(chosenUnit, ally.transform.position);
+					print("AI unit moving " + chosenUnit.name + " to heal " + ally.name);
 				}
 			}
 			else
@@ -295,12 +303,13 @@ public class AIPlayer : Player
 				if (enemy && CanAttack(chosenUnit, enemy))
 				{
 					enemy.SetCurrentHealth(enemy.GetCurrentHealth() - chosenUnit.GetDamage());
+					print("AI unit " + chosenUnit.name + " attacked " + enemy.name);
 					PlayerMana--;
 				}
 				else
 				{
-					yield return MoveUnit(chosenUnit, enemy.transform.position);
-					PlayerMana--;
+					yield return MoveUnitTowardsInRange(chosenUnit, enemy.transform.position);
+					print("AI unit moving " + chosenUnit.name + " to attack " + enemy.name);
 				}
 			}
 
@@ -342,7 +351,7 @@ public class AIPlayer : Player
 		}
 	}
 	
-	private IEnumerator MoveUnit(Unit unit, Vector3 targetLocation)
+	private IEnumerator MoveUnitTowardsInRange(Unit unit, Vector3 targetLocation)
 	{
 		Node closestNodeToTarget = null;
 		float closetDist = Mathf.Infinity;
@@ -364,6 +373,32 @@ public class AIPlayer : Player
 
 		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
 			closestNodeToTarget.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.GetMinRange(), unit.GetMaxRange()));
+
+		PlayerMana--;
+	}
+
+	private IEnumerator MoveUnitAway(Unit unit, Unit awayFrom)
+	{
+		Node farthestNodeFromUnit = null;
+		float farthestDist = 0;
+		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
+			unit.GetMinRange(), unit.GetMaxRange()).ToArray();
+		
+		if(movableNodes.Length < 1)
+			yield break;
+
+		for (int i = 0; i < movableNodes.Length; i++)
+		{
+			float currentDist = Vector3.Distance(awayFrom.transform.position, movableNodes[i].worldPosition);
+			if (currentDist > farthestDist)
+			{
+				farthestNodeFromUnit = movableNodes[i];
+				farthestDist = currentDist;
+			}
+		}
+
+		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
+			farthestNodeFromUnit.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.GetMinRange(), unit.GetMaxRange()));
 
 		PlayerMana--;
 	}

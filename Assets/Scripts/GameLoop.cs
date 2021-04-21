@@ -42,7 +42,7 @@ public class GameLoop : Singleton<GameLoop>
             {
                 Player player = players[index];
                 player.StartTurn();
-                Debug.Log("Player " + index + "'s turn.");
+                Debug.Log("Player " + index + "'s turn. --------------------------------------------");
                 yield return new WaitUntil(() => player.TurnComplete);
                 turnMana++;
             }
