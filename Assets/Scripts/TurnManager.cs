@@ -621,18 +621,18 @@ public class TurnManager : Singleton<TurnManager>
         Vector3 selectedNodePosition = Vector3.zero;
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity);
-
-        for (int i = 0; i < hits.Length; i++)
+        RaycastHit hit;
+        if (Physics.Raycast(ray.origin, ray.direction, out hit))
         {
-            RaycastHit hit = hits[i];
-
-            if (hit.transform.CompareTag("Tile"))
-            {
-                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
-                selectedNodePosition = hit.transform.position;
-                break;
-            }
+	        if (hit.transform.CompareTag("Tile"))
+	        {
+		        selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
+		        selectedNodePosition = hit.transform.position;
+	        }
+        }
+        else
+        {
+	        return;
         }
 
         if (selectableNodes.Contains(selectedNode))
