@@ -500,7 +500,7 @@ public class TurnManager : Singleton<TurnManager>
             }
         }
 
-        if (selectedNode != null)
+        if (selectedNode != null && selectableNodes.Contains(selectedNode))
         {
             if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() != currentPlayer.PlayerId)
                 Attack(currentUnit, selectedNode.unitInThisNode);
