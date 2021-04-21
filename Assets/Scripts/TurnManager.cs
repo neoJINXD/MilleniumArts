@@ -327,8 +327,7 @@ public class TurnManager : Singleton<TurnManager>
 
             foreach (Node node in allUnitsNodes)
                 node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-
-
+            
             if(currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
                 currentTurnState = TurnState.SelectingTileHeal;
             else
@@ -526,8 +525,11 @@ public class TurnManager : Singleton<TurnManager>
         currentTurnState = TurnState.Free;
     }
 
+    [SerializeField] private GameObject test;
     void Attack(Unit attacker, Unit receiver)
     {
+	    print("ANIMATION HERE");
+	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
         int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
