@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PhotonPrototyping.unity
     guid: 9e79ff828d2cdaa459ca3684ca4fd7aa
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/PhotonMain.unity
     guid: a6f3ce48ce8c5a8418f1adf7abc3d879
   - enabled: 1
@@ -19,5 +19,5 @@ EditorBuildSettings:
     guid: 69478bf841688df4db060b1798c50db3
   - enabled: 1
     path: Assets/Scenes/PhotonGameMap.unity
-    guid: 447020c649c215b4e8937fdddbab4858
+    guid: 2e004b28e6745b3448b687369328c74d
   m_configObjects: {}
