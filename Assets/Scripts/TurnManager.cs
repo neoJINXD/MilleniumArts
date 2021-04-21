@@ -40,6 +40,8 @@ public class TurnManager : Singleton<TurnManager>
     
     public int currentMana;
 
+    private GameObject animRef;
+
     public enum TurnState
     {
         DrawingCard,
@@ -152,6 +154,12 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (Input.GetMouseButtonDown(0))
                 placeEnemyUnit();
+        }
+
+        // destroy attack GameObject animation after it is finished playing
+        if (animRef != null)
+        {
+	        Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
         }
     }
 
@@ -530,12 +538,7 @@ public class TurnManager : Singleton<TurnManager>
     
     void Attack(Unit attacker, Unit receiver)
     {
-	    Instantiate(attackAnimation, currentUnit.transform, false);
-	    Destroy(attackAnimation);
-	    // if (attackAnimation.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Done"))
-	    // {
-		   //  
-	    // }
+	    animRef = Instantiate(attackAnimation, currentUnit.transform, false);
 	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
