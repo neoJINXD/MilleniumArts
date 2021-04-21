@@ -1211,6 +1211,7 @@ MonoBehaviour:
   cost: 0
   targetIndex: 0
   isClicked: 0
+  m_healthBar: {fileID: 0}
 --- !u!136 &891132760
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1399,6 +1400,7 @@ MonoBehaviour:
   cost: 0
   targetIndex: 0
   isClicked: 0
+  m_healthBar: {fileID: 0}
 --- !u!136 &1084916424
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1757,6 +1759,7 @@ MonoBehaviour:
   cost: 0
   targetIndex: 0
   isClicked: 0
+  m_healthBar: {fileID: 0}
 --- !u!136 &1273640696
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2160,6 +2163,7 @@ MonoBehaviour:
   cost: 0
   targetIndex: 0
   isClicked: 0
+  m_healthBar: {fileID: 0}
 --- !u!1 &1617636894
 GameObject:
   m_ObjectHideFlags: 0
@@ -2319,7 +2323,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fa2cd5e8026d234196603690896ecfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_player: {fileID: 1514034435}
   m_placeButton: {fileID: 518576770}
   m_endTurnButton: {fileID: 1087767110}
 --- !u!114 &1676824104
@@ -2575,6 +2578,7 @@ MonoBehaviour:
   cost: 0
   targetIndex: 0
   isClicked: 0
+  m_healthBar: {fileID: 0}
 --- !u!136 &1755316931
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3312,6 +3316,12 @@ PrefabInstance:
       propertyPath: healButtonRef
       value: 
       objectReference: {fileID: 1958855452}
+    - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: attackAnimation
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
+        type: 3}
     - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: attackButtonRef
