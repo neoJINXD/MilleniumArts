@@ -400,13 +400,14 @@ public class TurnManager : Singleton<TurnManager>
             }
         }
 
-        if (selectedNode != null)
+        if (selectedNode != null && currentPlayer.ManaCheck(1))
         {
             if (selectableNodes.Contains(selectedNode) && selectedNode.unitInThisNode == null)
             {
                 currentUnit.isClicked = true;
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
+                currentPlayer.PlayerMana--;
             }
         }
 
