@@ -4,9 +4,11 @@ using UnityEngine;
 using Zone.Core.Utils;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
 
 public class TurnManager : Singleton<TurnManager>
 {
+	[SerializeField] private GameObject attackAnimation;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] public Material availableMaterial;
     [SerializeField] public Material defaultMaterial;
@@ -37,6 +39,8 @@ public class TurnManager : Singleton<TurnManager>
     public List<Unit> allUnits;
     
     public int currentMana;
+
+    private GameObject animRef;
 
     public enum TurnState
     {
@@ -150,6 +154,12 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (Input.GetMouseButtonDown(0))
                 placeEnemyUnit();
+        }
+
+        // destroy attack GameObject animation after it is finished playing
+        if (animRef != null)
+        {
+	        Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
         }
     }
 
@@ -327,8 +337,7 @@ public class TurnManager : Singleton<TurnManager>
 
             foreach (Node node in allUnitsNodes)
                 node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-
-
+            
             if(currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
                 currentTurnState = TurnState.SelectingTileHeal;
             else
@@ -530,8 +539,11 @@ public class TurnManager : Singleton<TurnManager>
         currentTurnState = TurnState.Free;
     }
 
+    
     void Attack(Unit attacker, Unit receiver)
     {
+	    animRef = Instantiate(attackAnimation, currentUnit.transform, false);
+	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
         int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
