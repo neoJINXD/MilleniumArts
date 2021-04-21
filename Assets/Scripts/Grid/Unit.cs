@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 

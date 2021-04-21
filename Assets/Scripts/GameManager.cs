@@ -55,21 +55,19 @@ public class GameManager : Singleton<GameManager>
         view = GetComponent<PhotonView>();
 
 
-        // TODO change cube to king unit
-        if (PhotonNetwork.IsMasterClient)
-        {
-            print("Player 1 creating");
-            player1 = PhotonNetwork.Instantiate("Cube", 
-                player1Spawn.transform.position, player1Spawn.transform.rotation, 0);
-            player1.GetComponent<Renderer>().material = player1Mat;
-        }
-        else
-        {
-            print("Player 2 creating");
-            player2 = PhotonNetwork.Instantiate("Cube",
-                player2Spawn.transform.position, player2Spawn.transform.rotation, 0);
-            player2.GetComponent<Renderer>().material = player2Mat;
-        }
+        // // TODO change cube to king unit
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+         //   print("Player 1 creating");
+            //player1 = PhotonNetwork.Instantiate("Cube", player1Spawn.transform.position, player1Spawn.transform.rotation, 0);
+            //player1.GetComponent<Renderer>().material = player1Mat;
+        //}
+        //else
+        //{
+        //    print("Player 2 creating");
+            //player2 = PhotonNetwork.Instantiate("Cube", player2Spawn.transform.position, player2Spawn.transform.rotation, 0);
+            //player2.GetComponent<Renderer>().material = player2Mat;
+        //}
 
         Player p1 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
         Player p2 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
@@ -87,7 +85,7 @@ public class GameManager : Singleton<GameManager>
             isLeaving = true;
             NetworkRoom.LeaveRoom();
             //     PhotonNetwork.LeaveRoom();
-            //     SceneManager.LoadScene("PhotonPrototyping");
+            SceneManager.LoadScene("PhotonPrototyping");
         }    
     }
 

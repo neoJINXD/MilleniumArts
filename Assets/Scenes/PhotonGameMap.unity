@@ -2520,6 +2520,10 @@ PrefabInstance:
       propertyPath: kingSpawnP2.Array.data[1]
       value: 
       objectReference: {fileID: 965627753}
+    - target: {fileID: 1514034437, guid: e4857921910c9f242a6803656d2a979b, type: 3}
+      propertyPath: networked
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 425242347578269721, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: m_AnchoredPosition.x

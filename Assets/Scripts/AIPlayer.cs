@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
-using UnityEditor.Rendering;
+//using UnityEditor.Rendering;
 using UnityEngine;
 
 public class AIPlayer : Player
