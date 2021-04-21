@@ -9,6 +9,7 @@ public abstract class Player : MonoBehaviour
 {
     [HideInInspector] public int PlayerId;
     public int PlayerMana;
+    public int PlayerMaxMana;
 	public Unit King;
     [SerializeField] protected List<Card> m_playerCards = new List<Card>();
     [SerializeField] protected List<Unit> m_playerUnits = new List<Unit>();
@@ -32,26 +33,20 @@ public abstract class Player : MonoBehaviour
 
     #region Unit & Card Setters/Getters
 
-    public virtual void PlayCard(int cardIndex)
+    public virtual void PlayCard(Card cardToPlay)
     {
-        // temporary changed this to simulate placing enemy unit for testing
-        // expecting to change some stuff to accomodate AI or networking
-        // - rey
-
-        TurnManager.instance.placingEnemyUnit = true;
         TurnManager.instance.currentPlayer = this;
 
-        /*if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
+        if (CardCount > 0)
         {
-            Card cardToPlay = GetCard(cardIndex);
             if (cardToPlay.cost <= PlayerMana)
             {
-                if(cardToPlay.type == CardType.Unit)
+                if(cardToPlay.GetType() == typeof(UnitCard))
                 {
-                    TurnManager.instance.placingEnemyUnit = true;
-                    TurnManager.instance.currentPlayer = this;
                 }
 
+                PlayerMana -= cardToPlay.cost;
+                RemoveCard(cardToPlay);
             }
             else
             {
@@ -62,12 +57,16 @@ public abstract class Player : MonoBehaviour
         else
         {
             Debug.LogError("Player out of cards or bad card index");
-        }*/
+        }
     }
-    
-    public void RemoveCard(int index)
+
+    public bool ManaCheck(int cost)
     {
-        m_playerCards.RemoveAt(index);
+        bool canUse = PlayerMana >= cost;
+        if(!canUse)
+            GameplayUIManager.instance.NotEnoughMana();
+
+        return canUse;
     }
 
     public void RemoveCard(Card card)

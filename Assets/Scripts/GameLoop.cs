@@ -30,6 +30,7 @@ public class GameLoop : Singleton<GameLoop>
             foreach (var player in players)
             {
                 player.PlayerMana = turnMana;
+                player.PlayerMaxMana = turnMana;
             }
             
             for (index = 0; index < players.Count; index++)

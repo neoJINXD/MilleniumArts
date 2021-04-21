@@ -85,6 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerId: 0
   PlayerMana: 0
+  PlayerMaxMana: 0
   King: {fileID: 0}
   m_playerCards: []
   m_playerUnits: []
@@ -102,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerId: 0
   PlayerMana: 0
+  PlayerMaxMana: 0
   King: {fileID: 0}
   m_playerCards: []
   m_playerUnits: []
@@ -239,7 +241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00016021729, y: 0.000019073486}
+  m_AnchoredPosition: {x: -0.00016784668, y: 0.000019073486}
   m_SizeDelta: {x: -45.596, y: -16.052}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3437506041100076005
@@ -790,8 +792,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 33.2
+  m_fontSizeBase: 33.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -826,7 +828,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 17.774824, y: -11.588212, z: 19.138212, w: -12.6706085}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1126,7 +1128,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.096354716, y: 0.104}
   m_AnchorMax: {x: 0.8945887, y: 0.896}
-  m_AnchoredPosition: {x: -0.00010681152, y: -0.0000076293945}
+  m_AnchoredPosition: {x: -0.00012207031, y: 0}
   m_SizeDelta: {x: -85.061, y: -89.567}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8248314846659528250
@@ -2375,6 +2377,7 @@ GameObject:
   - component: {fileID: 5066473959696421399}
   - component: {fileID: 5066473959696421416}
   - component: {fileID: 5066473959696421417}
+  - component: {fileID: 1192495519}
   m_Layer: 5
   m_Name: GameplayUICanvas
   m_TagString: Untagged
@@ -2487,6 +2490,25 @@ MonoBehaviour:
   cardZoomInPanel: {fileID: 5066473959591253378}
   cardPrefab: {fileID: 2029850991681697623, guid: c23dd6b41858043488b6b597af7395bf,
     type: 3}
+--- !u!95 &1192495519
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5066473959696421418}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d25bf259b751cb4499497347df1da587, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5066473959697811811
 GameObject:
   m_ObjectHideFlags: 0
@@ -6562,7 +6584,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0015487671, y: -0.0016937256}
+  m_AnchoredPosition: {x: -0.0015563965, y: -0.0016937256}
   m_SizeDelta: {x: -106.56, y: -113.09}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &343072362918744196
@@ -6620,7 +6642,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 29.65
+  m_fontSize: 27.45
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6656,7 +6678,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 1
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 15.87945, y: 0, z: 17.160793, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -6830,7 +6852,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0014801025, y: -0.0002861023}
+  m_AnchoredPosition: {x: -0.0014648438, y: -0.0002861023}
   m_SizeDelta: {x: -102.05, y: -16.539}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5692629616526499327
