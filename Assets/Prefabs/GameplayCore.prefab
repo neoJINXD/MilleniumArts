@@ -407,7 +407,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keepAlive: 0
-  attackAnimation: {fileID: 7056591320535787146, guid: 71f5588f777c4d447a4a482bfbc19877,
+  attackAnimationHit: {fileID: 4685259530587244230, guid: 21d18fe1550a6e24590f746025a6446c,
+    type: 3}
+  attackAnimationMiss: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
     type: 3}
   unitPrefab: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
     type: 3}
