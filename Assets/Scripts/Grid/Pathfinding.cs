@@ -348,7 +348,7 @@ public class Pathfinding : Singleton<Pathfinding>
 	}
 	
 	//for Ai
-	public Node[] AIFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPlayerID, int minRange, int maxRange) 
+	public Node[] AIFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPlayerID) 
 	{
 		bool pathSuccess = false;
 		HeuristicFunction heuristicFunction = new HeuristicFunction(GetDistance);
@@ -364,6 +364,8 @@ public class Pathfinding : Singleton<Pathfinding>
 			while (openSet.Count > 0) 
 			{
 				Node currentNode = openSet.RemoveFirst();
+				
+				
 				closedSet.Add(currentNode);
 				
 				if (currentNode == targetNode) {
