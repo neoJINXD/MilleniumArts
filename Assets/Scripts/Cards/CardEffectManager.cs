@@ -31,21 +31,40 @@ public class CardEffectManager : Singleton<CardEffectManager>
     public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
     {
         Unit placedUnit = null;
-        
-        if (unit == Unit.UnitTypes.Soldier)
-            placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-        if (unit == Unit.UnitTypes.Knight)
-            placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-        if (unit == Unit.UnitTypes.Assassin)
-            placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-        if (unit == Unit.UnitTypes.Priest)
-            placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-        if (unit == Unit.UnitTypes.Archer)
-            placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-        if (unit == Unit.UnitTypes.DragonRider)
-            placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
 
         int playerId = GameLoop.instance.GetCurrentPlayer().PlayerId;
+
+        if (unit == Unit.UnitTypes.Soldier)
+        {
+            placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + ", " +  positionNode.gridY + ")!\n");
+        }
+        else if (unit == Unit.UnitTypes.Knight)
+        {
+            placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+        }
+        else if (unit == Unit.UnitTypes.Assassin)
+        {
+            placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+        }
+        else if (unit == Unit.UnitTypes.Priest)
+        {
+            placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+        }
+        else if (unit == Unit.UnitTypes.Archer)
+        {
+            placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+        }  
+        else if (unit == Unit.UnitTypes.DragonRider)
+        {
+            placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Dragon Rider at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+        }
+            
         placedUnit.SetUnitPlayerID(playerId);
 
         positionNode.AddUnit(placedUnit);
@@ -61,8 +80,6 @@ public class CardEffectManager : Singleton<CardEffectManager>
         placedUnit.CheckHostileTrapOrItemInNode(positionNode);
 
         TurnManager.instance.cardSuccessful = true;
-
-        print(unit + " unit placed");
     }
     
     /*
@@ -75,14 +92,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_smite(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Smite!");
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() != playerId) // confirm that the unit is not ours
             {
-                selectedNode.unitInThisNode.DecreaseCurrentHealthBy(5); // smite damage
+                selectedNode.GetUnit().DecreaseCurrentHealthBy(5); // smite damage
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Smite");
             }
         }
     }
@@ -97,14 +113,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_snipe(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Snipe!");
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() != playerId) // confirm that the unit is not ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() != playerId) // confirm that the unit is not ours
             {
-                selectedNode.unitInThisNode.DecreaseCurrentHealthBy(10); // smite damage
+                selectedNode.GetUnit().DecreaseCurrentHealthBy(10); // smite damage
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") lost 10 health!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Smite");
             }
         }
     }
@@ -119,10 +134,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_heavenlySmite(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
-        print("Player " + playerId + " used Heavenly Smite!");
-
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 0, 1);
         HashSet<Node> getEnemyNodesInRange = new HashSet<Node>();
+
+        string spellMessage = "";
 
         foreach (Node node in allNodesInRange)
         {
@@ -133,11 +148,16 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
         }
 
-        foreach (Node node in getEnemyNodesInRange)
+        if(getEnemyNodesInRange.Count > 0)
         {
-            node.GetUnit().DecreaseCurrentHealthBy(3);
+            spellMessage += "Player " + playerId + " used Heavenly Smite at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+            foreach (Node node in getEnemyNodesInRange)
+            {
+                node.GetUnit().DecreaseCurrentHealthBy(3);
+                spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + ", " + node.gridY + ") lost 3 health!\n";
+            }
+            TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.cardSuccessful = true;
-            print("Card Effect Sucessful: Heavenly Smite");
         }
     }
 
@@ -151,10 +171,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_prayer(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
-        print("Player " + playerId + " used Prayer!");
-
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 0, 1);
         HashSet<Node> getAllyNodesInRange = new HashSet<Node>();
+
+        string spellMessage = "";
 
         foreach (Node node in allNodesInRange)
         {
@@ -165,11 +185,17 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
         }
 
-        foreach (Node node in getAllyNodesInRange)
+        if (getAllyNodesInRange.Count > 0)
         {
-            node.GetUnit().IncreaseCurrentHealthBy(3);
+            spellMessage += "Player " + playerId + " used Prayer at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+
+            foreach (Node node in getAllyNodesInRange)
+            {
+                spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + ", " + node.gridY + ") gained 3 health!\n";
+                node.GetUnit().IncreaseCurrentHealthBy(3);
+            }
+            TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.cardSuccessful = true;
-            print("Card Effect Sucessful: Prayer");
         }
     }
 
@@ -183,16 +209,14 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_vitality(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Vitality!");
-
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
-                selectedNode.unitInThisNode.IncreaseMaxHealthBy(5);
-                selectedNode.unitInThisNode.IncreaseCurrentHealthBy(5);
+                selectedNode.GetUnit().IncreaseMaxHealthBy(5);
+                selectedNode.GetUnit().IncreaseCurrentHealthBy(5);
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Vitality on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 5 maximum health!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Vitality");
             }
         }
     }
@@ -207,15 +231,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_endurance(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Endurance!");
-
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
-                selectedNode.unitInThisNode.IncreaseDefenceBy(2);
+                selectedNode.GetUnit().IncreaseDefenceBy(2);
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Endurance on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 2 defence!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Endurance");
             }
         }
     }
@@ -230,14 +252,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_vigor(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Vigor!");
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
-                selectedNode.unitInThisNode.IncreaseDamageBy(3);
+                selectedNode.GetUnit().IncreaseDamageBy(3);
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Vigor on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 5 damage!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Vigor");
             }
         }
     }
@@ -252,15 +273,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_nimbleness(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Nimbleness!");
-
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
-                selectedNode.unitInThisNode.IncreaseMovementSpeedBy(1);
+                selectedNode.GetUnit().IncreaseMovementSpeedBy(1);
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Nimbleness on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 1 movement speed!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Nimbleness");
             }
         }
     }
@@ -275,14 +294,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_agility(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Agility!");
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
-                selectedNode.unitInThisNode.IncreaseEvasionBy(10);
+                selectedNode.GetUnit().IncreaseEvasionBy(10);
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 10 evasion!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Agility");
             }
         }
     }
@@ -297,15 +315,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_precision(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Precision!");
-
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
-                selectedNode.unitInThisNode.IncreaseAccuracyBy(10);
+                selectedNode.GetUnit().IncreaseAccuracyBy(10);
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Precision on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 10 accuracy!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Precision");
             }
         }
     }
@@ -320,22 +336,23 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_oracle(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
-        print("Player " + playerId + " used Oracle!");
-
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 0, 2);
 
-        foreach(Node node in allNodesInRange)
+        string spellMessage = "Player " + playerId + " used Oracle at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+
+        foreach (Node node in allNodesInRange)
         {
             if(node.GetTrapOrItemList().Count > 0)
             {
                 foreach(TrapOrItem toi in node.GetTrapOrItemList())
                 {
                     if (toi.GetTrapOrItemPlayerID() != playerId)
-                        print("There is an enemy trap on (" + node.gridX + ", " + node.gridY + ").");
+                        spellMessage += "Enemy trap found at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
                 }
             }
         }
 
+        TurnManager.instance.updateGameHistory(spellMessage);
         TurnManager.instance.cardSuccessful = true;
     }
 
@@ -349,7 +366,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_disarmTrap(int playerId, Node selectedNode, Vector3 selectedNodePosition)
     {
-        print("Player " + playerId + " used Disarm Trap!");
+        string spellMessage = "Player " + playerId + " used Disarm Trap at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+
 
         if (selectedNode.GetTrapOrItemList().Count > 0)
         {
@@ -358,10 +376,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 if (toi.GetTrapOrItemPlayerID() != playerId)
                 {
                     selectedNode.RemoveTrapOrItem(toi);
-                    print("Enemy trapped removed from tile (" + selectedNode.gridX + ", " + selectedNode.gridY + ").");
+                    spellMessage += "Enemy trap removed at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
                 }
             }
         }
+
+        TurnManager.instance.updateGameHistory(spellMessage);
         TurnManager.instance.cardSuccessful = true;
     }
 
@@ -375,15 +395,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_provisions(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Provisions!");
-
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
                 selectedNode.GetUnit().IncreaseCurrentHealthBy(5);
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Provisions on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 5 health!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Provisions");
             }
         }
     }
@@ -409,10 +427,16 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
         if(unitCountAroundOrigin == 0)
         {
+            string spellMessage = "Player " + playerId + " used Reinforcements at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+
             foreach (Node node in allNodesInRange)
+            {
                 CreateUnit(Unit.UnitTypes.Soldier, node);
+                spellMessage += "Player " + playerId + " summoned a Soldier at (" + node.gridX + ", " + node.gridY + ")!\n";
+            }
+
+            TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.cardSuccessful = true;
-            print("Player " + playerId + " used Provisions!");
         }
         else
             print("Surrounding tiles are occupied. Cannot cast Reinforcements.");
@@ -432,6 +456,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         // draw 2 cards
         GameLoop.instance.GetCurrentPlayer().AddCard(TurnManager.instance.RandomCard());
         GameLoop.instance.GetCurrentPlayer().AddCard(TurnManager.instance.RandomCard());
+        TurnManager.instance.updateGameHistory("Player " + playerId + " used Greed!\nTwo random cards added to their hand!\n");
         TurnManager.instance.cardSuccessful = true;
     }
 
@@ -457,15 +482,23 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
         }
 
-        if (allyCountAroundOrigin == 0)
+        if (allyCountAroundOrigin > 0)
         {
+            string spellMessage = "Player " + playerId + " used Warcry on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+
             foreach (Node node in allNodesInRange)
             {
-                if (node.GetUnit().GetUnitPlayerID() == playerId)
-                    selectedNode.unitInThisNode.IncreaseDamageBy(2);
+                if (node.GetUnit() != null)
+                {
+                    if (node.GetUnit().GetUnitPlayerID() == playerId)
+                    {
+                        selectedNode.GetUnit().IncreaseDamageBy(2);
+                        spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + ", " + node.gridY + ") gained 2 damage!\n";
+                    }
+                }
             }
+            TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.cardSuccessful = true;
-            print("Player " + playerId + " used Warcry!");
         }
         else
             print("No allies surrounding the origin!");
@@ -481,17 +514,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_rebirth(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Rebirth!");
-
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() == playerId) // confirm that the unit is ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() == playerId) // confirm that the unit is ours
             {
-                if (selectedNode.unitInThisNode.GetCurrentHealth() != selectedNode.unitInThisNode.GetMaxHealth())
+                if (selectedNode.GetUnit().GetCurrentHealth() != selectedNode.GetUnit().GetMaxHealth())
                 {
-                    selectedNode.unitInThisNode.SetCurrentHealth(selectedNode.unitInThisNode.GetMaxHealth());
+                    selectedNode.GetUnit().SetCurrentHealth(selectedNode.GetUnit().GetMaxHealth());
+                    TurnManager.instance.updateGameHistory("Player " + playerId + " used Rebirth on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") was restored to full health!\n");
                     TurnManager.instance.cardSuccessful = true;
-                    print("Card Effect Sucessful: Rebirth");
                 }
             }
         }
@@ -507,14 +538,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_assassinate(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Assassinate!");
-        if (selectedNode.unitInThisNode != null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            if (selectedNode.unitInThisNode.GetUnitPlayerID() != playerId && selectedNode.unitInThisNode.GetUnitType() != Unit.UnitTypes.King) // confirm that the unit is not ours
+            if (selectedNode.GetUnit().GetUnitPlayerID() != playerId && selectedNode.GetUnit().GetUnitType() != Unit.UnitTypes.King) // confirm that the unit is not ours
             {
-                selectedNode.RemoveUnit(selectedNode.unitInThisNode); // smite damage
+                selectedNode.RemoveUnit(selectedNode.GetUnit()); // smite damage
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Assassinate on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") was slain!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Card Effect Sucessful: Assassinate");
             }
         }
     }
@@ -531,15 +561,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_bearTrap(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Bear Trap!");
-
-        if (selectedNode.unitInThisNode == null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() == null) // check if there's a unit on this node
         {
             TrapOrItem bearTrap = new TrapOrItem(playerId, 0, 0, 0, TrapOrItem.TrapOrItemTypes.BearTrap);
             selectedNode.AddTrapOrItem(bearTrap);
-
+            TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Bear Trap on the battlefield!\n");
             TurnManager.instance.cardSuccessful = true;
-            print("Card Effect Sucessful: Bear Trap");
 
         }
     }
@@ -554,16 +581,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
      */
     public void spell_landMine(int playerId, Node selectedNode)
     {
-        print("Player " + playerId + " used Land Mine!");
-
-        if (selectedNode.unitInThisNode == null) // check if there's a unit on this node
+        if (selectedNode.GetUnit() == null) // check if there's a unit on this node
         {
             TrapOrItem landMine = new TrapOrItem(playerId, 0, 0, 0, TrapOrItem.TrapOrItemTypes.LandMine);
             selectedNode.AddTrapOrItem(landMine);
-
+            TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Land Mine on the battlefield!\n");
             TurnManager.instance.cardSuccessful = true;
-            print("Card Effect Sucessful: Land Mine");
-
         }
     }
 
@@ -580,6 +603,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 1, 1);
 
         int allyCountAroundOrigin = 0;
+
         foreach (Node node in allNodesInRange)
         {
             if (node.GetUnit() != null)
@@ -589,19 +613,25 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
         }
 
-        if (allyCountAroundOrigin == 0)
+        if (allyCountAroundOrigin > 0)
         {
+            string spellMessage = "Player " + playerId + " used Royal Pledge on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+
             foreach (Node node in allNodesInRange)
             {
-                if (node.GetUnit().GetUnitPlayerID() == playerId)
+                if (node.GetUnit() != null)
                 {
-                    selectedNode.unitInThisNode.IncreaseDamageBy(2);
-                    selectedNode.unitInThisNode.IncreaseMaxHealthBy(2);
-                    selectedNode.unitInThisNode.IncreaseCurrentHealthBy(2);
+                    if (node.GetUnit().GetUnitPlayerID() == playerId)
+                    {
+                        node.GetUnit().IncreaseDamageBy(2);
+                        node.GetUnit().IncreaseMaxHealthBy(2);
+                        node.GetUnit().IncreaseCurrentHealthBy(2);
+                        spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + ", " + node.gridY + ") gained 2 damage, maximum health and health!\n";
+                    }
                 }
             }
+            TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.cardSuccessful = true;
-            print("Player " + playerId + " used Royal Pledge!");
         }
         else
             print("No allies surrounding the origin!");

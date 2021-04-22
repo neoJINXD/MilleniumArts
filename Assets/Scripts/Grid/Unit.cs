@@ -390,7 +390,7 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        m_healthBar.value = (float) currentHealth / maxHealth;
+        //m_healthBar.value = (float) currentHealth / maxHealth;
 
         if (currentHealth < 1)
         {
