@@ -89,6 +89,7 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
 
     public void endTurn()
     {
+        TurnManager.instance.cardDrawPanel.SetActive(false);
         GameLoop.instance.EndCurrentPlayer();
     }
 }
