@@ -54,31 +54,28 @@ public class GameManager : Singleton<GameManager>
         }
         view = GetComponent<PhotonView>();
 
+        print("Starting the photon game");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Player p1 = gameObject.AddComponent<NetworkedPlayer>();
+            //print(p1);
+            view.ObservedComponents.Add(p1);
 
-        // // TODO change cube to king unit
-        //if (PhotonNetwork.IsMasterClient)
-        //{
-         //   print("Player 1 creating");
-            //player1 = PhotonNetwork.Instantiate("Cube", player1Spawn.transform.position, player1Spawn.transform.rotation, 0);
-            //player1.GetComponent<Renderer>().material = player1Mat;
-        //}
-        //else
-        //{
-        //    print("Player 2 creating");
-            //player2 = PhotonNetwork.Instantiate("Cube", player2Spawn.transform.position, player2Spawn.transform.rotation, 0);
-            //player2.GetComponent<Renderer>().material = player2Mat;
-        //}
+            Player p2 = gameObject.AddComponent<NetworkedPlayer>();
+            //print(p2);
+            view.ObservedComponents.Add(p2);
+            gameLoop.GetPlayerList().Clear();
+            gameLoop.AddPlayer(p1);
+            gameLoop.AddPlayer(p2);
+            p2.EndTurn();
+        }
 
-        Player p1 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
-        Player p2 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
         StartCoroutine(gameLoop.Play());
-
-        view.ObservedComponents.Add(p1);
-        view.ObservedComponents.Add(p2);
     }
 
     private void Update() 
     {
+        //print(PhotonNetwork.PlayerList.Length);
         if(networked && !isLeaving && PhotonNetwork.IsConnected && PhotonNetwork.PlayerList.Length != 2)
         {
             isLeaving = true;

@@ -4,7 +4,7 @@ using Photon.Pun;
     Networked variant of the player MonoBehaviour
 */
 
-public class NetworkedPlayer : Player, IPunObservable
+public class NetworkedPlayer : LocalPlayer, IPunObservable
 {
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
