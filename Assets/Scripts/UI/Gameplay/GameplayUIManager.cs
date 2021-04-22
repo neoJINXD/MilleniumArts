@@ -43,7 +43,17 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
     // Update is called once per frame
     void Update()
     {
-		endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
+        if (GameManager.instance.networked)
+        {
+            if (Photon.Pun.PhotonNetwork.IsMasterClient)
+		        endTurnButton.SetActive(((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
+            if (!Photon.Pun.PhotonNetwork.IsMasterClient)
+		        endTurnButton.SetActive(!((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
+        }
+        else
+        {
+		    endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
+        }
     }
 
     public void NotEnoughMana()
@@ -89,6 +99,9 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
 
     public void endTurn()
     {
-        GameLoop.instance.EndCurrentPlayer();
+        if (GameManager.instance.networked)
+            GameManager.instance.view.RPC("EndCurrentPlayerTurn", Photon.Pun.RpcTarget.All);
+        else
+            GameLoop.instance.EndCurrentPlayer();
     }
 }

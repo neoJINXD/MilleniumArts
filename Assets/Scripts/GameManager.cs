@@ -11,7 +11,7 @@ public class GameManager : Singleton<GameManager>
 {
     private GameLoop gameLoop;
 
-    [SerializeField] private bool networked;
+    [SerializeField] public bool networked;
 
     [SerializeField] string gameHistory;
 
@@ -61,6 +61,7 @@ public class GameManager : Singleton<GameManager>
 
             gameLoop.GetPlayerList().Clear();
             gameLoop.AddPlayer(p1);
+            ((NetworkedPlayer)p1).amIP1 = true;
             gameLoop.AddPlayer(p2);
             //p2.EndTurn();
         //}
