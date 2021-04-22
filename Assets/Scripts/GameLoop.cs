@@ -17,6 +17,8 @@ public class GameLoop : Singleton<GameLoop>
     [SerializeField] private GameObject m_gameOverUI;
     [SerializeField] private TMPro.TMP_Text m_winningPlayerText;
 
+    public bool GameOver => winCondition;
+
     private int index;
     private int turnMana = 3;
     private bool winCondition = false;

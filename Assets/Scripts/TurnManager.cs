@@ -147,6 +147,9 @@ public class TurnManager : Singleton<TurnManager>
     // Update is called once per frame
     void Update()
     {
+	    if (GameLoop.instance.GameOver)
+		    return;
+	    
 	    currentPlayer = GameLoop.instance.GetCurrentPlayer();
 	    
 	    Player thisPlayer = GameLoop.instance.GetPlayer(0);

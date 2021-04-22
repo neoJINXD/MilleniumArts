@@ -40,10 +40,10 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
         handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-		endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
+        if(!GameLoop.instance.GameOver)
+            endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
     }
 
     public void NotEnoughMana()
