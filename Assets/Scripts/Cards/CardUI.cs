@@ -112,11 +112,7 @@ public class CardUI : MonoBehaviour
 
         TurnManager.instance.cardDrawPanel.SetActive(false);
         TurnManager.instance.currentTurnState = TurnManager.TurnState.Free;
-        
-        GameObject child = GameplayUIManager.instance.cardZoomInPanel.transform.GetChild(0).gameObject;
-        if (child)
-            Destroy(GameplayUIManager.instance.cardZoomInPanel.transform.GetChild(0).gameObject);
-                
+        Destroy(GameplayUIManager.instance.cardZoomInPanel.transform.GetChild(0).gameObject);
         TurnManager.instance.loadPlayerHand();
     }
 }

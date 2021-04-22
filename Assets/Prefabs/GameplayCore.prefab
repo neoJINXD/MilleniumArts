@@ -409,8 +409,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keepAlive: 0
-  attackAnimationHit: {fileID: 0}
-  attackAnimationMiss: {fileID: 0}
+  attackAnimationHit: {fileID: 4685259530587244230, guid: 21d18fe1550a6e24590f746025a6446c,
+    type: 3}
+  attackAnimationMiss: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
+    type: 3}
   unitPrefab: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
     type: 3}
   availableMaterial: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}

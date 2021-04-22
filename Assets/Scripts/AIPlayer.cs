@@ -52,7 +52,7 @@ public class AIPlayer : Player
 
     private IEnumerator SimulateTurn()
     {
-		PickUpCards();
+		PickUpCard();
 		
 		yield return CheckKingCondition();
 
@@ -65,18 +65,34 @@ public class AIPlayer : Player
         EndTurn();
     }
 	
-	private void PickUpCards()
+	private void PickUpCard()
 	{
 		m_playerCards.Clear();
 		Destroy(cardHolder);
 		cardHolder = new GameObject();
 		cardHolder.transform.parent = transform;
 		cardHolder.name = "AI card hand";
-		AddCard(GenerateCard());
-		AddCard(GenerateCard());
-		AddCard(GenerateCard());
-		AddCard(GenerateCard());
-		AddCard(GenerateCard());
+
+		List<Card> cards = new List<Card>();
+		cards.Add(GenerateCard());
+		cards.Add(GenerateCard());
+		cards.Add(GenerateCard());
+		cards.Add(GenerateCard());
+		cards.Add(GenerateCard());
+		
+		foreach (Card card in cards)
+		{
+			if (CardIsValued(card))
+			{
+				m_playerCards.Add(card);
+				print("AI picked up " + card.name + " card");
+				return;
+			}
+		}
+
+		Debug.LogWarning("AI did not find any valuable cards");
+		
+		m_playerCards.Add(cards[Random.Range(0, cards.Count - 1)]);
 	}
 	
 	private Card GenerateCard()
@@ -109,26 +125,27 @@ public class AIPlayer : Player
 	
 	private IEnumerator CheckKingCondition()
 	{
-		if (!ManaCheck(1))
+		if (!ManaCheck(1) || !King)
 			yield break;
 
-		float kingHealthThreshold = 0.5f;
+		float kingHealthThreshold = 0.75f;
 		if (m_behaviour == BehaviourType.Aggressive)
-			kingHealthThreshold = 0.25f;
+			kingHealthThreshold = 0.5f;
 		else if (m_behaviour == BehaviourType.Defensive)
-			kingHealthThreshold = 0.75f;
+			kingHealthThreshold = 0.9f;
 		
-		if(King.GetCurrentHealth() / King.GetMaxHealth() < kingHealthThreshold)
+		if((float)King.GetCurrentHealth() / King.GetMaxHealth() < kingHealthThreshold)
 		{
 			List<Node> nearbyEnemyNodes = m_pathfinding.GetEnemyUnitNodesInRange(PlayerId, King.transform.position, 
-				false, 1, 10);
+				false, 0, 10);
 			
-			if(nearbyEnemyNodes.Count > 1)
+			if(nearbyEnemyNodes.Count > 0)
 			{
-				// move king away from closest enemy unit.
-				// need to figure out a way to cap depending on resources.
-				yield return MoveUnitAway(King, GetClosetEnemy(King.transform.position));
-
+				Unit closestEnemy = GetClosetEnemy(King.transform.position);
+				print("AI moving king away from closest enemy " + closestEnemy.name);
+				if(closestEnemy)
+					yield return MoveUnitAway(King, closestEnemy);
+				
 				if (!ManaCheck(1))
 					yield break;
 				
@@ -191,36 +208,41 @@ public class AIPlayer : Player
 
 	private bool CardIsValued(Card card)
 	{
-		return true;
-		
 		if (m_behaviour == BehaviourType.Aggressive)
 		{
-			if (card.castType == CastType.OnEnemy)
+			if (m_playerUnits.Count > 4 && card.castType == CastType.OnEnemy)
 				return true;
 
 			if (card.GetType() == typeof(UnitCard))
 			{
-				// TODO: unit cards need type
-				// if ((UnitCard)card.unitType != Unit.UnitTypes.Priest)
-				//	return true
+				if (((UnitCard)card).UnitType != Unit.UnitTypes.Priest)
+					return true;
 			}
-			
-			// TODO: account for traps
 		}
 		
 		if (m_behaviour == BehaviourType.Balanced)
 		{
-			// TODO determine behaviour, might be complex
-			// TODO: account for traps
+			if (m_playerUnits.Count > 4 && card.castType == CastType.OnEnemy)
+				return true;
+
+			if (card.GetType() == typeof(UnitCard))
+			{
+				return true;
+			}
 		}
 		
 		if (m_behaviour == BehaviourType.Defensive)
 		{
-			// TODO determine behaviour, might be complex
-			// TODO: account for traps
+			if (m_playerUnits.Count > 6 && card.castType == CastType.OnEnemy)
+				return true;
+
+			if (card.GetType() == typeof(UnitCard))
+			{
+				return true;
+			}
 		}
 		
-		return true;
+		return false;
 	}
 
 	public override void PlayCard(Card cardToPlay)
@@ -371,7 +393,7 @@ public class AIPlayer : Player
 		Node closestNodeToTarget = null;
 		float closetDist = Mathf.Infinity;
 		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
-			unit.GetMinRange(), unit.GetMaxRange()).ToArray();
+			0, (int)unit.GetMovementSpeed()).ToArray();
 		
 		if(movableNodes.Length < 1)
 			yield break;
@@ -387,7 +409,7 @@ public class AIPlayer : Player
 		}
 
 		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
-			closestNodeToTarget.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.GetMinRange(), unit.GetMaxRange()));
+			closestNodeToTarget.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID()));
 
 		PlayerMana--;
 	}
@@ -397,7 +419,7 @@ public class AIPlayer : Player
 		Node farthestNodeFromUnit = null;
 		float farthestDist = 0;
 		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
-			unit.GetMinRange(), unit.GetMaxRange()).ToArray();
+			0, (int)unit.GetMovementSpeed()).ToArray();
 		
 		if(movableNodes.Length < 1)
 			yield break;
@@ -413,7 +435,7 @@ public class AIPlayer : Player
 		}
 
 		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
-			farthestNodeFromUnit.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID(), unit.GetMinRange(), unit.GetMaxRange()));
+			farthestNodeFromUnit.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID()));
 
 		PlayerMana--;
 	}

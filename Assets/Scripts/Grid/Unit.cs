@@ -486,11 +486,10 @@ public class Unit : MonoBehaviour
         Node unitNode = newPath[0];//keeps track of the node the unit is currently on
         Node currentWaypoint = newPath[1]; //keeps track of the next node the unit is going to move to
 
-        //Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
+        targetIndex = 1;
 
         while (true)
         {
-            //grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
             unitNode.RemoveUnit(this);
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
 
@@ -505,16 +504,7 @@ public class Unit : MonoBehaviour
 
                 currentWaypoint = newPath[targetIndex];
                 unitNode = newPath[targetIndex - 1];
-                //currentWaypoint.RemoveUnit(this);// moved this
-                //currentWaypoint = path[targetIndex];
-                //currentWaypoint.AddUnit(this);
-                //CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
             }
-
-            //transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
-
-            //CheckHostileTrapOrItemInNode(currentWaypoint);
-
             yield return null;
         }
     }

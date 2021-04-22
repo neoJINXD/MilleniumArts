@@ -596,7 +596,6 @@ public class TurnManager : Singleton<TurnManager>
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
         int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
-        print(hitChance);
         int roll = Random.Range(0, 101); // generate 0-100
 
         Node attackerNode = grid.NodeFromWorldPoint(attacker.transform.position);
