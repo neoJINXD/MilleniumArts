@@ -12,12 +12,6 @@ public class GameManager : Singleton<GameManager>
     private GameLoop gameLoop;
 
     [SerializeField] private bool networked;
-    [SerializeField] private GameObject player1Spawn;
-    [SerializeField] private GameObject player2Spawn;
-    [SerializeField] private GameObject player1;
-    [SerializeField] private GameObject player2;
-    [SerializeField] Material player1Mat;
-    [SerializeField] Material player2Mat;
 
     [SerializeField] string gameHistory;
 
