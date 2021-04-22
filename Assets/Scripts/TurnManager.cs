@@ -10,6 +10,7 @@ using UnityEngine.Serialization;
 public class TurnManager : Singleton<TurnManager>
 {
 	[SerializeField] private GameObject attackAnimationHit;
+	[SerializeField] private GameObject healAnimation;
 	[SerializeField] private GameObject attackAnimationMiss;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] public Material availableMaterial;
@@ -147,6 +148,9 @@ public class TurnManager : Singleton<TurnManager>
     // Update is called once per frame
     void Update()
     {
+	    if (GameLoop.instance.GameOver)
+		    return;
+	    
 	    currentPlayer = GameLoop.instance.GetCurrentPlayer();
 	    
 	    Player thisPlayer = GameLoop.instance.GetPlayer(0);
@@ -516,7 +520,9 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() == currentPlayer.PlayerId)
             {
+	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.unitInThisNode.IncreaseCurrentHealthBy(currentUnit.GetDamage());
+                currentPlayer.PlayerMana--;
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") healed " + selectedNode.unitInThisNode.GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") for " + currentUnitNode.unitInThisNode.GetDamage() + " health!\n");
             }
         }

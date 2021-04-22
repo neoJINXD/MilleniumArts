@@ -9,6 +9,7 @@ public class AIPlayer : Player
 {
 	
 	[SerializeField] private GameObject attackAnimationHit;
+	[SerializeField] private GameObject healAnimation;
 	
 	private GameObject animRef;
 	
@@ -301,8 +302,6 @@ public class AIPlayer : Player
 			Debug.LogError("Player out of cards or bad card index");
 		}
 	}
-	
-	#endregion
 
 	private IEnumerator UseActiveUnits()
 	{
@@ -369,6 +368,82 @@ public class AIPlayer : Player
 		}
 	}
 	
+	private IEnumerator Heal(Unit currentUnit, Unit targetUnit)
+	{
+		targetUnit.SetCurrentHealth(Mathf.Max(targetUnit.GetCurrentHealth() + targetUnit.GetDamage(), targetUnit.GetMaxHealth()));
+		animRef = Instantiate(healAnimation, currentUnit.transform, false);
+		Debug.Log("<color=green>AI unit " + currentUnit.name + " healed " + targetUnit.name + "</color>");
+		yield return new WaitForSeconds(0.4f);
+		PlayerMana--;
+	}
+
+	private IEnumerator Attack(Unit currentUnit, Unit targetUnit)
+	{
+		targetUnit.SetCurrentHealth(targetUnit.GetCurrentHealth() - currentUnit.GetDamage());
+		animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
+		Debug.Log("<color=red>AI unit " + currentUnit.name + " attacked " + targetUnit.name + "</color>");
+		PlayerMana--;
+		yield return new WaitForSeconds(0.4f);
+	}
+	
+	private IEnumerator MoveUnitTowards(Unit unit, Vector3 targetLocation)
+	{
+		Node closestNodeToTarget = null;
+		float closetDist = Mathf.Infinity;
+		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
+			1, (int)unit.GetMovementSpeed()).ToArray();
+		
+		if(movableNodes.Length < 1)
+			yield break;
+
+		for (int i = 0; i < movableNodes.Length; i++)
+		{
+			Node currentNode = movableNodes[i];
+			float currentDist = Vector3.Distance(targetLocation, currentNode.worldPosition);
+			if (currentDist < closetDist && currentNode.canWalkHere && !currentNode.unitInThisNode)
+			{
+				closestNodeToTarget = currentNode;
+				closetDist = currentDist;
+			}
+		}
+
+		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
+			closestNodeToTarget.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID()));
+
+		PlayerMana--;
+	}
+
+	private IEnumerator MoveUnitAway(Unit unit, Unit awayFrom)
+	{
+		Node farthestNodeFromUnit = null;
+		float farthestDist = 0;
+		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
+			1, (int)unit.GetMovementSpeed()).ToArray();
+		
+		if(movableNodes.Length < 1)
+			yield break;
+
+		for (int i = 0; i < movableNodes.Length; i++)
+		{
+			Node currentNode = movableNodes[i];
+			float currentDist = Vector3.Distance(awayFrom.transform.position, currentNode.worldPosition);
+			if (currentDist > farthestDist && currentNode.canWalkHere && !currentNode.unitInThisNode)
+			{
+				farthestNodeFromUnit = currentNode;
+				farthestDist = currentDist;
+			}
+		}
+
+		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
+			farthestNodeFromUnit.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID()));
+
+		PlayerMana--;
+	}
+	
+	#endregion
+
+	#region AIHelperMethods
+
 	//Should be in Unit.cs
 	private bool CanHeal(Unit currentUnit, Unit targetUnit)
 	{
@@ -401,75 +476,6 @@ public class AIPlayer : Player
 		{
 			return false;
 		}
-	}
-
-	private IEnumerator Heal(Unit currentUnit, Unit targetUnit)
-	{
-		targetUnit.SetCurrentHealth(Mathf.Max(targetUnit.GetCurrentHealth() + targetUnit.GetDamage(), targetUnit.GetMaxHealth()));
-		Debug.Log("<color=green>AI unit " + currentUnit.name + " healed " + targetUnit.name + "</color>");
-		yield return new WaitForSeconds(0.4f);
-		PlayerMana--;
-	}
-
-	private IEnumerator Attack(Unit currentUnit, Unit targetUnit)
-	{
-		targetUnit.SetCurrentHealth(targetUnit.GetCurrentHealth() - currentUnit.GetDamage());
-		animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
-		Debug.Log("<color=red>AI unit " + currentUnit.name + " attacked " + targetUnit.name + "</color>");
-		PlayerMana--;
-		yield return new WaitForSeconds(0.4f);
-	}
-	
-	private IEnumerator MoveUnitTowards(Unit unit, Vector3 targetLocation)
-	{
-		Node closestNodeToTarget = null;
-		float closetDist = Mathf.Infinity;
-		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
-			1, (int)unit.GetMovementSpeed()).ToArray();
-		
-		if(movableNodes.Length < 1)
-			yield break;
-
-		for (int i = 0; i < movableNodes.Length; i++)
-		{
-			float currentDist = Vector3.Distance(targetLocation, movableNodes[i].worldPosition);
-			if (currentDist < closetDist && movableNodes[i].canWalkHere)
-			{
-				closestNodeToTarget = movableNodes[i];
-				closetDist = currentDist;
-			}
-		}
-
-		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
-			closestNodeToTarget.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID()));
-
-		PlayerMana--;
-	}
-
-	private IEnumerator MoveUnitAway(Unit unit, Unit awayFrom)
-	{
-		Node farthestNodeFromUnit = null;
-		float farthestDist = 0;
-		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
-			1, (int)unit.GetMovementSpeed()).ToArray();
-		
-		if(movableNodes.Length < 1)
-			yield break;
-
-		for (int i = 0; i < movableNodes.Length; i++)
-		{
-			float currentDist = Vector3.Distance(awayFrom.transform.position, movableNodes[i].worldPosition);
-			if (currentDist > farthestDist && movableNodes[i].canWalkHere)
-			{
-				farthestNodeFromUnit = movableNodes[i];
-				farthestDist = currentDist;
-			}
-		}
-
-		yield return unit.AIFollowPath(Pathfinding.instance.AIFindPath(unit.transform.position,
-			farthestNodeFromUnit.worldPosition, unit.GetCanFly(), unit.GetUnitPlayerID()));
-
-		PlayerMana--;
 	}
 
 	private Unit GetClosestAlly(Vector3 startPos)
@@ -529,4 +535,6 @@ public class AIPlayer : Player
 		return closestUnit;
 	}
 	
+	#endregion
+
 }

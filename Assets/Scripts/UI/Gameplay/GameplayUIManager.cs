@@ -40,19 +40,21 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
         handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (GameManager.instance.networked)
+        if(!GameLoop.instance.GameOver)
         {
-            if (Photon.Pun.PhotonNetwork.IsMasterClient)
-		        endTurnButton.SetActive(((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
-            if (!Photon.Pun.PhotonNetwork.IsMasterClient)
-		        endTurnButton.SetActive(!((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
-        }
-        else
-        {
-		    endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
+            if (GameManager.instance.networked)
+            {
+                if (Photon.Pun.PhotonNetwork.IsMasterClient)
+                    endTurnButton.SetActive(((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
+                if (!Photon.Pun.PhotonNetwork.IsMasterClient)
+                    endTurnButton.SetActive(!((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
+            }
+            else
+            {
+                endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
+            }
         }
     }
 
