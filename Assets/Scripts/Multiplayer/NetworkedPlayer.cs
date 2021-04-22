@@ -15,6 +15,13 @@ public class NetworkedPlayer : LocalPlayer, IPunObservable
     //         amIP1 = true;
     // }
 
+    public override void StartTurn()
+    {
+        TurnComplete = false;
+        if (PhotonNetwork.IsMasterClient == amIP1)
+            TurnManager.instance.ShowCardSelection();
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
