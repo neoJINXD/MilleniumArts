@@ -301,8 +301,6 @@ public class AIPlayer : Player
 			Debug.LogError("Player out of cards or bad card index");
 		}
 	}
-	
-	#endregion
 
 	private IEnumerator UseActiveUnits()
 	{
@@ -369,40 +367,6 @@ public class AIPlayer : Player
 		}
 	}
 	
-	//Should be in Unit.cs
-	private bool CanHeal(Unit currentUnit, Unit targetUnit)
-	{
-		List<Node> nearbyAllies = m_pathfinding.GetAllyUnitNodesInRange(currentUnit.GetUnitPlayerID(),
-			currentUnit.transform.position, currentUnit.GetCanFly(), currentUnit.GetMinRange(),
-			currentUnit.GetMaxRange());
-		//Gets a list of nodes of nearby allies and searches the target's node in this list
-		if (nearbyAllies.Contains(m_pathfinding.gridRef.NodeFromWorldPoint(targetUnit.transform.position)))
-		{
-			return true; //return true if target's node is present, else false
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	//Should be in Unit.cs
-	private bool CanAttack(Unit currentUnit, Unit targetUnit)
-	{
-		List<Node> nearbyEnemies = m_pathfinding.GetEnemyUnitNodesInRange(currentUnit.GetUnitPlayerID(),
-			currentUnit.transform.position, currentUnit.GetCanFly(), currentUnit.GetMinRange(),
-			currentUnit.GetMaxRange());
-		//Gets a list of nodes of nearby enemies and searches the target's node in this list
-		if (nearbyEnemies.Contains(m_pathfinding.gridRef.NodeFromWorldPoint(targetUnit.transform.position)))
-		{
-			return true; //return true if target's node is present, else false
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 	private IEnumerator Heal(Unit currentUnit, Unit targetUnit)
 	{
 		targetUnit.SetCurrentHealth(Mathf.Max(targetUnit.GetCurrentHealth() + targetUnit.GetDamage(), targetUnit.GetMaxHealth()));
@@ -473,6 +437,44 @@ public class AIPlayer : Player
 
 		PlayerMana--;
 	}
+	
+	#endregion
+
+	#region AIHelperMethods
+
+	//Should be in Unit.cs
+	private bool CanHeal(Unit currentUnit, Unit targetUnit)
+	{
+		List<Node> nearbyAllies = m_pathfinding.GetAllyUnitNodesInRange(currentUnit.GetUnitPlayerID(),
+			currentUnit.transform.position, currentUnit.GetCanFly(), currentUnit.GetMinRange(),
+			currentUnit.GetMaxRange());
+		//Gets a list of nodes of nearby allies and searches the target's node in this list
+		if (nearbyAllies.Contains(m_pathfinding.gridRef.NodeFromWorldPoint(targetUnit.transform.position)))
+		{
+			return true; //return true if target's node is present, else false
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	//Should be in Unit.cs
+	private bool CanAttack(Unit currentUnit, Unit targetUnit)
+	{
+		List<Node> nearbyEnemies = m_pathfinding.GetEnemyUnitNodesInRange(currentUnit.GetUnitPlayerID(),
+			currentUnit.transform.position, currentUnit.GetCanFly(), currentUnit.GetMinRange(),
+			currentUnit.GetMaxRange());
+		//Gets a list of nodes of nearby enemies and searches the target's node in this list
+		if (nearbyEnemies.Contains(m_pathfinding.gridRef.NodeFromWorldPoint(targetUnit.transform.position)))
+		{
+			return true; //return true if target's node is present, else false
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	private Unit GetClosestAlly(Vector3 startPos)
 	{		
@@ -531,4 +533,6 @@ public class AIPlayer : Player
 		return closestUnit;
 	}
 	
+	#endregion
+
 }
