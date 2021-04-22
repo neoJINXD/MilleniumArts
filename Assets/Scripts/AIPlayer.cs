@@ -9,6 +9,7 @@ public class AIPlayer : Player
 {
 	
 	[SerializeField] private GameObject attackAnimationHit;
+	[SerializeField] private GameObject healAnimation;
 	
 	private GameObject animRef;
 	
@@ -406,6 +407,7 @@ public class AIPlayer : Player
 	private IEnumerator Heal(Unit currentUnit, Unit targetUnit)
 	{
 		targetUnit.SetCurrentHealth(Mathf.Max(targetUnit.GetCurrentHealth() + targetUnit.GetDamage(), targetUnit.GetMaxHealth()));
+		animRef = Instantiate(healAnimation, currentUnit.transform, false);
 		Debug.Log("<color=green>AI unit " + currentUnit.name + " healed " + targetUnit.name + "</color>");
 		yield return new WaitForSeconds(0.4f);
 		PlayerMana--;

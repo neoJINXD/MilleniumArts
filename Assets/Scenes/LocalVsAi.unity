@@ -1766,6 +1766,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1514034434, guid: e4857921910c9f242a6803656d2a979b, type: 3}
+      propertyPath: healAnimation
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 350843f0c2f9b344a9c1da5bd1bbbacf,
+        type: 3}
+    - target: {fileID: 1514034434, guid: e4857921910c9f242a6803656d2a979b, type: 3}
       propertyPath: attackAnimationHit
       value: 
       objectReference: {fileID: 4685259530587244230, guid: 21d18fe1550a6e24590f746025a6446c,
@@ -1815,6 +1820,12 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: healAnimation
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 350843f0c2f9b344a9c1da5bd1bbbacf,
+        type: 3}
     - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: attackAnimation
