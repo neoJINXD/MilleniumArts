@@ -2477,6 +2477,12 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
+      propertyPath: attackAudio
+      value: 
+      objectReference: {fileID: 4850911413912669270, guid: aa4fa20e7123ce54fbee461a1f490452,
+        type: 3}
+    - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
       propertyPath: attackAnimation
       value: 
       objectReference: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,

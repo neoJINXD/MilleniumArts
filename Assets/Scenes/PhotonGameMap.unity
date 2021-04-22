@@ -2563,7 +2563,7 @@ PrefabInstance:
         type: 3}
       propertyPath: attackAnimation
       value: 
-      objectReference: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
+      objectReference: {fileID: 7056591320535787146, guid: 71f5588f777c4d447a4a482bfbc19877,
         type: 3}
     - target: {fileID: 5066473961084471719, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}

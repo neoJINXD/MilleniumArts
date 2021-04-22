@@ -14,7 +14,7 @@ public class TurnManager : Singleton<TurnManager>
     [SerializeField] public Material defaultMaterial;
     [SerializeField] public Material targetMaterial;
     [SerializeField] public Material AOEMaterial;
-
+    
     private const float lockAxis = 27f;
 
     public Player currentPlayer = default;
