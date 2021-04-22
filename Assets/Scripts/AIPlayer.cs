@@ -277,7 +277,7 @@ public class AIPlayer : Player
 			{
 				Unit ally = GetAllyInNeed();
 				
-				if (!ally)
+				if (!ally || !chosenUnit)
 					yield break;
 				
 				if (ally && CanHeal(chosenUnit, ally) && ally.GetCurrentHealth() < ally.GetMaxHealth())
@@ -297,7 +297,7 @@ public class AIPlayer : Player
 			{
 				Unit enemy = GetClosetEnemy(chosenUnit.transform.position);
 
-				if (!enemy)
+				if (!enemy || !chosenUnit)
 					yield break;
 				
 				if (enemy && CanAttack(chosenUnit, enemy))
