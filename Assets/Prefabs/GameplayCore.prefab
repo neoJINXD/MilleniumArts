@@ -476,6 +476,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5066473961084471719}
     m_Modifications:
+    - target: {fileID: 3088426782106570399, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3088426782106570399, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5537238055536317928, guid: 4b2bc9f11b66e894d94803420d7fc702,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -589,6 +599,11 @@ PrefabInstance:
     - target: {fileID: 5537238055950215474, guid: 4b2bc9f11b66e894d94803420d7fc702,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5537238056054238885, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5537238057051526749, guid: 4b2bc9f11b66e894d94803420d7fc702,
