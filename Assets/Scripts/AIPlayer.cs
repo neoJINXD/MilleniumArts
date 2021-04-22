@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class AIPlayer : Player
 {
-	
+	[SerializeField] private GameObject healAnimation;
 	[SerializeField] private GameObject attackAnimationHit;
 	
 	private GameObject animRef;
@@ -143,6 +143,7 @@ public class AIPlayer : Player
 					if(CanHeal(closestAlly, King))
 					{
 						King.SetCurrentHealth(Mathf.Max(King.GetCurrentHealth() + closestAlly.GetDamage(), King.GetMaxHealth()));
+						animRef = Instantiate(healAnimation, closestAlly.transform, false);
 						PlayerMana--;
 						Debug.Log("<color=green>AI unit " + closestAlly.name + "healed king" + "</color>");
 					}
@@ -298,7 +299,6 @@ public class AIPlayer : Player
 				{
 					ally.SetCurrentHealth(Mathf.Max(ally.GetCurrentHealth() + chosenUnit.GetDamage(), ally.GetMaxHealth()));
 					Debug.Log("<color=green>AI unit " + chosenUnit.name + " healed " + ally.name + "</color>");
-
 					PlayerMana--;
 				}
 				else
@@ -317,7 +317,6 @@ public class AIPlayer : Player
 				if (enemy && CanAttack(chosenUnit, enemy))
 				{
 					enemy.SetCurrentHealth(enemy.GetCurrentHealth() - chosenUnit.GetDamage());
-					animRef = Instantiate(attackAnimationHit, chosenUnit.transform, false);
 					Debug.Log("<color=red>AI unit " + chosenUnit.name + " attacked " + enemy.name + "</color>");
 					PlayerMana--;
 				}
