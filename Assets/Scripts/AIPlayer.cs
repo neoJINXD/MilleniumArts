@@ -161,10 +161,7 @@ public class AIPlayer : Player
 				{
 					if(CanHeal(closestAlly, King))
 					{
-						King.SetCurrentHealth(Mathf.Max(King.GetCurrentHealth() + closestAlly.GetDamage(), King.GetMaxHealth()));
-						PlayerMana--;
-						Debug.Log("<color=green>AI unit " + closestAlly.name + "healed king" + "</color>");
-						yield return new WaitForSeconds(0.4f);
+						yield return Heal(closestAlly, King);
 					}
 					else
 					{
@@ -181,10 +178,7 @@ public class AIPlayer : Player
 					
 					if(CanAttack(closestAlly, enemy))
 					{
-						enemy.SetCurrentHealth(enemy.GetCurrentHealth() - closestAlly.GetDamage());
-						PlayerMana--;
-						Debug.Log("<color=red>AI attacking " + enemy.name + " to defend king" + "</color>");
-						yield return new WaitForSeconds(0.4f);
+						yield return Attack(closestAlly, enemy);
 					}
 					else
 					{
@@ -345,10 +339,7 @@ public class AIPlayer : Player
 				
 				if (ally && CanHeal(chosenUnit, ally) && ally.GetCurrentHealth() < ally.GetMaxHealth())
 				{
-					ally.SetCurrentHealth(Mathf.Max(ally.GetCurrentHealth() + chosenUnit.GetDamage(), ally.GetMaxHealth()));
-					Debug.Log("<color=green>AI unit " + chosenUnit.name + " healed " + ally.name + "</color>");
-					yield return new WaitForSeconds(0.4f);
-					PlayerMana--;
+					yield return Heal(chosenUnit, ally);
 				}
 				else
 				{
@@ -365,11 +356,7 @@ public class AIPlayer : Player
 				
 				if (enemy && CanAttack(chosenUnit, enemy))
 				{
-					enemy.SetCurrentHealth(enemy.GetCurrentHealth() - chosenUnit.GetDamage());
-					animRef = Instantiate(attackAnimationHit, chosenUnit.transform, false);
-					Debug.Log("<color=red>AI unit " + chosenUnit.name + " attacked " + enemy.name + "</color>");
-					PlayerMana--;
-					yield return new WaitForSeconds(0.4f);
+					yield return Attack(chosenUnit, enemy);
 				}
 				else
 				{
@@ -414,6 +401,23 @@ public class AIPlayer : Player
 		{
 			return false;
 		}
+	}
+
+	private IEnumerator Heal(Unit currentUnit, Unit targetUnit)
+	{
+		targetUnit.SetCurrentHealth(Mathf.Max(targetUnit.GetCurrentHealth() + targetUnit.GetDamage(), targetUnit.GetMaxHealth()));
+		Debug.Log("<color=green>AI unit " + currentUnit.name + " healed " + targetUnit.name + "</color>");
+		yield return new WaitForSeconds(0.4f);
+		PlayerMana--;
+	}
+
+	private IEnumerator Attack(Unit currentUnit, Unit targetUnit)
+	{
+		targetUnit.SetCurrentHealth(targetUnit.GetCurrentHealth() - currentUnit.GetDamage());
+		animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
+		Debug.Log("<color=red>AI unit " + currentUnit.name + " attacked " + targetUnit.name + "</color>");
+		PlayerMana--;
+		yield return new WaitForSeconds(0.4f);
 	}
 	
 	private IEnumerator MoveUnitTowards(Unit unit, Vector3 targetLocation)
