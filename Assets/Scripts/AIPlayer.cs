@@ -61,6 +61,8 @@ public class AIPlayer : Player
 		
 		if (PlayerMana > 0)
 			yield return UseActiveUnits();
+
+		yield return new WaitForSeconds(0.5f);
 		
         EndTurn();
     }
@@ -159,9 +161,7 @@ public class AIPlayer : Player
 				{
 					if(CanHeal(closestAlly, King))
 					{
-						King.SetCurrentHealth(Mathf.Max(King.GetCurrentHealth() + closestAlly.GetDamage(), King.GetMaxHealth()));
-						PlayerMana--;
-						Debug.Log("<color=green>AI unit " + closestAlly.name + "healed king" + "</color>");
+						yield return Heal(closestAlly, King);
 					}
 					else
 					{
@@ -178,10 +178,7 @@ public class AIPlayer : Player
 					
 					if(CanAttack(closestAlly, enemy))
 					{
-						enemy.SetCurrentHealth(enemy.GetCurrentHealth() - closestAlly.GetDamage());
-						PlayerMana--;
-						Debug.Log("<color=red>AI attacking " + enemy.name + " to defend king" + "</color>");
-						
+						yield return Attack(closestAlly, enemy);
 					}
 					else
 					{
@@ -200,7 +197,31 @@ public class AIPlayer : Player
 			Card playerCard = m_playerCards[i];
 			if (playerCard.cost < PlayerMana && CardIsValued(playerCard))
 			{
-				PlayCard(playerCard); 
+				List<Unit> otherUnits = GameLoop.instance.GetOtherPlayer(PlayerId).Units;
+				
+				if (playerCard.GetType() == typeof(UnitCard))
+				{
+					if (m_behaviour == BehaviourType.Aggressive)
+					{
+						if(m_playerCards.Count < otherUnits.Count + 2)
+							PlayCard(playerCard);
+					}
+					
+					if (m_behaviour == BehaviourType.Defensive)
+					{
+						if(m_playerCards.Count < otherUnits.Count + 4)
+							PlayCard(playerCard);
+					}
+					
+					if (m_behaviour == BehaviourType.Balanced)
+					{
+						if(m_playerCards.Count < otherUnits.Count + 3)
+							PlayCard(playerCard);
+					}
+				}
+				
+				//TODO: add spell placement
+				
 				yield return new WaitForSeconds(0.2f);
 			}
 		}
@@ -318,10 +339,7 @@ public class AIPlayer : Player
 				
 				if (ally && CanHeal(chosenUnit, ally) && ally.GetCurrentHealth() < ally.GetMaxHealth())
 				{
-					ally.SetCurrentHealth(Mathf.Max(ally.GetCurrentHealth() + chosenUnit.GetDamage(), ally.GetMaxHealth()));
-					Debug.Log("<color=green>AI unit " + chosenUnit.name + " healed " + ally.name + "</color>");
-
-					PlayerMana--;
+					yield return Heal(chosenUnit, ally);
 				}
 				else
 				{
@@ -338,10 +356,7 @@ public class AIPlayer : Player
 				
 				if (enemy && CanAttack(chosenUnit, enemy))
 				{
-					enemy.SetCurrentHealth(enemy.GetCurrentHealth() - chosenUnit.GetDamage());
-					animRef = Instantiate(attackAnimationHit, chosenUnit.transform, false);
-					Debug.Log("<color=red>AI unit " + chosenUnit.name + " attacked " + enemy.name + "</color>");
-					PlayerMana--;
+					yield return Attack(chosenUnit, enemy);
 				}
 				else
 				{
@@ -387,13 +402,30 @@ public class AIPlayer : Player
 			return false;
 		}
 	}
+
+	private IEnumerator Heal(Unit currentUnit, Unit targetUnit)
+	{
+		targetUnit.SetCurrentHealth(Mathf.Max(targetUnit.GetCurrentHealth() + targetUnit.GetDamage(), targetUnit.GetMaxHealth()));
+		Debug.Log("<color=green>AI unit " + currentUnit.name + " healed " + targetUnit.name + "</color>");
+		yield return new WaitForSeconds(0.4f);
+		PlayerMana--;
+	}
+
+	private IEnumerator Attack(Unit currentUnit, Unit targetUnit)
+	{
+		targetUnit.SetCurrentHealth(targetUnit.GetCurrentHealth() - currentUnit.GetDamage());
+		animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
+		Debug.Log("<color=red>AI unit " + currentUnit.name + " attacked " + targetUnit.name + "</color>");
+		PlayerMana--;
+		yield return new WaitForSeconds(0.4f);
+	}
 	
 	private IEnumerator MoveUnitTowards(Unit unit, Vector3 targetLocation)
 	{
 		Node closestNodeToTarget = null;
 		float closetDist = Mathf.Infinity;
 		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
-			0, (int)unit.GetMovementSpeed()).ToArray();
+			1, (int)unit.GetMovementSpeed()).ToArray();
 		
 		if(movableNodes.Length < 1)
 			yield break;
@@ -401,7 +433,7 @@ public class AIPlayer : Player
 		for (int i = 0; i < movableNodes.Length; i++)
 		{
 			float currentDist = Vector3.Distance(targetLocation, movableNodes[i].worldPosition);
-			if (currentDist < closetDist)
+			if (currentDist < closetDist && movableNodes[i].canWalkHere)
 			{
 				closestNodeToTarget = movableNodes[i];
 				closetDist = currentDist;
@@ -419,7 +451,7 @@ public class AIPlayer : Player
 		Node farthestNodeFromUnit = null;
 		float farthestDist = 0;
 		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
-			0, (int)unit.GetMovementSpeed()).ToArray();
+			1, (int)unit.GetMovementSpeed()).ToArray();
 		
 		if(movableNodes.Length < 1)
 			yield break;
@@ -427,7 +459,7 @@ public class AIPlayer : Player
 		for (int i = 0; i < movableNodes.Length; i++)
 		{
 			float currentDist = Vector3.Distance(awayFrom.transform.position, movableNodes[i].worldPosition);
-			if (currentDist > farthestDist)
+			if (currentDist > farthestDist && movableNodes[i].canWalkHere)
 			{
 				farthestNodeFromUnit = movableNodes[i];
 				farthestDist = currentDist;

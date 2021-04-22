@@ -364,6 +364,8 @@ public class Pathfinding : Singleton<Pathfinding>
 			while (openSet.Count > 0) 
 			{
 				Node currentNode = openSet.RemoveFirst();
+				
+				
 				closedSet.Add(currentNode);
 				
 				if (currentNode == targetNode) {
