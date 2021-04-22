@@ -79,7 +79,6 @@ public class GameManager : Singleton<GameManager>
 
     private void Update() 
     {
-        print(PhotonNetwork.PlayerList.Length);
         if(networked && !isLeaving && PhotonNetwork.IsConnected && PhotonNetwork.PlayerList.Length != 2)
         {
             isLeaving = true;
