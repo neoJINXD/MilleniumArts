@@ -7,6 +7,11 @@ using UnityEngine;
 
 public class AIPlayer : Player
 {
+	
+	[SerializeField] private GameObject attackAnimationHit;
+	
+	private GameObject animRef;
+	
 	private enum BehaviourType
 	{
 		Aggressive,
@@ -29,6 +34,14 @@ public class AIPlayer : Player
 		cardHolder = new GameObject();
 		cardHolder.transform.parent = transform;
 		cardHolder.name = "AI card hand";
+	}
+
+	private void Update()
+	{
+		if (animRef != null)
+		{
+			Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+		}
 	}
 	
     public override void StartTurn()
@@ -151,6 +164,7 @@ public class AIPlayer : Player
 						enemy.SetCurrentHealth(enemy.GetCurrentHealth() - closestAlly.GetDamage());
 						PlayerMana--;
 						Debug.Log("<color=red>AI attacking " + enemy.name + " to defend king" + "</color>");
+						
 					}
 					else
 					{
@@ -303,6 +317,7 @@ public class AIPlayer : Player
 				if (enemy && CanAttack(chosenUnit, enemy))
 				{
 					enemy.SetCurrentHealth(enemy.GetCurrentHealth() - chosenUnit.GetDamage());
+					animRef = Instantiate(attackAnimationHit, chosenUnit.transform, false);
 					Debug.Log("<color=red>AI unit " + chosenUnit.name + " attacked " + enemy.name + "</color>");
 					PlayerMana--;
 				}
