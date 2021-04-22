@@ -432,10 +432,11 @@ public class AIPlayer : Player
 
 		for (int i = 0; i < movableNodes.Length; i++)
 		{
-			float currentDist = Vector3.Distance(targetLocation, movableNodes[i].worldPosition);
-			if (currentDist < closetDist && movableNodes[i].canWalkHere)
+			Node currentNode = movableNodes[i];
+			float currentDist = Vector3.Distance(targetLocation, currentNode.worldPosition);
+			if (currentDist < closetDist && currentNode.canWalkHere && !currentNode.unitInThisNode)
 			{
-				closestNodeToTarget = movableNodes[i];
+				closestNodeToTarget = currentNode;
 				closetDist = currentDist;
 			}
 		}
@@ -458,10 +459,11 @@ public class AIPlayer : Player
 
 		for (int i = 0; i < movableNodes.Length; i++)
 		{
-			float currentDist = Vector3.Distance(awayFrom.transform.position, movableNodes[i].worldPosition);
-			if (currentDist > farthestDist && movableNodes[i].canWalkHere)
+			Node currentNode = movableNodes[i];
+			float currentDist = Vector3.Distance(awayFrom.transform.position, currentNode.worldPosition);
+			if (currentDist > farthestDist && currentNode.canWalkHere && !currentNode.unitInThisNode)
 			{
-				farthestNodeFromUnit = movableNodes[i];
+				farthestNodeFromUnit = currentNode;
 				farthestDist = currentDist;
 			}
 		}
