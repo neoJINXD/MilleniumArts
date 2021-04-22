@@ -63,6 +63,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
         TurnManager.instance.cardSuccessful = true;
 
         print(unit + " unit placed");
+        
+        
     }
     
     /*
