@@ -516,6 +516,7 @@ public class TurnManager : Singleton<TurnManager>
             if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() == currentPlayer.PlayerId)
             {
                 selectedNode.unitInThisNode.IncreaseCurrentHealthBy(currentUnit.GetDamage());
+                currentPlayer.PlayerMana--;
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") healed " + selectedNode.unitInThisNode.GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") for " + currentUnitNode.unitInThisNode.GetDamage() + " health!\n");
             }
         }
