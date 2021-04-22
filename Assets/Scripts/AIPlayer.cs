@@ -446,6 +446,9 @@ public class AIPlayer : Player
 		float shortestDist = Mathf.Infinity;
 		foreach(Unit unit in enemyUnits)
 		{
+			if (unit == null)
+				continue;
+			
 			float currentDist = Vector3.Distance(startPos, unit.transform.position);
 			if(currentDist < shortestDist)
 			{
