@@ -389,6 +389,10 @@ public class TurnManager : Singleton<TurnManager>
 
     void checkBoardClickForUnit()
     {
+        if (GameManager.instance.networked && 
+            !(Photon.Pun.PhotonNetwork.IsMasterClient == ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1))
+            return;
+            
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
