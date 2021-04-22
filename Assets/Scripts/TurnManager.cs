@@ -9,7 +9,8 @@ using UnityEngine.Serialization;
 
 public class TurnManager : Singleton<TurnManager>
 {
-	[SerializeField] private GameObject attackAnimation;
+	[SerializeField] private GameObject attackAnimationHit;
+	[SerializeField] private GameObject attackAnimationMiss;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] public Material availableMaterial;
     [SerializeField] public Material defaultMaterial;
@@ -590,7 +591,7 @@ public class TurnManager : Singleton<TurnManager>
     
     void Attack(Unit attacker, Unit receiver)
     {
-	    animRef = Instantiate(attackAnimation, currentUnit.transform, false);
+	    
 	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
@@ -604,9 +605,14 @@ public class TurnManager : Singleton<TurnManager>
         {
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
             updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!");
+            animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
         }
         else
-            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!");
+        {
+	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!");
+	        animRef = Instantiate(attackAnimationMiss, currentUnit.transform, false);
+        }
+            
 
         currentPlayer.PlayerMana--;
     }
