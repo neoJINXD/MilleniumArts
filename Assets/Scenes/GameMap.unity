@@ -451,6 +451,7 @@ MonoBehaviour:
   maxRange: 2
   aoeMinRange: 0
   aoeMaxRange: 0
+  indexInHand: 0
   description: Damages the triggering unit for 5 health.
 --- !u!114 &41984071
 MonoBehaviour:
@@ -597,6 +598,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardZoomInPanel: {fileID: 0}
+  cardPrefab: {fileID: 0}
 --- !u!114 &64347880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,6 +699,7 @@ MonoBehaviour:
   maxRange: 0
   aoeMinRange: 0
   aoeMaxRange: 0
+  indexInHand: 0
   description: "Increases an ally unit\u2019s Damage by 3."
 --- !u!114 &77103125
 MonoBehaviour:
@@ -1000,6 +1004,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardZoomInPanel: {fileID: 0}
+  cardPrefab: {fileID: 0}
 --- !u!114 &168097967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2632,6 +2638,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardZoomInPanel: {fileID: 0}
+  cardPrefab: {fileID: 0}
 --- !u!114 &567321014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2825,6 +2833,7 @@ MonoBehaviour:
   maxRange: 1
   aoeMinRange: 0
   aoeMaxRange: 0
+  indexInHand: 0
   description: '"Damages an enemy unit for 5 health."'
 --- !u!1 &596508711
 GameObject:
@@ -3779,6 +3788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26c70af5c0b69ce48820eeef079fe2de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepAlive: 0
   target: {fileID: 1737116090}
   unit: {fileID: 1764270284}
   size: 1
@@ -3831,9 +3841,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc65fda1cf3c774ba64274e240d9c9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayPath: {fileID: 2100000, guid: 68f3246b26d468b4081b9d6ad1c68929, type: 2}
+  keepAlive: 0
+  hoveredTile: {fileID: 0}
   defaultMat: {fileID: 2100000, guid: dd005584003bd474eb71d4d36b0158e2, type: 2}
-  selectedTile: {fileID: 2100000, guid: 0027759dfc5935d4a99771f544d66a93, type: 2}
   gridRef: {fileID: 0}
   minDepthLimit: 2
   maxDepthLimit: 3
@@ -3849,6 +3859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de5b0dec804893744b96a6a0ef13d93a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepAlive: 0
 --- !u!1 &854632274
 GameObject:
   m_ObjectHideFlags: 0
@@ -4116,11 +4127,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitType: 7
   movementSpeed: 10
   canFly: 0
   unitPlayerId: -1
+  maxHealth: 0
+  currentHealth: 0
+  damage: 0
+  defense: 0
+  minRange: 0
+  maxRange: 0
+  accuracy: 0
+  evasion: 0
+  cost: 0
+  targetIndex: 0
   isClicked: 0
-  startRoutine: 0
+  m_healthBar: {fileID: 0}
 --- !u!136 &891132760
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4538,6 +4560,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keepAlive: 0
+  attackAnimation: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
+    type: 3}
   unitPrefab: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
     type: 3}
   availableMaterial: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}
@@ -4545,24 +4569,33 @@ MonoBehaviour:
   targetMaterial: {fileID: 2100000, guid: f9bab5bc25629f642a6d281acc413cc7, type: 2}
   AOEMaterial: {fileID: 2100000, guid: f963182103342044997c34da04653f36, type: 2}
   currentPlayer: {fileID: 0}
+  localPlayer: {fileID: 0}
   currentUnit: {fileID: 0}
   currentUnitPosition: {x: 0, y: 0, z: 0}
   cardSelected: 0
   cardEffectManager: {fileID: 854632276}
   storedCard: {fileID: 0}
+  cardSuccessful: 0
   allUnits: []
+  currentMana: 0
   placingEnemyUnit: 0
   currentTurnState: 0
   unitSelected: 0
-  unitPlayerIDText: {fileID: 1612099297}
-  unitDamageText: {fileID: 2120046831}
-  unitDefenceText: {fileID: 674534646}
-  unitARText: {fileID: 1465574610}
-  unitMSText: {fileID: 1610506559}
-  unitAccuracyText: {fileID: 774431142}
-  unitEvasionText: {fileID: 627703170}
-  unitHealthText: {fileID: 1075602114}
+  unitPlayerIDText: {fileID: 0}
+  unitDamageText: {fileID: 0}
+  unitDefenceText: {fileID: 0}
+  unitARText: {fileID: 0}
+  unitMSText: {fileID: 0}
+  unitAccuracyText: {fileID: 0}
+  unitEvasionText: {fileID: 0}
+  unitHealthText: {fileID: 0}
   optionPanel: {fileID: 105927771}
+  attackButtonRef: {fileID: 0}
+  healButtonRef: {fileID: 0}
+  cardPrefab: {fileID: 0}
+  cardDrawPanel: {fileID: 0}
+  handPanel: {fileID: 0}
+  manaText: {fileID: 0}
 --- !u!1 &1075602112
 GameObject:
   m_ObjectHideFlags: 0
@@ -4797,6 +4830,7 @@ MonoBehaviour:
   maxRange: 3
   aoeMinRange: 0
   aoeMaxRange: 1
+  indexInHand: 0
   description: Damages all enemies within (0,1) tiles of the casting origin for 3
     health
 --- !u!1 &1084266112
@@ -4865,11 +4899,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitType: 7
   movementSpeed: 10
   canFly: 0
   unitPlayerId: -1
+  maxHealth: 0
+  currentHealth: 0
+  damage: 0
+  defense: 0
+  minRange: 0
+  maxRange: 0
+  accuracy: 0
+  evasion: 0
+  cost: 0
+  targetIndex: 0
   isClicked: 0
-  startRoutine: 0
+  m_healthBar: {fileID: 0}
 --- !u!136 &1084916424
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5206,6 +5251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardZoomInPanel: {fileID: 0}
+  cardPrefab: {fileID: 0}
 --- !u!114 &1098093642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5402,6 +5449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a25ba81221ac4774d9fe4e94b89f3d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  keepAlive: 0
   m_player: {fileID: 0}
   handCount: 5
   defaultHandPanel: {fileID: 1195809201}
@@ -5410,6 +5458,8 @@ MonoBehaviour:
     type: 3}
   endTurnButton: {fileID: 10395072}
   hardCap: 0
+  cardZoomInPanel: {fileID: 0}
+  cardPrefab: {fileID: 0}
 --- !u!114 &1116349855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6092,11 +6142,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitType: 7
   movementSpeed: 10
   canFly: 0
   unitPlayerId: -1
+  maxHealth: 0
+  currentHealth: 0
+  damage: 0
+  defense: 0
+  minRange: 0
+  maxRange: 0
+  accuracy: 0
+  evasion: 0
+  cost: 0
+  targetIndex: 0
   isClicked: 0
-  startRoutine: 0
+  m_healthBar: {fileID: 0}
 --- !u!136 &1273640696
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6329,6 +6390,8 @@ MonoBehaviour:
   maxRange: 2
   aoeMinRange: 0
   aoeMaxRange: 0
+  indexInHand: 0
+  UnitType: 0
   health: 10
   damage: 5
   defence: 1
@@ -6898,10 +6961,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerId: 0
   PlayerMana: 0
+  PlayerMaxMana: 0
+  KingAlive: 1
+  King: {fileID: 0}
   m_playerCards:
   - {fileID: 0}
   - {fileID: 0}
   m_playerUnits: []
+  m_behaviour: 0
 --- !u!114 &1514034435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6916,6 +6983,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerId: 0
   PlayerMana: 0
+  PlayerMaxMana: 0
+  KingAlive: 1
+  King: {fileID: 0}
   m_playerCards:
   - {fileID: 0}
   - {fileID: 0}
@@ -6936,6 +7006,8 @@ MonoBehaviour:
   players:
   - {fileID: 1514034435}
   - {fileID: 1514034434}
+  m_gameOverUI: {fileID: 0}
+  m_winningPlayerText: {fileID: 0}
 --- !u!114 &1514034437
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6956,6 +7028,7 @@ MonoBehaviour:
   player2: {fileID: 0}
   player1Mat: {fileID: 0}
   player2Mat: {fileID: 0}
+  gameHistory: 
 --- !u!4 &1514034438
 Transform:
   m_ObjectHideFlags: 0
@@ -7341,11 +7414,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitType: 7
   movementSpeed: 10
   canFly: 0
   unitPlayerId: -1
+  maxHealth: 0
+  currentHealth: 0
+  damage: 0
+  defense: 0
+  minRange: 0
+  maxRange: 0
+  accuracy: 0
+  evasion: 0
+  cost: 0
+  targetIndex: 0
   isClicked: 0
-  startRoutine: 0
+  m_healthBar: {fileID: 0}
 --- !u!1 &1610506557
 GameObject:
   m_ObjectHideFlags: 0
@@ -7814,7 +7898,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fa2cd5e8026d234196603690896ecfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_player: {fileID: 1514034435}
   m_placeButton: {fileID: 518576770}
   m_endTurnButton: {fileID: 1087767110}
 --- !u!114 &1676824104
@@ -8225,6 +8308,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5ebfce2fba1d4c46a3d65ee52c62379, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardZoomInPanel: {fileID: 0}
+  cardPrefab: {fileID: 0}
 --- !u!222 &1753632937
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8346,11 +8431,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitType: 7
   movementSpeed: 10
   canFly: 0
   unitPlayerId: -1
+  maxHealth: 0
+  currentHealth: 0
+  damage: 0
+  defense: 0
+  minRange: 0
+  maxRange: 0
+  accuracy: 0
+  evasion: 0
+  cost: 0
+  targetIndex: 0
   isClicked: 0
-  startRoutine: 0
+  m_healthBar: {fileID: 0}
 --- !u!136 &1755316931
 CapsuleCollider:
   m_ObjectHideFlags: 0
