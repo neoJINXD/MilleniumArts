@@ -14,7 +14,7 @@ public class Pathfinding : Singleton<Pathfinding>
 	[SerializeField] private Material hoveredTile;
 	[SerializeField] private Material defaultMat;
 	
-	private  Node[] waypoints;
+	public  Node[] waypoints;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	public Grid gridRef;

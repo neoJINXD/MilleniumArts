@@ -30,6 +30,12 @@ public abstract class Player : MonoBehaviour
     public virtual void EndTurn()
     {
         TurnComplete = true;
+
+        foreach(Unit unit in m_playerUnits)
+        {
+            unit.SetMovementSpeedLeft(unit.GetMovementSpeed());
+            unit.SetCanAttack(true);
+        }
     }
 
     #region Unit & Card Setters/Getters

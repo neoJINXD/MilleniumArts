@@ -347,6 +347,12 @@ public class TurnManager : Singleton<TurnManager>
     {
         if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
         {
+            if(!currentUnit.GetCanAttack())
+            {
+                print("This unit cannot attack again for the rest of the turn.");
+                return;
+            }
+
             Node currentNode = grid.NodeFromWorldPoint(currentUnitPosition);
 
             pf.minDepthLimit = currentUnit.GetMinRange();
@@ -455,6 +461,8 @@ public class TurnManager : Singleton<TurnManager>
                 currentUnit.isClicked = true;
 
                 updateGameHistory("Player " + currentPlayer.PlayerId + " moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
+
+                // decrement the unit's movementSpeedLeft variable
 
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
@@ -593,7 +601,6 @@ public class TurnManager : Singleton<TurnManager>
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
         int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
-        print(hitChance);
         int roll = Random.Range(0, 101); // generate 0-100
 
         Node attackerNode = grid.NodeFromWorldPoint(attacker.transform.position);
@@ -602,10 +609,12 @@ public class TurnManager : Singleton<TurnManager>
         if(roll <= hitChance)
         {
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
-            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!");
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!\n");
         }
         else
-            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!");
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!\n");
+
+        attacker.SetCanAttack(false);
 
         currentPlayer.PlayerMana--;
     }
