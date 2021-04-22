@@ -4,9 +4,12 @@ using UnityEngine;
 using Zone.Core.Utils;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Serialization;
+
 
 public class TurnManager : Singleton<TurnManager>
 {
+	[SerializeField] private GameObject attackAnimation;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] public Material availableMaterial;
     [SerializeField] public Material defaultMaterial;
@@ -16,7 +19,7 @@ public class TurnManager : Singleton<TurnManager>
     private const float lockAxis = 27f;
 
     public Player currentPlayer = default;
-    public Player localPlayer = default;
+    private Player localPlayer = default;
 
     public HashSet<Node> selectableNodes;
 
@@ -25,11 +28,11 @@ public class TurnManager : Singleton<TurnManager>
 
     public Unit currentUnit;
     public Vector3 currentUnitPosition;
+    public Node currentUnitNode;
 
-    public bool cardSelected;
+    [SerializeField] private CardEffectManager cardEffectManager;
 
-    public CardEffectManager cardEffectManager;
-
+    private bool cardSelected;
     public Card storedCard;
 
     public bool cardSuccessful;
@@ -37,6 +40,8 @@ public class TurnManager : Singleton<TurnManager>
     public List<Unit> allUnits;
     
     public int currentMana;
+
+    private GameObject animRef;
 
     public enum TurnState
     {
@@ -54,39 +59,70 @@ public class TurnManager : Singleton<TurnManager>
 
     [SerializeField] public TurnState currentTurnState;
 
-    public bool unitSelected;
+    [SerializeField] private GameObject gameplayPanel;
+    private GameObject unitPanel;
+
+    private bool unitSelected;
 
     // Stat panel
 
-    public TextMeshProUGUI unitPlayerIDText;
-    public TextMeshProUGUI unitDamageText;
-    public TextMeshProUGUI unitDefenceText;
-    public TextMeshProUGUI unitARText;
-    public TextMeshProUGUI unitMSText;
-    public TextMeshProUGUI unitAccuracyText;
-    public TextMeshProUGUI unitEvasionText;
-    public TextMeshProUGUI unitHealthText;
+    private TextMeshProUGUI unitPlayerIDText;
+    private TextMeshProUGUI unitDamageText;
+    private TextMeshProUGUI unitDefenceText;
+    private TextMeshProUGUI unitARText;
+    private TextMeshProUGUI unitMSText;
+    private TextMeshProUGUI unitAccuracyText;
+    private TextMeshProUGUI unitEvasionText;
+    private TextMeshProUGUI unitHealthText;
 
     // Option Menu
-    public GameObject optionPanel;
+    private GameObject optionPanel;
 
-    public GameObject attackButtonRef;
-    public GameObject healButtonRef;
+    private GameObject attackButtonRef;
+    private GameObject healButtonRef;
 
     // Card Draw
 
-    [SerializeField] private GameObject cardPrefab;
-    [SerializeField] public GameObject cardDrawPanel;
+    [SerializeField] public GameObject cardPrefab;
 
-    [SerializeField] private GameObject handPanel;
+    public GameObject cardDrawPanel;
+    private GameObject handPanel;
 
     // Mana Panel
-    public TextMeshProUGUI manaText;
+    private TextMeshProUGUI manaText;
+
+    // Game History Panel
+
+    private TextMeshProUGUI gameHistoryText;
 
     void Start()
     {
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
+
+        gameplayPanel = GameObject.Find("GameplayUICanvas");
+        unitPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(0).gameObject;
+
+        unitPlayerIDText = unitPanel.transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitDamageText = unitPanel.transform.GetChild(3).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitDefenceText = unitPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitARText = unitPanel.transform.GetChild(5).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitMSText = unitPanel.transform.GetChild(6).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitAccuracyText = unitPanel.transform.GetChild(7).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitEvasionText = unitPanel.transform.GetChild(8).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitHealthText = unitPanel.transform.GetChild(9).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        optionPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(1).transform.GetChild(1).gameObject;
+
+        attackButtonRef = optionPanel.transform.GetChild(0).gameObject;
+        healButtonRef = optionPanel.transform.GetChild(1).gameObject;
+
+        manaText = gameplayPanel.transform.GetChild(0).transform.GetChild(4).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        gameHistoryText = gameplayPanel.transform.GetChild(0).transform.GetChild(1).transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        cardDrawPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(6).gameObject;
+
+        handPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(3).gameObject;
 
         currentTurnState = TurnState.Free;
 
@@ -152,6 +188,12 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (Input.GetMouseButtonDown(0))
                 placeEnemyUnit();
+        }
+
+        // destroy attack GameObject animation after it is finished playing
+        if (animRef != null)
+        {
+	        Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
         }
     }
 
@@ -229,8 +271,14 @@ public class TurnManager : Singleton<TurnManager>
         }
     }
 
+    public void summonEnemy()
+    {
+        currentTurnState = TurnState.PlacingEnemyUnit;
+        placingEnemyUnit = true;
+    }
+
     // temp function to place enemy units
-    void placeEnemyUnit()
+    public void placeEnemyUnit()
     {
         Node selectedNode = null;
         Vector3 selectedNodePosition = Vector3.zero;
@@ -329,8 +377,7 @@ public class TurnManager : Singleton<TurnManager>
 
             foreach (Node node in allUnitsNodes)
                 node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-
-
+            
             if(currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
                 currentTurnState = TurnState.SelectingTileHeal;
             else
@@ -353,6 +400,7 @@ public class TurnManager : Singleton<TurnManager>
                 {
                     currentUnit = hit.transform.GetComponent<Unit>();
                     currentUnitPosition = hit.transform.position;
+                    currentUnitNode = grid.NodeFromWorldPoint(currentUnitPosition);
 
                     optionPanel.SetActive(true);
 
@@ -373,11 +421,11 @@ public class TurnManager : Singleton<TurnManager>
                 unitPlayerIDText.text = "" + hit.transform.GetComponent<Unit>().GetUnitPlayerID();
                 unitDamageText.text = "" + hit.transform.GetComponent<Unit>().GetDamage();
                 unitDefenceText.text = "" + hit.transform.GetComponent<Unit>().GetDefence();
-                unitARText.text = "" + hit.transform.GetComponent<Unit>().GetMinRange() + " - " +  + hit.transform.GetComponent<Unit>().GetMaxRange();
+                unitARText.text = "" + hit.transform.GetComponent<Unit>().GetMinRange() + " - " + hit.transform.GetComponent<Unit>().GetMaxRange();
                 unitMSText.text = "" + hit.transform.GetComponent<Unit>().GetMovementSpeed();
                 unitAccuracyText.text = "" + hit.transform.GetComponent<Unit>().GetAccuracy();
                 unitEvasionText.text = "" + hit.transform.GetComponent<Unit>().GetEvasion();
-                unitHealthText.text = "" + hit.transform.GetComponent<Unit>().GetCurrentHealth() + "/" + + hit.transform.GetComponent<Unit>().GetMaxHealth();
+                unitHealthText.text = "" + hit.transform.GetComponent<Unit>().GetCurrentHealth() + "/" + hit.transform.GetComponent<Unit>().GetMaxHealth();
             }
         }
     }
@@ -407,9 +455,13 @@ public class TurnManager : Singleton<TurnManager>
             if (selectableNodes.Contains(selectedNode) && selectedNode.unitInThisNode == null)
             {
                 currentUnit.isClicked = true;
+
+                updateGameHistory("Player " + currentPlayer.PlayerId + " moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
+
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
                 currentPlayer.PlayerMana--;
+
             }
         }
 
@@ -458,7 +510,10 @@ public class TurnManager : Singleton<TurnManager>
         if (selectedNode != null)
         {
             if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() == currentPlayer.PlayerId)
+            {
                 selectedNode.unitInThisNode.IncreaseCurrentHealthBy(currentUnit.GetDamage());
+                updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") healed " + selectedNode.unitInThisNode.GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") for " + currentUnitNode.unitInThisNode.GetDamage() + " health!\n");
+            }
         }
 
         foreach (var node in selectableNodes)
@@ -532,20 +587,27 @@ public class TurnManager : Singleton<TurnManager>
         currentTurnState = TurnState.Free;
     }
 
+    
     void Attack(Unit attacker, Unit receiver)
     {
+	    animRef = Instantiate(attackAnimation, currentUnit.transform, false);
+	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
         int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
+        print(hitChance);
         int roll = Random.Range(0, 101); // generate 0-100
+
+        Node attackerNode = grid.NodeFromWorldPoint(attacker.transform.position);
+        Node receiverNode = grid.NodeFromWorldPoint(receiver.transform.position);
 
         if(roll <= hitChance)
         {
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
-            print("Attack successful!");
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!");
         }
         else
-            print("Attack missed!");
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!");
 
         currentPlayer.PlayerMana--;
     }
@@ -1145,7 +1207,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 16;
-					card.castType = CastType.OnEmpty;
+					card.castType = CastType.OnAny;
 					card.name = "Oracle";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1324,4 +1386,10 @@ public class TurnManager : Singleton<TurnManager>
 		
 		return new Card();
 	}
+
+    // method to update game history (can maybe make this a PunRPC to have the same on both clients
+    public void updateGameHistory(string actionString)
+    {
+        gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
+    }
 }

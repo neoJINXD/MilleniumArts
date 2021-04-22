@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -390,7 +390,7 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        m_healthBar.value = (float) currentHealth / maxHealth;
+        //m_healthBar.value = (float) currentHealth / maxHealth;
 
         if (currentHealth < 1)
         {
