@@ -148,6 +148,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Damages an enemy unit for 10 health.
      * Cost: 3
      */
+    
+    // NOTE: Come back to, spell doesn't seem to be working.
     public void spell_snipe(int playerId, Node selectedNode)
     {
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
@@ -157,6 +159,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 selectedNode.GetUnit().DecreaseCurrentHealthBy(10); // smite damage
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") lost 10 health!\n");
                 TurnManager.instance.cardSuccessful = true;
+                
+                animRef = Instantiate(anim_spell_snipe, selectedNode.GetUnit().transform, false);
             }
         }
     }
@@ -188,6 +192,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         if(getEnemyNodesInRange.Count > 0)
         {
             spellMessage += "Player " + playerId + " used Heavenly Smite at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+            animRef = Instantiate(anim_spell_heavenlySmite, selectedNode.GetUnit().transform, false);
             foreach (Node node in getEnemyNodesInRange)
             {
                 node.GetUnit().DecreaseCurrentHealthBy(3);
@@ -604,7 +609,6 @@ public class CardEffectManager : Singleton<CardEffectManager>
             selectedNode.AddTrapOrItem(bearTrap);
             TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Bear Trap on the battlefield!\n");
             TurnManager.instance.cardSuccessful = true;
-
         }
     }
 

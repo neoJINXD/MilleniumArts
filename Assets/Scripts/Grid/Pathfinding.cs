@@ -15,6 +15,8 @@ public class Pathfinding : Singleton<Pathfinding>
 	[SerializeField] private Material defaultMat;
 	
 	private  Node[] waypoints;
+	
+	public static float pathNodeCount;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	public Grid gridRef;
@@ -342,6 +344,7 @@ public class Pathfinding : Singleton<Pathfinding>
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
+			pathNodeCount = waypoints.Length;
 		}
 
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);

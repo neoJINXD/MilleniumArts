@@ -111,6 +111,8 @@ MonoBehaviour:
   King: {fileID: 0}
   m_playerCards: []
   m_playerUnits: []
+  attackAnimationHit: {fileID: 0}
+  healAnimation: {fileID: 0}
   m_behaviour: 0
 --- !u!1 &73664737091938438
 GameObject:
@@ -363,6 +365,48 @@ MonoBehaviour:
     type: 3}
   m_dragonRider: {fileID: 557146629312656060, guid: 795a204b449bd8d41908d488c3f096c9,
     type: 3}
+  anim_spell_smite: {fileID: 4685259530587244230, guid: 44f19c2ef51c2a0498e956ecd46097c0,
+    type: 3}
+  anim_spell_snipe: {fileID: 4685259530587244230, guid: 0ff44cbe63af9b146849470967ec5717,
+    type: 3}
+  anim_spell_heavenlySmite: {fileID: 4685259530587244230, guid: d621bc84084717a4e8b4c8bdab4d9966,
+    type: 3}
+  anim_spell_prayer: {fileID: 4685259530587244230, guid: b5bd6c53317bd154caafbd3de69c5e4b,
+    type: 3}
+  anim_spell_vitality: {fileID: 4685259530587244230, guid: 0a5dab94a83b47f4d881fc4bec28a47c,
+    type: 3}
+  anim_spell_endurance: {fileID: 4685259530587244230, guid: 10ec725b91ee18642a029bb737d9243e,
+    type: 3}
+  anim_spell_vigor: {fileID: 4685259530587244230, guid: a9f31946c3eb8fa4590e1d90a0025fef,
+    type: 3}
+  anim_spell_nimbleness: {fileID: 4685259530587244230, guid: 6c4a6f6b3853dc74d932673fb8d0f1a8,
+    type: 3}
+  anim_spell_agility: {fileID: 4685259530587244230, guid: 88afa6fadb806e44d9d208e90d753be2,
+    type: 3}
+  anim_spell_precision: {fileID: 4685259530587244230, guid: 1f8ed7c8c7e63c340b3fe321b36854ed,
+    type: 3}
+  anim_spell_oracle: {fileID: 4685259530587244230, guid: 9f8296d518b9843499ec41b586766aee,
+    type: 3}
+  anim_spell_disarmTrap: {fileID: 4685259530587244230, guid: 79e3dd50cca349e4d9a595dfa1e48321,
+    type: 3}
+  anim_spell_provisions: {fileID: 4685259530587244230, guid: 7e6d64365a2d17f4587e72499e9cc52d,
+    type: 3}
+  anim_spell_reinforcements: {fileID: 4685259530587244230, guid: 8135d18185f69174ebfd39a9ce689310,
+    type: 3}
+  anim_spell_greed: {fileID: 4685259530587244230, guid: 17cca59a1d78aa8428b489e18f13d878,
+    type: 3}
+  anim_spell_warcry: {fileID: 4685259530587244230, guid: 4d3ec05760ba67446a8caff793bea4a2,
+    type: 3}
+  anim_spell_rebirth: {fileID: 4685259530587244230, guid: 3f7e9e77df9193045a60c52d75cca7eb,
+    type: 3}
+  anim_spell_assassinate: {fileID: 4685259530587244230, guid: e48a500683f9c8d45aa30c03df42881a,
+    type: 3}
+  anim_spell_bearTrap: {fileID: 4685259530587244230, guid: 0f4dde0370de7484aa6a732206c38bf7,
+    type: 3}
+  anim_spell_landMine: {fileID: 4685259530587244230, guid: ec2e95c3d9d5e904abce2000dd986ada,
+    type: 3}
+  anim_spell_royalPledge: {fileID: 4685259530587244230, guid: ef9cc7e03719ad842b005a6a1147d84d,
+    type: 3}
 --- !u!1 &5066473961083304728
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,6 +453,7 @@ MonoBehaviour:
   keepAlive: 0
   attackAnimationHit: {fileID: 4685259530587244230, guid: 21d18fe1550a6e24590f746025a6446c,
     type: 3}
+  healAnimation: {fileID: 0}
   attackAnimationMiss: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
     type: 3}
   unitPrefab: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
@@ -476,6 +521,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5066473961084471719}
     m_Modifications:
+    - target: {fileID: 131622179157118385, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 14.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 667981870944668446, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418349004214285250, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1491241866864841942, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 1698662725015262538, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 3088426782106570399, guid: 4b2bc9f11b66e894d94803420d7fc702,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -485,6 +555,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3303779226148535833, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 19.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 4464601518633997519, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5061782661949723743, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12.2
       objectReference: {fileID: 0}
     - target: {fileID: 5537238055536317928, guid: 4b2bc9f11b66e894d94803420d7fc702,
         type: 3}
@@ -621,6 +706,41 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 5066473961083304710}
+    - target: {fileID: 6035710571792307285, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 12.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6613168030796315004, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 33.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 7631250247357078926, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7631250247357078926, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7631250247357078926, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8184644097090490033, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 36.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9073252962656970879, guid: 4b2bc9f11b66e894d94803420d7fc702,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b2bc9f11b66e894d94803420d7fc702, type: 3}
 --- !u!224 &5066473959696421397 stripped
