@@ -56,6 +56,14 @@ public class CardEffectManager : Singleton<CardEffectManager>
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
+    private void Update()
+    {
+        if (animRef != null)
+        {
+            Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+        }
+    }
+
     public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
     {
         Unit placedUnit = null;
@@ -127,7 +135,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 selectedNode.GetUnit().DecreaseCurrentHealthBy(5); // smite damage
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
                 TurnManager.instance.cardSuccessful = true;
-                print("Yummy");
+                animRef = Instantiate(anim_spell_smite, selectedNode.GetUnit().transform, false);
             }
         }
     }
