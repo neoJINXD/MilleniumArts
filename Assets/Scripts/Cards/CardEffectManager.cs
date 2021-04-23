@@ -11,7 +11,36 @@ public class CardEffectManager : Singleton<CardEffectManager>
     [SerializeField] private Unit m_priest;
     [SerializeField] private Unit m_archer;
     [SerializeField] private Unit m_dragonRider;
-    
+
+    #region Card Animations
+
+    private GameObject animRef;
+
+    [SerializeField] private GameObject anim_spell_smite;
+    [SerializeField] private GameObject anim_spell_snipe;
+    [SerializeField] private GameObject anim_spell_heavenlySmite;
+    [SerializeField] private GameObject anim_spell_prayer;
+    [SerializeField] private GameObject anim_spell_vitality;
+    [SerializeField] private GameObject anim_spell_endurance;
+    [SerializeField] private GameObject anim_spell_vigor;
+    [SerializeField] private GameObject anim_spell_nimbleness;
+    [SerializeField] private GameObject anim_spell_agility;
+    [SerializeField] private GameObject anim_spell_precision;
+    [SerializeField] private GameObject anim_spell_oracle;
+    [SerializeField] private GameObject anim_spell_disarmTrap;
+    [SerializeField] private GameObject anim_spell_provisions;
+    [SerializeField] private GameObject anim_spell_reinforcements;
+    [SerializeField] private GameObject anim_spell_greed;
+    [SerializeField] private GameObject anim_spell_warcry;
+    [SerializeField] private GameObject anim_spell_rebirth;
+    [SerializeField] private GameObject anim_spell_assassinate;
+    [SerializeField] private GameObject anim_spell_bearTrap;
+    [SerializeField] private GameObject anim_spell_landMine;
+    [SerializeField] private GameObject anim_spell_royalPledge;
+
+    #endregion
+
+
     private bool placerClicked = false;
     private const float lockAxis = 27f;
 
@@ -26,6 +55,14 @@ public class CardEffectManager : Singleton<CardEffectManager>
     {
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
+    }
+
+    private void Update()
+    {
+        if (animRef != null)
+        {
+            Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+        }
     }
 
     public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
@@ -104,6 +141,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Successfully used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_smite, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -125,6 +163,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") lost 10 health!\n");
             TurnManager.instance.updateTurnUpdate("Successfully used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_snipe, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -157,8 +196,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 }
             }
         }
+
         TurnManager.instance.updateGameHistory(spellMessage);
         TurnManager.instance.updateTurnUpdate("Successfully used Heavenly Smite at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        animRef = Instantiate(anim_spell_heavenlySmite, selectedNode.GetUnit().transform, false);
         TurnManager.instance.cardSuccessful = true;
 
     }
