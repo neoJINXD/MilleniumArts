@@ -427,7 +427,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000015258789, y: -0.000015258789}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0.000091553, y: -0.000030518}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &41984070
@@ -675,7 +675,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.0002975464, y: 0}
+  m_AnchoredPosition: {x: -0.00030517578, y: 0}
   m_SizeDelta: {x: 0.0005188, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &77103124
@@ -2715,7 +2715,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00032043457, y: 0.00016784668}
+  m_AnchoredPosition: {x: -0.00033569336, y: 0.00018310547}
   m_SizeDelta: {x: -0.4600067, y: 0.42999268}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &573685513
@@ -4560,8 +4560,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   keepAlive: 0
-  attackAnimation: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
-    type: 3}
+  attackAnimationHit: {fileID: 0}
+  healAnimation: {fileID: 0}
+  attackAnimationMiss: {fileID: 0}
   unitPrefab: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
     type: 3}
   availableMaterial: {fileID: 2100000, guid: 47779e91d22b0584fa4dc30aa34bec12, type: 2}
@@ -4569,10 +4570,8 @@ MonoBehaviour:
   targetMaterial: {fileID: 2100000, guid: f9bab5bc25629f642a6d281acc413cc7, type: 2}
   AOEMaterial: {fileID: 2100000, guid: f963182103342044997c34da04653f36, type: 2}
   currentPlayer: {fileID: 0}
-  localPlayer: {fileID: 0}
   currentUnit: {fileID: 0}
   currentUnitPosition: {x: 0, y: 0, z: 0}
-  cardSelected: 0
   cardEffectManager: {fileID: 854632276}
   storedCard: {fileID: 0}
   cardSuccessful: 0
@@ -4580,22 +4579,9 @@ MonoBehaviour:
   currentMana: 0
   placingEnemyUnit: 0
   currentTurnState: 0
-  unitSelected: 0
-  unitPlayerIDText: {fileID: 0}
-  unitDamageText: {fileID: 0}
-  unitDefenceText: {fileID: 0}
-  unitARText: {fileID: 0}
-  unitMSText: {fileID: 0}
-  unitAccuracyText: {fileID: 0}
-  unitEvasionText: {fileID: 0}
-  unitHealthText: {fileID: 0}
-  optionPanel: {fileID: 105927771}
-  attackButtonRef: {fileID: 0}
-  healButtonRef: {fileID: 0}
+  gameplayPanel: {fileID: 0}
   cardPrefab: {fileID: 0}
   cardDrawPanel: {fileID: 0}
-  handPanel: {fileID: 0}
-  manaText: {fileID: 0}
 --- !u!1 &1075602112
 GameObject:
   m_ObjectHideFlags: 0
@@ -4712,7 +4698,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000015258789, y: 0.000015258789}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -0.000030518, y: -0.000030518}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1077621884
@@ -6968,6 +6954,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   m_playerUnits: []
+  attackAnimationHit: {fileID: 0}
+  healAnimation: {fileID: 0}
   m_behaviour: 0
 --- !u!114 &1514034435
 MonoBehaviour:
@@ -7543,7 +7531,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000020980835}
+  m_AnchoredPosition: {x: 0, y: -0.000022888184}
   m_SizeDelta: {x: -0.000091553, y: 0.000080109}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1612099297
@@ -9928,7 +9916,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000049591064, y: 0.000015258789}
+  m_AnchoredPosition: {x: -0.000045776367, y: 0.000015258789}
   m_SizeDelta: {x: 0.000099182, y: 0.0000076294}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2120046831
