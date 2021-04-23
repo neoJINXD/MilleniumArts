@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4685259530587244229}
   - component: {fileID: 4685259530587244227}
   - component: {fileID: 387721329667816263}
-  - component: {fileID: -318335281802596806}
+  - component: {fileID: 8050217595353312844}
   m_Layer: 0
-  m_Name: Heal
+  m_Name: Blast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -663916303081124925, guid: b8c161198c30c864e9605042705a0f2b,
+  m_Sprite: {fileID: 8381761346048096291, guid: 095ed0beadeb45f43bc8c5c263e8af24,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -96,7 +96,7 @@ Animator:
   m_GameObject: {fileID: 4685259530587244230}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6436848ae4c9330418f4d5678e4c2655, type: 2}
+  m_Controller: {fileID: 9100000, guid: b16a55105ad29264392b364b0493f771, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e79ed4b3de089e347b0e2dfc3dbc632c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!82 &-318335281802596806
+--- !u!82 &8050217595353312844
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,10 +127,10 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7c68e060e9772e1409aa444dbaf7ac26, type: 3}
+  m_audioClip: {fileID: 8300000, guid: b7f86484d522924499ab3d781dddf442, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
-  m_Pitch: 1.91
+  m_Pitch: 2.55
   Loop: 0
   Mute: 0
   Spatialize: 0
