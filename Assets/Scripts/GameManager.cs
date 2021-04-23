@@ -34,6 +34,12 @@ public class GameManager : Singleton<GameManager>
         isLeaving = false;
     }
 
+    private void Start() 
+    {
+        if (networked && !PhotonNetwork.IsMasterClient)
+            TurnManager.instance.cardDrawPanel.SetActive(false);    
+    }
+
     private void LocalStart()
     {
         StartCoroutine(gameLoop.Play());
