@@ -204,19 +204,19 @@ public class AIPlayer : Player
 				{
 					if (m_behaviour == BehaviourType.Aggressive)
 					{
-						if(m_playerCards.Count < otherUnits.Count + 2)
+						if(m_playerUnits.Count < otherUnits.Count + 2)
 							PlayCard(playerCard);
 					}
 					
 					if (m_behaviour == BehaviourType.Defensive)
 					{
-						if(m_playerCards.Count < otherUnits.Count + 4)
+						if(m_playerUnits.Count < otherUnits.Count + 4)
 							PlayCard(playerCard);
 					}
 					
 					if (m_behaviour == BehaviourType.Balanced)
 					{
-						if(m_playerCards.Count < otherUnits.Count + 3)
+						if(m_playerUnits.Count < otherUnits.Count + 3)
 							PlayCard(playerCard);
 					}
 				}
@@ -279,7 +279,7 @@ public class AIPlayer : Player
 				}
 				else if (cardToPlay.GetType() == typeof(UnitCard))
 				{
-					Node[] placeableNodes = Grid.instance.GetPlaceableNodes(cardToPlay).ToArray();
+					Node[] placeableNodes = Grid.instance.GetPlaceableUnitNodes((UnitCard)cardToPlay).ToArray();
 					Node nodeToPlaceIn = placeableNodes[Random.Range(0, placeableNodes.Length - 1)];
 					CardEffectManager.instance.CreateUnit(((UnitCard)cardToPlay).UnitType, nodeToPlaceIn);
 					RemoveCard(cardToPlay);
@@ -400,7 +400,7 @@ public class AIPlayer : Player
 		{
 			Node currentNode = movableNodes[i];
 			float currentDist = Vector3.Distance(targetLocation, currentNode.worldPosition);
-			if (currentDist < closetDist && currentNode.canWalkHere && !currentNode.unitInThisNode)
+			if (currentDist < closetDist && (unit.GetCanFly() || currentNode.canWalkHere) && !currentNode.unitInThisNode)
 			{
 				closestNodeToTarget = currentNode;
 				closetDist = currentDist;

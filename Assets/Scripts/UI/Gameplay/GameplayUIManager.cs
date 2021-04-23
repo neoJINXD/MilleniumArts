@@ -105,5 +105,7 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
             GameManager.instance.view.RPC("EndCurrentPlayerTurn", Photon.Pun.RpcTarget.All);
         else
             GameLoop.instance.EndCurrentPlayer();
+        // TODO check if this is needed in the multiplayer part?
+        TurnManager.instance.cardDrawPanel.SetActive(false);
     }
 }

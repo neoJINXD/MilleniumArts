@@ -114,7 +114,7 @@ public class Grid : Singleton<Grid>
         return allyUnitNodes;
     }
 
-    public HashSet<Node> GetPlaceableNodes(Card currentCard)
+    public HashSet<Node> GetPlaceableUnitNodes(UnitCard currentUnit)
     {
         HashSet<Node> placeableNodes = new HashSet<Node>();
         List<Node> allyNodes = GetAllyUnitNodes(GameLoop.instance.GetCurrentPlayer().PlayerId);
@@ -123,11 +123,10 @@ public class Grid : Singleton<Grid>
             Vector3 nodePos = node.unitInThisNode.transform.position;
             placeableNodes.UnionWith(Pathfinding.instance.GetNodesMinMaxRange(
                 nodePos, 
-                false, 
-                currentCard.minRange, 
-                currentCard.maxRange));
+                currentUnit.flying, 
+                1, 
+                currentUnit.moveSpeed));
         }
-
         return placeableNodes;
     }
 
@@ -154,6 +153,22 @@ public class Grid : Singleton<Grid>
                 currentCard.maxRange));
         }
 
+        return placeableNodes;
+    }
+
+    public HashSet<Node> GetPlaceableNodes(Card currentCard)
+    {
+        HashSet<Node> placeableNodes = new HashSet<Node>();
+        List<Node> allyNodes = GetAllyUnitNodes(GameLoop.instance.GetCurrentPlayer().PlayerId);
+        foreach (Node node in allyNodes)
+        {
+            Vector3 nodePos = node.unitInThisNode.transform.position;
+            placeableNodes.UnionWith(Pathfinding.instance.GetNodesMinMaxRange(
+                nodePos, 
+                false, 
+                currentCard.minRange, 
+                currentCard.maxRange));
+        }
         return placeableNodes;
     }
 

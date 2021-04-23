@@ -111,6 +111,10 @@ MonoBehaviour:
   King: {fileID: 0}
   m_playerCards: []
   m_playerUnits: []
+  attackAnimationHit: {fileID: 4685259530587244230, guid: 21d18fe1550a6e24590f746025a6446c,
+    type: 3}
+  healAnimation: {fileID: 4685259530587244230, guid: 350843f0c2f9b344a9c1da5bd1bbbacf,
+    type: 3}
   m_behaviour: 0
 --- !u!1 &73664737091938438
 GameObject:
@@ -409,6 +413,7 @@ MonoBehaviour:
   keepAlive: 0
   attackAnimationHit: {fileID: 4685259530587244230, guid: 21d18fe1550a6e24590f746025a6446c,
     type: 3}
+  healAnimation: {fileID: 0}
   attackAnimationMiss: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
     type: 3}
   unitPrefab: {fileID: 4496463322564576529, guid: b32d65d9dcb9dcc448691bff2fb1ab71,
