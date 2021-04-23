@@ -19,8 +19,9 @@ public class GameManager : Singleton<GameManager>
 
     private bool isLeaving = false;
     
-    void Start()
+    public override void Awake()
     {
+        base.Awake();
         gameLoop = GameLoop.instance;
         if (networked)
         {
