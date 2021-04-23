@@ -95,6 +95,10 @@ public class TurnManager : Singleton<TurnManager>
 
     private TextMeshProUGUI gameHistoryText;
 
+    // Turn Update Panel
+
+    private TextMeshProUGUI turnUpdateText;
+
     void Start()
     {
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
@@ -123,6 +127,8 @@ public class TurnManager : Singleton<TurnManager>
         cardDrawPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(6).gameObject;
 
         handPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(3).gameObject;
+
+        turnUpdateText = gameplayPanel.transform.GetChild(0).transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
         currentTurnState = TurnState.Free;
 
@@ -349,7 +355,7 @@ public class TurnManager : Singleton<TurnManager>
         {
             if(!currentUnit.GetCanAttack())
             {
-                print("This unit cannot attack again for the rest of the turn.");
+                updateTurnUpdate("This unit cannot attack again for the rest of the turn.");
                 return;
             }
 
@@ -1398,5 +1404,11 @@ public class TurnManager : Singleton<TurnManager>
     public void updateGameHistory(string actionString)
     {
         gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
+    }
+
+    // updates the TurnUpdatePanel
+    public void updateTurnUpdate(string message)
+    {
+        turnUpdateText.text = message;
     }
 }
