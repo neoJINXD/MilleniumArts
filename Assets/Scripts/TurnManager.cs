@@ -64,8 +64,6 @@ public class TurnManager : Singleton<TurnManager>
     [SerializeField] private GameObject gameplayPanel;
     private GameObject unitPanel;
 
-    private bool unitSelected;
-
     // Stat panel
 
     private TextMeshProUGUI unitPlayerIDText;
@@ -76,6 +74,7 @@ public class TurnManager : Singleton<TurnManager>
     private TextMeshProUGUI unitAccuracyText;
     private TextMeshProUGUI unitEvasionText;
     private TextMeshProUGUI unitHealthText;
+    private Slider unitHealthBarSlider;
 
     // Option Menu
     private GameObject optionPanel;
@@ -126,6 +125,7 @@ public class TurnManager : Singleton<TurnManager>
         unitAccuracyText = unitPanel.transform.GetChild(7).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         unitEvasionText = unitPanel.transform.GetChild(8).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         unitHealthText = unitPanel.transform.GetChild(9).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitHealthBarSlider = unitPanel.transform.GetChild(10).transform.GetChild(0).transform.GetChild(1).GetComponent<Slider>();
 
         optionPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(1).transform.GetChild(1).gameObject;
 
@@ -497,6 +497,7 @@ public class TurnManager : Singleton<TurnManager>
                 unitAccuracyText.text = "" + hit.transform.GetComponent<Unit>().GetAccuracy();
                 unitEvasionText.text = "" + hit.transform.GetComponent<Unit>().GetEvasion();
                 unitHealthText.text = "" + hit.transform.GetComponent<Unit>().GetCurrentHealth() + "/" + hit.transform.GetComponent<Unit>().GetMaxHealth();
+                unitHealthBarSlider.value = (float)hit.transform.GetComponent<Unit>().GetCurrentHealth() / hit.transform.GetComponent<Unit>().GetMaxHealth();
             }
         }
     }
@@ -683,7 +684,7 @@ public class TurnManager : Singleton<TurnManager>
         else
         {
 	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!\n");
-            updateTurnUpdate("Mised an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ")!");
+            updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ")!");
             animRef = Instantiate(attackAnimationMiss, currentUnit.transform, false);
         }
 
@@ -924,6 +925,7 @@ public class TurnManager : Singleton<TurnManager>
         unitAccuracyText.text = "-";
         unitEvasionText.text = "-";
         unitHealthText.text = "-/-";
+        unitHealthBarSlider.value = 0f;
 
         optionPanel.SetActive(false);
     }
