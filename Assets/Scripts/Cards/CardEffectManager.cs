@@ -12,6 +12,34 @@ public class CardEffectManager : Singleton<CardEffectManager>
     [SerializeField] private Unit m_archer;
     [SerializeField] private Unit m_dragonRider;
     
+    #region Card Animations
+    
+    private GameObject animRef;
+
+    [SerializeField] private GameObject anim_spell_smite;
+    [SerializeField] private GameObject anim_spell_snipe;
+    [SerializeField] private GameObject anim_spell_heavenlySmite;
+    [SerializeField] private GameObject anim_spell_prayer;
+    [SerializeField] private GameObject anim_spell_vitality;
+    [SerializeField] private GameObject anim_spell_endurance;
+    [SerializeField] private GameObject anim_spell_vigor;
+    [SerializeField] private GameObject anim_spell_nimbleness;
+    [SerializeField] private GameObject anim_spell_agility;
+    [SerializeField] private GameObject anim_spell_precision;
+    [SerializeField] private GameObject anim_spell_oracle;
+    [SerializeField] private GameObject anim_spell_disarmTrap;
+    [SerializeField] private GameObject anim_spell_provisions;
+    [SerializeField] private GameObject anim_spell_reinforcements;
+    [SerializeField] private GameObject anim_spell_greed;
+    [SerializeField] private GameObject anim_spell_warcry;
+    [SerializeField] private GameObject anim_spell_rebirth;
+    [SerializeField] private GameObject anim_spell_assassinate;
+    [SerializeField] private GameObject anim_spell_bearTrap;
+    [SerializeField] private GameObject anim_spell_landMine;
+    [SerializeField] private GameObject anim_spell_royalPledge;
+    
+    #endregion
+
     private bool placerClicked = false;
     private const float lockAxis = 27f;
 
@@ -99,6 +127,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 selectedNode.GetUnit().DecreaseCurrentHealthBy(5); // smite damage
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
                 TurnManager.instance.cardSuccessful = true;
+                print("Yummy");
             }
         }
     }
