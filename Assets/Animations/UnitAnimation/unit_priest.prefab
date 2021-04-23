@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 387721329667816263}
   - component: {fileID: 8050217595353312844}
   m_Layer: 0
-  m_Name: spell_landMine
+  m_Name: unit_priest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -7748681111646275465, guid: 99a8f8c87dac0744187482ad123a5fca,
+  m_Sprite: {fileID: 8381761346048096291, guid: 095ed0beadeb45f43bc8c5c263e8af24,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -96,7 +96,7 @@ Animator:
   m_GameObject: {fileID: 4685259530587244230}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: beedb2f179c41f2418a502d64c8ee517, type: 2}
+  m_Controller: {fileID: 9100000, guid: b16a55105ad29264392b364b0493f771, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -127,7 +127,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b7f86484d522924499ab3d781dddf442, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 0787449da6af7c74480884fccc16ab75, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 2.55
