@@ -75,37 +75,37 @@ public class CardEffectManager : Singleton<CardEffectManager>
         {
             placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + "," +  positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned a Soldier!", TurnManager.instance.color32_green);
+            TurnManager.instance.updateTurnUpdate("Successfully summoned a Soldier!", TurnManager.instance.color32_green);
         }
         else if (unit == Unit.UnitTypes.Knight)
         {
             placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + "," + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned a Knight!", TurnManager.instance.color32_green);
+            TurnManager.instance.updateTurnUpdate("Successfully summoned a Knight!", TurnManager.instance.color32_green);
         }
         else if (unit == Unit.UnitTypes.Assassin)
         {
             placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + "," + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Assassin!", TurnManager.instance.color32_green);
+            TurnManager.instance.updateTurnUpdate("Successfully summoned an Assassin!", TurnManager.instance.color32_green);
         }
         else if (unit == Unit.UnitTypes.Priest)
         {
             placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + "," + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Priest!", TurnManager.instance.color32_green);
+            TurnManager.instance.updateTurnUpdate("Successfully summoned an Priest!", TurnManager.instance.color32_green);
         }
         else if (unit == Unit.UnitTypes.Archer)
         {
             placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + "," + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Archer!", TurnManager.instance.color32_green);
+            TurnManager.instance.updateTurnUpdate("Successfully summoned an Archer!", TurnManager.instance.color32_green);
         }  
         else if (unit == Unit.UnitTypes.DragonRider)
         {
             placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Dragon Rider at (" + positionNode.gridX + "," + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned a Dragon Rider!", TurnManager.instance.color32_green);
+            TurnManager.instance.updateTurnUpdate("Successfully summoned a Dragon Rider!", TurnManager.instance.color32_green);
         }
             
         placedUnit.SetUnitPlayerID(playerId);
@@ -336,7 +336,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         {
             selectedNode.GetUnit().IncreaseEvasionBy(10);
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 10 evasion!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            TurnManager.instance.updateTurnUpdate("Successfully used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
         }
         else
