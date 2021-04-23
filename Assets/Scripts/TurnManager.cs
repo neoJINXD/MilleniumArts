@@ -705,7 +705,7 @@ public class TurnManager : Singleton<TurnManager>
         }
 
         attacker.SetCanAttack(false);
-        currentPlayer.PlayerMana--;
+        currentPlayer.PlayerMana -= COST_ATTACK;
     }
 
     private void ResetMaterial()
