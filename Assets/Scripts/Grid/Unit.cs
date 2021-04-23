@@ -226,6 +226,10 @@ public class Unit : MonoBehaviour
     public virtual int IncreaseCurrentHealthBy(int cH)
     {
         currentHealth += cH;
+
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+
         currentHealth = Mathf.Clamp(currentHealth, MINValue, MAXValue);
         return currentHealth;
     }
