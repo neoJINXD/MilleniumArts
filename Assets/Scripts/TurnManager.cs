@@ -548,7 +548,7 @@ public class TurnManager : Singleton<TurnManager>
 
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
-                currentPlayer.PlayerMana--;
+                currentPlayer.PlayerMana -= COST_MOVE;
 
             }
         }
@@ -601,7 +601,7 @@ public class TurnManager : Singleton<TurnManager>
             {
 	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.GetUnit().IncreaseCurrentHealthBy(currentUnit.GetDamage());
-                currentPlayer.PlayerMana--;
+                currentPlayer.PlayerMana -= COST_HEAL;
                 currentUnit.SetCanAttack(false);
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") for " + currentUnitNode.GetUnit().GetDamage() + " health!\n");
                 updateTurnUpdate("Successfully healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", color32_green);
