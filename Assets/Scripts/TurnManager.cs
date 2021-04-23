@@ -402,10 +402,7 @@ public class TurnManager : Singleton<TurnManager>
                     Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
 
-                    if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
-                        newMat.material = availableMaterial;
-                    else
-                        newMat.material = targetMaterial;
+                    newMat.material = targetMaterial;
                 }
             }
 
@@ -445,10 +442,7 @@ public class TurnManager : Singleton<TurnManager>
                     Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
 
-                    if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
-                        newMat.material = availableMaterial;
-                    else
-                        newMat.material = targetMaterial;
+                    newMat.material = availableMaterial;
                 }
             }
 
@@ -587,7 +581,7 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null)
         {
-            if (selectedNode.unitInThisNode != null)
+            if (selectedNode.unitInThisNode != null && selectableNodes.Contains(selectedNode))
             {
 	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.unitInThisNode.IncreaseCurrentHealthBy(currentUnit.GetDamage());
@@ -643,7 +637,7 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null && selectableNodes.Contains(selectedNode))
         {
-            if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() != currentPlayer.PlayerId)
+            if (selectedNode.unitInThisNode != null)
                 Attack(currentUnit, selectedNode.unitInThisNode);
         }
 
@@ -671,8 +665,6 @@ public class TurnManager : Singleton<TurnManager>
     
     void Attack(Unit attacker, Unit receiver)
     {
-	    
-	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
         int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
