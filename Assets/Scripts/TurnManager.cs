@@ -938,7 +938,7 @@ public class TurnManager : Singleton<TurnManager>
         SpellCard spellCard;
         GameObject cardGO;
 
-        for (int x = 0; x < 5; x++)
+        for (int x = 1; x < 6; x++)
         {
             if(cardDrawPanel.transform.GetChild(0).transform.GetChild(x).childCount > 0)
                 Destroy(cardDrawPanel.transform.GetChild(0).transform.GetChild(x).transform.GetChild(0).gameObject);
