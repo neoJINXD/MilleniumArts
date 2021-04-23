@@ -131,11 +131,37 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1514034434, guid: e4857921910c9f242a6803656d2a979b, type: 3}
+      propertyPath: healAnimation
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 9c7bb2750dcd8224a89ad4781d10633f,
+        type: 3}
+    - target: {fileID: 1514034434, guid: e4857921910c9f242a6803656d2a979b, type: 3}
+      propertyPath: attackAnimationHit
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 21d18fe1550a6e24590f746025a6446c,
+        type: 3}
+    - target: {fileID: 2327173939468760504, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2327173939468760504, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: attackAudio
       value: 
       objectReference: {fileID: 4850911413912669270, guid: aa4fa20e7123ce54fbee461a1f490452,
+        type: 3}
+    - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: healAnimation
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 350843f0c2f9b344a9c1da5bd1bbbacf,
         type: 3}
     - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
@@ -202,6 +228,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GameplayCore
+      objectReference: {fileID: 0}
+    - target: {fileID: 8610083051893609304, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e4857921910c9f242a6803656d2a979b, type: 3}

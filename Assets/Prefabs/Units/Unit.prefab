@@ -110,11 +110,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 987b032aa2642e740b60e8b13b93400a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitType: 7
   movementSpeed: 10
   canFly: 0
   unitPlayerId: -1
+  maxHealth: 0
+  currentHealth: 0
+  damage: 0
+  defense: 0
+  minRange: 0
+  maxRange: 0
+  accuracy: 0
+  evasion: 0
+  cost: 0
+  targetIndex: 0
   isClicked: 0
-  startRoutine: 0
+  canAttack: 0
+  movementSpeedLeft: 0
+  m_healthBar: {fileID: 0}
 --- !u!114 &7589532909933318529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,8 +140,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4648fbbcfa915424a8d04fcf23929a24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitType: 7
   movementSpeed: 10
   canFly: 0
   unitPlayerId: -1
+  maxHealth: 0
+  currentHealth: 0
+  damage: 0
+  defense: 0
+  minRange: 0
+  maxRange: 0
+  accuracy: 0
+  evasion: 0
+  cost: 0
+  targetIndex: 0
   isClicked: 0
-  startRoutine: 0
+  canAttack: 1
+  movementSpeedLeft: 0
+  m_healthBar: {fileID: 0}

@@ -11,7 +11,7 @@ public class Unit : MonoBehaviour
 {
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
     public UnitTypes unitType;
-    [SerializeField] protected float movementSpeed = 20;
+    [SerializeField] protected int movementSpeed = 20;
     [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
     [SerializeField] protected int unitPlayerId;
     [SerializeField] protected int maxHealth;
@@ -26,6 +26,9 @@ public class Unit : MonoBehaviour
     [SerializeField] protected Node[] path;
     [SerializeField] protected int targetIndex;
     public bool isClicked = false;
+
+    [SerializeField] protected bool canAttack;
+    [SerializeField] protected int movementSpeedLeft;
 
     [Header("UI")]
     [SerializeField] private Slider m_healthBar;
@@ -66,11 +69,13 @@ public class Unit : MonoBehaviour
         accuracy = 0;
         evasion = 0;
         cost = 0;
+        canAttack = true;
+        movementSpeedLeft = 0;
     }
     
     // parameterized abstract constructor
-    protected Unit(float _movementSpeed, bool _canfly, Pathfinding.Heuristic _hf, UnitTypes _type, int _unitPlayerId, int _maxHealth,
-        int _currentHealth, int _damage, int _defense, int _minRange, int _maxRange, int _accuracy, int _evasion, int _cost)
+    protected Unit(int _movementSpeed, bool _canfly, Pathfinding.Heuristic _hf, UnitTypes _type, int _unitPlayerId, int _maxHealth,
+        int _currentHealth, int _damage, int _defense, int _minRange, int _maxRange, int _accuracy, int _evasion, int _cost, bool _canAttack)
     {
         movementSpeed = _movementSpeed;
         canFly = _canfly;
@@ -86,6 +91,8 @@ public class Unit : MonoBehaviour
         accuracy = _accuracy;
         evasion = _evasion;
         cost = _cost;
+        canAttack = _canAttack;
+        movementSpeedLeft = movementSpeed;
     }
 
     // dictionary of heap index and unit itself.
@@ -99,24 +106,48 @@ public class Unit : MonoBehaviour
     }*/
 
     //set, get and update functions for movement speed
-    public virtual void SetMovementSpeed(float s)
+    //set, get and update functions for movement speed
+    public void SetCanAttack(bool b)
+    {
+        canAttack = b;
+    }
+
+    public bool GetCanAttack()
+    {
+        return canAttack;
+    }
+
+    //set, get and update functions for movement speed
+    public void SetMovementSpeedLeft(int i)
+    {
+        movementSpeedLeft = i;
+    }
+
+    public int GetMovementSpeedLeft()
+    {
+        return movementSpeedLeft;
+    }
+
+
+    //set, get and update functions for movement speed
+    public virtual void SetMovementSpeed(int s)
     {
         movementSpeed = Mathf.Clamp(s, MINValue, MAXValue);
     }
 
-    public virtual float GetMovementSpeed()
+    public virtual int GetMovementSpeed()
     {
         return movementSpeed;
     }
 
-    public virtual float IncreaseMovementSpeedBy(float s)
+    public virtual int IncreaseMovementSpeedBy(int s)
     {
         movementSpeed += s;
         movementSpeed = Mathf.Clamp(movementSpeed, MINValue, MAXValue);
         return movementSpeed;
     }
     
-    public virtual float DecreaseMovementSpeedBy(float s)
+    public virtual int DecreaseMovementSpeedBy(int s)
     {
         movementSpeed -= s;
         movementSpeed = Mathf.Clamp(movementSpeed, MINValue, MAXValue);

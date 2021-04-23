@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 519887686405710202, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
       propertyPath: m_Name
-      value: BaseUnit Variant 2
+      value: Priest
       objectReference: {fileID: 0}
     - target: {fileID: 519887686405710206, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
@@ -105,6 +105,11 @@ PrefabInstance:
     - target: {fileID: 5765391961698694634, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
       propertyPath: movementSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765391961698694634, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: movementSpeedLeft
       value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
