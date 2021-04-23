@@ -34,12 +34,16 @@ public class Hover : MonoBehaviour
             hoverMat = Grid.tileTrack[hoverNode.gridX, hoverNode.gridY].GetComponent<Renderer>();
             prevMat = hoverMat.material;
             hoverMat.material = hoveredTile;
+
+            TurnManager.instance.hoveredTileText.text = "(" + hoverNode.gridX + "," + hoverNode.gridY + ")";
         }
     }
 
     void OnMouseExit()
     {
-        if(hoverMat != null)
+        TurnManager.instance.hoveredTileText.text = "";
+
+        if (hoverMat != null)
             hoverMat.material = prevMat;
     }
 }

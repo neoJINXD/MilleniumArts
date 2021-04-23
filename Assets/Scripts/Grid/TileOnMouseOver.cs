@@ -38,7 +38,10 @@ public class TileOnMouseOver : MonoBehaviour
     //Detect if the Cursor starts to pass over the GameObject
     public void OnMouseOver()
     {
-        if(availableNodes != null)
+        Node hoverNode = grid.NodeFromWorldPoint(transform.position);
+        TurnManager.instance.hoveredTileText.text = "(" + hoverNode.gridX + "," + hoverNode.gridY + ")";
+
+        if (availableNodes != null)
         {
             if (tm.currentTurnState == TurnManager.TurnState.SelectingCardOrigin)
             {
@@ -71,7 +74,9 @@ public class TileOnMouseOver : MonoBehaviour
     //Detect when Cursor leaves the GameObject
     public void OnMouseExit()
     {
-        if(hovered)
+        TurnManager.instance.hoveredTileText.text = "";
+
+        if (hovered)
         {
             if (tm.currentTurnState == TurnManager.TurnState.SelectingCardOrigin)
             {

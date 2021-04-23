@@ -98,6 +98,10 @@ public class TurnManager : Singleton<TurnManager>
     // Turn Update Panel
     private TextMeshProUGUI turnUpdateText;
 
+    // Hovered Tile Panel
+    [HideInInspector]
+    public TextMeshProUGUI hoveredTileText;
+    
     private const int COST_MOVE = 1;
     private const int COST_HEAL = 1;
     private const int COST_ATTACK = 2;
@@ -140,6 +144,8 @@ public class TurnManager : Singleton<TurnManager>
         handPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(3).gameObject;
 
         turnUpdateText = gameplayPanel.transform.GetChild(0).transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        hoveredTileText = gameplayPanel.transform.GetChild(0).transform.GetChild(7).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
         currentTurnState = TurnState.Free;
 
