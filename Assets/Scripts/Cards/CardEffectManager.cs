@@ -254,6 +254,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Vitality on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 5 maximum health!\n");
             TurnManager.instance.updateTurnUpdate("Successfully used Vitality on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_vitality, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -275,6 +276,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Endurance on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 2 defence!\n");
             TurnManager.instance.updateTurnUpdate("Successfully used Endurance on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_endurance, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -296,6 +298,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Vigor on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 5 damage!\n");
             TurnManager.instance.updateTurnUpdate("Successfully used Vigor on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_vigor, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -318,6 +321,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Nimbleness on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 1 movement speed!\n");
             TurnManager.instance.updateTurnUpdate("Successfully used Nimbleness on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_nimbleness, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -339,6 +343,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 10 evasion!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_agility, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -360,6 +365,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Precision on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 10 accuracy!\n");
             TurnManager.instance.updateTurnUpdate("Successfully used Precision on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_precision, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -442,6 +448,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " used Provisions on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") gained 5 health!\n");
             TurnManager.instance.updateTurnUpdate("Successfully used Provisions on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_provisions, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
@@ -480,6 +487,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.updateTurnUpdate("Successfully used Reinforcements on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("Cannot use Reinforcements on this unit! Its surrounding cells must be empty.", TurnManager.instance.color32_red);
@@ -532,6 +540,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         TurnManager.instance.updateGameHistory(spellMessage);
         TurnManager.instance.updateTurnUpdate("Successfully used Warcry on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         TurnManager.instance.cardSuccessful = true;
+        animRef = Instantiate(anim_spell_warcry, selectedNode.GetUnit().transform, false);
     }
 
     /*
@@ -552,6 +561,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Rebirth on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") was restored to full health!\n");
                 TurnManager.instance.updateTurnUpdate("Successfully used Rebirth on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
                 TurnManager.instance.cardSuccessful = true;
+                animRef = Instantiate(anim_spell_rebirth, selectedNode.GetUnit().transform, false);
             }
             else
                 TurnManager.instance.updateTurnUpdate("This target is already full health!", TurnManager.instance.color32_red);
@@ -578,6 +588,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Assassinate on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") was slain!\n");
                 TurnManager.instance.updateTurnUpdate("Successfully used Assassinate on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
                 TurnManager.instance.cardSuccessful = true;
+                animRef = Instantiate(anim_spell_assassinate, selectedNode.GetUnit().transform, false);
             }
             else
                 TurnManager.instance.updateTurnUpdate("Assassinate cannot be used on a King!", TurnManager.instance.color32_red);
@@ -605,6 +616,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Bear Trap on the battlefield!\n");
             TurnManager.instance.updateTurnUpdate("Successfully placed Bear Trap at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_bearTrap, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
@@ -627,6 +639,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Land Mine on the battlefield!\n");
             TurnManager.instance.updateTurnUpdate("Successfully placed a Land Mine at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
+            animRef = Instantiate(anim_spell_landMine, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
@@ -656,6 +669,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                     node.GetUnit().IncreaseMaxHealthBy(2);
                     node.GetUnit().IncreaseCurrentHealthBy(2);
                     spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + ", " + node.gridY + ") gained 2 damage, maximum health and health!\n";
+                    animRef = Instantiate(anim_spell_royalPledge, selectedNode.GetUnit().transform, false);
                 }
             }
         }
