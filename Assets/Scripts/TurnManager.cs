@@ -340,7 +340,7 @@ public class TurnManager : Singleton<TurnManager>
             }
 
             // Display All Valid Tiles to move on
-            int unitMoveSpeed = (int)currentUnit.GetMovementSpeed();
+            int unitMoveSpeed = currentUnit.GetMovementSpeedLeft();
             Node currentNode = grid.NodeFromWorldPoint(currentUnitPosition);
 
             pf.minDepthLimit = 1;
@@ -499,7 +499,7 @@ public class TurnManager : Singleton<TurnManager>
                 unitDamageText.text = "" + hit.transform.GetComponent<Unit>().GetDamage();
                 unitDefenceText.text = "" + hit.transform.GetComponent<Unit>().GetDefence();
                 unitARText.text = "" + hit.transform.GetComponent<Unit>().GetMinRange() + " - " + hit.transform.GetComponent<Unit>().GetMaxRange();
-                unitMSText.text = "" + hit.transform.GetComponent<Unit>().GetMovementSpeed();
+                unitMSText.text = "" + hit.transform.GetComponent<Unit>().GetMovementSpeed() + " (" + hit.transform.GetComponent<Unit>().GetMovementSpeedLeft() + ")";
                 unitAccuracyText.text = "" + hit.transform.GetComponent<Unit>().GetAccuracy();
                 unitEvasionText.text = "" + hit.transform.GetComponent<Unit>().GetEvasion();
                 unitHealthText.text = "" + hit.transform.GetComponent<Unit>().GetCurrentHealth() + "/" + hit.transform.GetComponent<Unit>().GetMaxHealth();

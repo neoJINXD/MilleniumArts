@@ -271,6 +271,9 @@ public class Grid : Singleton<Grid>
         king2.SetMaxRange(1);
         king2.SetAccuracy(90);
         king2.SetEvasion(30);
+
+        GameLoop.instance.GetPlayer(0).AddUnit(king1);
+        GameLoop.instance.GetPlayer(1).AddUnit(king2);
     }
 
     // might have to use boolean, to change walkable nodes, based on flying and ground units.

@@ -278,7 +278,7 @@ MonoBehaviour:
   targetIndex: 0
   isClicked: 0
   canAttack: 1
-  movementSpeedLeft: 0
+  movementSpeedLeft: 10
   m_healthBar: {fileID: 681792318208086750}
 --- !u!1 &5011158680704168567
 GameObject:

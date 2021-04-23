@@ -31,8 +31,10 @@ public abstract class Player : MonoBehaviour
     {
         TurnComplete = true;
 
+        print("1");
         foreach(Unit unit in m_playerUnits)
         {
+            print("2");
             unit.SetMovementSpeedLeft(unit.GetMovementSpeed());
             unit.SetCanAttack(true);
         }

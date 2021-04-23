@@ -450,7 +450,6 @@ public class Unit : MonoBehaviour
                     return; // already at destination
 
                 PathRequestManager.RequestPath(transform.position, hit.transform.position, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
-                // print(Pathfinding.pathNodeCount);
             }
         }
     }

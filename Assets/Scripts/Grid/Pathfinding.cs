@@ -15,6 +15,7 @@ public class Pathfinding : Singleton<Pathfinding>
 	[SerializeField] private Material defaultMat;
 	
 	public  Node[] waypoints;
+    public static int pathLength;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	public Grid gridRef;
@@ -287,8 +288,11 @@ public class Pathfinding : Singleton<Pathfinding>
 		
 		Node startNode = gridRef.NodeFromWorldPoint(startPos);
 		Node targetNode = gridRef.NodeFromWorldPoint(targetPos);
-		
-		HashSet<Node> nodesInBfsRange = GetNodesMinMaxRange(startPos, canFly, minDepthLimit, maxDepthLimit);
+
+        Unit currentUnit = startNode.GetUnit();
+
+
+        HashSet<Node> nodesInBfsRange = GetNodesMinMaxRange(startPos, canFly, minDepthLimit, maxDepthLimit);
 		
 		if (startNode.canWalkHere && targetNode.canWalkHere && nodesInBfsRange.Contains(targetNode)) 
 		{
@@ -344,7 +348,8 @@ public class Pathfinding : Singleton<Pathfinding>
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
-		}
+            currentUnit.SetMovementSpeedLeft(currentUnit.GetMovementSpeedLeft() - (waypoints.Length - 1));
+        }
 
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
