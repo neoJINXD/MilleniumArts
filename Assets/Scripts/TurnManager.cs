@@ -64,8 +64,6 @@ public class TurnManager : Singleton<TurnManager>
     [SerializeField] private GameObject gameplayPanel;
     private GameObject unitPanel;
 
-    private bool unitSelected;
-
     // Stat panel
 
     private TextMeshProUGUI unitPlayerIDText;
@@ -76,6 +74,7 @@ public class TurnManager : Singleton<TurnManager>
     private TextMeshProUGUI unitAccuracyText;
     private TextMeshProUGUI unitEvasionText;
     private TextMeshProUGUI unitHealthText;
+    private Slider unitHealthBarSlider;
 
     // Option Menu
     private GameObject optionPanel;
@@ -99,6 +98,10 @@ public class TurnManager : Singleton<TurnManager>
     // Turn Update Panel
     private TextMeshProUGUI turnUpdateText;
 
+    // Hovered Tile Panel
+    [HideInInspector]
+    public TextMeshProUGUI hoveredTileText;
+    
     private const int COST_MOVE = 1;
     private const int COST_HEAL = 1;
     private const int COST_ATTACK = 2;
@@ -126,6 +129,7 @@ public class TurnManager : Singleton<TurnManager>
         unitAccuracyText = unitPanel.transform.GetChild(7).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         unitEvasionText = unitPanel.transform.GetChild(8).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         unitHealthText = unitPanel.transform.GetChild(9).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        unitHealthBarSlider = unitPanel.transform.GetChild(10).transform.GetChild(0).transform.GetChild(1).GetComponent<Slider>();
 
         optionPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(1).transform.GetChild(1).gameObject;
 
@@ -140,6 +144,8 @@ public class TurnManager : Singleton<TurnManager>
         handPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(3).gameObject;
 
         turnUpdateText = gameplayPanel.transform.GetChild(0).transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        hoveredTileText = gameplayPanel.transform.GetChild(0).transform.GetChild(7).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
         currentTurnState = TurnState.Free;
 
@@ -320,7 +326,7 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null)
         {
-            if (selectedNode.unitInThisNode == null)
+            if (selectedNode.GetUnit() == null)
             {
                 cardEffectManager.CreateUnit(Unit.UnitTypes.Soldier, selectedNode); // assuming enemy player id = 1
             }
@@ -402,10 +408,7 @@ public class TurnManager : Singleton<TurnManager>
                     Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
 
-                    if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
-                        newMat.material = availableMaterial;
-                    else
-                        newMat.material = targetMaterial;
+                    newMat.material = targetMaterial;
                 }
             }
 
@@ -423,7 +426,12 @@ public class TurnManager : Singleton<TurnManager>
     {
         if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
         {
-            if (!currentPlayer.ManaCheck(COST_HEAL))
+            if (!currentUnit.GetCanAttack())
+            {
+                updateTurnUpdate("This unit cannot heal again for the rest of the turn.", color32_red);
+                return;
+            }
+            else if (!currentPlayer.ManaCheck(COST_HEAL))
             {
                 updateTurnUpdate("Not enough mana to perform a heal!", color32_red);
                 return;
@@ -445,10 +453,7 @@ public class TurnManager : Singleton<TurnManager>
                     Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
                     Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
 
-                    if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
-                        newMat.material = availableMaterial;
-                    else
-                        newMat.material = targetMaterial;
+                    newMat.material = availableMaterial;
                 }
             }
 
@@ -507,6 +512,7 @@ public class TurnManager : Singleton<TurnManager>
                 unitAccuracyText.text = "" + hit.transform.GetComponent<Unit>().GetAccuracy();
                 unitEvasionText.text = "" + hit.transform.GetComponent<Unit>().GetEvasion();
                 unitHealthText.text = "" + hit.transform.GetComponent<Unit>().GetCurrentHealth() + "/" + hit.transform.GetComponent<Unit>().GetMaxHealth();
+                unitHealthBarSlider.value = (float)hit.transform.GetComponent<Unit>().GetCurrentHealth() / hit.transform.GetComponent<Unit>().GetMaxHealth();
             }
         }
     }
@@ -533,12 +539,12 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null && currentPlayer.ManaCheck(1))
         {
-            if (selectableNodes.Contains(selectedNode) && selectedNode.unitInThisNode == null)
+            if (selectableNodes.Contains(selectedNode) && selectedNode.GetUnit() == null)
             {
                 currentUnit.isClicked = true;
 
-                updateGameHistory("Player " + currentPlayer.PlayerId + " moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
-                updateTurnUpdate("Successfully moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", color32_green);
+                updateGameHistory("Player " + currentPlayer.PlayerId + " moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") to (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n");
+                updateTurnUpdate("Successfully moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") to (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", color32_green);
 
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
@@ -591,13 +597,14 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null)
         {
-            if (selectedNode.unitInThisNode != null)
+            if (selectedNode.GetUnit() != null && selectableNodes.Contains(selectedNode))
             {
 	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
-                selectedNode.unitInThisNode.IncreaseCurrentHealthBy(currentUnit.GetDamage());
+                selectedNode.GetUnit().IncreaseCurrentHealthBy(currentUnit.GetDamage());
                 currentPlayer.PlayerMana--;
-                updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") healed " + selectedNode.unitInThisNode.GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") for " + currentUnitNode.unitInThisNode.GetDamage() + " health!\n");
-                updateTurnUpdate("Successfully healed " + selectedNode.unitInThisNode.GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", color32_green);
+                currentUnit.SetCanAttack(false);
+                updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") for " + currentUnitNode.GetUnit().GetDamage() + " health!\n");
+                updateTurnUpdate("Successfully healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", color32_green);
             }
         }
 
@@ -647,8 +654,8 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null && selectableNodes.Contains(selectedNode))
         {
-            if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() != currentPlayer.PlayerId)
-                Attack(currentUnit, selectedNode.unitInThisNode);
+            if (selectedNode.GetUnit() != null)
+                Attack(currentUnit, selectedNode.GetUnit());
         }
 
         foreach (var node in selectableNodes)
@@ -675,8 +682,6 @@ public class TurnManager : Singleton<TurnManager>
     
     void Attack(Unit attacker, Unit receiver)
     {
-	    
-	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
         int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
@@ -688,14 +693,14 @@ public class TurnManager : Singleton<TurnManager>
         if(roll <= hitChance)
         {
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
-            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!\n");
-            updateTurnUpdate("Successfully attacked " + receiverNode.unitInThisNode.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ")!", color32_green);
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ") for " + attackerNode.GetUnit().GetDamage() + " damage!\n");
+            updateTurnUpdate("Successfully attacked " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!", color32_green);
             animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
         }
         else
         {
-	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!\n");
-            updateTurnUpdate("Mised an attacked on " + receiverNode.unitInThisNode.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ")!");
+	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + attackerNode.gridY + ")!\n");
+            updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!");
             animRef = Instantiate(attackAnimationMiss, currentUnit.transform, false);
         }
 
@@ -854,14 +859,14 @@ public class TurnManager : Singleton<TurnManager>
             {
 	            if (storedCard as UnitCard)
 	            {
-		            if (selectedNode.unitInThisNode == null)
+		            if (selectedNode.GetUnit() == null)
 			            cardEffectManager.CreateUnit(((UnitCard)storedCard).UnitType, selectedNode);
                     else
                         updateTurnUpdate("This cell is not empty!", TurnManager.instance.color32_red);
                 }
 	            else
 	            {
-		            if (selectedNode.unitInThisNode == null)
+		            if (selectedNode.GetUnit() == null)
 		            {
 			            if (storedCard.id == 16)
 				            cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
@@ -936,6 +941,7 @@ public class TurnManager : Singleton<TurnManager>
         unitAccuracyText.text = "-";
         unitEvasionText.text = "-";
         unitHealthText.text = "-/-";
+        unitHealthBarSlider.value = 0f;
 
         optionPanel.SetActive(false);
     }
@@ -948,7 +954,7 @@ public class TurnManager : Singleton<TurnManager>
         SpellCard spellCard;
         GameObject cardGO;
 
-        for (int x = 0; x < 5; x++)
+        for (int x = 1; x < 6; x++)
         {
             if(cardDrawPanel.transform.GetChild(0).transform.GetChild(x).childCount > 0)
                 Destroy(cardDrawPanel.transform.GetChild(0).transform.GetChild(x).transform.GetChild(0).gameObject);

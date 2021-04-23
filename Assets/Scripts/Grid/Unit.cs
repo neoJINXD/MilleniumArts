@@ -37,6 +37,8 @@ public class Unit : MonoBehaviour
     private const int MINValue = 0;
     private Camera mainCam;
     private const int constantMovementSpeed = 7;
+
+    private Grid grid;
     
     #region UnitModifications
 
@@ -226,6 +228,10 @@ public class Unit : MonoBehaviour
     public virtual int IncreaseCurrentHealthBy(int cH)
     {
         currentHealth += cH;
+
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+
         currentHealth = Mathf.Clamp(currentHealth, MINValue, MAXValue);
         return currentHealth;
     }
@@ -417,6 +423,7 @@ public class Unit : MonoBehaviour
     void Awake()
     {
         mainCam = Camera.main;
+        grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
     private void Update()
@@ -573,19 +580,30 @@ public class Unit : MonoBehaviour
     //     }
     // }
 
-/*    void OnMouseDown()
+    /*    void OnMouseDown()
+        {
+            Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID() +
+                "\nType: " + GetComponent<Unit>().GetUnitType() +
+                "\nMax HP: " + GetComponent<Unit>().GetMaxHealth() +
+                "\nCurrent HP: " + GetComponent<Unit>().GetCurrentHealth() +
+                "\nDamage: " + GetComponent<Unit>().GetDamage() +
+                "\nDefence: " + GetComponent<Unit>().GetDefence() +
+                "\nMin Range: " + GetComponent<Unit>().GetMinRange() +
+                "\nMax Range: " + GetComponent<Unit>().GetMaxRange() +
+                "\nAccuracy: " + GetComponent<Unit>().GetAccuracy() +
+                "\nEvasion: " + GetComponent<Unit>().GetEvasion() +
+                "\nMS: " + GetComponent<Unit>().GetMovementSpeed() +
+                "\nFlying: " + GetComponent<Unit>().GetCanFly());
+        }*/
+
+    void OnMouseEnter()
     {
-        Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID() +
-            "\nType: " + GetComponent<Unit>().GetUnitType() +
-            "\nMax HP: " + GetComponent<Unit>().GetMaxHealth() +
-            "\nCurrent HP: " + GetComponent<Unit>().GetCurrentHealth() +
-            "\nDamage: " + GetComponent<Unit>().GetDamage() +
-            "\nDefence: " + GetComponent<Unit>().GetDefence() +
-            "\nMin Range: " + GetComponent<Unit>().GetMinRange() +
-            "\nMax Range: " + GetComponent<Unit>().GetMaxRange() +
-            "\nAccuracy: " + GetComponent<Unit>().GetAccuracy() +
-            "\nEvasion: " + GetComponent<Unit>().GetEvasion() +
-            "\nMS: " + GetComponent<Unit>().GetMovementSpeed() +
-            "\nFlying: " + GetComponent<Unit>().GetCanFly());
-    }*/
+        Node hoverNode = grid.NodeFromWorldPoint(transform.position);
+        TurnManager.instance.hoveredTileText.text = "(" + hoverNode.gridX + "," + hoverNode.gridY + ")";
+    }
+
+    void OnMouseExit()
+    {
+        TurnManager.instance.hoveredTileText.text = "";
+    }
 }
