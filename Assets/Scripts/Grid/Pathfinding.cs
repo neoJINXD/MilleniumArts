@@ -14,9 +14,7 @@ public class Pathfinding : Singleton<Pathfinding>
 	[SerializeField] private Material hoveredTile;
 	[SerializeField] private Material defaultMat;
 	
-	private  Node[] waypoints;
-	
-	public static float pathNodeCount;
+	public  Node[] waypoints;
 
 	delegate int HeuristicFunction(Node a, Node b); // dynamically change heuristic calculation  
 	public Grid gridRef;
@@ -216,6 +214,8 @@ public class Pathfinding : Singleton<Pathfinding>
 			}
 		}
 		
+		print(enemyUnitNodes.Count);
+
 		return enemyUnitNodes;
 	}
 	
@@ -344,14 +344,13 @@ public class Pathfinding : Singleton<Pathfinding>
 		if (pathSuccess) 
 		{
 			waypoints = RetracePath(startNode, targetNode);
-			pathNodeCount = waypoints.Length;
 		}
 
 		requestManager.FinishedProcessingPath(waypoints, pathSuccess);
 	}
 	
 	//for Ai
-	public Node[] AIFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPlayerID) 
+	public Node[] AIFindPath(Vector3 startPos, Vector3 targetPos, bool canFly, int unitPlayerID, int minRange, int maxRange) 
 	{
 		bool pathSuccess = false;
 		HeuristicFunction heuristicFunction = new HeuristicFunction(GetDistance);
@@ -367,8 +366,6 @@ public class Pathfinding : Singleton<Pathfinding>
 			while (openSet.Count > 0) 
 			{
 				Node currentNode = openSet.RemoveFirst();
-				
-				
 				closedSet.Add(currentNode);
 				
 				if (currentNode == targetNode) {
