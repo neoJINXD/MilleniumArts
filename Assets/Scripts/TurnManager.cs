@@ -420,7 +420,12 @@ public class TurnManager : Singleton<TurnManager>
     {
         if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
         {
-            if (!currentPlayer.ManaCheck(COST_HEAL))
+            if (!currentUnit.GetCanAttack())
+            {
+                updateTurnUpdate("This unit cannot heal again for the rest of the turn.", color32_red);
+                return;
+            }
+            else if (!currentPlayer.ManaCheck(COST_HEAL))
             {
                 updateTurnUpdate("Not enough mana to perform a heal!", color32_red);
                 return;
@@ -528,8 +533,8 @@ public class TurnManager : Singleton<TurnManager>
             {
                 currentUnit.isClicked = true;
 
-                updateGameHistory("Player " + currentPlayer.PlayerId + " moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
-                updateTurnUpdate("Successfully moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", color32_green);
+                updateGameHistory("Player " + currentPlayer.PlayerId + " moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") to (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n");
+                updateTurnUpdate("Successfully moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") to (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", color32_green);
 
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
@@ -587,8 +592,9 @@ public class TurnManager : Singleton<TurnManager>
 	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.GetUnit().IncreaseCurrentHealthBy(currentUnit.GetDamage());
                 currentPlayer.PlayerMana--;
-                updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") for " + currentUnitNode.GetUnit().GetDamage() + " health!\n");
-                updateTurnUpdate("Successfully healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", color32_green);
+                currentUnit.SetCanAttack(false);
+                updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") for " + currentUnitNode.GetUnit().GetDamage() + " health!\n");
+                updateTurnUpdate("Successfully healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", color32_green);
             }
         }
 
@@ -677,14 +683,14 @@ public class TurnManager : Singleton<TurnManager>
         if(roll <= hitChance)
         {
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
-            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.GetUnit().GetDamage() + " damage!\n");
-            updateTurnUpdate("Successfully attacked " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ")!", color32_green);
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ") for " + attackerNode.GetUnit().GetDamage() + " damage!\n");
+            updateTurnUpdate("Successfully attacked " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!", color32_green);
             animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
         }
         else
         {
-	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!\n");
-            updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ")!");
+	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + attackerNode.gridY + ")!\n");
+            updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!");
             animRef = Instantiate(attackAnimationMiss, currentUnit.transform, false);
         }
 
