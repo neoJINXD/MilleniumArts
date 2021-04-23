@@ -94,8 +94,21 @@ public class TurnManager : Singleton<TurnManager>
     private TextMeshProUGUI manaText;
 
     // Game History Panel
-
     private TextMeshProUGUI gameHistoryText;
+
+    // Turn Update Panel
+    private TextMeshProUGUI turnUpdateText;
+
+    private const int COST_MOVE = 1;
+    private const int COST_HEAL = 1;
+    private const int COST_ATTACK = 2;
+    
+    // color32
+    [HideInInspector]
+    public Color32 color32_red = new Color32(255, 0, 0, 255);
+
+    [HideInInspector]
+    public Color32 color32_green = new Color32(0, 160, 0, 255);
 
     void Start()
     {
@@ -125,6 +138,8 @@ public class TurnManager : Singleton<TurnManager>
         cardDrawPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(6).gameObject;
 
         handPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(3).gameObject;
+
+        turnUpdateText = gameplayPanel.transform.GetChild(0).transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
 
         currentTurnState = TurnState.Free;
 
@@ -318,6 +333,12 @@ public class TurnManager : Singleton<TurnManager>
     {
         if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
         {
+            if (!currentPlayer.ManaCheck(COST_MOVE))
+            {
+                updateTurnUpdate("Not enough mana to move a unit!", color32_red);
+                return;
+            }
+
             // Display All Valid Tiles to move on
             int unitMoveSpeed = (int)currentUnit.GetMovementSpeed();
             Node currentNode = grid.NodeFromWorldPoint(currentUnitPosition);
@@ -354,6 +375,17 @@ public class TurnManager : Singleton<TurnManager>
     {
         if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
         {
+            if (!currentUnit.GetCanAttack())
+            {
+                updateTurnUpdate("This unit cannot attack again for the rest of the turn.", color32_red);
+                return;
+            }
+            else if (!currentPlayer.ManaCheck(COST_ATTACK))
+            {
+                updateTurnUpdate("Not enough mana to perform an attack!", color32_red);
+                return;
+            }
+
             Node currentNode = grid.NodeFromWorldPoint(currentUnitPosition);
 
             pf.minDepthLimit = currentUnit.GetMinRange();
@@ -383,10 +415,50 @@ public class TurnManager : Singleton<TurnManager>
             foreach (Node node in allUnitsNodes)
                 node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             
-            if(currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
-                currentTurnState = TurnState.SelectingTileHeal;
-            else
-                currentTurnState = TurnState.SelectingTileAttack;
+            currentTurnState = TurnState.SelectingTileAttack;
+        }
+    }
+
+    public void unitHeal()
+    {
+        if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
+        {
+            if (!currentPlayer.ManaCheck(COST_HEAL))
+            {
+                updateTurnUpdate("Not enough mana to perform a heal!", color32_red);
+                return;
+            }
+
+            Node currentNode = grid.NodeFromWorldPoint(currentUnitPosition);
+
+            pf.minDepthLimit = currentUnit.GetMinRange();
+            pf.maxDepthLimit = currentUnit.GetMaxRange();
+            selectableNodes = pf.GetNodesMinMaxRange(currentUnitPosition, false, currentUnit.GetMinRange(), currentUnit.GetMaxRange());
+
+            if (selectableNodes != null && selectableNodes.Count > 0)
+            {
+                foreach (var node in selectableNodes)
+                {
+                    //jon hover script
+                    Destroy(Grid.tileTrack[node.gridX, node.gridY].GetComponent<Hover>());
+
+                    Grid.tileTrack[node.gridX, node.gridY].AddComponent(typeof(TileOnMouseOver));
+                    Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
+
+                    if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
+                        newMat.material = availableMaterial;
+                    else
+                        newMat.material = targetMaterial;
+                }
+            }
+
+            // set the units' layer to ignore raycast (used because the unit model stopped raycast from hitting tile, to show AOE)
+            List<Node> allUnitsNodes = grid.GetAllUnitNodes();
+
+            foreach (Node node in allUnitsNodes)
+                node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+
+            currentTurnState = TurnState.SelectingTileHeal;
         }
     }
 
@@ -462,6 +534,7 @@ public class TurnManager : Singleton<TurnManager>
                 currentUnit.isClicked = true;
 
                 updateGameHistory("Player " + currentPlayer.PlayerId + " moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
+                updateTurnUpdate("Successfully moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", color32_green);
 
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
@@ -514,12 +587,13 @@ public class TurnManager : Singleton<TurnManager>
 
         if (selectedNode != null)
         {
-            if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() == currentPlayer.PlayerId)
+            if (selectedNode.unitInThisNode != null)
             {
 	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.unitInThisNode.IncreaseCurrentHealthBy(currentUnit.GetDamage());
                 currentPlayer.PlayerMana--;
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") healed " + selectedNode.unitInThisNode.GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") for " + currentUnitNode.unitInThisNode.GetDamage() + " health!\n");
+                updateTurnUpdate("Successfully healed " + selectedNode.unitInThisNode.GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", color32_green);
             }
         }
 
@@ -610,16 +684,18 @@ public class TurnManager : Singleton<TurnManager>
         if(roll <= hitChance)
         {
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
-            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!");
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!\n");
+            updateTurnUpdate("Successfully attacked " + receiverNode.unitInThisNode.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ")!", color32_green);
             animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
         }
         else
         {
-	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!");
-	        animRef = Instantiate(attackAnimationMiss, currentUnit.transform, false);
+	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!\n");
+            updateTurnUpdate("Mised an attacked on " + receiverNode.unitInThisNode.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ")!");
+            animRef = Instantiate(attackAnimationMiss, currentUnit.transform, false);
         }
-            
 
+        attacker.SetCanAttack(false);
         currentPlayer.PlayerMana--;
     }
 
@@ -641,7 +717,13 @@ public class TurnManager : Singleton<TurnManager>
         Card currentCard = clickedButtonGO.GetComponent<Card>();
         storedCard = currentCard;
 
-        if(storedCard.id == 20) // greed card
+        if (!currentPlayer.ManaCheck(storedCard.cost))
+        {
+            updateTurnUpdate("Not enough mana to cast this card!", color32_red);
+            return;
+        }
+
+        if (storedCard.id == 20) // greed card
         {
             cardEffectManager.spell_greed(currentPlayer.PlayerId);
             if (cardSuccessful)
@@ -770,7 +852,9 @@ public class TurnManager : Singleton<TurnManager>
 	            {
 		            if (selectedNode.unitInThisNode == null)
 			            cardEffectManager.CreateUnit(((UnitCard)storedCard).UnitType, selectedNode);
-	            }
+                    else
+                        updateTurnUpdate("This cell is not empty!", TurnManager.instance.color32_red);
+                }
 	            else
 	            {
 		            if (selectedNode.unitInThisNode == null)
@@ -1402,5 +1486,17 @@ public class TurnManager : Singleton<TurnManager>
     public void updateGameHistory(string actionString)
     {
         gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
+    }
+
+    public void updateTurnUpdate(string message)
+    {
+        turnUpdateText.text = message;
+        turnUpdateText.color = new Color32(0, 0, 0, 255);
+
+    }
+    public void updateTurnUpdate(string message, Color32 color)
+    {
+        turnUpdateText.text = message;
+        turnUpdateText.color = color;
     }
 }

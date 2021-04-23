@@ -69,7 +69,7 @@ public class Unit : MonoBehaviour
         accuracy = 0;
         evasion = 0;
         cost = 0;
-        canAttack = false;
+        canAttack = true;
         movementSpeedLeft = 0;
     }
     
