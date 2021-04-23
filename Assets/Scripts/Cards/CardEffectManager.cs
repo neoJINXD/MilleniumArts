@@ -12,10 +12,14 @@ public class CardEffectManager : Singleton<CardEffectManager>
     [SerializeField] private Unit m_archer;
     [SerializeField] private Unit m_dragonRider;
 
-    #region Card Animations
+    #region Animations
 
     private GameObject animRef;
-
+    
+    // Units
+    
+    
+    // Spells
     [SerializeField] private GameObject anim_spell_smite;
     [SerializeField] private GameObject anim_spell_snipe;
     [SerializeField] private GameObject anim_spell_heavenlySmite;
@@ -37,6 +41,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
     [SerializeField] private GameObject anim_spell_bearTrap;
     [SerializeField] private GameObject anim_spell_landMine;
     [SerializeField] private GameObject anim_spell_royalPledge;
+    
+    [SerializeField] private GameObject anim_unit_soldier;
+    [SerializeField] private GameObject anim_unit_knight;
+    [SerializeField] private GameObject anim_unit_assassin;
+    [SerializeField] private GameObject anim_unit_priest;
+    [SerializeField] private GameObject anim_unit_archer;
+    [SerializeField] private GameObject anim_unit_dragonRider;
 
     #endregion
 
@@ -76,36 +87,43 @@ public class CardEffectManager : Singleton<CardEffectManager>
             placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + ", " +  positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Soldier!", TurnManager.instance.color32_green);
+            animRef = Instantiate(anim_unit_soldier, positionNode.worldPosition, Quaternion.identity);
         }
         else if (unit == Unit.UnitTypes.Knight)
         {
             placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Knight!", TurnManager.instance.color32_green);
+            animRef = Instantiate(anim_unit_knight, positionNode.worldPosition, Quaternion.identity);
+            
         }
         else if (unit == Unit.UnitTypes.Assassin)
         {
             placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Assassin!", TurnManager.instance.color32_green);
+            animRef = Instantiate(anim_unit_assassin, positionNode.worldPosition, Quaternion.identity);
         }
         else if (unit == Unit.UnitTypes.Priest)
         {
             placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Priest!", TurnManager.instance.color32_green);
+            animRef = Instantiate(anim_unit_priest, positionNode.worldPosition, Quaternion.identity);
         }
         else if (unit == Unit.UnitTypes.Archer)
         {
             placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Archer!", TurnManager.instance.color32_green);
+            animRef = Instantiate(anim_unit_archer, positionNode.worldPosition, Quaternion.identity);
         }  
         else if (unit == Unit.UnitTypes.DragonRider)
         {
             placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Dragon Rider at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Dragon Rider!", TurnManager.instance.color32_green);
+            animRef = Instantiate(anim_unit_dragonRider, positionNode.worldPosition, Quaternion.identity);
         }
             
         placedUnit.SetUnitPlayerID(playerId);
@@ -400,6 +418,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         TurnManager.instance.updateGameHistory(spellMessage);
         TurnManager.instance.updateTurnUpdate("Successfully used Oracle at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         TurnManager.instance.cardSuccessful = true;
+        animRef = Instantiate(anim_spell_oracle, selectedNode.GetUnit().transform, false);
     }
 
     /*
@@ -423,6 +442,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 {
                     selectedNode.RemoveTrapOrItem(toi);
                     spellMessage += "Enemy trap removed at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
+                    animRef = Instantiate(anim_spell_disarmTrap, selectedNode.GetUnit().transform, false);
                 }
             }
         }
@@ -510,6 +530,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
         TurnManager.instance.updateGameHistory("Player " + playerId + " used Greed!\nTwo random cards added to their hand!\n");
         TurnManager.instance.updateTurnUpdate("Successfully used Greed!", TurnManager.instance.color32_green);
         TurnManager.instance.cardSuccessful = true;
+        // Will only use sound
+        animRef = Instantiate(anim_spell_greed);
     }
 
     /*
