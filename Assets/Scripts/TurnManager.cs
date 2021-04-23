@@ -9,13 +9,15 @@ using UnityEngine.Serialization;
 
 public class TurnManager : Singleton<TurnManager>
 {
-	[SerializeField] private GameObject attackAnimation;
+	[SerializeField] private GameObject attackAnimationHit;
+	[SerializeField] private GameObject healAnimation;
+	[SerializeField] private GameObject attackAnimationMiss;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] public Material availableMaterial;
     [SerializeField] public Material defaultMaterial;
     [SerializeField] public Material targetMaterial;
     [SerializeField] public Material AOEMaterial;
-
+    
     private const float lockAxis = 27f;
 
     public Player currentPlayer = default;
@@ -95,10 +97,6 @@ public class TurnManager : Singleton<TurnManager>
 
     private TextMeshProUGUI gameHistoryText;
 
-    // Turn Update Panel
-
-    private TextMeshProUGUI turnUpdateText;
-
     void Start()
     {
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
@@ -128,8 +126,6 @@ public class TurnManager : Singleton<TurnManager>
 
         handPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(3).gameObject;
 
-        turnUpdateText = gameplayPanel.transform.GetChild(0).transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-
         currentTurnState = TurnState.Free;
 
         selectableNodes = new HashSet<Node>();
@@ -152,6 +148,11 @@ public class TurnManager : Singleton<TurnManager>
     // Update is called once per frame
     void Update()
     {
+	    if (GameLoop.instance.GameOver)
+		    return;
+	    
+	    currentPlayer = GameLoop.instance.GetCurrentPlayer();
+	    
 	    Player thisPlayer = GameLoop.instance.GetPlayer(0);
         manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
 
@@ -353,12 +354,6 @@ public class TurnManager : Singleton<TurnManager>
     {
         if (currentUnit != null && currentUnit.GetUnitPlayerID() == currentPlayer.PlayerId)
         {
-            if(!currentUnit.GetCanAttack())
-            {
-                updateTurnUpdate("This unit cannot attack again for the rest of the turn.");
-                return;
-            }
-
             Node currentNode = grid.NodeFromWorldPoint(currentUnitPosition);
 
             pf.minDepthLimit = currentUnit.GetMinRange();
@@ -468,8 +463,6 @@ public class TurnManager : Singleton<TurnManager>
 
                 updateGameHistory("Player " + currentPlayer.PlayerId + " moved " + currentUnit.GetUnitType() + " (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") to (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n");
 
-                // decrement the unit's movementSpeedLeft variable
-
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
                 currentPlayer.PlayerMana--;
@@ -523,7 +516,9 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (selectedNode.unitInThisNode != null && selectedNode.unitInThisNode.GetUnitPlayerID() == currentPlayer.PlayerId)
             {
+	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.unitInThisNode.IncreaseCurrentHealthBy(currentUnit.GetDamage());
+                currentPlayer.PlayerMana--;
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + ", " + currentUnitNode.gridY + ") healed " + selectedNode.unitInThisNode.GetUnitType() + " (" + selectedNode.gridX + ", " + selectedNode.gridY + ") for " + currentUnitNode.unitInThisNode.GetDamage() + " health!\n");
             }
         }
@@ -602,7 +597,7 @@ public class TurnManager : Singleton<TurnManager>
     
     void Attack(Unit attacker, Unit receiver)
     {
-	    animRef = Instantiate(attackAnimation, currentUnit.transform, false);
+	    
 	    
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
 
@@ -615,12 +610,15 @@ public class TurnManager : Singleton<TurnManager>
         if(roll <= hitChance)
         {
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
-            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!\n");
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + receiverNode.gridY + ") for " + attackerNode.unitInThisNode.GetDamage() + " damage!");
+            animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
         }
         else
-            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!\n");
-
-        attacker.SetCanAttack(false);
+        {
+	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.unitInThisNode.GetUnitType() + "(" + attackerNode.gridX + ", " + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + ", " + attackerNode.gridY + ")!");
+	        animRef = Instantiate(attackAnimationMiss, currentUnit.transform, false);
+        }
+            
 
         currentPlayer.PlayerMana--;
     }
@@ -1404,11 +1402,5 @@ public class TurnManager : Singleton<TurnManager>
     public void updateGameHistory(string actionString)
     {
         gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
-    }
-
-    // updates the TurnUpdatePanel
-    public void updateTurnUpdate(string message)
-    {
-        turnUpdateText.text = message;
     }
 }

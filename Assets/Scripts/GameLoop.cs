@@ -17,6 +17,8 @@ public class GameLoop : Singleton<GameLoop>
     [SerializeField] private GameObject m_gameOverUI;
     [SerializeField] private TMPro.TMP_Text m_winningPlayerText;
 
+    public bool GameOver => winCondition;
+
     private int index;
     private int turnMana = 3;
     private bool winCondition = false;
@@ -44,11 +46,10 @@ public class GameLoop : Singleton<GameLoop>
                 player.StartTurn();
                 Debug.Log("Player " + index + "'s turn. --------------------------------------------");
                 yield return new WaitUntil(() => player.TurnComplete);
-                turnMana++;
             }
+            turnMana++;
+
         }
-
-
     }
 
     private void Update()
@@ -66,6 +67,23 @@ public class GameLoop : Singleton<GameLoop>
         }
     }
 
+    private const int infiniteManaValue = 999999;
+    
+    public void InfinitePlayerMana()
+    {
+        players[0].PlayerMana = infiniteManaValue;
+        players[0].PlayerMaxMana = infiniteManaValue;
+    }
+    
+    public void InfiniteManaForAll()
+    {
+        turnMana = infiniteManaValue;
+        players[0].PlayerMana = infiniteManaValue;
+        players[0].PlayerMaxMana = infiniteManaValue; 
+        players[1].PlayerMana = infiniteManaValue;
+        players[1].PlayerMaxMana = infiniteManaValue;
+    }
+    
     public void AddPlayer(Player toAdd)
     {
         players.Add(toAdd);

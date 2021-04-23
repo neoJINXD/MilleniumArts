@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Object = UnityEngine.Object;
 
 public class CardMouseOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -54,6 +56,11 @@ public class CardMouseOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             cardGO.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
             cardGO.AddComponent(typeof(CardUI));
         }
+    }
+
+    private void OnDisable()
+    {
+        cardZoomInPanel.SetActive(false);
     }
 
     //Detect when Cursor leaves the GameObject

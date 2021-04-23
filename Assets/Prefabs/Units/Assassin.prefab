@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 519887686405710202, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
       propertyPath: m_Name
-      value: Assassin 1
+      value: Assassin
       objectReference: {fileID: 0}
     - target: {fileID: 519887686405710206, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
