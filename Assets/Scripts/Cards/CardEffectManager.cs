@@ -234,6 +234,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         TurnManager.instance.updateGameHistory(spellMessage);
         TurnManager.instance.updateTurnUpdate("Successfully used Prayer at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         TurnManager.instance.cardSuccessful = true;
+        animRef = Instantiate(anim_spell_prayer, selectedNode.GetUnit().transform, false);
     }
 
     /*
