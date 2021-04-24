@@ -24,7 +24,7 @@ public class CardMouseOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         mouseEnter = GameObject.FindWithTag("CardHover").GetComponent<AudioSource>();
     }
 
-    //Detect if the Cursor starts to pass over the GameObject
+    // Detect if the Cursor starts to pass over the GameObject
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
         mouseEnter.Play();
