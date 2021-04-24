@@ -137,10 +137,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
         positionNode.AddUnit(placedUnit);
 
         //hardcoded color for test
+        /*
         if (playerId == 0)
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
         else
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.red;
+        */
         
         GameLoop.instance.GetCurrentPlayer().AddUnit(placedUnit);
 

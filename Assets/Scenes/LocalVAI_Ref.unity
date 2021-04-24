@@ -211,9 +211,21 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
+      propertyPath: sprite_soldier_red
+      value: 
+      objectReference: {fileID: 21300000, guid: e5a37c2b56fef8245a55199196b33dd1,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
       propertyPath: sprite_assassin_red
       value: 
       objectReference: {fileID: 21300000, guid: d23f2b406cd2609468fe75f49848718b,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_soldier_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 86e9795645e925344929b9d8d683b56c,
         type: 3}
     - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
