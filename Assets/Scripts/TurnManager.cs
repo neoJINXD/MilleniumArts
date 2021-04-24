@@ -244,7 +244,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
     public void loadPlayerHand()
     {
-	    localPlayer = currentPlayer;
         if(localPlayer.GetHand().Count <= 5)
         {
             handPanel.transform.GetChild(0).gameObject.SetActive(true);
