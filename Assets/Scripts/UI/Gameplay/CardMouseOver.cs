@@ -7,7 +7,10 @@ using Object = UnityEngine.Object;
 
 public class CardMouseOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    private AudioSource mouseEnter;
+    
     private RectTransform rt;
+
     [SerializeField] private GameObject cardZoomInPanel;
     [SerializeField] private GameObject cardPrefab;
 
@@ -17,17 +20,21 @@ public class CardMouseOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         rt = this.GetComponent<RectTransform>();
         cardZoomInPanel = GameplayUIManager.instance.cardZoomInPanel;
         cardPrefab = GameplayUIManager.instance.cardPrefab;
+
+        mouseEnter = GameObject.FindWithTag("CardHover").GetComponent<AudioSource>();
     }
 
-    //Detect if the Cursor starts to pass over the GameObject
+    // Detect if the Cursor starts to pass over the GameObject
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
+        mouseEnter.Play();
+        
         float hoverHeight = rt.rect.height * 0.05f;
         /*Top*/
         rt.offsetMax += new Vector2(0, hoverHeight);
         /*Bottom*/
         rt.offsetMin += new Vector2(0, hoverHeight);
-
+        
         cardZoomInPanel.SetActive(true);
 
         UnitCard unitCard;
@@ -66,6 +73,7 @@ public class CardMouseOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     //Detect when Cursor leaves the GameObject
     public void OnPointerExit(PointerEventData pointerEventData)
     {
+        
         if(transform.childCount > 0)
             Destroy(cardZoomInPanel.transform.GetChild(0).gameObject);
 

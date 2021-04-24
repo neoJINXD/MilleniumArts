@@ -48,7 +48,7 @@ public class TileOnMouseOver : MonoBehaviour
                 aoeNodes = pf.GetNodesMinMaxRange(this.transform.position, false, storedCard.minRange, storedCard.maxRange);
                 availableNodes = tm.selectableNodes;
                 if (availableNodes.Contains(grid.NodeFromWorldPoint(this.transform.position)))
-                {
+                { 
                     pf.minDepthLimit = storedCard.aoeMinRange;
                     pf.maxDepthLimit = storedCard.aoeMaxRange;
 

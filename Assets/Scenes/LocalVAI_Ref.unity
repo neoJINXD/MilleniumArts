@@ -141,6 +141,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4685259530587244230, guid: 21d18fe1550a6e24590f746025a6446c,
         type: 3}
+    - target: {fileID: 976998207325035072, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2327173939468760504, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -150,6 +155,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3274394353332834295, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3341467801928550799, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
@@ -1905,6 +1915,8 @@ MonoBehaviour:
   kingSpawnP2:
   - {fileID: 1977095599}
   - {fileID: 965627753}
+  king1: {fileID: 0}
+  king2: {fileID: 0}
   displayGridGizmos: 1
   unableToWalkHere:
     serializedVersion: 2

@@ -572,7 +572,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.updateTurnUpdate("Successfully used Reinforcements on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
+            // animRef = Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
         }
         else
             TurnManager.instance.updateTurnUpdate("Cannot use Reinforcements on this unit! Its surrounding cells must be empty.", TurnManager.instance.color32_red);
@@ -675,7 +675,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 TurnManager.instance.updateTurnUpdate("Successfully used Assassinate on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
                 selectedNode.GetUnit().SetCurrentHealth(0); // smite damage
                 TurnManager.instance.cardSuccessful = true;
-                animRef = Instantiate(anim_spell_assassinate, selectedNode.GetUnit().transform, false);
+                DisplayAnimation(anim_spell_assassinate);
             }
             else
                 TurnManager.instance.updateTurnUpdate("Assassinate cannot be used on a King!", TurnManager.instance.color32_red);
@@ -703,10 +703,25 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Bear Trap on the battlefield!\n");
             TurnManager.instance.updateTurnUpdate("Successfully placed Bear Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_bearTrap, selectedNode.GetUnit().transform, false);
+
+            DisplayAnimation(anim_spell_bearTrap);
+
         }
         else
             TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
+    }
+
+    // for displaying animations without a unit on position to instantiate
+    public void DisplayAnimation(GameObject anim)
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+        {
+            Vector3 vec = new Vector3(hit.transform.position.x, 1, hit.transform.position.z);
+            animRef = Instantiate(anim, vec, Quaternion.identity);
+        }
     }
 
     /*
@@ -726,7 +741,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Land Mine on the battlefield!\n");
             TurnManager.instance.updateTurnUpdate("Successfully placed a Land Mine at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_landMine, selectedNode.GetUnit().transform, false);
+            DisplayAnimation(anim_spell_landMine);
         }
         else
             TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
