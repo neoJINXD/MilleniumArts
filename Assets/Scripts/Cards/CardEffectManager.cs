@@ -11,6 +11,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
     [SerializeField] private Unit m_priest;
     [SerializeField] private Unit m_archer;
     [SerializeField] private Unit m_dragonRider;
+    [SerializeField] private Sprite m_archer_blue;
+    [SerializeField] private Sprite m_archer_red;
     
     private bool placerClicked = false;
     private const float lockAxis = 27f;
@@ -58,6 +60,16 @@ public class CardEffectManager : Singleton<CardEffectManager>
         {
             placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_red;
+            }
+            
         }  
         else if (unit == Unit.UnitTypes.DragonRider)
         {
