@@ -882,27 +882,126 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     if (selectedNode.GetUnit().GetUnitPlayerID() == currentPlayer.PlayerId)
                     {
                         if (storedCard.id == 10)
-                            cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_vitality", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {   
+                                cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 11)
-                            cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_endurance", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 12)
-                            cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_vigor", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 13)
-                            cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_nimbleness", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 14)
-                            cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_agility", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 15)
-                            cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_precision", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 18)
-                            cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_provisions", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 19)
-                            cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_reinforcements", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                        }
                         else if (storedCard.id == 21)
-                            cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_warcry", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                        }
                         else if (storedCard.id == 22)
-                            cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_rebirth", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 26)
-                            cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_royalPledge", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                        }
                     }
                 }
             }
@@ -924,9 +1023,27 @@ public class TurnManager : MonoBehaviour, IPunObservable
                             }
                         }
                         else if (storedCard.id == 7)
-                            cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_snipe", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 23)
-                            cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_assassinate", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                     }
                 }
             }
@@ -944,22 +1061,74 @@ public class TurnManager : MonoBehaviour, IPunObservable
 		            if (selectedNode.GetUnit() == null)
 		            {
 			            if (storedCard.id == 16)
-				            cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_oracle", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                            else
+                            {
+				                cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                        }
 			            else if (storedCard.id == 17)
-				            cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_disarmTrap", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                            else
+                            {
+				                cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                        }
 			            else if (storedCard.id == 24)
-				            cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_bearTrap", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                            else
+                            {
+				                cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
 			            else if (storedCard.id == 25)
-				            cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_landMine", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                            else
+                            {
+				                cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                     }
 	            }
             }
             else if (storedCard.castType == CastType.OnAny)
             {
                 if (storedCard.id == 8)
-                    cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    if (GameManager.instance.networked)
+                    {
+                        PhotonView.Get(cardEffectManager).RPC("spell_heavenlySmite", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                    }
+                    else
+                    {
+                        cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNodePosition);
+                    }
                 else if (storedCard.id == 9)
-                    cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                {
+                    if (GameManager.instance.networked)
+                    {
+                        PhotonView.Get(cardEffectManager).RPC("spell_prayer", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                    }
+                    else
+                    {
+                        cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNodePosition);
+                    }
+                }
             }
         }
 
@@ -1593,12 +1762,10 @@ public class TurnManager : MonoBehaviour, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(gameHistoryText.text);
-            stream.SendNext(turnUpdateText.text);
         }
         else
         {
             gameHistoryText.text = (string)stream.ReceiveNext();
-            turnUpdateText.text = (string)stream.ReceiveNext();
         }
     }
 }
