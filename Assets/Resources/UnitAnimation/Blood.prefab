@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7685436670059861695}
   - component: {fileID: 7685436670059861694}
   - component: {fileID: 7107228974447417833}
-  - component: {fileID: -2797130480755310511}
+  - component: {fileID: 6211817110665728772}
   m_Layer: 0
   m_Name: Blood
   m_TagString: Untagged
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-2797130480755310511
+--- !u!114 &6211817110665728772
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

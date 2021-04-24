@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 387721329667816263}
   - component: {fileID: 8050217595353312844}
   - component: {fileID: -7767351915806290142}
-  - component: {fileID: -3168127368683907936}
+  - component: {fileID: 7068137207992471829}
   m_Layer: 0
   m_Name: spell_nimbleness
   m_TagString: Untagged
@@ -129,7 +129,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b7f86484d522924499ab3d781dddf442, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 2ac77b0cd5bd3ea41817f38f5a344a95, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 2.55
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-3168127368683907936
+--- !u!114 &7068137207992471829
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 387721329667816263}
   - component: {fileID: -318335281802596806}
   - component: {fileID: -7296883815894420325}
-  - component: {fileID: 7933056882054755815}
+  - component: {fileID: -6037618137116796175}
   m_Layer: 0
   m_Name: Heal
   m_TagString: Untagged
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7933056882054755815
+--- !u!114 &-6037618137116796175
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

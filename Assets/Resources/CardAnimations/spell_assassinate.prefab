@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 387721329667816263}
   - component: {fileID: 8050217595353312844}
   - component: {fileID: -6228207429777855257}
-  - component: {fileID: 2417858731169832562}
+  - component: {fileID: 2987081634427648138}
   m_Layer: 0
   m_Name: spell_assassinate
   m_TagString: Untagged
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2417858731169832562
+--- !u!114 &2987081634427648138
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

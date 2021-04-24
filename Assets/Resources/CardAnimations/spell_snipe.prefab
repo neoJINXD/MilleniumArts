@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 387721329667816263}
   - component: {fileID: 8050217595353312844}
   - component: {fileID: -1846663733358339421}
-  - component: {fileID: 5109298130671569101}
+  - component: {fileID: 2006692543627659012}
   m_Layer: 0
   m_Name: spell_snipe
   m_TagString: Untagged
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5109298130671569101
+--- !u!114 &2006692543627659012
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
