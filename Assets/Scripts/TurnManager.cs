@@ -5,9 +5,10 @@ using Zone.Core.Utils;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Serialization;
+using Photon.Pun;
 
 
-public class TurnManager : Singleton<TurnManager>
+public class TurnManager : Singleton<TurnManager>, IPunObservable
 {
 	[SerializeField] private GameObject attackAnimationHit;
 	[SerializeField] private GameObject healAnimation;
@@ -115,6 +116,11 @@ public class TurnManager : Singleton<TurnManager>
 
     void Start()
     {
+        if (GameManager.instance.networked)
+        {
+            PhotonView.Get(gameObject).ObservedComponents.Add(this);
+        }
+
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
 
@@ -1495,6 +1501,9 @@ public class TurnManager : Singleton<TurnManager>
     // method to update game history (can maybe make this a PunRPC to have the same on both clients
     public void updateGameHistory(string actionString)
     {
+        if (GameManager.instance.networked)
+            PhotonView.Get(gameObject).RequestOwnership();
+
         gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
     }
 
@@ -1508,5 +1517,17 @@ public class TurnManager : Singleton<TurnManager>
     {
         turnUpdateText.text = message;
         turnUpdateText.color = color;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(gameHistoryText.text);
+        }
+        else
+        {
+            gameHistoryText.text = (string)stream.ReceiveNext();
+        }
     }
 }

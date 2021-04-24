@@ -2049,6 +2049,47 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1764270283}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1814141792 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5066473961083304728, guid: e4857921910c9f242a6803656d2a979b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5066473960744613815}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1814141793 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5066473960744613815}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814141792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4939b6e33448534b895fc0f0f8be111, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1814141794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1814141792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 1
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 1814141793}
+  sceneViewId: 4
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &1825307172 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5066473961030832357, guid: e4857921910c9f242a6803656d2a979b,
@@ -2586,6 +2627,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.0017089844
+      objectReference: {fileID: 0}
+    - target: {fileID: 511577629528842599, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 976998207325035072, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
