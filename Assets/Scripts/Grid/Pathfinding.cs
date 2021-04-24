@@ -214,8 +214,6 @@ public class Pathfinding : Singleton<Pathfinding>
 				}
 			}
 		}
-		
-		print(enemyUnitNodes.Count);
 
 		return enemyUnitNodes;
 	}
@@ -361,6 +359,7 @@ public class Pathfinding : Singleton<Pathfinding>
 		HeuristicFunction heuristicFunction = new HeuristicFunction(GetDistance);
 		Node startNode = gridRef.NodeFromWorldPoint(startPos);
 		Node targetNode = gridRef.NodeFromWorldPoint(targetPos);
+		Unit currentUnit = startNode.GetUnit();
 
 		if (startNode.canWalkHere && targetNode.canWalkHere) 
 		{
@@ -412,7 +411,9 @@ public class Pathfinding : Singleton<Pathfinding>
 
 		if (pathSuccess) 
 		{
-			return RetracePath(startNode, targetNode);
+			Node[] waypoints = RetracePath(startNode, targetNode);
+			currentUnit.SetMovementSpeedLeft(currentUnit.GetMovementSpeedLeft() - (waypoints.Length - 1));
+			return waypoints;
 		}
 
 		return new[] {startNode};

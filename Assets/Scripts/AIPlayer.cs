@@ -160,7 +160,7 @@ public class AIPlayer : Player
 				
 				if(closestAlly.unitType == Unit.UnitTypes.Priest)
 				{
-					if(CanHeal(closestAlly, King))
+					if(CanHeal(closestAlly, King) && closestAlly.GetCanAttack())
 					{
 						yield return Heal(closestAlly, King);
 					}
@@ -177,7 +177,7 @@ public class AIPlayer : Player
 					if (!enemy)
 						yield break;
 					
-					if(CanAttack(closestAlly, enemy))
+					if(CanAttack(closestAlly, enemy) && closestAlly.GetCanAttack())
 					{
 						yield return Attack(closestAlly, enemy);
 					}
@@ -308,9 +308,9 @@ public class AIPlayer : Player
 		if (m_playerUnits.Count < 1)
 			yield break;
 
-		while (PlayerMana > 0)
+		for (int i = 0; i < m_playerUnits.Count && PlayerMana > 0; i++)
 		{
-			Unit chosenUnit = m_playerUnits[Random.Range(0, m_playerUnits.Count - 1)]; //TODO: make not random
+			Unit chosenUnit = m_playerUnits[i];
 		
 			if (m_behaviour == BehaviourType.Aggressive)
 			{
@@ -336,7 +336,8 @@ public class AIPlayer : Player
 				if (!ally || !chosenUnit)
 					yield break;
 				
-				if (ally && CanHeal(chosenUnit, ally) && ally.GetCurrentHealth() < ally.GetMaxHealth())
+				if (ally && CanHeal(chosenUnit, ally) && chosenUnit.GetCanAttack()
+				    && ally.GetCurrentHealth() < ally.GetMaxHealth())
 				{
 					yield return Heal(chosenUnit, ally);
 				}
@@ -353,7 +354,7 @@ public class AIPlayer : Player
 				if (!enemy || !chosenUnit)
 					yield break;
 				
-				if (enemy && CanAttack(chosenUnit, enemy))
+				if (enemy && CanAttack(chosenUnit, enemy) && chosenUnit.GetCanAttack())
 				{
 					yield return Attack(chosenUnit, enemy);
 				}
@@ -363,7 +364,7 @@ public class AIPlayer : Player
 					Debug.Log("AI unit moving " + chosenUnit.name + " to attack " + enemy.name);
 				}
 			}
-
+			
 			yield return null;
 		}
 	}
@@ -374,6 +375,7 @@ public class AIPlayer : Player
 		animRef = Instantiate(healAnimation, currentUnit.transform, false);
 		Debug.Log("<color=green>AI unit " + currentUnit.name + " healed " + targetUnit.name + "</color>");
 		yield return new WaitForSeconds(0.4f);
+		currentUnit.SetCanAttack(false);
 		PlayerMana--;
 	}
 
@@ -383,6 +385,7 @@ public class AIPlayer : Player
 		animRef = Instantiate(attackAnimationHit, currentUnit.transform, false);
 		Debug.Log("<color=red>AI unit " + currentUnit.name + " attacked " + targetUnit.name + "</color>");
 		PlayerMana--;
+		currentUnit.SetCanAttack(false);
 		yield return new WaitForSeconds(0.4f);
 	}
 	
@@ -391,7 +394,7 @@ public class AIPlayer : Player
 		Node closestNodeToTarget = null;
 		float closetDist = Mathf.Infinity;
 		Node[] movableNodes = Pathfinding.instance.GetNodesMinMaxRange(unit.transform.position, unit.GetCanFly(),
-			1, (int)unit.GetMovementSpeed()).ToArray();
+			1, unit.GetMovementSpeedLeft()).ToArray();
 		
 		if(movableNodes.Length < 1)
 			yield break;
