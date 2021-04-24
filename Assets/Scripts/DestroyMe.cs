@@ -1,5 +1,6 @@
 using UnityEngine;
 using Zone.Core.Utils;
+using Photon.Pun;
 
 public class DestroyMe : MonoBehaviour
 {

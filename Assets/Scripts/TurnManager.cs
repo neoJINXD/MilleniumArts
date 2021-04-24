@@ -236,10 +236,10 @@ public class TurnManager : MonoBehaviour, IPunObservable
         }
 
         // destroy attack GameObject animation after it is finished playing
-        if (animRef != null)
-        {
-	        Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
-        }
+        // if (animRef != null)
+        // {
+	    //     Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+        // }
     }
 
     public void loadPlayerHand()
@@ -677,11 +677,12 @@ public class TurnManager : MonoBehaviour, IPunObservable
             {
                 if (GameManager.instance.networked)
                 {
+                    // move hit chance here to make sure its the same for both players clients
                     int hitChance = Mathf.Max(0, (int)Mathf.Floor(currentUnit.GetAccuracy() - selectedNode.GetUnit().GetEvasion() / 2));
                     int roll = Random.Range(0, 101); // generate 0-100
 
                     PhotonView.Get(gameObject).RequestOwnership();
-                    PhotonView.Get(gameObject).RPC("NetworkAttack", RpcTarget.All, currentUnit.transform.position, selectedNode.worldPosition, (roll <= hitChance));
+                    PhotonView.Get(gameObject).RPC("NetworkAttack", RpcTarget.All, currentUnit.transform.position, selectedNode.worldPosition, roll <= hitChance);
                     //Attack(currentUnit, selectedNode.GetUnit());
                 }   
                 else
@@ -761,18 +762,18 @@ public class TurnManager : MonoBehaviour, IPunObservable
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
             if (PhotonView.Get(gameObject).IsMine)
             {
-                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Hit", currentUnit.transform.position, Quaternion.identity);
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ") for " + attackerNode.GetUnit().GetDamage() + " damage!\n");
                 updateTurnUpdate("Successfully attacked " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!", color32_green);
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Hit", currentUnit.transform.position, Quaternion.identity);
             }
         }
         else
         {
             if (PhotonView.Get(gameObject).IsMine)
             {
-                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Miss", currentUnit.transform.position, Quaternion.identity);
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + attackerNode.gridY + ")!\n");
                 updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!");
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Miss", currentUnit.transform.position, Quaternion.identity);
             }
         }
 
