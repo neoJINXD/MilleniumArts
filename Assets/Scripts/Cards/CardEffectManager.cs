@@ -19,6 +19,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
     [SerializeField] private Sprite sprite_dragonRider_red;
     [SerializeField] private Sprite sprite_knight_blue;
     [SerializeField] private Sprite sprite_knight_red;
+    [SerializeField] private Sprite sprite_priest_blue;
+    [SerializeField] private Sprite sprite_priest_red;
+    [SerializeField] private Sprite sprite_soldier_blue;
+    [SerializeField] private Sprite sprite_soldier_red;
     
     private bool placerClicked = false;
     private const float lockAxis = 27f;
@@ -46,6 +50,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
         {
             placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + ", " +  positionNode.gridY + ")!\n");
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_soldier_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_soldier_red;
+            }
         }
         else if (unit == Unit.UnitTypes.Knight)
         {
@@ -79,6 +92,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
         {
             placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_priest_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_priest_red;
+            }
         }
         else if (unit == Unit.UnitTypes.Archer)
         {

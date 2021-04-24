@@ -187,6 +187,12 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
+      propertyPath: sprite_priest_red
+      value: 
+      objectReference: {fileID: 21300000, guid: c62ba79804deaf344bfb7cf444726172,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
       propertyPath: sprite_archer_blue
       value: 
       objectReference: {fileID: 21300000, guid: b45a10f7591f7d24bab89ed6ef2cc2af,
@@ -196,6 +202,12 @@ PrefabInstance:
       propertyPath: sprite_knight_blue
       value: 
       objectReference: {fileID: 21300000, guid: 182a1aff313f0ef4f918d252b2e26010,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_priest_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 343713d36ef2efc4d82281f40b1d6531,
         type: 3}
     - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
