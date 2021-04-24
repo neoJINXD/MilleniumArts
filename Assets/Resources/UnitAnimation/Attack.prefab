@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7056591320535787151}
   - component: {fileID: 7056591320535787144}
   - component: {fileID: 7056591320535787145}
-  - component: {fileID: 57781480992082460}
+  - component: {fileID: -3338575373062382139}
   m_Layer: 0
   m_Name: Attack
   m_TagString: Untagged
@@ -104,7 +104,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &57781480992082460
+--- !u!114 &-3338575373062382139
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,16 +113,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7056591320535787146}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents: []
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0

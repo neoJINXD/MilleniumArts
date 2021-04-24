@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &1655098889157408918
+--- !u!114 &-786058725803789037
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22,7 +22,7 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-1686720163388881056
+--- !u!114 &6113930448668858156
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -50,6 +50,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Priest
       objectReference: {fileID: 0}
+    - target: {fileID: 519887686405710204, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 519887686405710205, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 519887686405710206, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
       propertyPath: m_RootOrder
@@ -105,6 +115,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1688930418379368585, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1688930418379368585, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5765391961698694634, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
       propertyPath: damage
@@ -144,6 +164,21 @@ PrefabInstance:
         type: 3}
       propertyPath: movementSpeed
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765391961698694634, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: movementSpeedLeft
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628325342251820236, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628325342251820236, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.98
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8704ec88ee016646a21ce9013edcea9, type: 3}

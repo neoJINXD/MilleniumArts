@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 4685259530587244227}
   - component: {fileID: 387721329667816263}
   - component: {fileID: 8050217595353312844}
-  - component: {fileID: 3103165313044363588}
+  - component: {fileID: -7767351915806290142}
   m_Layer: 0
-  m_Name: Blast_Hit
+  m_Name: spell_nimbleness
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8381761346048096291, guid: 095ed0beadeb45f43bc8c5c263e8af24,
+  m_Sprite: {fileID: 2078008994102062909, guid: d88472fc10b31c04ca0b4a5c4edc8e7e,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -97,7 +97,7 @@ Animator:
   m_GameObject: {fileID: 4685259530587244230}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b16a55105ad29264392b364b0493f771, type: 2}
+  m_Controller: {fileID: 9100000, guid: 9213b64bd90036b4b85a7a254794f003, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -214,7 +214,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &3103165313044363588
+--- !u!114 &-7767351915806290142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
