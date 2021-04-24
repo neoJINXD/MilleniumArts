@@ -17,18 +17,18 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
     
     // Units
-    [SerializeField] private Sprite sprite_archer_blue;
-    [SerializeField] private Sprite sprite_archer_red;
-    [SerializeField] private Sprite sprite_assassin_blue;
-    [SerializeField] private Sprite sprite_assassin_red;
-    [SerializeField] private Sprite sprite_dragonRider_blue;
-    [SerializeField] private Sprite sprite_dragonRider_red;
-    [SerializeField] private Sprite sprite_knight_blue;
-    [SerializeField] private Sprite sprite_knight_red;
-    [SerializeField] private Sprite sprite_priest_blue;
-    [SerializeField] private Sprite sprite_priest_red;
-    [SerializeField] private Sprite sprite_soldier_blue;
-    [SerializeField] private Sprite sprite_soldier_red;
+    [SerializeField] public Sprite sprite_archer_blue;
+    [SerializeField] public Sprite sprite_archer_red;
+    [SerializeField] public Sprite sprite_assassin_blue;
+    [SerializeField] public Sprite sprite_assassin_red;
+    [SerializeField] public Sprite sprite_dragonRider_blue;
+    [SerializeField] public Sprite sprite_dragonRider_red;
+    [SerializeField] public Sprite sprite_knight_blue;
+    [SerializeField] public Sprite sprite_knight_red;
+    [SerializeField] public Sprite sprite_priest_blue;
+    [SerializeField] public Sprite sprite_priest_red;
+    [SerializeField] public Sprite sprite_soldier_blue;
+    [SerializeField] public Sprite sprite_soldier_red;
     
     // Spells
     [SerializeField] private GameObject anim_spell_smite;

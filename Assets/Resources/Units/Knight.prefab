@@ -36,9 +36,40 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: -6220656173903261937}
+  - {fileID: 7191292201279409395}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &7191292201279409395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7510104115886521816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4d40a2b36399f642b8a9c36f72f9bc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitType: 2
+  movementSpeed: 3
+  canFly: 0
+  unitPlayerId: -1
+  maxHealth: 30
+  currentHealth: 30
+  damage: 7
+  defense: 2
+  minRange: 1
+  maxRange: 1
+  accuracy: 90
+  evasion: 30
+  cost: 0
+  targetIndex: 0
+  isClicked: 0
+  canAttack: 1
+  movementSpeedLeft: 10
+  m_healthBar: {fileID: 7383663133336833660}
 --- !u!1001 &8002400656261553314
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -158,6 +189,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5765391961698694634, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5765391961698694634, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
       propertyPath: maxHealth
       value: 30
       objectReference: {fileID: 0}
@@ -189,3 +225,15 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 8002400656261553314}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7383663133336833660 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 681792318208086750, guid: c8704ec88ee016646a21ce9013edcea9,
+    type: 3}
+  m_PrefabInstance: {fileID: 8002400656261553314}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
