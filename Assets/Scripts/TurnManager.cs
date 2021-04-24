@@ -8,8 +8,9 @@ using UnityEngine.Serialization;
 using Photon.Pun;
 
 
-public class TurnManager : Singleton<TurnManager>, IPunObservable
+public class TurnManager : MonoBehaviour, IPunObservable
 {
+    public static TurnManager instance = null;
 	[SerializeField] private GameObject attackAnimationHit;
 	[SerializeField] private GameObject healAnimation;
 	[SerializeField] private GameObject attackAnimationMiss;
@@ -113,6 +114,11 @@ public class TurnManager : Singleton<TurnManager>, IPunObservable
 
     [HideInInspector]
     public Color32 color32_green = new Color32(0, 160, 0, 255);
+
+    private void Awake() 
+    {    
+        instance = this;
+    }
 
     void Start()
     {
@@ -907,7 +913,16 @@ public class TurnManager : Singleton<TurnManager>, IPunObservable
                     if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
                     {
                         if (storedCard.id == 6)
-                            cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_smite", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                         else if (storedCard.id == 7)
                             cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode);
                         else if (storedCard.id == 23)
@@ -1578,10 +1593,12 @@ public class TurnManager : Singleton<TurnManager>, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(gameHistoryText.text);
+            stream.SendNext(turnUpdateText.text);
         }
         else
         {
             gameHistoryText.text = (string)stream.ReceiveNext();
+            turnUpdateText.text = (string)stream.ReceiveNext();
         }
     }
 }
