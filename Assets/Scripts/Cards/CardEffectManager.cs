@@ -18,6 +18,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
     
     // Units
     
+    [SerializeField] private Sprite m_archer_blue;
+    [SerializeField] private Sprite m_archer_red;
     
     // Spells
     [SerializeField] private GameObject anim_spell_smite;
@@ -117,6 +119,16 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Archer!", TurnManager.instance.color32_green);
             animRef = Instantiate(anim_unit_archer, positionNode.worldPosition, Quaternion.identity);
+
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_red;
+            }
+            
         }  
         else if (unit == Unit.UnitTypes.DragonRider)
         {
