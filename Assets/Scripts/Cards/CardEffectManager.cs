@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using Zone.Core.Utils;
 
@@ -72,8 +73,23 @@ public class CardEffectManager : Singleton<CardEffectManager>
     {
         if (animRef != null)
         {
-            Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+            if (GameManager.instance.networked)
+            {
+                StartCoroutine(NetworkDestroyAnimation(animRef));
+                // PhotonNetwork.Destroy(animRef.GetComponent<PhotonView>());
+            }
+            else
+            {
+                Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+            }
         }
+    }
+
+    private IEnumerator NetworkDestroyAnimation(GameObject animRef)
+    {
+        yield return new WaitForSeconds(animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+        if (animRef != null)
+            PhotonNetwork.Destroy(animRef.GetComponent<PhotonView>());
     }
 
     public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
@@ -84,47 +100,96 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
         if (unit == Unit.UnitTypes.Soldier)
         {
-            placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Soldier", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/unit_soldier", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = Instantiate(anim_unit_soldier, positionNode.worldPosition, Quaternion.identity);
+            }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + ", " +  positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Soldier!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_soldier, positionNode.worldPosition, Quaternion.identity);
         }
         else if (unit == Unit.UnitTypes.Knight)
         {
-            placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Knight", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/unit_knight", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = Instantiate(anim_unit_knight, positionNode.worldPosition, Quaternion.identity);
+            }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Knight!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_knight, positionNode.worldPosition, Quaternion.identity);
-            
         }
         else if (unit == Unit.UnitTypes.Assassin)
         {
-            placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Assassin", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/unit_assassin", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = Instantiate(anim_unit_assassin, positionNode.worldPosition, Quaternion.identity);
+            }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Assassin!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_assassin, positionNode.worldPosition, Quaternion.identity);
         }
         else if (unit == Unit.UnitTypes.Priest)
         {
-            placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Priest", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/unit_priest", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = Instantiate(anim_unit_priest, positionNode.worldPosition, Quaternion.identity);
+            }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Priest!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_priest, positionNode.worldPosition, Quaternion.identity);
         }
         else if (unit == Unit.UnitTypes.Archer)
         {
-            placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Archer", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/unit_archer", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = Instantiate(anim_unit_archer, positionNode.worldPosition, Quaternion.identity);
+            }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Archer!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_archer, positionNode.worldPosition, Quaternion.identity);
         }  
         else if (unit == Unit.UnitTypes.DragonRider)
         {
-            placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/DragonRider", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/unit_dragonRider", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                animRef = Instantiate(anim_unit_dragonRider, positionNode.worldPosition, Quaternion.identity);
+            }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Dragon Rider at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Dragon Rider!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_dragonRider, positionNode.worldPosition, Quaternion.identity);
         }
+
+        // TODO everything below is only done on the player spawning the unit
             
         placedUnit.SetUnitPlayerID(playerId);
 
