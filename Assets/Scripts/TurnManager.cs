@@ -185,9 +185,16 @@ public class TurnManager : MonoBehaviour, IPunObservable
 		    return;
 	    
 	    currentPlayer = GameLoop.instance.GetCurrentPlayer();
-	    
-	    Player thisPlayer = GameLoop.instance.GetPlayer(0);
-        manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
+	    if (GameManager.instance.networked)
+        {
+            Player thisPlayer = currentPlayer;
+            manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
+        }
+        else
+        {
+            Player thisPlayer = GameLoop.instance.GetPlayer(0);
+            manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
+        }
 
         if (currentTurnState == TurnState.DrawingCard)
         {
