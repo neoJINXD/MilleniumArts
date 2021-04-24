@@ -67,6 +67,7 @@ public class TurnManager : Singleton<TurnManager>
     // Stat panel
 
     private TextMeshProUGUI unitPlayerIDText;
+    private Image unitImage;
     private TextMeshProUGUI unitDamageText;
     private TextMeshProUGUI unitDefenceText;
     private TextMeshProUGUI unitARText;
@@ -122,6 +123,9 @@ public class TurnManager : Singleton<TurnManager>
         unitPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(0).gameObject;
 
         unitPlayerIDText = unitPanel.transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        unitImage = unitPanel.transform.GetChild(0).GetComponent<Image>();
+
         unitDamageText = unitPanel.transform.GetChild(3).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         unitDefenceText = unitPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         unitARText = unitPanel.transform.GetChild(5).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -500,7 +504,44 @@ public class TurnManager : Singleton<TurnManager>
                 else
                     optionPanel.SetActive(false);
 
-                unitPlayerIDText.text = "" + hit.transform.GetComponent<Unit>().GetUnitPlayerID();
+                unitPlayerIDText.text = "" + hit.transform.GetComponent<Unit>().GetUnitType() + " (" + hit.transform.GetComponent<Unit>().GetUnitPlayerID() + ")";
+
+
+                if(hit.transform.GetComponent<Unit>().GetUnitPlayerID() == 0) // player id 0
+                {
+                    if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Soldier)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Soldier_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Knight)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Knight_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Assassin)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Assassin_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Priest)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Priest_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Archer)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Archer_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.DragonRider)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/DragonRider_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.King)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/King_Blue");
+                }
+                else
+                {
+                    if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Soldier)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Soldier_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Knight)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Knight_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Assassin)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Assassin_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Priest)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Priest_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Archer)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Archer_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.DragonRider)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/DragonRider_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.King)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/King_Red");
+                }
+
                 unitDamageText.text = "" + hit.transform.GetComponent<Unit>().GetDamage();
                 unitDefenceText.text = "" + hit.transform.GetComponent<Unit>().GetDefence();
                 unitARText.text = "" + hit.transform.GetComponent<Unit>().GetMinRange() + " - " + hit.transform.GetComponent<Unit>().GetMaxRange();
@@ -918,6 +959,9 @@ public class TurnManager : Singleton<TurnManager>
         currentUnitPosition = Vector3.zero;
 
         unitPlayerIDText.text = "-";
+
+        unitImage.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Background.psd");
+
         unitDamageText.text = "-";
         unitDefenceText.text = "-";
         unitARText.text = "x - x";
@@ -1119,7 +1163,7 @@ public class TurnManager : Singleton<TurnManager>
 					card.moveSpeed = 4;
 					card.accuracy = 85;
 					card.evasion = 20;
-					card.flying = false;
+					card.flying = true;
 
 					break;
 			}
