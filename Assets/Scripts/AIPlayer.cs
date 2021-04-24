@@ -363,7 +363,6 @@ public class AIPlayer : Player
 					Debug.Log("AI unit moving " + chosenUnit.name + " to attack " + enemy.name);
 				}
 			}
-
 			yield return null;
 		}
 	}
