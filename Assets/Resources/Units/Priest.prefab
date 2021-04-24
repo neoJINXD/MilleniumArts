@@ -19,8 +19,8 @@ MonoBehaviour:
   OwnershipTransfer: 1
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 6113930448668858156}
   - {fileID: 5191459175064172809}
+  - {fileID: 6113930448668858156}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -217,7 +217,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -0.98
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5765391961698694634, guid: c8704ec88ee016646a21ce9013edcea9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c8704ec88ee016646a21ce9013edcea9, type: 3}
 --- !u!1 &7510104115886521816 stripped
 GameObject:
