@@ -94,7 +94,22 @@ public abstract class Player : MonoBehaviour
 
     public void AddCard(Card card)
     {
-        m_playerCards.Add(card);
+        UnitCard unitCopyCard = null;
+        SpellCard spellCopyCard = null;
+
+        if (card is UnitCard)
+        {
+            unitCopyCard = new UnitCard();
+            unitCopyCard.copyUnitCard((UnitCard)card);
+            m_playerCards.Add(unitCopyCard);
+        }
+        else if (card is SpellCard)
+        {
+            spellCopyCard = new SpellCard();
+            spellCopyCard.copySpellCard((SpellCard)card);
+            m_playerCards.Add(spellCopyCard);
+        }
+
         m_playerCards[m_playerCards.Count - 1].indexInHand = m_playerCards.Count - 1;
 
     }

@@ -56,8 +56,8 @@ public class GameManager : Singleton<GameManager>
         view = GetComponent<PhotonView>();
 
         print("Starting the photon game");
-        //if (PhotonNetwork.IsMasterClient)
-        //{
+        if (PhotonNetwork.IsMasterClient)
+        {
             Player p1 = gameObject.AddComponent<NetworkedPlayer>();
             //print(p1);
             view.ObservedComponents.Add(p1);
@@ -71,7 +71,25 @@ public class GameManager : Singleton<GameManager>
             ((NetworkedPlayer)p1).amIP1 = true;
             gameLoop.AddPlayer(p2);
             //p2.EndTurn();
-        //}
+        }
+        else
+        {
+            Player p1 = gameObject.AddComponent<NetworkedPlayer>();
+            //print(p1);
+            view.ObservedComponents.Add(p1);
+
+            Player p2 = gameObject.AddComponent<NetworkedPlayer>();
+            //print(p2);
+            view.ObservedComponents.Add(p2);
+
+            gameLoop.GetPlayerList().Clear();
+            gameLoop.AddPlayer(p1);
+            ((NetworkedPlayer)p2).amIP1 = true;
+            gameLoop.AddPlayer(p2);
+            //p2.EndTurn();
+        }
+
+
 
         StartCoroutine(gameLoop.Play());
     }

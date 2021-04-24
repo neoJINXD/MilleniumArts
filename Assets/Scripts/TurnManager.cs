@@ -169,10 +169,18 @@ public class TurnManager : MonoBehaviour, IPunObservable
         currentPlayer = GameLoop.instance.GetCurrentPlayer();
         localPlayer = null;
 
-        foreach(Player player in GameLoop.instance.GetPlayerList())
+        foreach (NetworkedPlayer nPlayer in GameLoop.instance.GetPlayerList())
         {
-            if (player is LocalPlayer)
-                localPlayer = player;
+            if (nPlayer.amIP1)
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    localPlayer = nPlayer;
+            }
+            else
+            {
+                if (!PhotonNetwork.IsMasterClient)
+                    localPlayer = nPlayer;
+            }
         }
 
         loadPlayerHand();
@@ -185,6 +193,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 		    return;
 	    
 	    currentPlayer = GameLoop.instance.GetCurrentPlayer();
+
 	    if (GameManager.instance.networked)
         {
             Player thisPlayer = currentPlayer;

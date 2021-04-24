@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 using Zone.Core.Utils;
+using UnityEngine.UI;
 
 public class CardEffectManager : Singleton<CardEffectManager>
 {
@@ -102,6 +103,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             
             if (playerId == 0)
             {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                 placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_soldier_blue;
             }
             else
@@ -126,6 +128,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             
             if (playerId == 0)
             {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                 placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_knight_blue;
             }
             else
@@ -150,6 +153,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             
             if (playerId == 0)
             {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                 placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_assassin_blue;
             }
             else
@@ -174,6 +178,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             
             if (playerId == 0)
             {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                 placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_priest_blue;
             }
             else
@@ -199,6 +204,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
             if (playerId == 0)
             {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                 placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_archer_blue;
             }
             else
@@ -224,6 +230,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             
             if (playerId == 0)
             {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                 placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_dragonRider_blue;
             }
             else
