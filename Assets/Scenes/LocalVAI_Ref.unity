@@ -173,6 +173,54 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: b45a10f7591f7d24bab89ed6ef2cc2af,
         type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_archer_red
+      value: 
+      objectReference: {fileID: 21300000, guid: 413615f387c76494cb7af0bc0f3a6b0a,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_knight_red
+      value: 
+      objectReference: {fileID: 21300000, guid: 48cb9198502dc0a489f562539076a6fa,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_archer_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: b45a10f7591f7d24bab89ed6ef2cc2af,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_knight_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 182a1aff313f0ef4f918d252b2e26010,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_assassin_red
+      value: 
+      objectReference: {fileID: 21300000, guid: d23f2b406cd2609468fe75f49848718b,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_assassin_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 3e65dbd43ee56e7458a2514aab251276,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_dragonRider_red
+      value: 
+      objectReference: {fileID: 21300000, guid: 500b2f12494a1c14d94a619fd603543c,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_dragonRider_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b4348a390b116646ac2c8f88c235e8d,
+        type: 3}
     - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: attackAudio

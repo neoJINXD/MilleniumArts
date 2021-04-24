@@ -11,8 +11,14 @@ public class CardEffectManager : Singleton<CardEffectManager>
     [SerializeField] private Unit m_priest;
     [SerializeField] private Unit m_archer;
     [SerializeField] private Unit m_dragonRider;
-    [SerializeField] private Sprite m_archer_blue;
-    [SerializeField] private Sprite m_archer_red;
+    [SerializeField] private Sprite sprite_archer_blue;
+    [SerializeField] private Sprite sprite_archer_red;
+    [SerializeField] private Sprite sprite_assassin_blue;
+    [SerializeField] private Sprite sprite_assassin_red;
+    [SerializeField] private Sprite sprite_dragonRider_blue;
+    [SerializeField] private Sprite sprite_dragonRider_red;
+    [SerializeField] private Sprite sprite_knight_blue;
+    [SerializeField] private Sprite sprite_knight_red;
     
     private bool placerClicked = false;
     private const float lockAxis = 27f;
@@ -45,11 +51,29 @@ public class CardEffectManager : Singleton<CardEffectManager>
         {
             placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_knight_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_knight_red;
+            }
         }
         else if (unit == Unit.UnitTypes.Assassin)
         {
             placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_assassin_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_assassin_red;
+            }
         }
         else if (unit == Unit.UnitTypes.Priest)
         {
@@ -63,11 +87,11 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
             if (playerId == 0)
             {
-                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_blue;
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_archer_blue;
             }
             else
             {
-                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_red;
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_archer_red;
             }
             
         }  
@@ -75,6 +99,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
         {
             placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Dragon Rider at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_dragonRider_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_dragonRider_red;
+            }
         }
             
         placedUnit.SetUnitPlayerID(playerId);
