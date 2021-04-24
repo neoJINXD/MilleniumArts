@@ -70,6 +70,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
     private Pathfinding pf;
     private Unit currentUnit;
     private Unit[] unitArray;
+    private float timeInterval = 0;
 
     private Grid grid;
 
@@ -78,7 +79,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
-
+    
     public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
     {
         Unit placedUnit = null;
