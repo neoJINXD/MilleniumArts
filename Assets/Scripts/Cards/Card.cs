@@ -5,10 +5,9 @@ using UnityEngine;
 
 public enum CastType
 {
-    OnAlly = 0,
-    OnEnemy = 1,
-    OnEmpty = 2,
-    OnAny = 3
+    OnUnit = 0,
+    OnEmpty = 1,
+    OnAny = 2
 }
 
 [Serializable]

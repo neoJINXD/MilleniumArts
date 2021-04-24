@@ -805,50 +805,38 @@ public class TurnManager : Singleton<TurnManager>
 	        if (!currentPlayer.ManaCheck(storedCard.cost))
 		        return;
 	        
-            if (storedCard.castType == CastType.OnAlly)
+            if (storedCard.castType == CastType.OnUnit)
             {
                 if (selectedNode.GetUnit() != null)
                 {
-                    if (selectedNode.GetUnit().GetUnitPlayerID() == currentPlayer.PlayerId)
-                    {
-                        if (storedCard.id == 10)
-                            cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 11)
-                            cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 12)
-                            cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 13)
-                            cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 14)
-                            cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 15)
-                            cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 18)
-                            cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 19)
-                            cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-                        else if (storedCard.id == 21)
-                            cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-                        else if (storedCard.id == 22)
-                            cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 26)
-                            cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-                    }
-                }
-            }
-            else if (storedCard.castType == CastType.OnEnemy)
-            { 
-                if (selectedNode.GetUnit() != null)
-                {
-                    if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
-                    {
-                        if (storedCard.id == 6)
-                            cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 7)
-                            cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode);
-                        else if (storedCard.id == 23)
-                            cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode);
-                    }
+                    if (storedCard.id == 10)
+                        cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 11)
+                        cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 12)
+                        cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 13)
+                        cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 14)
+                        cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 15)
+                        cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 18)
+                        cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 19)
+                        cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    else if (storedCard.id == 21)
+                        cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    else if (storedCard.id == 22)
+                        cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 26)
+                        cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    else if (storedCard.id == 6)
+                        cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 7)
+                        cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 23)
+                        cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode);
                 }
             }
             else if (storedCard.castType == CastType.OnEmpty)
@@ -1148,7 +1136,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 6;
-					card.castType = CastType.OnEnemy;
+					card.castType = CastType.OnUnit;
 					card.name = "Smite";
 					card.cost = 2;
 					card.minRange = 1;
@@ -1164,7 +1152,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 7;
-					card.castType = CastType.OnEnemy;
+					card.castType = CastType.OnUnit;
 					card.name = "Snipe";
 					card.cost = 3;
 					card.minRange = 1;
@@ -1212,7 +1200,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 10;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Vitality";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1228,7 +1216,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 11;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Endurance";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1244,7 +1232,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 12;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Vigor";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1260,7 +1248,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 13;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Nimbleness";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1276,7 +1264,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 14;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Agility";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1292,7 +1280,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 15;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Precision";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1340,7 +1328,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 18;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Provisions";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1356,7 +1344,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 19;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Reinforcements";
 					card.cost = 6;
 					card.minRange = 0;
@@ -1388,7 +1376,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 21;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Warcry";
 					card.cost = 4;
 					card.minRange = 0;
@@ -1404,7 +1392,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 22;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Rebirth";
 					card.cost = 4;
 					card.minRange = 0;
@@ -1420,7 +1408,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 23;
-					card.castType = CastType.OnEnemy;
+					card.castType = CastType.OnUnit;
 					card.name = "Assassinate";
 					card.cost = 5;
 					card.minRange = 1;
@@ -1468,7 +1456,7 @@ public class TurnManager : Singleton<TurnManager>
 
 
 					card.id = 26;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Royal Pledge";
 					card.cost = 3;
 					card.minRange = 0;
