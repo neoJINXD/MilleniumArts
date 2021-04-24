@@ -18,9 +18,18 @@ public class CardEffectManager : Singleton<CardEffectManager>
     private GameObject animRef;
     
     // Units
-    
-    [SerializeField] private Sprite m_archer_blue;
-    [SerializeField] private Sprite m_archer_red;
+    [SerializeField] private Sprite sprite_archer_blue;
+    [SerializeField] private Sprite sprite_archer_red;
+    [SerializeField] private Sprite sprite_assassin_blue;
+    [SerializeField] private Sprite sprite_assassin_red;
+    [SerializeField] private Sprite sprite_dragonRider_blue;
+    [SerializeField] private Sprite sprite_dragonRider_red;
+    [SerializeField] private Sprite sprite_knight_blue;
+    [SerializeField] private Sprite sprite_knight_red;
+    [SerializeField] private Sprite sprite_priest_blue;
+    [SerializeField] private Sprite sprite_priest_red;
+    [SerializeField] private Sprite sprite_soldier_blue;
+    [SerializeField] private Sprite sprite_soldier_red;
     
     // Spells
     [SerializeField] private GameObject anim_spell_smite;
@@ -114,6 +123,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + ", " +  positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Soldier!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_soldier_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_soldier_red;
+            }
         }
         else if (unit == Unit.UnitTypes.Knight)
         {
@@ -129,6 +147,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Knight!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_knight_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_knight_red;
+            }
         }
         else if (unit == Unit.UnitTypes.Assassin)
         {
@@ -144,6 +171,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Assassin!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_assassin_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_assassin_red;
+            }
         }
         else if (unit == Unit.UnitTypes.Priest)
         {
@@ -159,6 +195,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Priest!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_priest_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_priest_red;
+            }
         }
         else if (unit == Unit.UnitTypes.Archer)
         {
@@ -178,11 +223,11 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
             if (playerId == 0)
             {
-                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_blue;
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_archer_blue;
             }
             else
             {
-                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_red;
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_archer_red;
             }
             
         }  
@@ -200,6 +245,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Dragon Rider at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Dragon Rider!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_dragonRider_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_dragonRider_red;
+            }
         }
 
         // TODO everything below is only done on the player spawning the unit
@@ -209,10 +263,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
         positionNode.AddUnit(placedUnit);
 
         //hardcoded color for test
+        /*
         if (playerId == 0)
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
         else
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.red;
+        */
         
         GameLoop.instance.GetCurrentPlayer().AddUnit(placedUnit);
 

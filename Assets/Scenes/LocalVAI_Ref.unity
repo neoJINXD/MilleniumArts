@@ -187,6 +187,78 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4850911413912669270, guid: aa4fa20e7123ce54fbee461a1f490452,
         type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_archer_red
+      value: 
+      objectReference: {fileID: 21300000, guid: 413615f387c76494cb7af0bc0f3a6b0a,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_knight_red
+      value: 
+      objectReference: {fileID: 21300000, guid: 48cb9198502dc0a489f562539076a6fa,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_priest_red
+      value: 
+      objectReference: {fileID: 21300000, guid: c62ba79804deaf344bfb7cf444726172,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_archer_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: b45a10f7591f7d24bab89ed6ef2cc2af,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_knight_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 182a1aff313f0ef4f918d252b2e26010,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_priest_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 343713d36ef2efc4d82281f40b1d6531,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_soldier_red
+      value: 
+      objectReference: {fileID: 21300000, guid: e5a37c2b56fef8245a55199196b33dd1,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_assassin_red
+      value: 
+      objectReference: {fileID: 21300000, guid: d23f2b406cd2609468fe75f49848718b,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_soldier_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 86e9795645e925344929b9d8d683b56c,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_assassin_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 3e65dbd43ee56e7458a2514aab251276,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_dragonRider_red
+      value: 
+      objectReference: {fileID: 21300000, guid: 500b2f12494a1c14d94a619fd603543c,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sprite_dragonRider_blue
+      value: 
+      objectReference: {fileID: 21300000, guid: 6b4348a390b116646ac2c8f88c235e8d,
+        type: 3}
     - target: {fileID: 5066473961083304710, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: healAnimation
