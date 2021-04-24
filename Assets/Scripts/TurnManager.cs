@@ -661,7 +661,21 @@ public class TurnManager : Singleton<TurnManager>, IPunObservable
         if (selectedNode != null && selectableNodes.Contains(selectedNode))
         {
             if (selectedNode.GetUnit() != null)
-                Attack(currentUnit, selectedNode.GetUnit());
+            {
+                if (GameManager.instance.networked)
+                {
+                    int hitChance = Mathf.Max(0, (int)Mathf.Floor(currentUnit.GetAccuracy() - selectedNode.GetUnit().GetEvasion() / 2));
+                    int roll = Random.Range(0, 101); // generate 0-100
+
+                    PhotonView.Get(gameObject).RequestOwnership();
+                    PhotonView.Get(gameObject).RPC("NetworkAttack", RpcTarget.All, currentUnit.transform.position, selectedNode.worldPosition, (roll <= hitChance));
+                    //Attack(currentUnit, selectedNode.GetUnit());
+                }   
+                else
+                {
+                    Attack(currentUnit, selectedNode.GetUnit());
+                }
+            }
         }
 
         foreach (var node in selectableNodes)
@@ -713,6 +727,46 @@ public class TurnManager : Singleton<TurnManager>, IPunObservable
         attacker.SetCanAttack(false);
         currentPlayer.PlayerMana -= COST_ATTACK;
     }
+
+    [PunRPC]
+    void NetworkAttack(Vector3 attackerPos, Vector3 receiverPos, bool hit)
+    {
+        print("We attacking");
+        Unit attacker = grid.NodeFromWorldPoint(attackerPos).GetUnit();
+        Unit receiver = grid.NodeFromWorldPoint(receiverPos).GetUnit();
+
+        int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
+
+        // int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
+        // int roll = Random.Range(0, 101); // generate 0-100
+
+        Node attackerNode = grid.NodeFromWorldPoint(attacker.transform.position);
+        Node receiverNode = grid.NodeFromWorldPoint(receiver.transform.position);
+
+        if(hit)
+        {
+            receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
+            if (PhotonView.Get(gameObject).IsMine)
+            {
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Hit", currentUnit.transform.position, Quaternion.identity);
+                updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ") for " + attackerNode.GetUnit().GetDamage() + " damage!\n");
+                updateTurnUpdate("Successfully attacked " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!", color32_green);
+            }
+        }
+        else
+        {
+            if (PhotonView.Get(gameObject).IsMine)
+            {
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Miss", currentUnit.transform.position, Quaternion.identity);
+                updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + attackerNode.gridY + ")!\n");
+                updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!");
+            }
+        }
+
+        attacker.SetCanAttack(false);
+        currentPlayer.PlayerMana -= COST_ATTACK;
+    }
+
 
     private void ResetMaterial()
     {

@@ -39,6 +39,7 @@ public class Unit : MonoBehaviour
     private const int constantMovementSpeed = 7;
 
     private Grid grid;
+    private Vector3 lastPos;
     
     #region UnitModifications
 
@@ -440,6 +441,19 @@ public class Unit : MonoBehaviour
             owningPlayer.RemoveUnit(this);
             Destroy(gameObject);
         }
+
+        if (GameManager.instance)
+        {
+            if (lastPos == transform.position)
+            {
+                grid.NodeFromWorldPoint(transform.position).AddUnit(this);
+            }
+            else
+            {
+                grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            }
+        }
+        lastPos = transform.position;
     }
 
     public void SelectNewUnitPosition()
