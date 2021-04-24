@@ -5,9 +5,10 @@ using Zone.Core.Utils;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Serialization;
+using Photon.Pun;
 
 
-public class TurnManager : Singleton<TurnManager>
+public class TurnManager : Singleton<TurnManager>, IPunObservable
 {
 	[SerializeField] private GameObject attackAnimationHit;
 	[SerializeField] private GameObject healAnimation;
@@ -115,6 +116,11 @@ public class TurnManager : Singleton<TurnManager>
 
     void Start()
     {
+        if (GameManager.instance.networked)
+        {
+            PhotonView.Get(gameObject).ObservedComponents.Add(this);
+        }
+
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
 
@@ -548,7 +554,7 @@ public class TurnManager : Singleton<TurnManager>
 
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
-                currentPlayer.PlayerMana--;
+                currentPlayer.PlayerMana -= COST_MOVE;
 
             }
         }
@@ -601,7 +607,7 @@ public class TurnManager : Singleton<TurnManager>
             {
 	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.GetUnit().IncreaseCurrentHealthBy(currentUnit.GetDamage());
-                currentPlayer.PlayerMana--;
+                currentPlayer.PlayerMana -= COST_HEAL;
                 currentUnit.SetCanAttack(false);
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") for " + currentUnitNode.GetUnit().GetDamage() + " health!\n");
                 updateTurnUpdate("Successfully healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", color32_green);
@@ -705,7 +711,7 @@ public class TurnManager : Singleton<TurnManager>
         }
 
         attacker.SetCanAttack(false);
-        currentPlayer.PlayerMana--;
+        currentPlayer.PlayerMana -= COST_ATTACK;
     }
 
     private void ResetMaterial()
@@ -1495,6 +1501,9 @@ public class TurnManager : Singleton<TurnManager>
     // method to update game history (can maybe make this a PunRPC to have the same on both clients
     public void updateGameHistory(string actionString)
     {
+        if (GameManager.instance.networked)
+            PhotonView.Get(gameObject).RequestOwnership();
+
         gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
     }
 
@@ -1508,5 +1517,17 @@ public class TurnManager : Singleton<TurnManager>
     {
         turnUpdateText.text = message;
         turnUpdateText.color = color;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(gameHistoryText.text);
+        }
+        else
+        {
+            gameHistoryText.text = (string)stream.ReceiveNext();
+        }
     }
 }

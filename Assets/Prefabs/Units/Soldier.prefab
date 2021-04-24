@@ -12,6 +12,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Soldier
       objectReference: {fileID: 0}
+    - target: {fileID: 519887686405710204, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 519887686405710205, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 519887686405710206, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
       propertyPath: m_RootOrder
@@ -121,6 +131,16 @@ PrefabInstance:
         type: 3}
       propertyPath: movementSpeedLeft
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628325342251820236, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628325342251820236, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.98
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8704ec88ee016646a21ce9013edcea9, type: 3}
