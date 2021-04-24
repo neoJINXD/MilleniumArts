@@ -79,29 +79,6 @@ public class CardEffectManager : Singleton<CardEffectManager>
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
-    // private void Update()
-    // {
-    //     if (animRef != null)
-    //     {
-    //         if (GameManager.instance.networked)
-    //         {
-    //             StartCoroutine(NetworkDestroyAnimation(animRef));
-    //             // PhotonNetwork.Destroy(animRef.GetComponent<PhotonView>());
-    //         }
-    //         else
-    //         {
-    //             Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
-    //         }
-    //     }
-    // }
-
-    // private IEnumerator NetworkDestroyAnimation(GameObject animRef)
-    // {
-    //     yield return new WaitForSeconds(animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
-    //     if (animRef != null)
-    //         PhotonNetwork.Destroy(animRef.GetComponent<PhotonView>());
-    // }
-
     public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
     {
         Unit placedUnit = null;
@@ -255,7 +232,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
         }
 
-        // TODO everything below is only done on the player spawning the unit
+        // TODO everything below is only done on the player spawning the unit,
+        // WARNING is probably breaking the use of spells after someone moves
             
         placedUnit.SetUnitPlayerID(playerId);
 
