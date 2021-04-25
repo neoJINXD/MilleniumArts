@@ -232,7 +232,7 @@ public class AIPlayer : Player
 	{
 		if (m_behaviour == BehaviourType.Aggressive)
 		{
-			if (m_playerUnits.Count > 4 && card.castType == CastType.OnEnemy)
+			if (m_playerUnits.Count > 4 && card.castType == CastType.OnUnit)
 				return true;
 
 			if (card.GetType() == typeof(UnitCard))
@@ -244,7 +244,7 @@ public class AIPlayer : Player
 		
 		if (m_behaviour == BehaviourType.Balanced)
 		{
-			if (m_playerUnits.Count > 4 && card.castType == CastType.OnEnemy)
+			if (m_playerUnits.Count > 4 && card.castType == CastType.OnUnit)
 				return true;
 
 			if (card.GetType() == typeof(UnitCard))
@@ -255,7 +255,7 @@ public class AIPlayer : Player
 		
 		if (m_behaviour == BehaviourType.Defensive)
 		{
-			if (m_playerUnits.Count > 6 && card.castType == CastType.OnEnemy)
+			if (m_playerUnits.Count > 6 && card.castType == CastType.OnUnit)
 				return true;
 
 			if (card.GetType() == typeof(UnitCard))
@@ -364,7 +364,6 @@ public class AIPlayer : Player
 					Debug.Log("AI unit moving " + chosenUnit.name + " to attack " + enemy.name);
 				}
 			}
-			
 			yield return null;
 		}
 	}

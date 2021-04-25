@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4685259530587244227}
   - component: {fileID: 387721329667816263}
   - component: {fileID: 8050217595353312844}
+  - component: {fileID: -9114626772611843405}
   m_Layer: 0
   m_Name: spell_landMine
   m_TagString: Untagged
@@ -127,7 +128,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b7f86484d522924499ab3d781dddf442, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 68ea797229c1630429a8dd1e7117a53b, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 2.55
@@ -213,3 +214,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-9114626772611843405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4685259530587244230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

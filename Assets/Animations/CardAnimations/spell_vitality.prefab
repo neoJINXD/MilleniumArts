@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4685259530587244227}
   - component: {fileID: 387721329667816263}
   - component: {fileID: 8050217595353312844}
+  - component: {fileID: 930392442060092573}
   m_Layer: 0
   m_Name: spell_vitality
   m_TagString: Untagged
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8381761346048096291, guid: 095ed0beadeb45f43bc8c5c263e8af24,
+  m_Sprite: {fileID: 7293733182490804604, guid: 4747d52cb236342488ccd2a29937a61d,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -96,7 +97,7 @@ Animator:
   m_GameObject: {fileID: 4685259530587244230}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: b16a55105ad29264392b364b0493f771, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4908286196437d44cb45d59dca5da697, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -213,3 +214,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &930392442060092573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4685259530587244230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

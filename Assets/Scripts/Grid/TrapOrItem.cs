@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class TrapOrItem : MonoBehaviour
 {
@@ -44,26 +45,14 @@ public class TrapOrItem : MonoBehaviour
     }
 
     //function called when Unit triggers the Trap or Item in a Node
+
+
     public virtual void TrapOrItemTriggeredByUnit(Node triggeringOriginNode)
     {
         if(trapOrItemType == TrapOrItemTypes.BearTrap)
-        {
-            print(triggeringOriginNode.GetUnit());
-            triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
-            print("Bear Trap triggered!");
-        }
+            TurnManager.instance.GetComponent<PhotonView>().RPC("signalPlayers", RpcTarget.All, triggeringOriginNode.worldPosition, TrapOrItemTypes.BearTrap);
         else if(trapOrItemType == TrapOrItemTypes.LandMine)
-        {
-            HashSet<Node> affectedNodes = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>().GetNodesMinMaxRange(triggeringOriginNode.worldPosition, false, 0, 1);
-
-            foreach (Node node in affectedNodes)
-            {
-                if (node.GetUnit() != null)
-                    node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 3);
-            }
-            print("Land Mine triggered!");
-        }
-
+            TurnManager.instance.GetComponent<PhotonView>().RPC("signalPlayers", RpcTarget.All, triggeringOriginNode.worldPosition, TrapOrItemTypes.LandMine);
         triggeringOriginNode.RemoveTrapOrItem(this);
     }
     

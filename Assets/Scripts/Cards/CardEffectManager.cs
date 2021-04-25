@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using Zone.Core.Utils;
+using UnityEngine.UI;
 
 public class CardEffectManager : Singleton<CardEffectManager>
 {
@@ -14,13 +16,21 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
     #region Animations
 
-    private GameObject animRef;
-    
+
     // Units
-    
-    [SerializeField] private Sprite m_archer_blue;
-    [SerializeField] private Sprite m_archer_red;
-    
+    [SerializeField] public Sprite sprite_archer_blue;
+    [SerializeField] public Sprite sprite_archer_red;
+    [SerializeField] public Sprite sprite_assassin_blue;
+    [SerializeField] public Sprite sprite_assassin_red;
+    [SerializeField] public Sprite sprite_dragonRider_blue;
+    [SerializeField] public Sprite sprite_dragonRider_red;
+    [SerializeField] public Sprite sprite_knight_blue;
+    [SerializeField] public Sprite sprite_knight_red;
+    [SerializeField] public Sprite sprite_priest_blue;
+    [SerializeField] public Sprite sprite_priest_red;
+    [SerializeField] public Sprite sprite_soldier_blue;
+    [SerializeField] public Sprite sprite_soldier_red;
+
     // Spells
     [SerializeField] private GameObject anim_spell_smite;
     [SerializeField] private GameObject anim_spell_snipe;
@@ -70,14 +80,6 @@ public class CardEffectManager : Singleton<CardEffectManager>
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
-    private void Update()
-    {
-        if (animRef != null)
-        {
-            Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
-        }
-    }
-
     public void CreateUnit(Unit.UnitTypes unit, Node positionNode)
     {
         Unit placedUnit = null;
@@ -86,67 +88,171 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
         if (unit == Unit.UnitTypes.Soldier)
         {
-            placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + ", " +  positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned a Soldier!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_soldier, positionNode.worldPosition, Quaternion.identity);
-        }
-        else if (unit == Unit.UnitTypes.Knight)
-        {
-            placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned a Knight!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_knight, positionNode.worldPosition, Quaternion.identity);
-            
-        }
-        else if (unit == Unit.UnitTypes.Assassin)
-        {
-            placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Assassin!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_assassin, positionNode.worldPosition, Quaternion.identity);
-        }
-        else if (unit == Unit.UnitTypes.Priest)
-        {
-            placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Priest!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_priest, positionNode.worldPosition, Quaternion.identity);
-        }
-        else if (unit == Unit.UnitTypes.Archer)
-        {
-            placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Archer!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_archer, positionNode.worldPosition, Quaternion.identity);
-
-            if (playerId == 0)
+            if (GameManager.instance.networked)
             {
-                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_blue;
+                placedUnit = PhotonNetwork.Instantiate("Units/Soldier", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                PhotonNetwork.Instantiate("UnitAnimation/unit_soldier", positionNode.worldPosition, Quaternion.identity);
             }
             else
             {
-                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = m_archer_red;
+                placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                Instantiate(anim_unit_soldier, positionNode.worldPosition, Quaternion.identity);
+            }
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + ", " +  positionNode.gridY + ")!\n");
+            TurnManager.instance.updateTurnUpdate("Succesfully summoned a Soldier!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_soldier_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_soldier_red;
+            }
+        }
+        else if (unit == Unit.UnitTypes.Knight)
+        {
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Knight", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                PhotonNetwork.Instantiate("UnitAnimation/unit_knight", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                Instantiate(anim_unit_knight, positionNode.worldPosition, Quaternion.identity);
+            }
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+            TurnManager.instance.updateTurnUpdate("Succesfully summoned a Knight!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_knight_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_knight_red;
+            }
+        }
+        else if (unit == Unit.UnitTypes.Assassin)
+        {
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Assassin", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                PhotonNetwork.Instantiate("UnitAnimation/unit_assassin", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                Instantiate(anim_unit_assassin, positionNode.worldPosition, Quaternion.identity);
+            }
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Assassin!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_assassin_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_assassin_red;
+            }
+        }
+        else if (unit == Unit.UnitTypes.Priest)
+        {
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Priest", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                PhotonNetwork.Instantiate("UnitAnimation/unit_priest", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                Instantiate(anim_unit_priest, positionNode.worldPosition, Quaternion.identity);
+            }
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Priest!", TurnManager.instance.color32_green);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_priest_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_priest_red;
+            }
+        }
+        else if (unit == Unit.UnitTypes.Archer)
+        {
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/Archer", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                PhotonNetwork.Instantiate("UnitAnimation/unit_archer", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                Instantiate(anim_unit_archer, positionNode.worldPosition, Quaternion.identity);
+            }
+            TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
+            TurnManager.instance.updateTurnUpdate("Succesfully summoned an Archer!", TurnManager.instance.color32_green);
+            Instantiate(anim_unit_archer, positionNode.worldPosition, Quaternion.identity);
+
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_archer_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_archer_red;
             }
             
         }  
         else if (unit == Unit.UnitTypes.DragonRider)
         {
-            placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+            if (GameManager.instance.networked)
+            {
+                placedUnit = PhotonNetwork.Instantiate("Units/DragonRider", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                PhotonNetwork.Instantiate("UnitAnimation/unit_dragonRider", positionNode.worldPosition, Quaternion.identity);
+            }
+            else
+            {
+                placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
+                Instantiate(anim_unit_dragonRider, positionNode.worldPosition, Quaternion.identity);
+            }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Dragon Rider at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Dragon Rider!", TurnManager.instance.color32_green);
-            animRef = Instantiate(anim_unit_dragonRider, positionNode.worldPosition, Quaternion.identity);
+            
+            if (playerId == 0)
+            {
+                placedUnit.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_dragonRider_blue;
+            }
+            else
+            {
+                placedUnit.transform.GetComponentInChildren<SpriteRenderer>().sprite = sprite_dragonRider_red;
+            }
         }
+
+        // TODO everything below is only done on the player spawning the unit,
+        // WARNING is probably breaking the use of spells after someone moves
             
         placedUnit.SetUnitPlayerID(playerId);
 
         positionNode.AddUnit(placedUnit);
 
         //hardcoded color for test
+        /*
         if (playerId == 0)
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.blue;
         else
             placedUnit.transform.GetComponent<Renderer>().material.color = Color.red;
+        */
         
         GameLoop.instance.GetCurrentPlayer().AddUnit(placedUnit);
 
@@ -163,18 +269,28 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Damages an enemy unit for 5 health.
      * Cost: 2
      */
-    public void spell_smite(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_smite(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().DecreaseCurrentHealthBy(5); // smite damage
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_smite, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_smite, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -185,18 +301,28 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Damages an enemy unit for 10 health.
      * Cost: 3
      */
-    public void spell_snipe(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_snipe(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            selectedNode.GetUnit().DecreaseCurrentHealthBy(10); // smite damage
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") lost 10 health!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            selectedNode.GetUnit().DecreaseCurrentHealthBy(10); // snipe damage
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") lost 10 health!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_snipe, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_snipe, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -207,8 +333,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Damages all enemies within (0,1) tiles of the casting origin for 3 health.
      * Cost: 5
      */
-    public void spell_heavenlySmite(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    [PunRPC]
+    public void spell_heavenlySmite(int playerId, Vector3 selectedNodePosition)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePosition);
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 0, 1);
 
         string spellMessage = "";
@@ -227,9 +355,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
             }
         }
 
-        TurnManager.instance.updateGameHistory(spellMessage);
-        TurnManager.instance.updateTurnUpdate("Successfully used Heavenly Smite at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
-        animRef = Instantiate(anim_spell_heavenlySmite, selectedNode.GetUnit().transform, false);
+        if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+        {
+            TurnManager.instance.updateGameHistory(spellMessage);
+            TurnManager.instance.updateTurnUpdate("Successfully used Heavenly Smite at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        }
+        Instantiate(anim_spell_heavenlySmite, selectedNode.GetUnit().transform, false);
         TurnManager.instance.cardSuccessful = true;
 
     }
@@ -242,8 +373,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Heal all allies within (0,1) tiles of the casting origin for 3 health.
      * Cost: 4
      */
-    public void spell_prayer(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    [PunRPC]
+    public void spell_prayer(int playerId, Vector3 selectedNodePosition)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePosition);
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 0, 1);
 
         string spellMessage = "";
@@ -261,10 +394,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 }
             }
         }
-        TurnManager.instance.updateGameHistory(spellMessage);
-        TurnManager.instance.updateTurnUpdate("Successfully used Prayer at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+        {
+            TurnManager.instance.updateGameHistory(spellMessage);
+            TurnManager.instance.updateTurnUpdate("Successfully used Prayer at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        }
         TurnManager.instance.cardSuccessful = true;
-        animRef = Instantiate(anim_spell_prayer, selectedNode.GetUnit().transform, false);
+        Instantiate(anim_spell_prayer, selectedNode.GetUnit().transform, false);
     }
 
     /*
@@ -275,19 +411,29 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Increases an ally unit’s current and maximum Health by 5.
      * Cost: 1
      */
-    public void spell_vitality(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_vitality(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().IncreaseMaxHealthBy(5);
             selectedNode.GetUnit().IncreaseCurrentHealthBy(5);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Vitality on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 5 maximum health!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Vitality on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Vitality on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 5 maximum health!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Vitality on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_vitality, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_vitality, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -298,18 +444,28 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Increases an ally unit’s Defence by 2.
      * Cost: 2
      */
-    public void spell_endurance(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_endurance(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().IncreaseDefenceBy(2);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Endurance on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 2 defence!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Endurance on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Endurance on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 2 defence!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Endurance on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_endurance, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_endurance, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -320,18 +476,28 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Increases an ally unit’s Damage by 3.
      * Cost: 2
      */
-    public void spell_vigor(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_vigor(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().IncreaseDamageBy(3);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Vigor on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 5 damage!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Vigor on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Vigor on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 5 damage!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Vigor on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_vigor, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_vigor, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -342,19 +508,29 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Increases an ally unit’s movement speed by 1.
      * Cost: 2
      */
-    public void spell_nimbleness(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_nimbleness(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
 
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().IncreaseMovementSpeedBy(1);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Nimbleness on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 1 movement speed!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Nimbleness on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Nimbleness on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 1 movement speed!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Nimbleness on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_nimbleness, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_nimbleness, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }   
+        }
     }
 
     /*
@@ -365,18 +541,29 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Increases an ally unit’s Evasion by 10.
      * Cost: 2
      */
-    public void spell_agility(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_agility(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().IncreaseEvasionBy(10);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 10 evasion!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 10 evasion!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Agility on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_agility, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_agility, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -387,18 +574,29 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Increases an ally unit’s current and Accuracy by 10.
      * Cost: 2
      */
-    public void spell_precision(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_precision(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().IncreaseAccuracyBy(10);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Precision on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 10 accuracy!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Precision on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Precision on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 10 accuracy!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Precision on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_precision, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_precision, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -409,8 +607,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Reveals all traps within (0,2) tiles of the triggering origin
      * Cost: 2
      */
-    public void spell_oracle(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    [PunRPC]
+    public void spell_oracle(int playerId, Vector3 selectedNodePosition)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePosition);
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 0, 2);
 
         string spellMessage = "Player " + playerId + " used Oracle at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n";
@@ -426,11 +626,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 }
             }
         }
-
-        TurnManager.instance.updateGameHistory(spellMessage);
-        TurnManager.instance.updateTurnUpdate("Successfully used Oracle at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+        {
+            TurnManager.instance.updateGameHistory(spellMessage);
+            TurnManager.instance.updateTurnUpdate("Successfully used Oracle at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        }
         TurnManager.instance.cardSuccessful = true;
-        animRef = Instantiate(anim_spell_oracle, selectedNode.GetUnit().transform, false);
+        Instantiate(anim_spell_oracle, selectedNode.GetUnit().transform, false);
     }
 
     /*
@@ -441,8 +643,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Attempts to disarm an enemy trap on a tile.
      * Cost: 1
      */
-    public void spell_disarmTrap(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    [PunRPC]
+    public void spell_disarmTrap(int playerId, Vector3 selectedNodePosition)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePosition);
         string spellMessage = "Player " + playerId + " used Disarm Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n";
 
 
@@ -454,13 +658,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 {
                     selectedNode.RemoveTrapOrItem(toi);
                     spellMessage += "Enemy trap removed at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
-                    animRef = Instantiate(anim_spell_disarmTrap, selectedNode.GetUnit().transform, false);
+                    Instantiate(anim_spell_disarmTrap, selectedNode.GetUnit().transform, false);
                 }
             }
         }
-
-        TurnManager.instance.updateGameHistory(spellMessage);
-        TurnManager.instance.updateTurnUpdate("Successfully used Disarm Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+        {
+            TurnManager.instance.updateGameHistory(spellMessage);
+            TurnManager.instance.updateTurnUpdate("Successfully used Disarm Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        }
         TurnManager.instance.cardSuccessful = true;
     }
 
@@ -472,18 +678,29 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Heals a unit for 5 health.
      * Cost: 1
      */
-    public void spell_provisions(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_provisions(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().IncreaseCurrentHealthBy(5);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " used Provisions on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 5 health!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully used Provisions on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " used Provisions on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") gained 5 health!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully used Provisions on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            animRef = Instantiate(anim_spell_provisions, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_provisions, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -494,8 +711,11 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Summons 4 Soldier units around an ally.
      * Cost: 6
      */
-    public void spell_reinforcements(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    [PunRPC]
+    public void spell_reinforcements(int playerId, Vector3 selectedNodePosition)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePosition);
+
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 1, 1);
 
         int unitCountAroundOrigin = 0;
@@ -516,13 +736,21 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 spellMessage += "Player " + playerId + " summoned a Soldier at (" + node.gridX + "," + node.gridY + ")!\n";
             }
 
-            TurnManager.instance.updateGameHistory(spellMessage);
-            TurnManager.instance.updateTurnUpdate("Successfully used Reinforcements on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory(spellMessage);
+                TurnManager.instance.updateTurnUpdate("Successfully used Reinforcements on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
-            // animRef = Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
+            // Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
         }
         else
-            TurnManager.instance.updateTurnUpdate("Cannot use Reinforcements on this unit! Its surrounding cells must be empty.", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("Cannot use Reinforcements on this unit! Its surrounding cells must be empty.", TurnManager.instance.color32_red);
+            }
+        }
 
     }
 
@@ -543,7 +771,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         TurnManager.instance.updateTurnUpdate("Successfully used Greed!", TurnManager.instance.color32_green);
         TurnManager.instance.cardSuccessful = true;
         // Will only use sound
-        animRef = Instantiate(anim_spell_greed);
+        Instantiate(anim_spell_greed);
     }
 
     /*
@@ -554,8 +782,11 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Increases the damage of all allies within (0,1) tiles of the casting origin by 2
      * Cost: 4
      */
-    public void spell_warcry(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    [PunRPC]
+    public void spell_warcry(int playerId, Vector3 selectedNodePosition)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePosition);
+
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 1, 1);
 
         string spellMessage = "Player " + playerId + " used Warcry on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n";
@@ -571,10 +802,14 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 }
             }
         }
-        TurnManager.instance.updateGameHistory(spellMessage);
-        TurnManager.instance.updateTurnUpdate("Successfully used Warcry on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+
+        if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+        {
+            TurnManager.instance.updateGameHistory(spellMessage);
+            TurnManager.instance.updateTurnUpdate("Successfully used Warcry on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        }
         TurnManager.instance.cardSuccessful = true;
-        animRef = Instantiate(anim_spell_warcry, selectedNode.GetUnit().transform, false);
+        Instantiate(anim_spell_warcry, selectedNode.GetUnit().transform, false);
     }
 
     /*
@@ -585,23 +820,39 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Fully heals an ally unit
      * Cost: 4
      */
-    public void spell_rebirth(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_rebirth(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             if (selectedNode.GetUnit().GetCurrentHealth() != selectedNode.GetUnit().GetMaxHealth())
             {
                 selectedNode.GetUnit().SetCurrentHealth(selectedNode.GetUnit().GetMaxHealth());
-                TurnManager.instance.updateGameHistory("Player " + playerId + " used Rebirth on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") was restored to full health!\n");
-                TurnManager.instance.updateTurnUpdate("Successfully used Rebirth on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+                if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+                {
+                    TurnManager.instance.updateGameHistory("Player " + playerId + " used Rebirth on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") was restored to full health!\n");
+                    TurnManager.instance.updateTurnUpdate("Successfully used Rebirth on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+                }
                 TurnManager.instance.cardSuccessful = true;
-                animRef = Instantiate(anim_spell_rebirth, selectedNode.GetUnit().transform, false);
+                Instantiate(anim_spell_rebirth, selectedNode.GetUnit().transform, false);
             }
             else
-                TurnManager.instance.updateTurnUpdate("This target is already full health!", TurnManager.instance.color32_red);
+            {
+                if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+                {
+                    TurnManager.instance.updateTurnUpdate("This target is already full health!", TurnManager.instance.color32_red);
+                }
+            }
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -612,23 +863,39 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Immediately kills and enemy unit. Does not work on King unit.
      * Cost: 5
      */
-    public void spell_assassinate(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_assassinate(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             if (selectedNode.GetUnit().GetUnitType() != Unit.UnitTypes.King) // confirm that the unit is not ours
             {
-                TurnManager.instance.updateGameHistory("Player " + playerId + " used Assassinate on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") was slain!\n");
-                TurnManager.instance.updateTurnUpdate("Successfully used Assassinate on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+                if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+                {
+                    TurnManager.instance.updateGameHistory("Player " + playerId + " used Assassinate on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n" + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") was slain!\n");
+                    TurnManager.instance.updateTurnUpdate("Successfully used Assassinate on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+                }
                 selectedNode.GetUnit().SetCurrentHealth(0); // smite damage
                 TurnManager.instance.cardSuccessful = true;
                 DisplayAnimation(anim_spell_assassinate);
             }
             else
-                TurnManager.instance.updateTurnUpdate("Assassinate cannot be used on a King!", TurnManager.instance.color32_red);
+            {
+                if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+                {
+                    TurnManager.instance.updateTurnUpdate("Assassinate cannot be used on a King!", TurnManager.instance.color32_red);
+                }
+            }
         }
         else
-            TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
 
@@ -641,21 +908,32 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Damages the triggering unit for 5 health.
      * Cost: 3
      */
-    public void spell_bearTrap(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_bearTrap(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() == null) // check if there's a unit on this node
         {
             TrapOrItem bearTrap = new TrapOrItem(playerId, 0, 0, 0, TrapOrItem.TrapOrItemTypes.BearTrap);
             selectedNode.AddTrapOrItem(bearTrap);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Bear Trap on the battlefield!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully placed Bear Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Bear Trap on the battlefield!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully placed Bear Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
 
             DisplayAnimation(anim_spell_bearTrap);
 
         }
         else
-            TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     // for displaying animations without a unit on position to instantiate
@@ -667,7 +945,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             Vector3 vec = new Vector3(hit.transform.position.x, 1, hit.transform.position.z);
-            animRef = Instantiate(anim, vec, Quaternion.identity);
+            Instantiate(anim, vec, Quaternion.identity);
         }
     }
 
@@ -679,19 +957,30 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Damages all units from (0,1) tiles from the detonation origin for 3 health.
      * Cost: 3
      */
-    public void spell_landMine(int playerId, Node selectedNode)
+    [PunRPC]
+    public void spell_landMine(int playerId, Vector3 selectedNodePos)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() == null) // check if there's a unit on this node
         {
             TrapOrItem landMine = new TrapOrItem(playerId, 0, 0, 0, TrapOrItem.TrapOrItemTypes.LandMine);
             selectedNode.AddTrapOrItem(landMine);
-            TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Land Mine on the battlefield!\n");
-            TurnManager.instance.updateTurnUpdate("Successfully placed a Land Mine at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Land Mine on the battlefield!\n");
+                TurnManager.instance.updateTurnUpdate("Successfully placed a Land Mine at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+            }
             TurnManager.instance.cardSuccessful = true;
             DisplayAnimation(anim_spell_landMine);
         }
         else
-            TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
+        {
+            if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+            {
+                TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
+            }
+        }
     }
 
     /*
@@ -702,8 +991,11 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Effect: Increases the damage, current health and maximum health of all allies within (1,1) tiles of the casting origin by 2 
      * Cost: 4
      */
-    public void spell_royalPledge(int playerId, Node selectedNode, Vector3 selectedNodePosition)
+    [PunRPC]
+    public void spell_royalPledge(int playerId, Vector3 selectedNodePosition)
     {
+        Node selectedNode = grid.NodeFromWorldPoint(selectedNodePosition);
+
         HashSet<Node> allNodesInRange = pf.GetNodesMinMaxRange(selectedNodePosition, false, 1, 1);
 
         string spellMessage = "Player " + playerId + " used Royal Pledge on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n";
@@ -718,13 +1010,16 @@ public class CardEffectManager : Singleton<CardEffectManager>
                     node.GetUnit().IncreaseMaxHealthBy(2);
                     node.GetUnit().IncreaseCurrentHealthBy(2);
                     spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + ", " + node.gridY + ") gained 2 damage, maximum health and health!\n";
-                    animRef = Instantiate(anim_spell_royalPledge, selectedNode.GetUnit().transform, false);
+                    Instantiate(anim_spell_royalPledge, selectedNode.GetUnit().transform, false);
                 }
             }
         }
 
-        TurnManager.instance.updateGameHistory(spellMessage);
-        TurnManager.instance.updateTurnUpdate("Successfully used Royal Pledge on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
+        {
+            TurnManager.instance.updateGameHistory(spellMessage);
+            TurnManager.instance.updateTurnUpdate("Successfully used Royal Pledge on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+        }
         TurnManager.instance.cardSuccessful = true;
     }
 }

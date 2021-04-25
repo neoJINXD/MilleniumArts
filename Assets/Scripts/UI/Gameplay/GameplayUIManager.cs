@@ -101,6 +101,8 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
 
     public void endTurn()
     {
+        TurnManager.instance.updateTurnUpdate("");
+
         if (GameManager.instance.networked)
             GameManager.instance.view.RPC("EndCurrentPlayerTurn", Photon.Pun.RpcTarget.All);
         else
