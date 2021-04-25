@@ -69,7 +69,10 @@ public class CardUI : MonoBehaviour
             if (unitCard.flying)
                 flyingPanel.SetActive(true);
 
-            bool playerOne= true; // toggle this appropriately
+            bool playerOne = false;
+
+            if (((NetworkedPlayer)TurnManager.instance.localPlayer).amIP1);
+                playerOne= true;
 
             if(playerOne)
             {

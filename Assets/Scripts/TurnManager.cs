@@ -23,7 +23,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
     private const float lockAxis = 27f;
 
     public Player currentPlayer = default;
-    private Player localPlayer = default;
+    public Player localPlayer = default;
 
     public HashSet<Node> selectableNodes;
 
