@@ -42,6 +42,9 @@ public class GameLoop : Singleton<GameLoop>
             
             for (index = 0; index < players.Count; index++)
             {
+                if (winCondition)
+                    break;
+                
                 Player player = players[index];
                 player.StartTurn();
                 Debug.Log("Player " + index + "'s turn. --------------------------------------------");
