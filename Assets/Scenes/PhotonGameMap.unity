@@ -12253,6 +12253,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
+      propertyPath: anim_unit_archer
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 6a31c4742bee91348bd114bdfccab1af,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: anim_unit_knight
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: d356e41348d4c9f4dae0d34aada647c5,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: anim_unit_priest
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: f398532fadd24934c9f846decb334149,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: anim_unit_soldier
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 284d31417cdaf6a4f9f088631ed01bff,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
       propertyPath: sprite_archer_red
       value: 
       objectReference: {fileID: 21300000, guid: 413615f387c76494cb7af0bc0f3a6b0a,
@@ -12268,6 +12292,12 @@ PrefabInstance:
       propertyPath: sprite_priest_red
       value: 
       objectReference: {fileID: 21300000, guid: c62ba79804deaf344bfb7cf444726172,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: anim_unit_assassin
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 28eecfa7570fd884e92cc921706840f1,
         type: 3}
     - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
@@ -12310,6 +12340,12 @@ PrefabInstance:
       propertyPath: sprite_assassin_blue
       value: 
       objectReference: {fileID: 21300000, guid: 3e65dbd43ee56e7458a2514aab251276,
+        type: 3}
+    - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: anim_unit_dragonRider
+      value: 
+      objectReference: {fileID: 4685259530587244230, guid: 692d9507527f12549af601dc2dbb18c6,
         type: 3}
     - target: {fileID: 5066473961030832355, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
