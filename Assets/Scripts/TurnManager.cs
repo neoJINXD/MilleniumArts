@@ -171,22 +171,25 @@ public class TurnManager : MonoBehaviour, IPunObservable
         cardSuccessful = false;
         placingEnemyUnit = false;
         currentPlayer = GameLoop.instance.GetCurrentPlayer();
-        localPlayer = null;
+        localPlayer = GameLoop.instance.GetPlayerList()[0];
 
-        foreach (NetworkedPlayer nPlayer in GameLoop.instance.GetPlayerList())
+        if (PhotonNetwork.IsConnected)
         {
-            if (nPlayer.amIP1)
+            foreach (NetworkedPlayer nPlayer in GameLoop.instance.GetPlayerList())
             {
-                if (PhotonNetwork.IsMasterClient)
-                    localPlayer = nPlayer;
-            }
-            else
-            {
-                if (!PhotonNetwork.IsMasterClient)
-                    localPlayer = nPlayer;
+                if (nPlayer.amIP1)
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                        localPlayer = nPlayer;
+                }
+                else
+                {
+                    if (!PhotonNetwork.IsMasterClient)
+                        localPlayer = nPlayer;
+                }
             }
         }
-
+        
         loadPlayerHand();
     }
 

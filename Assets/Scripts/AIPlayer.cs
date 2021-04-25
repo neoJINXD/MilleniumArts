@@ -311,6 +311,20 @@ public class AIPlayer : Player
 		for (int i = 0; i < m_playerUnits.Count && PlayerMana > 0; i++)
 		{
 			Unit chosenUnit = m_playerUnits[i];
+
+			if (chosenUnit == King)
+			{
+				float kingHealthThreshold = 0.75f;
+				if (m_behaviour == BehaviourType.Aggressive)
+					kingHealthThreshold = 0.5f;
+				else if (m_behaviour == BehaviourType.Defensive)
+					kingHealthThreshold = 0.9f;
+				
+				if((float)King.GetCurrentHealth() / King.GetMaxHealth() < kingHealthThreshold)
+				{
+					continue;
+				}
+			}
 		
 			if (m_behaviour == BehaviourType.Aggressive)
 			{
