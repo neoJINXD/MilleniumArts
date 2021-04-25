@@ -513,7 +513,11 @@ public class TurnManager : MonoBehaviour, IPunObservable
         {
             if (hit.transform.CompareTag("Unit")) // if board hits unit
             {
-                if (hit.transform.GetComponent<Unit>().GetUnitPlayerID() == currentPlayer.PlayerId) // check if unit belongs to current player
+                bool clickCondition = PhotonNetwork.IsConnected
+                    ? hit.transform.GetComponent<Unit>().GetUnitPlayerID() == currentPlayer.PlayerId
+                    : hit.transform.GetComponent<Unit>().GetUnitPlayerID() == 0 && currentPlayer.PlayerId == 0;
+                
+                if (clickCondition) // check if unit belongs to current player
                 {
                     currentUnit = hit.transform.GetComponent<Unit>();
                     currentUnitPosition = hit.transform.position;
@@ -521,7 +525,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
                     if (PhotonNetwork.IsConnected)
                     {
-                        optionPanel.SetActive(PhotonNetwork.IsMasterClient != ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
+                        optionPanel.SetActive(PhotonNetwork.IsMasterClient == ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
                     }
                     else
                     {
@@ -1231,7 +1235,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
         unitPlayerIDText.text = "-";
 
-        unitImage.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Background.psd");
+        unitImage.sprite = null;
 
         unitDamageText.text = "-";
         unitDefenceText.text = "-";

@@ -30,7 +30,7 @@ public abstract class Player : MonoBehaviour
     public virtual void EndTurn()
     {
         TurnComplete = true;
-
+        TurnManager.instance.unselectUnit();
         foreach(Unit unit in m_playerUnits)
         {
             unit.SetMovementSpeedLeft(unit.GetMovementSpeed());
