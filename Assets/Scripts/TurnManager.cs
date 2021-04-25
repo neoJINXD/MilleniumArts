@@ -505,10 +505,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
     void checkBoardClickForUnit()
     {
-        if (GameManager.instance.networked &&
-            !(Photon.Pun.PhotonNetwork.IsMasterClient == ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1))
-            return;
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -523,7 +519,14 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     currentUnitPosition = hit.transform.position;
                     currentUnitNode = grid.NodeFromWorldPoint(currentUnitPosition);
 
-                    optionPanel.SetActive(true);
+                    if (PhotonNetwork.IsConnected)
+                    {
+                        optionPanel.SetActive(PhotonNetwork.IsMasterClient != ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
+                    }
+                    else
+                    {
+                        optionPanel.SetActive(true);
+                    }
 
                     if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
                     {
