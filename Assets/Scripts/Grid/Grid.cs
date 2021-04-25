@@ -123,7 +123,7 @@ public class Grid : Singleton<Grid>
             Vector3 nodePos = node.unitInThisNode.transform.position;
             placeableNodes.UnionWith(Pathfinding.instance.GetNodesMinMaxRange(
                 nodePos, 
-                currentUnit.flying, 
+                false, 
                 1, 
                 currentUnit.moveSpeed));
         }
