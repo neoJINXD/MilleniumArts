@@ -1057,7 +1057,7 @@ MonoBehaviour:
   panLimitX: 20
   panLimitY: 20
   scrollSpeed: 5
-  minY: 20
+  minY: 5
   maxY: 120
 --- !u!1 &413594802
 GameObject:

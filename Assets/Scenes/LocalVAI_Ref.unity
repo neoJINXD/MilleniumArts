@@ -284,6 +284,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7637422350691071769, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7780273420350639564, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -551,7 +556,7 @@ MonoBehaviour:
   panLimitX: 20
   panLimitY: 20
   scrollSpeed: 20
-  minY: 20
+  minY: 5
   maxY: 120
 --- !u!1 &444601200
 GameObject:
