@@ -5,19 +5,21 @@ using Zone.Core.Utils;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Serialization;
+using Photon.Pun;
 
 
-public class TurnManager : Singleton<TurnManager>
+public class TurnManager : MonoBehaviour, IPunObservable
 {
-	[SerializeField] private GameObject attackAnimationHit;
-	[SerializeField] private GameObject healAnimation;
-	[SerializeField] private GameObject attackAnimationMiss;
+    public static TurnManager instance = null;
+    [SerializeField] private GameObject attackAnimationHit;
+    [SerializeField] private GameObject healAnimation;
+    [SerializeField] private GameObject attackAnimationMiss;
     [SerializeField] private GameObject unitPrefab;
     [SerializeField] public Material availableMaterial;
     [SerializeField] public Material defaultMaterial;
     [SerializeField] public Material targetMaterial;
     [SerializeField] public Material AOEMaterial;
-    
+
     private const float lockAxis = 27f;
 
     public Player currentPlayer = default;
@@ -40,7 +42,7 @@ public class TurnManager : Singleton<TurnManager>
     public bool cardSuccessful;
 
     public List<Unit> allUnits;
-    
+
     public int currentMana;
 
     private GameObject animRef;
@@ -102,11 +104,11 @@ public class TurnManager : Singleton<TurnManager>
     // Hovered Tile Panel
     [HideInInspector]
     public TextMeshProUGUI hoveredTileText;
-    
+
     private const int COST_MOVE = 1;
     private const int COST_HEAL = 1;
     private const int COST_ATTACK = 2;
-    
+
     // color32
     [HideInInspector]
     public Color32 color32_red = new Color32(255, 0, 0, 255);
@@ -114,8 +116,18 @@ public class TurnManager : Singleton<TurnManager>
     [HideInInspector]
     public Color32 color32_green = new Color32(0, 160, 0, 255);
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
+        if (GameManager.instance.networked)
+        {
+            PhotonView.Get(gameObject).ObservedComponents.Add(this);
+        }
+
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
 
@@ -161,10 +173,18 @@ public class TurnManager : Singleton<TurnManager>
         currentPlayer = GameLoop.instance.GetCurrentPlayer();
         localPlayer = null;
 
-        foreach(Player player in GameLoop.instance.GetPlayerList())
+        foreach (NetworkedPlayer nPlayer in GameLoop.instance.GetPlayerList())
         {
-            if (player is LocalPlayer)
-                localPlayer = player;
+            if (nPlayer.amIP1)
+            {
+                if (PhotonNetwork.IsMasterClient)
+                    localPlayer = nPlayer;
+            }
+            else
+            {
+                if (!PhotonNetwork.IsMasterClient)
+                    localPlayer = nPlayer;
+            }
         }
 
         loadPlayerHand();
@@ -173,13 +193,21 @@ public class TurnManager : Singleton<TurnManager>
     // Update is called once per frame
     void Update()
     {
-	    if (GameLoop.instance.GameOver)
-		    return;
-	    
-	    currentPlayer = GameLoop.instance.GetCurrentPlayer();
-	    
-	    Player thisPlayer = GameLoop.instance.GetPlayer(0);
-        manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
+        if (GameLoop.instance.GameOver)
+            return;
+
+        currentPlayer = GameLoop.instance.GetCurrentPlayer();
+
+        if (GameManager.instance.networked)
+        {
+            Player thisPlayer = currentPlayer;
+            manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
+        }
+        else
+        {
+            Player thisPlayer = GameLoop.instance.GetPlayer(0);
+            manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
+        }
 
         if (currentTurnState == TurnState.DrawingCard)
         {
@@ -221,22 +249,22 @@ public class TurnManager : Singleton<TurnManager>
         }
 
         // destroy attack GameObject animation after it is finished playing
-        if (animRef != null)
-        {
-	        Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
-        }
+        // if (animRef != null)
+        // {
+        //     Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+        // }
     }
 
     public void loadPlayerHand()
     {
-        if(localPlayer.GetHand().Count <= 5)
+        if (localPlayer.GetHand().Count <= 5)
         {
             handPanel.transform.GetChild(0).gameObject.SetActive(true);
             handPanel.transform.GetChild(1).gameObject.SetActive(false);
 
             foreach (Transform child in handPanel.transform.GetChild(0).gameObject.transform)
             {
-                if(child.gameObject.transform.childCount > 0)
+                if (child.gameObject.transform.childCount > 0)
                     GameObject.Destroy(child.gameObject.transform.GetChild(0).gameObject);
             }
 
@@ -264,7 +292,7 @@ public class TurnManager : Singleton<TurnManager>
                 cardGO.GetComponent<Button>().onClick.AddListener(PlaceCard);
             }
         }
-        else if(localPlayer.GetHand().Count > 5)
+        else if (localPlayer.GetHand().Count > 5)
         {
             handPanel.transform.GetChild(0).gameObject.SetActive(false);
             handPanel.transform.GetChild(1).gameObject.SetActive(true);
@@ -287,7 +315,7 @@ public class TurnManager : Singleton<TurnManager>
                     cardGO.AddComponent(typeof(SpellCard));
                     cardGO.GetComponent<SpellCard>().copySpellCard((SpellCard)card);
                 }
-   
+
                 cardGO.transform.SetParent(handPanel.transform.GetChild(1).transform.GetChild(i));
 
                 cardGO.GetComponent<RectTransform>().offsetMax = Vector2.zero;
@@ -421,7 +449,7 @@ public class TurnManager : Singleton<TurnManager>
 
             foreach (Node node in allUnitsNodes)
                 node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-            
+
             currentTurnState = TurnState.SelectingTileAttack;
         }
     }
@@ -474,6 +502,10 @@ public class TurnManager : Singleton<TurnManager>
 
     void checkBoardClickForUnit()
     {
+        if (GameManager.instance.networked &&
+            !(Photon.Pun.PhotonNetwork.IsMasterClient == ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1))
+            return;
+
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -507,7 +539,7 @@ public class TurnManager : Singleton<TurnManager>
                 unitPlayerIDText.text = "" + hit.transform.GetComponent<Unit>().GetUnitType() + " (" + hit.transform.GetComponent<Unit>().GetUnitPlayerID() + ")";
 
 
-                if(hit.transform.GetComponent<Unit>().GetUnitPlayerID() == 0) // player id 0
+                if (hit.transform.GetComponent<Unit>().GetUnitPlayerID() == 0) // player id 0
                 {
                     if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Soldier)
                         unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Soldier_Blue");
@@ -585,7 +617,7 @@ public class TurnManager : Singleton<TurnManager>
 
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
-                currentPlayer.PlayerMana--;
+                currentPlayer.PlayerMana -= COST_MOVE;
 
             }
         }
@@ -636,9 +668,9 @@ public class TurnManager : Singleton<TurnManager>
         {
             if (selectedNode.GetUnit() != null && selectableNodes.Contains(selectedNode))
             {
-	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
+                animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.GetUnit().IncreaseCurrentHealthBy(currentUnit.GetDamage());
-                currentPlayer.PlayerMana--;
+                currentPlayer.PlayerMana -= COST_HEAL;
                 currentUnit.SetCanAttack(false);
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") for " + currentUnitNode.GetUnit().GetDamage() + " health!\n");
                 updateTurnUpdate("Successfully healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", color32_green);
@@ -668,9 +700,9 @@ public class TurnManager : Singleton<TurnManager>
 
     void validateSelectTileClickAttack()
     {
-	    if (!currentPlayer.ManaCheck(1))
-		    return;
-	    
+        if (!currentPlayer.ManaCheck(1))
+            return;
+
         Node selectedNode = null;
         Vector3 selectedNodePosition = Vector3.zero;
 
@@ -692,7 +724,22 @@ public class TurnManager : Singleton<TurnManager>
         if (selectedNode != null && selectableNodes.Contains(selectedNode))
         {
             if (selectedNode.GetUnit() != null)
-                Attack(currentUnit, selectedNode.GetUnit());
+            {
+                if (GameManager.instance.networked)
+                {
+                    // move hit chance here to make sure its the same for both players clients
+                    int hitChance = Mathf.Max(0, (int)Mathf.Floor(currentUnit.GetAccuracy() - selectedNode.GetUnit().GetEvasion() / 2));
+                    int roll = Random.Range(0, 101); // generate 0-100
+
+                    PhotonView.Get(gameObject).RequestOwnership();
+                    PhotonView.Get(gameObject).RPC("NetworkAttack", RpcTarget.All, currentUnit.transform.position, selectedNode.worldPosition, roll <= hitChance);
+                    //Attack(currentUnit, selectedNode.GetUnit());
+                }
+                else
+                {
+                    Attack(currentUnit, selectedNode.GetUnit());
+                }
+            }
         }
 
         foreach (var node in selectableNodes)
@@ -716,7 +763,7 @@ public class TurnManager : Singleton<TurnManager>
         currentTurnState = TurnState.Free;
     }
 
-    
+
     void Attack(Unit attacker, Unit receiver)
     {
         int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
@@ -727,7 +774,7 @@ public class TurnManager : Singleton<TurnManager>
         Node attackerNode = grid.NodeFromWorldPoint(attacker.transform.position);
         Node receiverNode = grid.NodeFromWorldPoint(receiver.transform.position);
 
-        if(roll <= hitChance)
+        if (roll <= hitChance)
         {
             receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
             updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ") for " + attackerNode.GetUnit().GetDamage() + " damage!\n");
@@ -736,14 +783,54 @@ public class TurnManager : Singleton<TurnManager>
         }
         else
         {
-	        updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + attackerNode.gridY + ")!\n");
+            updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + attackerNode.gridY + ")!\n");
             updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!");
             animRef = Instantiate(attackAnimationMiss, currentUnit.transform, false);
         }
 
         attacker.SetCanAttack(false);
-        currentPlayer.PlayerMana--;
+        currentPlayer.PlayerMana -= COST_ATTACK;
     }
+
+    [PunRPC]
+    void NetworkAttack(Vector3 attackerPos, Vector3 receiverPos, bool hit)
+    {
+        print("We attacking");
+        Unit attacker = grid.NodeFromWorldPoint(attackerPos).GetUnit();
+        Unit receiver = grid.NodeFromWorldPoint(receiverPos).GetUnit();
+
+        int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
+
+        // int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
+        // int roll = Random.Range(0, 101); // generate 0-100
+
+        Node attackerNode = grid.NodeFromWorldPoint(attacker.transform.position);
+        Node receiverNode = grid.NodeFromWorldPoint(receiver.transform.position);
+
+        if (hit)
+        {
+            receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
+            if (PhotonView.Get(gameObject).IsMine)
+            {
+                updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ") for " + attackerNode.GetUnit().GetDamage() + " damage!\n");
+                updateTurnUpdate("Successfully attacked " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!", color32_green);
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Hit", currentUnit.transform.position, Quaternion.identity);
+            }
+        }
+        else
+        {
+            if (PhotonView.Get(gameObject).IsMine)
+            {
+                updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + attackerNode.gridY + ")!\n");
+                updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!");
+                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Miss", currentUnit.transform.position, Quaternion.identity);
+            }
+        }
+
+        attacker.SetCanAttack(false);
+        currentPlayer.PlayerMana -= COST_ATTACK;
+    }
+
 
     private void ResetMaterial()
     {
@@ -785,7 +872,7 @@ public class TurnManager : Singleton<TurnManager>
 
         if (grid != null)
         {
-            if(storedCard.id  == 7) // snipe     
+            if (storedCard.id == 7) // snipe     
                 selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard, Unit.UnitTypes.Archer));
             else if (storedCard.id == 9) // prayer
                 selectableNodes.UnionWith(Grid.instance.GetPlaceableNodes(currentCard, Unit.UnitTypes.Priest));
@@ -830,86 +917,264 @@ public class TurnManager : Singleton<TurnManager>
         RaycastHit hit;
         if (Physics.Raycast(ray.origin, ray.direction, out hit))
         {
-	        if (hit.transform.CompareTag("Tile"))
-	        {
-		        selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
-		        selectedNodePosition = hit.transform.position;
-	        }
+            if (hit.transform.CompareTag("Tile"))
+            {
+                selectedNode = grid.NodeFromWorldPoint(hit.transform.position);
+                selectedNodePosition = hit.transform.position;
+            }
         }
         else
         {
-	        return;
+            return;
         }
 
         if (selectableNodes.Contains(selectedNode))
         {
-	        if (!currentPlayer.ManaCheck(storedCard.cost))
-		        return;
-	        
+            if (!currentPlayer.ManaCheck(storedCard.cost))
+                return;
+
             if (storedCard.castType == CastType.OnUnit)
             {
                 if (selectedNode.GetUnit() != null)
                 {
                     if (storedCard.id == 10)
-                        cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_vitality", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 11)
-                        cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_endurance", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 12)
-                        cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_vigor", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 13)
-                        cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_nimbleness", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 14)
-                        cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_agility", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 15)
-                        cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_precision", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 18)
-                        cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_provisions", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 19)
-                        cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_reinforcements", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNodePosition);
+                        }
+                    }
                     else if (storedCard.id == 21)
-                        cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_warcry", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNodePosition);
+                        }
+                    }
                     else if (storedCard.id == 22)
-                        cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_rebirth", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 26)
-                        cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_royalPledge", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNodePosition);
+                        }
+                    }
                     else if (storedCard.id == 6)
-                        cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_smite", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 7)
-                        cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_snipe", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                     else if (storedCard.id == 23)
-                        cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode);
+                    {
+                        if (GameManager.instance.networked)
+                        {
+                            PhotonView.Get(cardEffectManager).RPC("spell_assassinate", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                        else
+                        {
+                            cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode.worldPosition);
+                        }
+                    }
                 }
             }
             else if (storedCard.castType == CastType.OnEmpty)
             {
-	            if (storedCard as UnitCard)
-	            {
-		            if (selectedNode.GetUnit() == null)
-			            cardEffectManager.CreateUnit(((UnitCard)storedCard).UnitType, selectedNode);
+                if (storedCard as UnitCard)
+                {
+                    if (selectedNode.GetUnit() == null)
+                        cardEffectManager.CreateUnit(((UnitCard)storedCard).UnitType, selectedNode);
                     else
                         updateTurnUpdate("This cell is not empty!", TurnManager.instance.color32_red);
                 }
-	            else
-	            {
-		            if (selectedNode.GetUnit() == null)
-		            {
-			            if (storedCard.id == 16)
-				            cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-			            else if (storedCard.id == 17)
-				            cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
-			            else if (storedCard.id == 24)
-				            cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
-			            else if (storedCard.id == 25)
-				            cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode);
+                else
+                {
+                    if (selectedNode.GetUnit() == null)
+                    {
+                        if (storedCard.id == 16)
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_oracle", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                        }
+                        else if (storedCard.id == 17)
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_disarmTrap", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                        }
+                        else if (storedCard.id == 24)
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_bearTrap", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
+                        else if (storedCard.id == 25)
+                        {
+                            if (GameManager.instance.networked)
+                            {
+                                PhotonView.Get(cardEffectManager).RPC("spell_landMine", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                            }
+                            else
+                            {
+                                cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode.worldPosition);
+                            }
+                        }
                     }
-	            }
+                }
             }
             else if (storedCard.castType == CastType.OnAny)
             {
                 if (storedCard.id == 8)
-                    cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    if (GameManager.instance.networked)
+                    {
+                        PhotonView.Get(cardEffectManager).RPC("spell_heavenlySmite", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                    }
+                    else
+                    {
+                        cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNodePosition);
+                    }
                 else if (storedCard.id == 9)
-                    cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                {
+                    if (GameManager.instance.networked)
+                    {
+                        PhotonView.Get(cardEffectManager).RPC("spell_prayer", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                    }
+                    else
+                    {
+                        cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNodePosition);
+                    }
+                }
             }
         }
 
@@ -931,7 +1196,7 @@ public class TurnManager : Singleton<TurnManager>
             Renderer newMat = Grid.tileTrack[node.gridX, node.gridY].GetComponent<Renderer>();
             newMat.material = defaultMaterial;
         }
-        
+
         // set the units back to their original layer
         List<Node> allUnitsNodes = grid.GetAllUnitNodes();
 
@@ -940,7 +1205,7 @@ public class TurnManager : Singleton<TurnManager>
 
         if (cardSuccessful)
         {
-			currentPlayer.PlayCard(storedCard);
+            currentPlayer.PlayCard(storedCard);
         }
 
         cardSuccessful = false;
@@ -984,7 +1249,7 @@ public class TurnManager : Singleton<TurnManager>
 
         for (int x = 1; x < 6; x++)
         {
-            if(cardDrawPanel.transform.GetChild(0).transform.GetChild(x).childCount > 0)
+            if (cardDrawPanel.transform.GetChild(0).transform.GetChild(x).childCount > 0)
                 Destroy(cardDrawPanel.transform.GetChild(0).transform.GetChild(x).transform.GetChild(0).gameObject);
 
             RectTransform rt = cardDrawPanel.transform.GetChild(0).transform.GetChild(x).GetComponent<RectTransform>();
@@ -994,25 +1259,25 @@ public class TurnManager : Singleton<TurnManager>
             /*Bottom*/
             rt.offsetMin = new Vector2(0, 0);
 
-			cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
-			
-			Card randomCard = RandomCard();
-			
-			if(randomCard.GetType() == typeof(UnitCard))
-			{
-				UnitCard randomCardComponent = (UnitCard)cardGO.AddComponent(randomCard.GetType());
-				randomCardComponent.copyUnitCard((UnitCard)randomCard);
-			}
-			else if(randomCard.GetType() == typeof(SpellCard))
-			{
-				SpellCard randomCardComponent = (SpellCard)cardGO.AddComponent(randomCard.GetType());
-				randomCardComponent.copySpellCard((SpellCard)randomCard);
-			}
-			else
-			{
-				Debug.LogError("Card type error! : " + randomCard.GetType().ToString());
-			}
-			
+            cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
+
+            Card randomCard = RandomCard();
+
+            if (randomCard.GetType() == typeof(UnitCard))
+            {
+                UnitCard randomCardComponent = (UnitCard)cardGO.AddComponent(randomCard.GetType());
+                randomCardComponent.copyUnitCard((UnitCard)randomCard);
+            }
+            else if (randomCard.GetType() == typeof(SpellCard))
+            {
+                SpellCard randomCardComponent = (SpellCard)cardGO.AddComponent(randomCard.GetType());
+                randomCardComponent.copySpellCard((SpellCard)randomCard);
+            }
+            else
+            {
+                Debug.LogError("Card type error! : " + randomCard.GetType().ToString());
+            }
+
             cardGO.transform.SetParent(cardDrawPanel.transform.GetChild(0).transform.GetChild(x));
             cardGO.GetComponent<RectTransform>().offsetMax = Vector2.zero;
             cardGO.GetComponent<RectTransform>().offsetMin = Vector2.zero;
@@ -1022,507 +1287,510 @@ public class TurnManager : Singleton<TurnManager>
             cardGO.GetComponent<Button>().onClick.AddListener(cardGO.GetComponent<CardUI>().addClickedCardToHand);
         }
     }
-	
+
     //Would be much easier if this was modular and hardcoding all the unit stats wasnt a requirement. I would suggets 
     //copying unit data from a Unit prefab or a spell prefab. Otherwise if you change any unit stats you have to change
     //it in multiple places
-	public Card RandomCard()
-	{
-		int random = Random.Range(0, 27);
-
-		if(random < 6)
-		{
-			UnitCard card = new UnitCard();
-			switch (random)
-			{
-				case 0:
-					card.UnitType = Unit.UnitTypes.Soldier;
-					card.id = 0;
-					card.castType = CastType.OnEmpty;
-					card.name = "Soldier";
-					card.cost = 1;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.health = 10;
-					card.damage = 5;
-					card.defence = 1;
-					card.minAttackRange = 1;
-					card.maxAttackRange = 1;
-					card.moveSpeed = 4;
-					card.accuracy = 80;
-					card.evasion = 20;
-					card.flying = false;
-
-					break;
-
-				case 1:
-					card.UnitType = Unit.UnitTypes.Knight;
-					card.id = 1;
-					card.castType = CastType.OnEmpty;
-					card.name = "Knight";
-					card.cost = 3;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.health = 20;
-					card.damage = 7;
-					card.defence = 3;
-					card.minAttackRange = 1;
-					card.maxAttackRange = 1;
-					card.moveSpeed = 3;
-					card.accuracy = 70;
-					card.evasion = 10;
-					card.flying = false;
-
-					break;
-
-				case 2:
-					card.UnitType = Unit.UnitTypes.Assassin;
-					card.id = 2;
-					card.castType = CastType.OnEmpty;
-					card.name = "Assassin";
-					card.cost = 3;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.health = 15;
-					card.damage = 9;
-					card.defence = 0;
-					card.minAttackRange = 1;
-					card.maxAttackRange = 1;
-					card.moveSpeed = 6;
-					card.accuracy = 95;
-					card.evasion = 60;
-					card.flying = false;
-
-					break;
-
-				case 3:
-					card.UnitType = Unit.UnitTypes.Priest;
-					card.id = 3;
-					card.castType = CastType.OnEmpty;
-					card.name = "Priest";
-					card.cost = 3;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.health = 15;
-					card.damage = 5;
-					card.defence = 0;
-					card.minAttackRange = 0;
-					card.maxAttackRange = 2;
-					card.moveSpeed = 4;
-					card.accuracy = 100;
-					card.evasion = 30;
-					card.flying = false;
-
-					break;
-
-				case 4:
-					card.UnitType = Unit.UnitTypes.Archer;
-					card.id = 4;
-					card.castType = CastType.OnEmpty;
-					card.name = "Archer";
-					card.cost = 3;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.health = 15;
-					card.damage = 6;
-					card.defence = 0;
-					card.minAttackRange = 2;
-					card.maxAttackRange = 3;
-					card.moveSpeed = 4;
-					card.accuracy = 90;
-					card.evasion = 30;
-					card.flying = false;
-
-					break;
-
-				case 5:
-					card.UnitType = Unit.UnitTypes.DragonRider;
-					card.id = 5;
-					card.castType = CastType.OnEmpty;
-					card.name = "Dragon Rider";
-					card.cost = 5;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.health = 25;
-					card.damage = 6;
-					card.defence = 2;
-					card.minAttackRange = 1;
-					card.maxAttackRange = 1;
-					card.moveSpeed = 4;
-					card.accuracy = 85;
-					card.evasion = 20;
-					card.flying = true;
-
-					break;
-			}
-			
-			return card;
-		}
-		else 
-		{
-			SpellCard card = new SpellCard();
-			switch (random)
-			{
-				case 6:
-
-
-
-					card.id = 6;
-					card.castType = CastType.OnUnit;
-					card.name = "Smite";
-					card.cost = 2;
-					card.minRange = 1;
-					card.maxRange = 1;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Damages an enemy unit for 5 health.";
-
-					break;
-
-				case 7:
-
-
-
-					card.id = 7;
-					card.castType = CastType.OnUnit;
-					card.name = "Snipe";
-					card.cost = 3;
-					card.minRange = 1;
-					card.maxRange = 3;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 10 health.";
-
-					break;
+    public Card RandomCard()
+    {
+        int random = Random.Range(0, 27);
+
+        if (random < 6)
+        {
+            UnitCard card = new UnitCard();
+            switch (random)
+            {
+                case 0:
+                    card.UnitType = Unit.UnitTypes.Soldier;
+                    card.id = 0;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Soldier";
+                    card.cost = 1;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 10;
+                    card.damage = 5;
+                    card.defence = 1;
+                    card.minAttackRange = 1;
+                    card.maxAttackRange = 1;
+                    card.moveSpeed = 4;
+                    card.accuracy = 80;
+                    card.evasion = 20;
+                    card.flying = false;
+
+                    break;
+
+                case 1:
+                    card.UnitType = Unit.UnitTypes.Knight;
+                    card.id = 1;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Knight";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 20;
+                    card.damage = 7;
+                    card.defence = 3;
+                    card.minAttackRange = 1;
+                    card.maxAttackRange = 1;
+                    card.moveSpeed = 3;
+                    card.accuracy = 70;
+                    card.evasion = 10;
+                    card.flying = false;
+
+                    break;
+
+                case 2:
+                    card.UnitType = Unit.UnitTypes.Assassin;
+                    card.id = 2;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Assassin";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 15;
+                    card.damage = 9;
+                    card.defence = 0;
+                    card.minAttackRange = 1;
+                    card.maxAttackRange = 1;
+                    card.moveSpeed = 6;
+                    card.accuracy = 95;
+                    card.evasion = 60;
+                    card.flying = false;
+
+                    break;
+
+                case 3:
+                    card.UnitType = Unit.UnitTypes.Priest;
+                    card.id = 3;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Priest";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 15;
+                    card.damage = 5;
+                    card.defence = 0;
+                    card.minAttackRange = 0;
+                    card.maxAttackRange = 2;
+                    card.moveSpeed = 4;
+                    card.accuracy = 100;
+                    card.evasion = 30;
+                    card.flying = false;
+
+                    break;
+
+                case 4:
+                    card.UnitType = Unit.UnitTypes.Archer;
+                    card.id = 4;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Archer";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 15;
+                    card.damage = 6;
+                    card.defence = 0;
+                    card.minAttackRange = 2;
+                    card.maxAttackRange = 3;
+                    card.moveSpeed = 4;
+                    card.accuracy = 90;
+                    card.evasion = 30;
+                    card.flying = false;
+
+                    break;
+
+                case 5:
+                    card.UnitType = Unit.UnitTypes.DragonRider;
+                    card.id = 5;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Dragon Rider";
+                    card.cost = 5;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 25;
+                    card.damage = 6;
+                    card.defence = 2;
+                    card.minAttackRange = 1;
+                    card.maxAttackRange = 1;
+                    card.moveSpeed = 4;
+                    card.accuracy = 85;
+                    card.evasion = 20;
+                    card.flying = true;
+
+                    break;
+            }
+
+            return card;
+        }
+        else
+        {
+            SpellCard card = new SpellCard();
+            switch (random)
+            {
+                case 6:
+
+
+
+                    card.id = 6;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Smite";
+                    card.cost = 2;
+                    card.minRange = 1;
+                    card.maxRange = 1;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Damages an enemy unit for 5 health.";
+
+                    break;
 
-				case 8:
+                case 7:
 
 
 
-					card.id = 8;
-					card.castType = CastType.OnAny;
-					card.name = "Heavenly Smite";
-					card.cost = 5;
-					card.minRange = 0;
-					card.maxRange = 3;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 1;
-					card.description = "Damages all enemies within (0,1) tiles of the casting origin for 3 health.";
-
-					break;
+                    card.id = 7;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Snipe";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 3;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 10 health.";
+
+                    break;
 
-				case 9:
+                case 8:
 
 
 
-					card.id = 9;
-					card.castType = CastType.OnAny;
-					card.name = "Prayer";
-					card.cost = 4;
-					card.minRange = 0;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 1;
-					card.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 3 health.";
+                    card.id = 8;
+                    card.castType = CastType.OnAny;
+                    card.name = "Heavenly Smite";
+                    card.cost = 5;
+                    card.minRange = 0;
+                    card.maxRange = 3;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 1;
+                    card.description = "Damages all enemies within (0,1) tiles of the casting origin for 3 health.";
 
-					break;
+                    break;
 
-				case 10:
+                case 9:
 
 
 
-					card.id = 10;
-					card.castType = CastType.OnUnit;
-					card.name = "Vitality";
-					card.cost = 1;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s current and maximum Health by 5.";
+                    card.id = 9;
+                    card.castType = CastType.OnAny;
+                    card.name = "Prayer";
+                    card.cost = 4;
+                    card.minRange = 0;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 1;
+                    card.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 3 health.";
 
-					break;
+                    break;
 
-				case 11:
+                case 10:
 
 
 
-					card.id = 11;
-					card.castType = CastType.OnUnit;
-					card.name = "Endurance";
-					card.cost = 1;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s Defence by 2.";
+                    card.id = 10;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Vitality";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s current and maximum Health by 5.";
 
-					break;
+                    break;
 
-				case 12:
+                case 11:
 
 
 
-					card.id = 12;
-					card.castType = CastType.OnUnit;
-					card.name = "Vigor";
-					card.cost = 1;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s Damage by 3.";
+                    card.id = 11;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Endurance";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s Defence by 2.";
 
-					break;
+                    break;
 
-				case 13:
+                case 12:
 
 
 
-					card.id = 13;
-					card.castType = CastType.OnUnit;
-					card.name = "Nimbleness";
-					card.cost = 1;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s movement speed by 1.";
+                    card.id = 12;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Vigor";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s Damage by 3.";
 
-					break;
+                    break;
 
-				case 14:
+                case 13:
 
 
 
-					card.id = 14;
-					card.castType = CastType.OnUnit;
-					card.name = "Agility";
-					card.cost = 1;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s Evasion by 10.";
+                    card.id = 13;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Nimbleness";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s movement speed by 1.";
 
-					break;
+                    break;
 
-				case 15:
+                case 14:
 
 
 
-					card.id = 15;
-					card.castType = CastType.OnUnit;
-					card.name = "Precision";
-					card.cost = 1;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Increases an ally unit’s Accuracy by 10.";
+                    card.id = 14;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Agility";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s Evasion by 10.";
 
-					break;
+                    break;
 
-				case 16:
+                case 15:
 
 
 
-					card.id = 16;
-					card.castType = CastType.OnAny;
-					card.name = "Oracle";
-					card.cost = 1;
-					card.minRange = 0;
-					card.maxRange = 5;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 2;
-					card.description = "Reveals all traps within (0,2) tiles of the triggering origin.";
+                    card.id = 15;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Precision";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s Accuracy by 10.";
 
-					break;
+                    break;
 
-				case 17:
+                case 16:
 
 
 
-					card.id = 17;
-					card.castType = CastType.OnEmpty;
-					card.name = "Disarm Trap";
-					card.cost = 1;
-					card.minRange = 1;
-					card.maxRange = 3;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Attempts to disarm an enemy trap on a tile.";
+                    card.id = 16;
+                    card.castType = CastType.OnAny;
+                    card.name = "Oracle";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 5;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 2;
+                    card.description = "Reveals all traps within (0,2) tiles of the triggering origin.";
 
-					break;
+                    break;
 
-				case 18:
+                case 17:
 
 
 
-					card.id = 18;
-					card.castType = CastType.OnUnit;
-					card.name = "Provisions";
-					card.cost = 1;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Heals a unit for 5 health.";
+                    card.id = 17;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Disarm Trap";
+                    card.cost = 1;
+                    card.minRange = 1;
+                    card.maxRange = 3;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Attempts to disarm an enemy trap on a tile.";
 
-					break;
+                    break;
 
-				case 19:
+                case 18:
 
 
 
-					card.id = 19;
-					card.castType = CastType.OnUnit;
-					card.name = "Reinforcements";
-					card.cost = 6;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Summons 4 Soldier units around an ally.";
+                    card.id = 18;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Provisions";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Heals a unit for 5 health.";
 
-					break;
+                    break;
 
-				case 20:
+                case 19:
 
 
 
-					card.id = 20;
-					card.castType = CastType.OnAny;
-					card.name = "Greed";
-					card.cost = 3;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Draw 2 cards.";
+                    card.id = 19;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Reinforcements";
+                    card.cost = 6;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Summons 4 Soldier units around an ally.";
 
-					break;
+                    break;
 
-				case 21:
+                case 20:
 
 
 
-					card.id = 21;
-					card.castType = CastType.OnUnit;
-					card.name = "Warcry";
-					card.cost = 4;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 1;
-					card.description = "Only castable from a friendly Knight unit. Increases the damage of all allies within (0,1) tiles of the casting origin by 2.";
+                    card.id = 20;
+                    card.castType = CastType.OnAny;
+                    card.name = "Greed";
+                    card.cost = 3;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Draw 2 cards.";
 
-					break;
+                    break;
 
-				case 22:
+                case 21:
 
 
 
-					card.id = 22;
-					card.castType = CastType.OnUnit;
-					card.name = "Rebirth";
-					card.cost = 4;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Fully heals an ally unit.";
+                    card.id = 21;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Warcry";
+                    card.cost = 4;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 1;
+                    card.description = "Only castable from a friendly Knight unit. Increases the damage of all allies within (0,1) tiles of the casting origin by 2.";
 
-					break;
+                    break;
 
-				case 23:
+                case 22:
 
 
 
-					card.id = 23;
-					card.castType = CastType.OnUnit;
-					card.name = "Assassinate";
-					card.cost = 5;
-					card.minRange = 1;
-					card.maxRange = 1;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Only castable from a friendly Assassin unit. Immediately kills and enemy unit (does not work on King unit).";
+                    card.id = 22;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Rebirth";
+                    card.cost = 4;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Fully heals an ally unit.";
 
-					break;
+                    break;
 
-				case 24:
+                case 23:
 
 
 
-					card.id = 24;
-					card.castType = CastType.OnEmpty;
-					card.name = "Bear Trap";
-					card.cost = 2;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Damages the triggering unit for 5 health.";
+                    card.id = 23;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Assassinate";
+                    card.cost = 5;
+                    card.minRange = 1;
+                    card.maxRange = 1;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Only castable from a friendly Assassin unit. Immediately kills and enemy unit (does not work on King unit).";
 
-					break;
+                    break;
 
-				case 25:
+                case 24:
 
 
 
-					card.id = 25;
-					card.castType = CastType.OnEmpty;
-					card.name = "Land Mine";
-					card.cost = 3;
-					card.minRange = 1;
-					card.maxRange = 2;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 1;
-					card.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
+                    card.id = 24;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Bear Trap";
+                    card.cost = 2;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Damages the triggering unit for 5 health.";
 
-					break;
+                    break;
 
-				case 26:
+                case 25:
 
 
 
-					card.id = 26;
-					card.castType = CastType.OnUnit;
-					card.name = "Royal Pledge";
-					card.cost = 3;
-					card.minRange = 0;
-					card.maxRange = 0;
-					card.aoeMinRange = 0;
-					card.aoeMaxRange = 0;
-					card.description = "Only castable from a friendly King unit. Increases the damage, current health and max health of all allies within (1,1) tiles of the casting origin by 2.";
+                    card.id = 25;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Land Mine";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 1;
+                    card.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
 
-					break;
+                    break;
 
+                case 26:
 
-			}
-			
-			return card;
-		}
-		
-		return new Card();
-	}
+
+
+                    card.id = 26;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Royal Pledge";
+                    card.cost = 3;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Only castable from a friendly King unit. Increases the damage, current health and max health of all allies within (1,1) tiles of the casting origin by 2.";
+
+                    break;
+
+
+            }
+
+            return card;
+        }
+
+        return new Card();
+    }
 
     // method to update game history (can maybe make this a PunRPC to have the same on both clients
     public void updateGameHistory(string actionString)
     {
+        if (GameManager.instance.networked)
+            PhotonView.Get(gameObject).RequestOwnership();
+
         gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
     }
 
@@ -1536,5 +1804,41 @@ public class TurnManager : Singleton<TurnManager>
     {
         turnUpdateText.text = message;
         turnUpdateText.color = color;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(gameHistoryText.text);
+        }
+        else
+        {
+            gameHistoryText.text = (string)stream.ReceiveNext();
+        }
+    }
+
+    [PunRPC]
+    public void signalPlayers(Vector3 triggeringOriginNodePosition, TrapOrItem.TrapOrItemTypes trapType)
+    {
+        Node triggeringOriginNode = grid.NodeFromWorldPoint(triggeringOriginNodePosition);
+        if (trapType == TrapOrItem.TrapOrItemTypes.BearTrap)
+        {
+            triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
+            TurnManager.instance.updateGameHistory("Bear trap triggered at (" + triggeringOriginNode.gridX + "," + triggeringOriginNode.gridY + ")!\n");
+            TurnManager.instance.updateTurnUpdate("Bear trap triggered!");
+        }
+        else if (trapType == TrapOrItem.TrapOrItemTypes.LandMine)
+        {
+            HashSet<Node> affectedNodes = pf.GetNodesMinMaxRange(triggeringOriginNode.worldPosition, false, 0, 1);
+
+            foreach (Node node in affectedNodes)
+            {
+                if (node.GetUnit() != null)
+                    node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 3);
+            }
+            TurnManager.instance.updateGameHistory("Land Mine triggered at (" + triggeringOriginNode.gridX + "," + triggeringOriginNode.gridY + ")!\n");
+            TurnManager.instance.updateTurnUpdate("Land Mine triggered!");
+        }
     }
 }

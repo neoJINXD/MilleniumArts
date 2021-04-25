@@ -18,19 +18,19 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
     
     // Units
-    [SerializeField] public Sprite sprite_archer_blue;
-    [SerializeField] public Sprite sprite_archer_red;
-    [SerializeField] public Sprite sprite_assassin_blue;
-    [SerializeField] public Sprite sprite_assassin_red;
-    [SerializeField] public Sprite sprite_dragonRider_blue;
-    [SerializeField] public Sprite sprite_dragonRider_red;
-    [SerializeField] public Sprite sprite_knight_blue;
-    [SerializeField] public Sprite sprite_knight_red;
-    [SerializeField] public Sprite sprite_priest_blue;
-    [SerializeField] public Sprite sprite_priest_red;
-    [SerializeField] public Sprite sprite_soldier_blue;
-    [SerializeField] public Sprite sprite_soldier_red;
-    
+    [SerializeField] public Sprite sprite_archer_blue = Resources.Load("CardImages/Unit/Archer_Blue") as Sprite;
+    [SerializeField] public Sprite sprite_archer_red = Resources.Load("CardImages/Unit/Archer_Red") as Sprite;
+    [SerializeField] public Sprite sprite_assassin_blue = Resources.Load("CardImages/Unit/Assassin_Blue") as Sprite;
+    [SerializeField] public Sprite sprite_assassin_red = Resources.Load("CardImages/Unit/Assassin_Red") as Sprite;
+    [SerializeField] public Sprite sprite_dragonRider_blue = Resources.Load("CardImages/Unit/DragonRider_Blue") as Sprite;
+    [SerializeField] public Sprite sprite_dragonRider_red = Resources.Load("CardImages/Unit/DragonRider_Red") as Sprite;
+    [SerializeField] public Sprite sprite_knight_blue = Resources.Load("CardImages/Unit/Knight_Blue") as Sprite;
+    [SerializeField] public Sprite sprite_knight_red = Resources.Load("CardImages/Unit/Knight_Red") as Sprite;
+    [SerializeField] public Sprite sprite_priest_blue = Resources.Load("CardImages/Unit/Priest_Blue") as Sprite;
+    [SerializeField] public Sprite sprite_priest_red = Resources.Load("CardImages/Unit/Priest_Red") as Sprite;
+    [SerializeField] public Sprite sprite_soldier_blue = Resources.Load("CardImages/Unit/Soldier_Blue") as Sprite;
+    [SerializeField] public Sprite sprite_soldier_red = Resources.Load("CardImages/Unit/Soldier_Red") as Sprite;
+
     // Spells
     [SerializeField] private GameObject anim_spell_smite;
     [SerializeField] private GameObject anim_spell_snipe;
