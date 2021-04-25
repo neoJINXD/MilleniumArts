@@ -319,7 +319,7 @@ MonoBehaviour:
   panLimitX: 20
   panLimitY: 20
   scrollSpeed: 20
-  minY: 20
+  minY: 5
   maxY: 120
 --- !u!1 &444601200
 GameObject:
@@ -1871,6 +1871,11 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 511577629528842599, guid: e4857921910c9f242a6803656d2a979b,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 976998207325035072, guid: e4857921910c9f242a6803656d2a979b,
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

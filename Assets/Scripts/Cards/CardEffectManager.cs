@@ -91,12 +91,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (GameManager.instance.networked)
             {
                 placedUnit = PhotonNetwork.Instantiate("Units/Soldier", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                PhotonNetwork.Instantiate("UnitAnimation/unit_soldier", positionNode.worldPosition, Quaternion.identity);
+                PhotonNetwork.Instantiate("UnitAnimation/unit_soldier", positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             else
             {
                 placedUnit = Instantiate(m_soldier.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                Instantiate(anim_unit_soldier, positionNode.worldPosition, Quaternion.identity);
+                Instantiate(anim_unit_soldier, positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Soldier at (" + positionNode.gridX + ", " +  positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Soldier!", TurnManager.instance.color32_green);
@@ -116,12 +116,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (GameManager.instance.networked)
             {
                 placedUnit = PhotonNetwork.Instantiate("Units/Knight", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                PhotonNetwork.Instantiate("UnitAnimation/unit_knight", positionNode.worldPosition, Quaternion.identity);
+                PhotonNetwork.Instantiate("UnitAnimation/unit_knight", positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             else
             {
                 placedUnit = Instantiate(m_knight.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                Instantiate(anim_unit_knight, positionNode.worldPosition, Quaternion.identity);
+                Instantiate(anim_unit_knight, positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Knight at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Knight!", TurnManager.instance.color32_green);
@@ -141,12 +141,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (GameManager.instance.networked)
             {
                 placedUnit = PhotonNetwork.Instantiate("Units/Assassin", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                PhotonNetwork.Instantiate("UnitAnimation/unit_assassin", positionNode.worldPosition, Quaternion.identity);
+                PhotonNetwork.Instantiate("UnitAnimation/unit_assassin", positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             else
             {
                 placedUnit = Instantiate(m_assassin.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                Instantiate(anim_unit_assassin, positionNode.worldPosition, Quaternion.identity);
+                Instantiate(anim_unit_assassin, positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Assassin at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Assassin!", TurnManager.instance.color32_green);
@@ -166,12 +166,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (GameManager.instance.networked)
             {
                 placedUnit = PhotonNetwork.Instantiate("Units/Priest", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                PhotonNetwork.Instantiate("UnitAnimation/unit_priest", positionNode.worldPosition, Quaternion.identity);
+                PhotonNetwork.Instantiate("UnitAnimation/unit_priest", positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             else
             {
                 placedUnit = Instantiate(m_priest.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                Instantiate(anim_unit_priest, positionNode.worldPosition, Quaternion.identity);
+                Instantiate(anim_unit_priest, positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Priest at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Priest!", TurnManager.instance.color32_green);
@@ -191,12 +191,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (GameManager.instance.networked)
             {
                 placedUnit = PhotonNetwork.Instantiate("Units/Archer", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                PhotonNetwork.Instantiate("UnitAnimation/unit_archer", positionNode.worldPosition, Quaternion.identity);
+                PhotonNetwork.Instantiate("UnitAnimation/unit_archer", positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             else
             {
                 placedUnit = Instantiate(m_archer.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                Instantiate(anim_unit_archer, positionNode.worldPosition, Quaternion.identity);
+                Instantiate(anim_unit_archer, positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned an Archer at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned an Archer!", TurnManager.instance.color32_green);
@@ -218,12 +218,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (GameManager.instance.networked)
             {
                 placedUnit = PhotonNetwork.Instantiate("Units/DragonRider", positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                PhotonNetwork.Instantiate("UnitAnimation/unit_dragonRider", positionNode.worldPosition, Quaternion.identity);
+                PhotonNetwork.Instantiate("UnitAnimation/unit_dragonRider", positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             else
             {
                 placedUnit = Instantiate(m_dragonRider.gameObject, positionNode.worldPosition, Quaternion.identity).GetComponent<Unit>();
-                Instantiate(anim_unit_dragonRider, positionNode.worldPosition, Quaternion.identity);
+                Instantiate(anim_unit_dragonRider, positionNode.worldPosition + Vector3.up, Quaternion.identity);
             }
             TurnManager.instance.updateGameHistory("Player " + playerId + " summoned a Dragon Rider at (" + positionNode.gridX + ", " + positionNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Succesfully summoned a Dragon Rider!", TurnManager.instance.color32_green);
