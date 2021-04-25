@@ -679,7 +679,15 @@ public class TurnManager : MonoBehaviour, IPunObservable
             if (selectedNode.GetUnit() != null && selectableNodes.Contains(selectedNode))
             {
                 animRef = Instantiate(healAnimation, currentUnit.transform, false);
-                selectedNode.GetUnit().IncreaseCurrentHealthBy(currentUnit.GetDamage());
+                if (GameManager.instance.networked)
+                {
+                    PhotonView.Get(gameObject).RequestOwnership();
+                    PhotonView.Get(gameObject).RPC("NetworkedHeal", RpcTarget.All, selectedNode.worldPosition, currentUnit.transform.position);
+                }
+                else
+                {
+                    selectedNode.GetUnit().IncreaseCurrentHealthBy(currentUnit.GetDamage());
+                }
                 currentPlayer.PlayerMana -= COST_HEAL;
                 currentUnit.SetCanAttack(false);
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") for " + currentUnitNode.GetUnit().GetDamage() + " health!\n");
@@ -706,6 +714,15 @@ public class TurnManager : MonoBehaviour, IPunObservable
         selectableNodes.Clear();
         unselectUnit();
         currentTurnState = TurnState.Free;
+    }
+
+    [PunRPC]
+    private void NetworkedHeal(Vector3 targetPos, Vector3 userPos)
+    {
+        Unit target = grid.NodeFromWorldPoint(targetPos).GetUnit();
+        Unit user = grid.NodeFromWorldPoint(userPos).GetUnit();
+
+        target.IncreaseCurrentHealthBy(user.GetDamage());
     }
 
     void validateSelectTileClickAttack()
