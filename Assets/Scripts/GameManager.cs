@@ -11,18 +11,17 @@ public class GameManager : Singleton<GameManager>
 {
     private GameLoop gameLoop;
 
-    [SerializeField] private bool networked;
-    [SerializeField] private GameObject player1Spawn;
-    [SerializeField] private GameObject player2Spawn;
-    [SerializeField] private GameObject player1;
-    [SerializeField] private GameObject player2;
-    [SerializeField] Material player1Mat;
-    [SerializeField] Material player2Mat;
+    [SerializeField] public bool networked;
+
+    [SerializeField] string gameHistory;
 
     public PhotonView view { get; private set; }
+
+    private bool isLeaving = false;
     
-    void Start()
+    public override void Awake()
     {
+        base.Awake();
         gameLoop = GameLoop.instance;
         if (networked)
         {
@@ -32,6 +31,13 @@ public class GameManager : Singleton<GameManager>
         {
             LocalStart();
         }
+        isLeaving = false;
+    }
+
+    private void Start() 
+    {
+        if (networked && !PhotonNetwork.IsMasterClient)
+            TurnManager.instance.cardDrawPanel.SetActive(false);    
     }
 
     private void LocalStart()
@@ -41,37 +47,48 @@ public class GameManager : Singleton<GameManager>
 
     private void PhotonStart()
     {
-        view = GetComponent<PhotonView>();
-
         if (!PhotonNetwork.IsConnected)
         {
             // go back to 'menu'
             SceneManager.LoadScene("PhotonPrototyping");
             return;
         }
+        view = GetComponent<PhotonView>();
 
-        // TODO change cube to king unit
-        if (PhotonNetwork.IsMasterClient)
-        {
-            print("Player 1 creating");
-            player1 = PhotonNetwork.Instantiate("Cube", 
-                player1Spawn.transform.position, player1Spawn.transform.rotation, 0);
-            player1.GetComponent<Renderer>().material = player1Mat;
-        }
-        else
-        {
-            print("Player 2 creating");
-            player2 = PhotonNetwork.Instantiate("Cube",
-                player2Spawn.transform.position, player2Spawn.transform.rotation, 0);
-            player2.GetComponent<Renderer>().material = player2Mat;
-        }
+        print("Starting the photon game");
+        //if (PhotonNetwork.IsMasterClient)
+        //{
+            Player p1 = gameObject.AddComponent<NetworkedPlayer>();
+            //print(p1);
+            view.ObservedComponents.Add(p1);
 
-        Player p1 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
-        Player p2 = gameLoop.AddReturnPlayer(gameObject.AddComponent<NetworkedPlayer>());
+            Player p2 = gameObject.AddComponent<NetworkedPlayer>();
+            //print(p2);
+            view.ObservedComponents.Add(p2);
+
+            gameLoop.GetPlayerList().Clear();
+            gameLoop.AddPlayer(p1);
+            ((NetworkedPlayer)p1).amIP1 = true;
+            gameLoop.AddPlayer(p2);
+            //p2.EndTurn();
+        //}
+
+
+
+
         StartCoroutine(gameLoop.Play());
+    }
 
-        view.ObservedComponents.Add(p1);
-        view.ObservedComponents.Add(p2);
+    private void Update() 
+    {
+        //print(PhotonNetwork.PlayerList.Length);
+        if(networked && !isLeaving && PhotonNetwork.IsConnected && PhotonNetwork.PlayerList.Length != 2)
+        {
+            isLeaving = true;
+            NetworkRoom.LeaveRoom();
+            //     PhotonNetwork.LeaveRoom();
+            SceneManager.LoadScene("PhotonPrototyping");
+        }    
     }
 
     public Player GetCurrentPlayer() => gameLoop.GetCurrentPlayer();

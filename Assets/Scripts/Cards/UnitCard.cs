@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UnitCard : Card
 {
+    public Unit.UnitTypes UnitType;
     public int health;
     public int damage;
     public int defence;
@@ -13,6 +14,8 @@ public class UnitCard : Card
     public int accuracy;
     public int evasion;
     public bool flying;
+
+	public UnitCard() {}
 
     public UnitCard(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax,
         int cardHealth, int cardDamage, int cardDefence, int cardMinARange, int cardMaxARange, int cardMoveSpeed, int cardAccuracy,
@@ -25,6 +28,9 @@ public class UnitCard : Card
         cost = cardCost;
         minRange = cardMin;
         maxRange = cardMax;
+
+        indexInHand = 0;
+
         health = cardHealth;
         damage = cardDamage;
         defence = cardDefence;
@@ -35,5 +41,29 @@ public class UnitCard : Card
         evasion = cardEvasion;
         flying = cardFlying;
 
+    }
+
+    public void copyUnitCard(UnitCard copyCard)
+    {
+        UnitType = copyCard.UnitType;
+        id = copyCard.id;
+        castType = copyCard.castType;
+        name = copyCard.name;
+        //image = cardImage;
+        cost = copyCard.cost;
+        minRange = copyCard.minRange;
+        maxRange = copyCard.maxRange;
+
+        indexInHand = copyCard.indexInHand;
+
+        health = copyCard.health;
+        damage = copyCard.damage;
+        defence = copyCard.defence;
+        minAttackRange = copyCard.minAttackRange;
+        maxAttackRange = copyCard.maxAttackRange;
+        moveSpeed = copyCard.moveSpeed;
+        accuracy = copyCard.accuracy;
+        evasion = copyCard.evasion;
+        flying = copyCard.flying;
     }
 }

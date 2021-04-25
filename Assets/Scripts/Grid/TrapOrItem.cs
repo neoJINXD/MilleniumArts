@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class TrapOrItem : MonoBehaviour
 {
@@ -12,15 +13,6 @@ public class TrapOrItem : MonoBehaviour
     protected TrapOrItemTypes trapOrItemType;
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
-
-    private Pathfinding pf;
-    private Grid grid;
-
-    void Start()
-    {
-        pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
-        grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
-    }
 
     public enum TrapOrItemTypes //enum for item/trap types
     {
@@ -53,27 +45,40 @@ public class TrapOrItem : MonoBehaviour
     }
 
     //function called when Unit triggers the Trap or Item in a Node
+
+
     public virtual void TrapOrItemTriggeredByUnit(Node triggeringOriginNode)
     {
-        if(trapOrItemType == TrapOrItemTypes.BearTrap)
+        if (GameManager.instance.networked)
         {
-            print(triggeringOriginNode.GetUnit());
-            triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
-            print("Bear Trap triggered!");
+            if (trapOrItemType == TrapOrItemTypes.BearTrap)
+                TurnManager.instance.GetComponent<PhotonView>().RPC("signalPlayers", RpcTarget.All, triggeringOriginNode.worldPosition, TrapOrItemTypes.BearTrap);
+            else if (trapOrItemType == TrapOrItemTypes.LandMine)
+                TurnManager.instance.GetComponent<PhotonView>().RPC("signalPlayers", RpcTarget.All, triggeringOriginNode.worldPosition, TrapOrItemTypes.LandMine);
+            triggeringOriginNode.RemoveTrapOrItem(this);
         }
-        else if(trapOrItemType == TrapOrItemTypes.LandMine)
+        else
         {
-            HashSet<Node> affectedNodes = pf.GetNodesMinMaxRange(triggeringOriginNode.GetUnit().gameObject.transform.position, false, 0, 1);
-
-            foreach (Node node in affectedNodes)
+            if (trapOrItemType == TrapOrItemTypes.BearTrap)
             {
-                if (node.GetUnit() != null)
-                    node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 3);
+                print(triggeringOriginNode.GetUnit());
+                triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
+                print("Bear Trap triggered!");
             }
-            print("Land Mine triggered!");
-        }
+            else if (trapOrItemType == TrapOrItemTypes.LandMine)
+            {
+                HashSet<Node> affectedNodes = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>().GetNodesMinMaxRange(triggeringOriginNode.worldPosition, false, 0, 1);
 
-        triggeringOriginNode.RemoveTrapOrItem(this);
+                foreach (Node node in affectedNodes)
+                {
+                    if (node.GetUnit() != null)
+                        node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 3);
+                }
+                print("Land Mine triggered!");
+            }
+
+            triggeringOriginNode.RemoveTrapOrItem(this);
+        }
     }
     
     //set and get functions for item type

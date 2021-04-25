@@ -5,10 +5,9 @@ using UnityEngine;
 
 public enum CastType
 {
-    OnAlly = 0,
-    OnEnemy = 1,
-    OnEmpty = 2,
-    OnAny = 3
+    OnUnit = 0,
+    OnEmpty = 1,
+    OnAny = 2
 }
 
 [Serializable]
@@ -24,6 +23,8 @@ public class Card : MonoBehaviour
     public int maxRange;
     public int aoeMinRange;
     public int aoeMaxRange;
+
+    public int indexInHand;
 
     public Card()
     {
@@ -41,6 +42,7 @@ public class Card : MonoBehaviour
         maxRange = cardMax;
         aoeMinRange = cardAOEMin;
         aoeMinRange = cardAOEMax;
+        indexInHand = 0;
     }
 }
 

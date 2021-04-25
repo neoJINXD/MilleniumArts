@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -9,13 +10,27 @@ public abstract class Player : MonoBehaviour
 {
     [HideInInspector] public int PlayerId;
     public int PlayerMana;
+    public int PlayerMaxMana;
+    public bool KingAlive = true;
+	public Unit King;
     [SerializeField] protected List<Card> m_playerCards = new List<Card>();
     [SerializeField] protected List<Unit> m_playerUnits = new List<Unit>();
+	public List<Unit> Units => m_playerUnits;
     public bool TurnComplete { get; protected set; }
 
     public Player()
     {
         TurnComplete = true;
+    }
+
+    private void Start()
+    {
+        TurnManager tm = TurnManager.instance;
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
     }
 
     public virtual void StartTurn()
@@ -26,30 +41,28 @@ public abstract class Player : MonoBehaviour
     public virtual void EndTurn()
     {
         TurnComplete = true;
+        TurnManager.instance.unselectUnit();
+        foreach(Unit unit in m_playerUnits)
+        {
+            unit.SetMovementSpeedLeft(unit.GetMovementSpeed());
+            unit.SetCanAttack(true);
+        }
     }
 
     #region Unit & Card Setters/Getters
 
-    public virtual void PlayCard(int cardIndex)
+    public virtual void PlayCard(Card cardToPlay)
     {
-        // temporary changed this to simulate placing enemy unit for testing
-        // expecting to change some stuff to accomodate AI or networking
-        // - rey
-
-        TurnManager.instance.placingEnemyUnit = true;
-        TurnManager.instance.currentPlayer = this;
-
-        /*if (CardCount > 0 && cardIndex >= 0 && cardIndex < CardCount)
+        if (CardCount > 0)
         {
-            Card cardToPlay = GetCard(cardIndex);
             if (cardToPlay.cost <= PlayerMana)
             {
-                if(cardToPlay.type == CardType.Unit)
+                if(cardToPlay.GetType() == typeof(UnitCard))
                 {
-                    TurnManager.instance.placingEnemyUnit = true;
-                    TurnManager.instance.currentPlayer = this;
                 }
 
+                PlayerMana -= cardToPlay.cost;
+                RemoveCard(cardToPlay);
             }
             else
             {
@@ -60,12 +73,24 @@ public abstract class Player : MonoBehaviour
         else
         {
             Debug.LogError("Player out of cards or bad card index");
-        }*/
+        }
     }
-    
-    public void RemoveCard(int index)
+
+    public bool ManaCheck(int cost)
     {
-        m_playerCards.RemoveAt(index);
+        bool canUse = PlayerMana >= cost;
+        if(!canUse)
+            GameplayUIManager.instance.NotEnoughMana();
+
+        return canUse;
+    }
+
+    public void RemoveCard(Card card)
+    {
+        m_playerCards.RemoveAt(card.indexInHand);
+
+        for(int x = 0; x < m_playerCards.Count; x++)
+            m_playerCards[x].indexInHand = x;
     }
 
     public Card GetCard(int index)
@@ -73,15 +98,51 @@ public abstract class Player : MonoBehaviour
         return m_playerCards[index];
     }
 
+    public List<Card> GetHand()
+    {
+        return m_playerCards;
+    }
+
+    public void AddCard(Card card)
+    {
+        UnitCard unitCopyCard = null;
+        SpellCard spellCopyCard = null;
+
+        if (card is UnitCard)
+        {
+            unitCopyCard = new UnitCard();
+            unitCopyCard.copyUnitCard((UnitCard)card);
+            m_playerCards.Add(unitCopyCard);
+        }
+        else if (card is SpellCard)
+        {
+            spellCopyCard = new SpellCard();
+            spellCopyCard.copySpellCard((SpellCard)card);
+            m_playerCards.Add(spellCopyCard);
+        }
+
+        m_playerCards[m_playerCards.Count - 1].indexInHand = m_playerCards.Count - 1;
+
+    }
+
     public void AddUnit(Unit unit)
     {
         m_playerUnits.Add(unit);
+    }
+    
+    public void RemoveUnit(Unit unit)
+    {
+        m_playerUnits.Remove(unit);
     }
 
     public int CardCount => m_playerCards.Count;
     public int UnitCount => m_playerUnits.Count;
 
+    public void DrawCard()
+    {
+        TurnManager.instance.ShowCardSelection();
+    }
+
     #endregion
 
 }
-

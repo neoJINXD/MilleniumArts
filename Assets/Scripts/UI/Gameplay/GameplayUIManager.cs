@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zone.Core.Utils;
 
-public class GameplayUIManager : MonoBehaviour
+public class GameplayUIManager: Singleton<GameplayUIManager>
 {
     [SerializeField] private Player m_player;
 
@@ -19,77 +20,65 @@ public class GameplayUIManager : MonoBehaviour
 
     private bool dynamicHandFilled;
 
-    private bool myTurn;
+    private RectTransform handPanelRT;
+    private Animator animator;
+    private static readonly int k_notEnoughMana = Animator.StringToHash("NotEnoughMana");
 
-    // Start is called before the first frame update
+    public GameObject cardZoomInPanel;
+    public GameObject cardPrefab;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+    
     void Start()
     {
         handCount = 5;
         dynamicHandFilled = false;
-        myTurn = true;
+
+        handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // used to test dynamic hand
-        if (Input.GetKeyDown(KeyCode.Q))
+        if(!GameLoop.instance.GameOver)
         {
-            handCount--;
-            dynamicHandFilled = false;
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            handCount++;
-            dynamicHandFilled = false;
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-            myTurn = true;
-
-        if (Input.GetKeyDown(KeyCode.R))
-            myTurn = false;
-
-
-        if (handCount > 5)
-        {
-            defaultHandPanel.SetActive(false);
-            dynamicHandPanel.SetActive(true);
-
-            if(!dynamicHandFilled)
-                fillDynamicHand();
-        }
-        else
-        {
-            defaultHandPanel.SetActive(true);
-            dynamicHandPanel.SetActive(false);
-
-            foreach (Transform child in dynamicHandPanel.transform)
+            if (GameManager.instance.networked)
             {
-                GameObject.Destroy(child.gameObject);
+                if (Photon.Pun.PhotonNetwork.IsMasterClient)
+                    endTurnButton.SetActive(((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
+                if (!Photon.Pun.PhotonNetwork.IsMasterClient)
+                    endTurnButton.SetActive(!((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
             }
-
-            dynamicHandFilled = false;
+            else
+            {
+                endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
+            }
         }
-
-        if (myTurn)
-            endTurnButton.SetActive(true);
-        else
-            endTurnButton.SetActive(false);
-
-
     }
 
-    void fillDynamicHand()
+    public void NotEnoughMana()
     {
+        animator.SetTrigger(k_notEnoughMana);
+    }
 
+    public void fillDynamicHand()
+    {
+        int x = 0;
 
-        RectTransform handPanelRT = GameObject.Find("HandPanel").GetComponent<RectTransform>();
+        GameObject[] children = new GameObject[dynamicHandPanel.transform.childCount];
 
         foreach (Transform child in dynamicHandPanel.transform)
         {
-            GameObject.Destroy(child.gameObject);
+            children[x] = child.gameObject;
+            x += 1;
         }
+
+
+        foreach (GameObject child in children)
+            GameObject.DestroyImmediate(child);
+
 
         float rectWidth = handPanelRT.rect.width;
 
@@ -110,14 +99,15 @@ public class GameplayUIManager : MonoBehaviour
         dynamicHandFilled = true;
     }
 
-    public void PlayCard(int cardIndex)
-    {
-        m_player.PlayCard(cardIndex);
-    }
-    
     public void endTurn()
     {
-        myTurn = false;
-        //m_player.EndTurn();
+        TurnManager.instance.updateTurnUpdate("");
+
+        if (GameManager.instance.networked)
+            GameManager.instance.view.RPC("EndCurrentPlayerTurn", Photon.Pun.RpcTarget.All);
+        else
+            GameLoop.instance.EndCurrentPlayer();
+        // TODO check if this is needed in the multiplayer part?
+        TurnManager.instance.cardDrawPanel.SetActive(false);
     }
 }

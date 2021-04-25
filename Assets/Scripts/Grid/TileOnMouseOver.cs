@@ -38,14 +38,17 @@ public class TileOnMouseOver : MonoBehaviour
     //Detect if the Cursor starts to pass over the GameObject
     public void OnMouseOver()
     {
-        if(availableNodes != null)
+        Node hoverNode = grid.NodeFromWorldPoint(transform.position);
+        TurnManager.instance.hoveredTileText.text = "(" + hoverNode.gridX + "," + hoverNode.gridY + ")";
+
+        if (availableNodes != null)
         {
             if (tm.currentTurnState == TurnManager.TurnState.SelectingCardOrigin)
             {
                 aoeNodes = pf.GetNodesMinMaxRange(this.transform.position, false, storedCard.minRange, storedCard.maxRange);
                 availableNodes = tm.selectableNodes;
                 if (availableNodes.Contains(grid.NodeFromWorldPoint(this.transform.position)))
-                {
+                { 
                     pf.minDepthLimit = storedCard.aoeMinRange;
                     pf.maxDepthLimit = storedCard.aoeMaxRange;
 
@@ -71,7 +74,9 @@ public class TileOnMouseOver : MonoBehaviour
     //Detect when Cursor leaves the GameObject
     public void OnMouseExit()
     {
-        if(hovered)
+        TurnManager.instance.hoveredTileText.text = "";
+
+        if (hovered)
         {
             if (tm.currentTurnState == TurnManager.TurnState.SelectingCardOrigin)
             {

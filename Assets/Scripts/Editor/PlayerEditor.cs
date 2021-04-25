@@ -7,9 +7,12 @@ public class PlayerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
+        Player player = (Player)target;
+        if (!player.TurnComplete)
+            GUILayout.Label("Its my turn");
+
         DrawDefaultInspector();
 
-        Player player = (Player)target;
         if(!player.TurnComplete && GUILayout.Button("End Turn"))
         {
             // player.EndTurn();

@@ -3,34 +3,43 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
-public class Unit : MonoBehaviour {
-
-    [SerializeField] protected float movementSpeed = 20;
-    [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
-    
+public class Unit : MonoBehaviour 
+{
     protected Pathfinding.Heuristic heuristic = Pathfinding.Heuristic.TileDistance; //determine which heuristic to use
-    protected UnitTypes unitType;
+    public UnitTypes unitType;
+    [SerializeField] protected int movementSpeed = 20;
+    [SerializeField] protected bool canFly; //bool to toggle flying pathfinding
     [SerializeField] protected int unitPlayerId;
-    protected int maxHealth;
-    protected int currentHealth;
-    protected int damage;
-    protected int defense;
-    protected int minRange;
-    protected int maxRange;
-    protected int accuracy;
-    protected int evasion;
-    protected int cost;
-    protected Node[] path;
-    protected int targetIndex;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] protected int currentHealth;
+    [SerializeField] protected int damage;
+    [SerializeField] protected int defense;
+    [SerializeField] protected int minRange;
+    [SerializeField] protected int maxRange;
+    [SerializeField] protected int accuracy;
+    [SerializeField] protected int evasion;
+    [SerializeField] protected int cost;
+    [SerializeField] protected Node[] path;
+    [SerializeField] protected int targetIndex;
+    public bool isClicked = false;
+
+    [SerializeField] protected bool canAttack;
+    [SerializeField] protected int movementSpeedLeft;
+
+    [Header("UI")]
+    [SerializeField] private Slider m_healthBar;
+
     private const int MAXValue = Int32.MaxValue;
     private const int MINValue = 0;
-    public bool isClicked = false;
-    public bool startRoutine;
     private Camera mainCam;
     private const int constantMovementSpeed = 7;
+
+    private Grid grid;
+    private Vector3 lastPos;
     
     #region UnitModifications
 
@@ -63,11 +72,13 @@ public class Unit : MonoBehaviour {
         accuracy = 0;
         evasion = 0;
         cost = 0;
+        canAttack = true;
+        movementSpeedLeft = 0;
     }
     
     // parameterized abstract constructor
-    protected Unit(float _movementSpeed, bool _canfly, Pathfinding.Heuristic _hf, UnitTypes _type, int _unitPlayerId, int _maxHealth,
-        int _currentHealth, int _damage, int _defense, int _minRange, int _maxRange, int _accuracy, int _evasion, int _cost)
+    protected Unit(int _movementSpeed, bool _canfly, Pathfinding.Heuristic _hf, UnitTypes _type, int _unitPlayerId, int _maxHealth,
+        int _currentHealth, int _damage, int _defense, int _minRange, int _maxRange, int _accuracy, int _evasion, int _cost, bool _canAttack)
     {
         movementSpeed = _movementSpeed;
         canFly = _canfly;
@@ -83,6 +94,8 @@ public class Unit : MonoBehaviour {
         accuracy = _accuracy;
         evasion = _evasion;
         cost = _cost;
+        canAttack = _canAttack;
+        movementSpeedLeft = movementSpeed;
     }
 
     // dictionary of heap index and unit itself.
@@ -96,24 +109,48 @@ public class Unit : MonoBehaviour {
     }*/
 
     //set, get and update functions for movement speed
-    public virtual void SetMovementSpeed(float s)
+    //set, get and update functions for movement speed
+    public void SetCanAttack(bool b)
+    {
+        canAttack = b;
+    }
+
+    public bool GetCanAttack()
+    {
+        return canAttack;
+    }
+
+    //set, get and update functions for movement speed
+    public void SetMovementSpeedLeft(int i)
+    {
+        movementSpeedLeft = i;
+    }
+
+    public int GetMovementSpeedLeft()
+    {
+        return movementSpeedLeft;
+    }
+
+
+    //set, get and update functions for movement speed
+    public virtual void SetMovementSpeed(int s)
     {
         movementSpeed = Mathf.Clamp(s, MINValue, MAXValue);
     }
 
-    public virtual float GetMovementSpeed()
+    public virtual int GetMovementSpeed()
     {
         return movementSpeed;
     }
 
-    public virtual float IncreaseMovementSpeedBy(float s)
+    public virtual int IncreaseMovementSpeedBy(int s)
     {
         movementSpeed += s;
         movementSpeed = Mathf.Clamp(movementSpeed, MINValue, MAXValue);
         return movementSpeed;
     }
     
-    public virtual float DecreaseMovementSpeedBy(float s)
+    public virtual int DecreaseMovementSpeedBy(int s)
     {
         movementSpeed -= s;
         movementSpeed = Mathf.Clamp(movementSpeed, MINValue, MAXValue);
@@ -192,6 +229,10 @@ public class Unit : MonoBehaviour {
     public virtual int IncreaseCurrentHealthBy(int cH)
     {
         currentHealth += cH;
+
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+
         currentHealth = Mathf.Clamp(currentHealth, MINValue, MAXValue);
         return currentHealth;
     }
@@ -383,9 +424,38 @@ public class Unit : MonoBehaviour {
     void Awake()
     {
         mainCam = Camera.main;
+        grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
     }
 
-    
+    private void Update()
+    {
+        m_healthBar.value = (float) currentHealth / maxHealth;
+
+        if (currentHealth < 1)
+        {
+            Player owningPlayer = GameLoop.instance.GetPlayer(unitPlayerId);
+            
+            if (unitType == UnitTypes.King)
+                owningPlayer.KingAlive = false;
+            
+            owningPlayer.RemoveUnit(this);
+            Destroy(gameObject);
+        }
+
+        if (GameManager.instance)
+        {
+            if (lastPos == transform.position)
+            {
+                grid.NodeFromWorldPoint(transform.position).AddUnit(this);
+            }
+            else
+            {
+                grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            }
+        }
+        lastPos = transform.position;
+    }
+
     public void SelectNewUnitPosition()
     {
         RaycastHit hit;
@@ -414,30 +484,30 @@ public class Unit : MonoBehaviour {
     {
         if (pathSuccessful) {
             path = newPath;
-            targetIndex = 0;
+            targetIndex = 1; //keeps track of the next node the unit is going to move to
             
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
     }
-    
-    
 
     //updates unit position by following along the path
-    IEnumerator FollowPath() 
+    public IEnumerator FollowPath()
     {
-        Node currentWaypoint = path[0];
+        Node unitNode = path[0];//keeps track of the node the unit is currently on
+        Node currentWaypoint = path[1]; //keeps track of the next node the unit is going to move to
 
-        Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
+        //Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
 
         while (true)
         {
-            grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            //grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
+            unitNode.RemoveUnit(this);
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
 
             if (transform.position == currentWaypoint.worldPosition) 
             {
-                targetIndex++;
+                targetIndex++; //it starts from 1 now
                 currentWaypoint.AddUnit(this);
                 CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
 
@@ -445,6 +515,7 @@ public class Unit : MonoBehaviour {
                     yield break;
 
                 currentWaypoint = path[targetIndex];
+                unitNode = path[targetIndex - 1];
                 //currentWaypoint.RemoveUnit(this);// moved this
                 //currentWaypoint = path[targetIndex];
                 //currentWaypoint.AddUnit(this);
@@ -455,6 +526,37 @@ public class Unit : MonoBehaviour {
 
             //CheckHostileTrapOrItemInNode(currentWaypoint);
 
+            yield return null;
+        }
+    }
+    
+    public IEnumerator AIFollowPath(Node[] newPath)
+    {
+        if (newPath.Length < 2)
+            yield break;
+        
+        Node unitNode = newPath[0];//keeps track of the node the unit is currently on
+        Node currentWaypoint = newPath[1]; //keeps track of the next node the unit is going to move to
+
+        targetIndex = 1;
+
+        while (true)
+        {
+            unitNode.RemoveUnit(this);
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
+
+            if (transform.position == currentWaypoint.worldPosition) 
+            {
+                targetIndex++; //it starts from 1 now
+                currentWaypoint.AddUnit(this);
+                CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
+
+                if (targetIndex >= newPath.Length) 
+                    yield break;
+
+                currentWaypoint = newPath[targetIndex];
+                unitNode = newPath[targetIndex - 1];
+            }
             yield return null;
         }
     }
@@ -492,19 +594,30 @@ public class Unit : MonoBehaviour {
     //     }
     // }
 
-/*    void OnMouseDown()
+    /*    void OnMouseDown()
+        {
+            Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID() +
+                "\nType: " + GetComponent<Unit>().GetUnitType() +
+                "\nMax HP: " + GetComponent<Unit>().GetMaxHealth() +
+                "\nCurrent HP: " + GetComponent<Unit>().GetCurrentHealth() +
+                "\nDamage: " + GetComponent<Unit>().GetDamage() +
+                "\nDefence: " + GetComponent<Unit>().GetDefence() +
+                "\nMin Range: " + GetComponent<Unit>().GetMinRange() +
+                "\nMax Range: " + GetComponent<Unit>().GetMaxRange() +
+                "\nAccuracy: " + GetComponent<Unit>().GetAccuracy() +
+                "\nEvasion: " + GetComponent<Unit>().GetEvasion() +
+                "\nMS: " + GetComponent<Unit>().GetMovementSpeed() +
+                "\nFlying: " + GetComponent<Unit>().GetCanFly());
+        }*/
+
+    void OnMouseEnter()
     {
-        Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID() +
-            "\nType: " + GetComponent<Unit>().GetUnitType() +
-            "\nMax HP: " + GetComponent<Unit>().GetMaxHealth() +
-            "\nCurrent HP: " + GetComponent<Unit>().GetCurrentHealth() +
-            "\nDamage: " + GetComponent<Unit>().GetDamage() +
-            "\nDefence: " + GetComponent<Unit>().GetDefence() +
-            "\nMin Range: " + GetComponent<Unit>().GetMinRange() +
-            "\nMax Range: " + GetComponent<Unit>().GetMaxRange() +
-            "\nAccuracy: " + GetComponent<Unit>().GetAccuracy() +
-            "\nEvasion: " + GetComponent<Unit>().GetEvasion() +
-            "\nMS: " + GetComponent<Unit>().GetMovementSpeed() +
-            "\nFlying: " + GetComponent<Unit>().GetCanFly());
-    }*/
+        Node hoverNode = grid.NodeFromWorldPoint(transform.position);
+        TurnManager.instance.hoveredTileText.text = "(" + hoverNode.gridX + "," + hoverNode.gridY + ")";
+    }
+
+    void OnMouseExit()
+    {
+        TurnManager.instance.hoveredTileText.text = "";
+    }
 }

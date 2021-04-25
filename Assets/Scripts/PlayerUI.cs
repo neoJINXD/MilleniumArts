@@ -6,18 +6,9 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
-    [SerializeField] private Player m_player;
     [SerializeField] private Image m_placeButton;
     [SerializeField] private GameObject m_endTurnButton;
-
-    private void Update()
-    {
-        if (GameLoop.instance.GetCurrentPlayer().PlayerId == m_player.PlayerId)
-            ActivePlayerUI();
-        else
-            InactivePlayerUI();
-    }
-
+    
     private void ActivePlayerUI()
     {
         m_placeButton.color = Color.white;
@@ -30,14 +21,9 @@ public class PlayerUI : MonoBehaviour
         m_endTurnButton.SetActive(false);
     }
 
-    public void EndTurnButton()
+    public void PlayTestCard()
     {
-        m_player.EndTurn();
-    }
-
-    public void PlayCard(int cardIndex)
-    {
-        m_player.PlayCard(cardIndex);
+        TurnManager.instance.placingEnemyUnit = true;
     }
     
     //TODO: read m_player cards and hide update card UI, likely on update
