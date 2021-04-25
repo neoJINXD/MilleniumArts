@@ -9,11 +9,15 @@ public class NetworkedPlayer : LocalPlayer, IPunObservable
 
     public bool amIP1 = false;
 
-    // private void Start() 
-    // {
-    //     if (PhotonNetwork.IsMasterClient)
-    //         amIP1 = true;
-    // }
+    private void Start() 
+    {
+        TurnManager tm = TurnManager.instance;
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+    }
 
     public override void StartTurn()
     {

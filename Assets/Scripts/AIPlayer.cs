@@ -75,11 +75,31 @@ public class AIPlayer : Player
 		if (PlayerMana > 0)
 			yield return UseActiveUnits();
 
+		if (PlayerMana > 0)
+			yield return MoveKing();
+
 		yield return new WaitForSeconds(0.5f);
 		
         EndTurn();
     }
 
+    private IEnumerator MoveKing()
+    {
+	    if(m_playerUnits.Count < 2)
+		    yield break;
+
+	    Vector3 unitAvgPos = m_playerUnits[0].transform.position;
+	    for (var i = 1; i < m_playerUnits.Count; i++)
+	    {
+		    Unit unit = m_playerUnits[i];
+		    unitAvgPos += unit.transform.position;
+	    }
+
+	    unitAvgPos /= m_playerUnits.Count;
+
+	    yield return MoveUnitTowards(King, unitAvgPos);
+    }
+    
     private Unit.UnitTypes lastPickedUpType;
     
 	private void PickUpCard()
@@ -333,7 +353,9 @@ public class AIPlayer : Player
 			Unit chosenUnit = m_playerUnits[i];
 
 			if (chosenUnit == King)
+			{
 				continue;
+			}
 		
 			if (m_behaviour == BehaviourType.Aggressive)
 			{
@@ -387,7 +409,7 @@ public class AIPlayer : Player
 					Debug.Log("AI unit moving " + chosenUnit.name + " to attack " + enemy.name);
 				}
 			}
-			yield return null;
+			yield return new WaitForSeconds(0.5f);
 		}
 	}
 	
