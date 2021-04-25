@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PhotonGameMap.unity
     guid: e4d686d9551693846af9544294d83f28
+  - enabled: 1
+    path: Assets/Scenes/LocalVsAi.unity
+    guid: e1edd576beeb2df4ca88065bb585a778
   m_configObjects: {}
