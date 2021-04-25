@@ -1824,6 +1824,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
         Node triggeringOriginNode = grid.NodeFromWorldPoint(triggeringOriginNodePosition);
         if (trapType == TrapOrItem.TrapOrItemTypes.BearTrap)
         {
+            print(triggeringOriginNode.GetUnit());
             triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
             TurnManager.instance.updateGameHistory("Bear trap triggered at (" + triggeringOriginNode.gridX + "," + triggeringOriginNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Bear trap triggered!");
