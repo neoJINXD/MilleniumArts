@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -22,6 +23,16 @@ public abstract class Player : MonoBehaviour
         TurnComplete = true;
     }
 
+    private void Start()
+    {
+        TurnManager tm = TurnManager.instance;
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+        AddCard(tm.RandomCard());
+    }
+
     public virtual void StartTurn()
     {
         TurnComplete = false;
@@ -30,7 +41,7 @@ public abstract class Player : MonoBehaviour
     public virtual void EndTurn()
     {
         TurnComplete = true;
-
+        TurnManager.instance.unselectUnit();
         foreach(Unit unit in m_playerUnits)
         {
             unit.SetMovementSpeedLeft(unit.GetMovementSpeed());

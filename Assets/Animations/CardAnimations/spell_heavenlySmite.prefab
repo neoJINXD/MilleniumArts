@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 4685259530587244228}
   - component: {fileID: 4685259530587244229}
   - component: {fileID: 4685259530587244227}
-  - component: {fileID: 387721329667816263}
   - component: {fileID: 8050217595353312844}
   - component: {fileID: -6050020234474947430}
+  - component: {fileID: -8525820113463123030}
   m_Layer: 0
   m_Name: spell_heavenlySmite
   m_TagString: Untagged
@@ -105,18 +105,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &387721329667816263
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4685259530587244230}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e79ed4b3de089e347b0e2dfc3dbc632c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &8050217595353312844
 AudioSource:
   m_ObjectHideFlags: 0
@@ -225,3 +213,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1674bade441b1404688f160947caa679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-8525820113463123030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4685259530587244230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36b53268a810b7446addfdc7e6b279e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isFacingUp: 1

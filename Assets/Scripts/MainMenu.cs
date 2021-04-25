@@ -15,7 +15,8 @@ public class MainMenu : MonoBehaviour
     
     public void OpenAIScene()
     {
-        SceneManager.LoadScene(m_aiScene);
+        // SceneManager.LoadScene(m_aiScene);
+        SceneManager.LoadScene("LocalVsAi");
     }
 
     public void Quit()

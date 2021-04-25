@@ -171,22 +171,25 @@ public class TurnManager : MonoBehaviour, IPunObservable
         cardSuccessful = false;
         placingEnemyUnit = false;
         currentPlayer = GameLoop.instance.GetCurrentPlayer();
-        localPlayer = null;
+        localPlayer = GameLoop.instance.GetPlayerList()[0];
 
-        foreach (NetworkedPlayer nPlayer in GameLoop.instance.GetPlayerList())
+        if (PhotonNetwork.IsConnected)
         {
-            if (nPlayer.amIP1)
+            foreach (NetworkedPlayer nPlayer in GameLoop.instance.GetPlayerList())
             {
-                if (PhotonNetwork.IsMasterClient)
-                    localPlayer = nPlayer;
-            }
-            else
-            {
-                if (!PhotonNetwork.IsMasterClient)
-                    localPlayer = nPlayer;
+                if (nPlayer.amIP1)
+                {
+                    if (PhotonNetwork.IsMasterClient)
+                        localPlayer = nPlayer;
+                }
+                else
+                {
+                    if (!PhotonNetwork.IsMasterClient)
+                        localPlayer = nPlayer;
+                }
             }
         }
-
+        
         loadPlayerHand();
     }
 
@@ -502,10 +505,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
     void checkBoardClickForUnit()
     {
-        if (GameManager.instance.networked &&
-            !(Photon.Pun.PhotonNetwork.IsMasterClient == ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1))
-            return;
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -514,13 +513,24 @@ public class TurnManager : MonoBehaviour, IPunObservable
         {
             if (hit.transform.CompareTag("Unit")) // if board hits unit
             {
-                if (hit.transform.GetComponent<Unit>().GetUnitPlayerID() == currentPlayer.PlayerId) // check if unit belongs to current player
+                bool clickCondition = PhotonNetwork.IsConnected
+                    ? hit.transform.GetComponent<Unit>().GetUnitPlayerID() == currentPlayer.PlayerId
+                    : hit.transform.GetComponent<Unit>().GetUnitPlayerID() == 0 && currentPlayer.PlayerId == 0;
+                
+                if (clickCondition) // check if unit belongs to current player
                 {
                     currentUnit = hit.transform.GetComponent<Unit>();
                     currentUnitPosition = hit.transform.position;
                     currentUnitNode = grid.NodeFromWorldPoint(currentUnitPosition);
 
-                    optionPanel.SetActive(true);
+                    if (PhotonNetwork.IsConnected)
+                    {
+                        optionPanel.SetActive(PhotonNetwork.IsMasterClient == ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
+                    }
+                    else
+                    {
+                        optionPanel.SetActive(true);
+                    }
 
                     if (currentUnit.GetUnitType() == Unit.UnitTypes.Priest)
                     {
@@ -1225,7 +1235,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
         unitPlayerIDText.text = "-";
 
-        unitImage.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Background.psd");
+        unitImage.sprite = null;
 
         unitDamageText.text = "-";
         unitDefenceText.text = "-";

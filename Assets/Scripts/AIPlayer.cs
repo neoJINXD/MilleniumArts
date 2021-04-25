@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Security.Cryptography;
 //using UnityEditor.Rendering;
 using UnityEngine;
@@ -23,10 +24,21 @@ public class AIPlayer : Player
 	[SerializeField] private BehaviourType m_behaviour;
 	private Pathfinding m_pathfinding;
 	
+	private GameObject aiCardHand;
 	private GameObject cardHolder;
 
 	private void Start()
-	{
+	{		
+		aiCardHand = new GameObject();
+		aiCardHand.transform.parent = transform;
+		aiCardHand.name = "AI card hand";
+
+		m_playerCards.Add(GenerateCard(aiCardHand));
+		m_playerCards.Add(GenerateCard(aiCardHand));
+		m_playerCards.Add(GenerateCard(aiCardHand));
+		m_playerCards.Add(GenerateCard(aiCardHand));
+		m_playerCards.Add(GenerateCard(aiCardHand));
+	
 		m_pathfinding = GameObject.FindObjectOfType<Pathfinding>();
 		
 		if(!m_pathfinding)
@@ -34,7 +46,7 @@ public class AIPlayer : Player
 		
 		cardHolder = new GameObject();
 		cardHolder.transform.parent = transform;
-		cardHolder.name = "AI card hand";
+		cardHolder.name = "AI card choices";
 	}
 
 	private void Update()
@@ -67,38 +79,46 @@ public class AIPlayer : Player
 		
         EndTurn();
     }
-	
+
+    private Unit.UnitTypes lastPickedUpType;
+    
 	private void PickUpCard()
 	{
-		m_playerCards.Clear();
 		Destroy(cardHolder);
 		cardHolder = new GameObject();
 		cardHolder.transform.parent = transform;
-		cardHolder.name = "AI card hand";
+		cardHolder.name = "AI pick up options";
 
 		List<Card> cards = new List<Card>();
-		cards.Add(GenerateCard());
-		cards.Add(GenerateCard());
-		cards.Add(GenerateCard());
-		cards.Add(GenerateCard());
-		cards.Add(GenerateCard());
+		cards.Add(GenerateCard(cardHolder));
+		cards.Add(GenerateCard(cardHolder));
+		cards.Add(GenerateCard(cardHolder));
+		cards.Add(GenerateCard(cardHolder));
+		cards.Add(GenerateCard(cardHolder));
 		
 		foreach (Card card in cards)
 		{
-			if (CardIsValued(card))
+			if (card is UnitCard)
 			{
+				if(((UnitCard) card).UnitType == lastPickedUpType)
+					continue;
+				
+				if(((UnitCard) card).UnitType == Unit.UnitTypes.Priest && m_behaviour == BehaviourType.Aggressive)
+					continue;
+				
 				m_playerCards.Add(card);
+				lastPickedUpType = ((UnitCard) card).UnitType;
 				print("AI picked up " + card.name + " card");
 				return;
 			}
 		}
-
-		Debug.LogWarning("AI did not find any valuable cards");
 		
 		m_playerCards.Add(cards[Random.Range(0, cards.Count - 1)]);
+
+		Debug.LogWarning("AI did not find any valuable cards");
 	}
 	
-	private Card GenerateCard()
+	private Card GenerateCard(GameObject holder)
 	{		
 		TurnManager tm = TurnManager.instance;
 
@@ -106,13 +126,13 @@ public class AIPlayer : Player
 		
 		if(randomCard.GetType() == typeof(UnitCard))
 		{
-			UnitCard randomCardComponent = (UnitCard)cardHolder.AddComponent(randomCard.GetType());
+			UnitCard randomCardComponent = (UnitCard)holder.AddComponent(randomCard.GetType());
 			randomCardComponent.copyUnitCard((UnitCard)randomCard);
 			return randomCardComponent;
 		}
 		else if(randomCard.GetType() == typeof(SpellCard))
 		{
-			SpellCard randomCardComponent = (SpellCard)cardHolder.AddComponent(randomCard.GetType());
+			SpellCard randomCardComponent = (SpellCard)holder.AddComponent(randomCard.GetType());
 			randomCardComponent.copySpellCard((SpellCard)randomCard);
 			return randomCardComponent;
 		}
@@ -311,6 +331,9 @@ public class AIPlayer : Player
 		for (int i = 0; i < m_playerUnits.Count && PlayerMana > 0; i++)
 		{
 			Unit chosenUnit = m_playerUnits[i];
+
+			if (chosenUnit == King)
+				continue;
 		
 			if (m_behaviour == BehaviourType.Aggressive)
 			{
@@ -487,7 +510,7 @@ public class AIPlayer : Player
 		foreach(Unit unit in m_playerUnits)
 		{
 			float currentDist = Vector3.Distance(startPos, unit.transform.position);
-			if(currentDist < shortestDist)
+			if(currentDist < shortestDist && unit.unitType != Unit.UnitTypes.King)
 			{
 				shortestDist = currentDist;
 				closestUnit = unit;
