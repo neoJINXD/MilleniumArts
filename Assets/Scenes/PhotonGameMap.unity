@@ -11439,11 +11439,11 @@ MonoBehaviour:
   kingPlayer2: {fileID: 2947912656713924271, guid: 89fe4362899ec304faa8f82343271eee,
     type: 3}
   kingSpawnP1:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 644439449}
+  - {fileID: 625422896}
   kingSpawnP2:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1930875788}
+  - {fileID: 2116382641}
   king1: {fileID: 0}
   king2: {fileID: 0}
   displayGridGizmos: 1
