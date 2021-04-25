@@ -10,6 +10,7 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
     private bool inRoom = false;
 
     [SerializeField] private GameObject joinButton;
+    [SerializeField] private TMPro.TMP_Text infoText;
 
     private void Awake() 
     {
@@ -92,6 +93,14 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
         // PhotonNetwork.Instantiate("Cube", Vector3.zero, Quaternion.identity);
         // TODO should use PhotonNetwork's LoadScene method with a waiting lobby
         // SceneManager.LoadScene("PhotonMain");
+        if (PhotonNetwork.IsMasterClient)
+        {
+            infoText.text = "You are the Blue Units";
+        }
+        else
+        {
+            infoText.text = "You are the Red Units";
+        }
         inRoom = true;
     }
 
