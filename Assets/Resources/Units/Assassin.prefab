@@ -16,8 +16,8 @@ MonoBehaviour:
   movementSpeed: 8
   canFly: 0
   unitPlayerId: -1
-  maxHealth: 30
-  currentHealth: 30
+  maxHealth: 15
+  currentHealth: 15
   damage: 9
   defense: 0
   minRange: 1
