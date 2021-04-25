@@ -69,7 +69,7 @@ public class CardUI : MonoBehaviour
             if (unitCard.flying)
                 flyingPanel.SetActive(true);
 
-            bool playerOne= true; // toggle this appropriately
+            bool playerOne = true;
 
             if(playerOne)
             {

@@ -68,7 +68,7 @@ MonoBehaviour:
   targetIndex: 0
   isClicked: 0
   canAttack: 1
-  movementSpeedLeft: 10
+  movementSpeedLeft: 3
   m_healthBar: {fileID: 7383663133336833660}
 --- !u!1001 &8002400656261553314
 PrefabInstance:

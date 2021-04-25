@@ -23,7 +23,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
     private const float lockAxis = 27f;
 
     public Player currentPlayer = default;
-    private Player localPlayer = default;
+    public Player localPlayer = default;
 
     public HashSet<Node> selectableNodes;
 
@@ -1832,21 +1832,23 @@ public class TurnManager : MonoBehaviour, IPunObservable
     public void signalPlayers(Vector3 triggeringOriginNodePosition, TrapOrItem.TrapOrItemTypes trapType)
     {
         Node triggeringOriginNode = grid.NodeFromWorldPoint(triggeringOriginNodePosition);
+
         if (trapType == TrapOrItem.TrapOrItemTypes.BearTrap)
         {
-            triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
+            // TIMING ISSUE
+            //triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
             TurnManager.instance.updateGameHistory("Bear trap triggered at (" + triggeringOriginNode.gridX + "," + triggeringOriginNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Bear trap triggered!");
         }
         else if (trapType == TrapOrItem.TrapOrItemTypes.LandMine)
         {
-            HashSet<Node> affectedNodes = pf.GetNodesMinMaxRange(triggeringOriginNode.worldPosition, false, 0, 1);
+            /*HashSet<Node> affectedNodes = pf.GetNodesMinMaxRange(triggeringOriginNode.worldPosition, false, 0, 1);
 
             foreach (Node node in affectedNodes)
             {
                 if (node.GetUnit() != null)
                     node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 3);
-            }
+            }*/
             TurnManager.instance.updateGameHistory("Land Mine triggered at (" + triggeringOriginNode.gridX + "," + triggeringOriginNode.gridY + ")!\n");
             TurnManager.instance.updateTurnUpdate("Land Mine triggered!");
         }
