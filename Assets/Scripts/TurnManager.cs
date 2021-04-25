@@ -5,12 +5,10 @@ using Zone.Core.Utils;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Serialization;
-using Photon.Pun;
 
 
-public class TurnManager : MonoBehaviour, IPunObservable
+public class TurnManager : Singleton<TurnManager>
 {
-    public static TurnManager instance = null;
 	[SerializeField] private GameObject attackAnimationHit;
 	[SerializeField] private GameObject healAnimation;
 	[SerializeField] private GameObject attackAnimationMiss;
@@ -69,6 +67,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
     // Stat panel
 
     private TextMeshProUGUI unitPlayerIDText;
+    private Image unitImage;
     private TextMeshProUGUI unitDamageText;
     private TextMeshProUGUI unitDefenceText;
     private TextMeshProUGUI unitARText;
@@ -115,18 +114,8 @@ public class TurnManager : MonoBehaviour, IPunObservable
     [HideInInspector]
     public Color32 color32_green = new Color32(0, 160, 0, 255);
 
-    private void Awake() 
-    {    
-        instance = this;
-    }
-
     void Start()
     {
-        if (GameManager.instance.networked)
-        {
-            PhotonView.Get(gameObject).ObservedComponents.Add(this);
-        }
-
         pf = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>();
         grid = GameObject.FindWithTag("Pathfinding").GetComponent<Grid>();
 
@@ -134,6 +123,9 @@ public class TurnManager : MonoBehaviour, IPunObservable
         unitPanel = gameplayPanel.transform.GetChild(0).transform.GetChild(0).gameObject;
 
         unitPlayerIDText = unitPanel.transform.GetChild(2).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+
+        unitImage = unitPanel.transform.GetChild(0).GetComponent<Image>();
+
         unitDamageText = unitPanel.transform.GetChild(3).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         unitDefenceText = unitPanel.transform.GetChild(4).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         unitARText = unitPanel.transform.GetChild(5).transform.GetChild(1).transform.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -169,18 +161,10 @@ public class TurnManager : MonoBehaviour, IPunObservable
         currentPlayer = GameLoop.instance.GetCurrentPlayer();
         localPlayer = null;
 
-        foreach (NetworkedPlayer nPlayer in GameLoop.instance.GetPlayerList())
+        foreach(Player player in GameLoop.instance.GetPlayerList())
         {
-            if (nPlayer.amIP1)
-            {
-                if (PhotonNetwork.IsMasterClient)
-                    localPlayer = nPlayer;
-            }
-            else
-            {
-                if (!PhotonNetwork.IsMasterClient)
-                    localPlayer = nPlayer;
-            }
+            if (player is LocalPlayer)
+                localPlayer = player;
         }
 
         loadPlayerHand();
@@ -193,17 +177,9 @@ public class TurnManager : MonoBehaviour, IPunObservable
 		    return;
 	    
 	    currentPlayer = GameLoop.instance.GetCurrentPlayer();
-
-	    if (GameManager.instance.networked)
-        {
-            Player thisPlayer = currentPlayer;
-            manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
-        }
-        else
-        {
-            Player thisPlayer = GameLoop.instance.GetPlayer(0);
-            manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
-        }
+	    
+	    Player thisPlayer = GameLoop.instance.GetPlayer(0);
+        manaText.text = "Mana " + thisPlayer.PlayerMana + "/" + thisPlayer.PlayerMaxMana;
 
         if (currentTurnState == TurnState.DrawingCard)
         {
@@ -245,10 +221,10 @@ public class TurnManager : MonoBehaviour, IPunObservable
         }
 
         // destroy attack GameObject animation after it is finished playing
-        // if (animRef != null)
-        // {
-	    //     Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
-        // }
+        if (animRef != null)
+        {
+	        Destroy(animRef, animRef.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
+        }
     }
 
     public void loadPlayerHand()
@@ -498,10 +474,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
     void checkBoardClickForUnit()
     {
-        if (GameManager.instance.networked && 
-            !(Photon.Pun.PhotonNetwork.IsMasterClient == ((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1))
-            return;
-            
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
@@ -532,7 +504,44 @@ public class TurnManager : MonoBehaviour, IPunObservable
                 else
                     optionPanel.SetActive(false);
 
-                unitPlayerIDText.text = "" + hit.transform.GetComponent<Unit>().GetUnitPlayerID();
+                unitPlayerIDText.text = "" + hit.transform.GetComponent<Unit>().GetUnitType() + " (" + hit.transform.GetComponent<Unit>().GetUnitPlayerID() + ")";
+
+
+                if(hit.transform.GetComponent<Unit>().GetUnitPlayerID() == 0) // player id 0
+                {
+                    if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Soldier)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Soldier_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Knight)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Knight_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Assassin)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Assassin_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Priest)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Priest_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Archer)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Archer_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.DragonRider)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/DragonRider_Blue");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.King)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/King_Blue");
+                }
+                else
+                {
+                    if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Soldier)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Soldier_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Knight)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Knight_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Assassin)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Assassin_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Priest)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Priest_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.Archer)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/Archer_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.DragonRider)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/DragonRider_Red");
+                    else if (hit.transform.GetComponent<Unit>().GetUnitType() == Unit.UnitTypes.King)
+                        unitImage.sprite = Resources.Load<Sprite>("CardImages/Unit/King_Red");
+                }
+
                 unitDamageText.text = "" + hit.transform.GetComponent<Unit>().GetDamage();
                 unitDefenceText.text = "" + hit.transform.GetComponent<Unit>().GetDefence();
                 unitARText.text = "" + hit.transform.GetComponent<Unit>().GetMinRange() + " - " + hit.transform.GetComponent<Unit>().GetMaxRange();
@@ -576,7 +585,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
                 currentUnitPosition = selectedNodePosition;
                 currentUnit.SelectNewUnitPosition();
-                currentPlayer.PlayerMana -= COST_MOVE;
+                currentPlayer.PlayerMana--;
 
             }
         }
@@ -629,7 +638,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
             {
 	            animRef = Instantiate(healAnimation, currentUnit.transform, false);
                 selectedNode.GetUnit().IncreaseCurrentHealthBy(currentUnit.GetDamage());
-                currentPlayer.PlayerMana -= COST_HEAL;
+                currentPlayer.PlayerMana--;
                 currentUnit.SetCanAttack(false);
                 updateGameHistory("Player " + currentPlayer.PlayerId + "'s Priest (" + currentUnitNode.gridX + "," + currentUnitNode.gridY + ") healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") for " + currentUnitNode.GetUnit().GetDamage() + " health!\n");
                 updateTurnUpdate("Successfully healed " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", color32_green);
@@ -683,22 +692,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
         if (selectedNode != null && selectableNodes.Contains(selectedNode))
         {
             if (selectedNode.GetUnit() != null)
-            {
-                if (GameManager.instance.networked)
-                {
-                    // move hit chance here to make sure its the same for both players clients
-                    int hitChance = Mathf.Max(0, (int)Mathf.Floor(currentUnit.GetAccuracy() - selectedNode.GetUnit().GetEvasion() / 2));
-                    int roll = Random.Range(0, 101); // generate 0-100
-
-                    PhotonView.Get(gameObject).RequestOwnership();
-                    PhotonView.Get(gameObject).RPC("NetworkAttack", RpcTarget.All, currentUnit.transform.position, selectedNode.worldPosition, roll <= hitChance);
-                    //Attack(currentUnit, selectedNode.GetUnit());
-                }   
-                else
-                {
-                    Attack(currentUnit, selectedNode.GetUnit());
-                }
-            }
+                Attack(currentUnit, selectedNode.GetUnit());
         }
 
         foreach (var node in selectableNodes)
@@ -748,48 +742,8 @@ public class TurnManager : MonoBehaviour, IPunObservable
         }
 
         attacker.SetCanAttack(false);
-        currentPlayer.PlayerMana -= COST_ATTACK;
+        currentPlayer.PlayerMana--;
     }
-
-    [PunRPC]
-    void NetworkAttack(Vector3 attackerPos, Vector3 receiverPos, bool hit)
-    {
-        print("We attacking");
-        Unit attacker = grid.NodeFromWorldPoint(attackerPos).GetUnit();
-        Unit receiver = grid.NodeFromWorldPoint(receiverPos).GetUnit();
-
-        int damageDealt = Mathf.Max(0, attacker.GetDamage() - receiver.GetDefence());
-
-        // int hitChance = Mathf.Max(0, (int)Mathf.Floor(attacker.GetAccuracy() - receiver.GetEvasion() / 2));
-        // int roll = Random.Range(0, 101); // generate 0-100
-
-        Node attackerNode = grid.NodeFromWorldPoint(attacker.transform.position);
-        Node receiverNode = grid.NodeFromWorldPoint(receiver.transform.position);
-
-        if(hit)
-        {
-            receiver.SetCurrentHealth(receiver.GetCurrentHealth() - damageDealt);
-            if (PhotonView.Get(gameObject).IsMine)
-            {
-                updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") attacked " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ") for " + attackerNode.GetUnit().GetDamage() + " damage!\n");
-                updateTurnUpdate("Successfully attacked " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!", color32_green);
-                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Hit", currentUnit.transform.position, Quaternion.identity);
-            }
-        }
-        else
-        {
-            if (PhotonView.Get(gameObject).IsMine)
-            {
-                updateGameHistory("Player " + currentPlayer.PlayerId + "'s " + currentUnitNode.GetUnit().GetUnitType() + "(" + attackerNode.gridX + "," + attackerNode.gridY + ") missed an attack on " + receiver.GetUnitType() + " (" + receiverNode.gridX + "," + attackerNode.gridY + ")!\n");
-                updateTurnUpdate("Missed an attacked on " + receiverNode.GetUnit().GetUnitType() + " (" + receiverNode.gridX + "," + receiverNode.gridY + ")!");
-                animRef = PhotonNetwork.Instantiate("UnitAnimation/Blast_Miss", currentUnit.transform.position, Quaternion.identity);
-            }
-        }
-
-        attacker.SetCanAttack(false);
-        currentPlayer.PlayerMana -= COST_ATTACK;
-    }
-
 
     private void ResetMaterial()
     {
@@ -892,176 +846,38 @@ public class TurnManager : MonoBehaviour, IPunObservable
 	        if (!currentPlayer.ManaCheck(storedCard.cost))
 		        return;
 	        
-            if (storedCard.castType == CastType.OnAlly)
+            if (storedCard.castType == CastType.OnUnit)
             {
                 if (selectedNode.GetUnit() != null)
                 {
-                    if (selectedNode.GetUnit().GetUnitPlayerID() == currentPlayer.PlayerId)
-                    {
-                        if (storedCard.id == 10)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_vitality", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {   
-                                cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 11)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_endurance", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 12)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_vigor", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 13)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_nimbleness", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 14)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_agility", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 15)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_precision", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 18)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_provisions", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 19)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_reinforcements", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                        }
-                        else if (storedCard.id == 21)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_warcry", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                        }
-                        else if (storedCard.id == 22)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_rebirth", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 26)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_royalPledge", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                        }
-                    }
-                }
-            }
-            else if (storedCard.castType == CastType.OnEnemy)
-            { 
-                if (selectedNode.GetUnit() != null)
-                {
-                    if (selectedNode.GetUnit().GetUnitPlayerID() != currentPlayer.PlayerId)
-                    {
-                        if (storedCard.id == 6)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_smite", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 7)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_snipe", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                        else if (storedCard.id == 23)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_assassinate", RpcTarget.All, currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
-                    }
+                    if (storedCard.id == 10)
+                        cardEffectManager.spell_vitality(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 11)
+                        cardEffectManager.spell_endurance(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 12)
+                        cardEffectManager.spell_vigor(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 13)
+                        cardEffectManager.spell_nimbleness(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 14)
+                        cardEffectManager.spell_agility(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 15)
+                        cardEffectManager.spell_precision(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 18)
+                        cardEffectManager.spell_provisions(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 19)
+                        cardEffectManager.spell_reinforcements(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    else if (storedCard.id == 21)
+                        cardEffectManager.spell_warcry(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    else if (storedCard.id == 22)
+                        cardEffectManager.spell_rebirth(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 26)
+                        cardEffectManager.spell_royalPledge(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
+                    else if (storedCard.id == 6)
+                        cardEffectManager.spell_smite(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 7)
+                        cardEffectManager.spell_snipe(currentPlayer.PlayerId, selectedNode);
+                    else if (storedCard.id == 23)
+                        cardEffectManager.spell_assassinate(currentPlayer.PlayerId, selectedNode);
                 }
             }
             else if (storedCard.castType == CastType.OnEmpty)
@@ -1078,74 +894,22 @@ public class TurnManager : MonoBehaviour, IPunObservable
 		            if (selectedNode.GetUnit() == null)
 		            {
 			            if (storedCard.id == 16)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_oracle", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                            else
-                            {
-				                cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                        }
+				            cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
 			            else if (storedCard.id == 17)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_disarmTrap", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                            else
-                            {
-				                cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                        }
+				            cardEffectManager.spell_disarmTrap(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
 			            else if (storedCard.id == 24)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_bearTrap", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                            else
-                            {
-				                cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
+				            cardEffectManager.spell_bearTrap(currentPlayer.PlayerId, selectedNode);
 			            else if (storedCard.id == 25)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_landMine", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                            else
-                            {
-				                cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode.worldPosition);
-                            }
-                        }
+				            cardEffectManager.spell_landMine(currentPlayer.PlayerId, selectedNode);
                     }
 	            }
             }
             else if (storedCard.castType == CastType.OnAny)
             {
                 if (storedCard.id == 8)
-                    if (GameManager.instance.networked)
-                    {
-                        PhotonView.Get(cardEffectManager).RPC("spell_heavenlySmite", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
-                    }
-                    else
-                    {
-                        cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNodePosition);
-                    }
+                    cardEffectManager.spell_heavenlySmite(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
                 else if (storedCard.id == 9)
-                {
-                    if (GameManager.instance.networked)
-                    {
-                        PhotonView.Get(cardEffectManager).RPC("spell_prayer", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
-                    }
-                    else
-                    {
-                        cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNodePosition);
-                    }
-                }
+                    cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNode, selectedNodePosition);
             }
         }
 
@@ -1195,6 +959,9 @@ public class TurnManager : MonoBehaviour, IPunObservable
         currentUnitPosition = Vector3.zero;
 
         unitPlayerIDText.text = "-";
+
+        unitImage.sprite = UnityEditor.AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Background.psd");
+
         unitDamageText.text = "-";
         unitDefenceText.text = "-";
         unitARText.text = "x - x";
@@ -1396,7 +1163,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 					card.moveSpeed = 4;
 					card.accuracy = 85;
 					card.evasion = 20;
-					card.flying = false;
+					card.flying = true;
 
 					break;
 			}
@@ -1413,7 +1180,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 6;
-					card.castType = CastType.OnEnemy;
+					card.castType = CastType.OnUnit;
 					card.name = "Smite";
 					card.cost = 2;
 					card.minRange = 1;
@@ -1429,7 +1196,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 7;
-					card.castType = CastType.OnEnemy;
+					card.castType = CastType.OnUnit;
 					card.name = "Snipe";
 					card.cost = 3;
 					card.minRange = 1;
@@ -1477,7 +1244,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 10;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Vitality";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1493,7 +1260,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 11;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Endurance";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1509,7 +1276,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 12;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Vigor";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1525,7 +1292,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 13;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Nimbleness";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1541,7 +1308,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 14;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Agility";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1557,7 +1324,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 15;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Precision";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1605,7 +1372,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 18;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Provisions";
 					card.cost = 1;
 					card.minRange = 0;
@@ -1621,7 +1388,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 19;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Reinforcements";
 					card.cost = 6;
 					card.minRange = 0;
@@ -1653,7 +1420,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 21;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Warcry";
 					card.cost = 4;
 					card.minRange = 0;
@@ -1669,7 +1436,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 22;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Rebirth";
 					card.cost = 4;
 					card.minRange = 0;
@@ -1685,7 +1452,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 23;
-					card.castType = CastType.OnEnemy;
+					card.castType = CastType.OnUnit;
 					card.name = "Assassinate";
 					card.cost = 5;
 					card.minRange = 1;
@@ -1733,7 +1500,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
 
 					card.id = 26;
-					card.castType = CastType.OnAlly;
+					card.castType = CastType.OnUnit;
 					card.name = "Royal Pledge";
 					card.cost = 3;
 					card.minRange = 0;
@@ -1756,9 +1523,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
     // method to update game history (can maybe make this a PunRPC to have the same on both clients
     public void updateGameHistory(string actionString)
     {
-        if (GameManager.instance.networked)
-            PhotonView.Get(gameObject).RequestOwnership();
-
         gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
     }
 
@@ -1772,17 +1536,5 @@ public class TurnManager : MonoBehaviour, IPunObservable
     {
         turnUpdateText.text = message;
         turnUpdateText.color = color;
-    }
-
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(gameHistoryText.text);
-        }
-        else
-        {
-            gameHistoryText.text = (string)stream.ReceiveNext();
-        }
     }
 }
