@@ -49,11 +49,36 @@ public class TrapOrItem : MonoBehaviour
 
     public virtual void TrapOrItemTriggeredByUnit(Node triggeringOriginNode)
     {
-        if(trapOrItemType == TrapOrItemTypes.BearTrap)
-            TurnManager.instance.GetComponent<PhotonView>().RPC("signalPlayers", RpcTarget.All, triggeringOriginNode.worldPosition, TrapOrItemTypes.BearTrap);
-        else if(trapOrItemType == TrapOrItemTypes.LandMine)
-            TurnManager.instance.GetComponent<PhotonView>().RPC("signalPlayers", RpcTarget.All, triggeringOriginNode.worldPosition, TrapOrItemTypes.LandMine);
-        triggeringOriginNode.RemoveTrapOrItem(this);
+        if (GameManager.instance.networked)
+        {
+            if (trapOrItemType == TrapOrItemTypes.BearTrap)
+                TurnManager.instance.GetComponent<PhotonView>().RPC("signalPlayers", RpcTarget.All, triggeringOriginNode.worldPosition, TrapOrItemTypes.BearTrap);
+            else if (trapOrItemType == TrapOrItemTypes.LandMine)
+                TurnManager.instance.GetComponent<PhotonView>().RPC("signalPlayers", RpcTarget.All, triggeringOriginNode.worldPosition, TrapOrItemTypes.LandMine);
+            triggeringOriginNode.RemoveTrapOrItem(this);
+        }
+        else
+        {
+            if (trapOrItemType == TrapOrItemTypes.BearTrap)
+            {
+                print(triggeringOriginNode.GetUnit());
+                triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
+                print("Bear Trap triggered!");
+            }
+            else if (trapOrItemType == TrapOrItemTypes.LandMine)
+            {
+                HashSet<Node> affectedNodes = GameObject.FindWithTag("Pathfinding").GetComponent<Pathfinding>().GetNodesMinMaxRange(triggeringOriginNode.worldPosition, false, 0, 1);
+
+                foreach (Node node in affectedNodes)
+                {
+                    if (node.GetUnit() != null)
+                        node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 3);
+                }
+                print("Land Mine triggered!");
+            }
+
+            triggeringOriginNode.RemoveTrapOrItem(this);
+        }
     }
     
     //set and get functions for item type

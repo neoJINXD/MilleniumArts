@@ -877,6 +877,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
             loadPlayerHand();
             currentTurnState = TurnState.Free;
             cardSelected = false;
+            currentPlayer.PlayCard(storedCard);
             return;
         }
 
@@ -1214,9 +1215,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
             node.GetUnit().gameObject.layer = LayerMask.NameToLayer("Unit");
 
         if (cardSuccessful)
-        {
             currentPlayer.PlayCard(storedCard);
-        }
 
         cardSuccessful = false;
 
