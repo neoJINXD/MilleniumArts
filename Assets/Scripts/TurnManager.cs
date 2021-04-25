@@ -1817,7 +1817,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
         if (GameManager.instance.networked)
             PhotonView.Get(gameObject).RequestOwnership();
 
-        gameHistoryText.text += System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString;
+        gameHistoryText.text = System.DateTime.Now.ToString("[HH:mm:ss] ") + actionString + gameHistoryText.text;
     }
 
     public void updateTurnUpdate(string message)
