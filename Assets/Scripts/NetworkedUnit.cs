@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using UnityEngine.UI;
 
 public class NetworkedUnit : Unit, IPunObservable
 {
@@ -20,6 +21,7 @@ public class NetworkedUnit : Unit, IPunObservable
                     {
                         unitPlayerId = 0;
                         GetComponentInChildren<SpriteRenderer>().sprite = CardEffectManager.instance.sprite_archer_blue;
+                        transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                     }
                     else
                     {
@@ -33,6 +35,7 @@ public class NetworkedUnit : Unit, IPunObservable
                     {
                         unitPlayerId = 0;
                         GetComponentInChildren<SpriteRenderer>().sprite = CardEffectManager.instance.sprite_assassin_blue;
+                        transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                     }
                     else
                     {
@@ -46,6 +49,7 @@ public class NetworkedUnit : Unit, IPunObservable
                     {
                         unitPlayerId = 0;
                         GetComponentInChildren<SpriteRenderer>().sprite = CardEffectManager.instance.sprite_dragonRider_blue;
+                        transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                     }
                     else
                     {
@@ -59,6 +63,7 @@ public class NetworkedUnit : Unit, IPunObservable
                     {
                         unitPlayerId = 0;
                         GetComponentInChildren<SpriteRenderer>().sprite = CardEffectManager.instance.sprite_knight_blue;
+                        transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                     }
                     else
                     {
@@ -72,6 +77,7 @@ public class NetworkedUnit : Unit, IPunObservable
                     {
                         unitPlayerId = 0;
                         GetComponentInChildren<SpriteRenderer>().sprite = CardEffectManager.instance.sprite_priest_blue;
+                        transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                     }
                     else
                     {
@@ -85,6 +91,7 @@ public class NetworkedUnit : Unit, IPunObservable
                     {
                         unitPlayerId = 0;
                         GetComponentInChildren<SpriteRenderer>().sprite = CardEffectManager.instance.sprite_soldier_blue;
+                        transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Image>().color = new Color32(0, 0, 255, 255);
                     }
                     else
                     {

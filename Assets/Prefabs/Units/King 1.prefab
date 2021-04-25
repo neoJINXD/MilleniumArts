@@ -208,6 +208,21 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4370658649476549407, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4370658649476549407, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4370658649476549407, guid: c8704ec88ee016646a21ce9013edcea9,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4974094165895785805, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
       propertyPath: m_Sprite
@@ -273,6 +288,7 @@ PrefabInstance:
         type: 3}
       propertyPath: movementSpeedLeft
       value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7628325342251820236, guid: c8704ec88ee016646a21ce9013edcea9,
         type: 3}
       propertyPath: m_LocalPosition.z
