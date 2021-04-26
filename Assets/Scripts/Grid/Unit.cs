@@ -465,14 +465,10 @@ public class Unit : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity))
         {
             if (hit.transform.CompareTag("Tile"))
-            {
                 PathRequestManager.RequestPath(transform.position, hit.transform.position, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
-            }
         }
     }
     
-    
-
 
     // passes this function when requesting for path
     // function starts the coroutine if pathfinding is successful

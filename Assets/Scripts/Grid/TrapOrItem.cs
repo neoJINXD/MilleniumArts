@@ -62,7 +62,7 @@ public class TrapOrItem : MonoBehaviour
             if (trapOrItemType == TrapOrItemTypes.BearTrap)
             {
                 print(triggeringOriginNode.GetUnit());
-                triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 5);
+                triggeringOriginNode.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 15);
                 print("Bear Trap triggered!");
             }
             else if (trapOrItemType == TrapOrItemTypes.LandMine)
@@ -72,7 +72,7 @@ public class TrapOrItem : MonoBehaviour
                 foreach (Node node in affectedNodes)
                 {
                     if (node.GetUnit() != null)
-                        node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 3);
+                        node.GetUnit().SetCurrentHealth(triggeringOriginNode.GetUnit().GetCurrentHealth() - 10);
                 }
                 print("Land Mine triggered!");
             }

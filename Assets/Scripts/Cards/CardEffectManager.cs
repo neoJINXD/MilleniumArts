@@ -275,7 +275,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            selectedNode.GetUnit().DecreaseCurrentHealthBy(5); // smite damage
+            selectedNode.GetUnit().DecreaseCurrentHealthBy(10); // smite damage
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
             {
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n");
@@ -307,7 +307,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            selectedNode.GetUnit().DecreaseCurrentHealthBy(10); // snipe damage
+            selectedNode.GetUnit().DecreaseCurrentHealthBy(15); // snipe damage
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
             {
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") lost 10 health!\n");
@@ -349,7 +349,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             {
                 if(node.GetUnit().GetUnitPlayerID() != playerId)
                 {
-                    node.GetUnit().DecreaseCurrentHealthBy(3);
+                    node.GetUnit().DecreaseCurrentHealthBy(8);
                     spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + "," + node.gridY + ") lost 3 health!\n";
                 }
             }
@@ -390,7 +390,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 if (node.GetUnit().GetUnitPlayerID() == playerId)
                 {
                     spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + "," + node.gridY + ") gained 3 health!\n";
-                    node.GetUnit().IncreaseCurrentHealthBy(3);
+                    node.GetUnit().IncreaseCurrentHealthBy(8);
                 }
             }
         }
@@ -905,7 +905,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Card Name: Bear Trap
      * Type: Spell(Trap)
      * Cast Range: (1, 2) tiles from any friendly unit
-     * Effect: Damages the triggering unit for 5 health.
+     * Effect: Damages the triggering unit for 15 health.
      * Cost: 3
      */
     [PunRPC]
@@ -951,8 +951,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Card Name: Land Mine
      * Type: Spell(Trap)
      * Cast Range: (1, 2) tiles from any friendly unit
-     * Effect: Damages all units from (0,1) tiles from the detonation origin for 3 health.
-     * Cost: 3
+     * Effect: Damages all units from (0,1) tiles from the detonation origin for 10 health.
+     * Cost: 4
      */
     [PunRPC]
     public void spell_landMine(int playerId, Vector3 selectedNodePos)

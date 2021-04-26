@@ -108,6 +108,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
     private const int COST_MOVE = 1;
     private const int COST_HEAL = 1;
     private const int COST_ATTACK = 2;
+    private const int CARDPOOL_COUNT = 27;
 
     // color32
     [HideInInspector]
@@ -1269,9 +1270,25 @@ public class TurnManager : MonoBehaviour, IPunObservable
     {
         cardDrawPanel.SetActive(true);
 
-        UnitCard unitCard;
-        SpellCard spellCard;
         GameObject cardGO;
+
+        int firstRandom = Random.Range(0, CARDPOOL_COUNT);
+
+        int secondRandom = firstRandom;
+        while (secondRandom == firstRandom)
+            secondRandom = Random.Range(0, CARDPOOL_COUNT);
+
+        int thirdRandom = firstRandom;
+        while (thirdRandom == firstRandom || thirdRandom == secondRandom)
+            thirdRandom = Random.Range(0, CARDPOOL_COUNT);
+
+        int fourthRandom = firstRandom;
+        while (fourthRandom == firstRandom || fourthRandom == secondRandom || fourthRandom == thirdRandom)
+            fourthRandom = Random.Range(0, CARDPOOL_COUNT);
+
+        int fifthRandom = firstRandom;
+        while (fifthRandom == firstRandom || fifthRandom == secondRandom || fifthRandom == thirdRandom || fourthRandom == fifthRandom)
+            fifthRandom = Random.Range(0, CARDPOOL_COUNT);
 
         for (int x = 1; x < 6; x++)
         {
@@ -1287,7 +1304,18 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
             cardGO = Object.Instantiate(cardPrefab, Vector3.zero, Quaternion.identity);
 
-            Card randomCard = RandomCard();
+            Card randomCard = null;
+
+            if (x == 1)
+                randomCard = CreateCard(firstRandom);
+            else if (x == 2)
+                randomCard = CreateCard(secondRandom);
+            else if (x == 3)
+                randomCard = CreateCard(thirdRandom);
+            else if (x == 4)
+                randomCard = CreateCard(fourthRandom);
+            else if (x == 5)
+                randomCard = CreateCard(fifthRandom);
 
             if (randomCard.GetType() == typeof(UnitCard))
             {
@@ -1319,7 +1347,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
     //it in multiple places
     public Card RandomCard()
     {
-        int random = Random.Range(0, 27);
+        int random = Random.Range(0, CARDPOOL_COUNT);
 
         if (random < 6)
         {
@@ -1467,9 +1495,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
             switch (random)
             {
                 case 6:
-
-
-
                     card.id = 6;
                     card.castType = CastType.OnUnit;
                     card.name = "Smite";
@@ -1478,14 +1503,11 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     card.maxRange = 1;
                     card.aoeMinRange = 0;
                     card.aoeMaxRange = 0;
-                    card.description = "Damages an enemy unit for 5 health.";
+                    card.description = "Damages an enemy unit for 10 health.";
 
                     break;
 
                 case 7:
-
-
-
                     card.id = 7;
                     card.castType = CastType.OnUnit;
                     card.name = "Snipe";
@@ -1494,14 +1516,11 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     card.maxRange = 3;
                     card.aoeMinRange = 0;
                     card.aoeMaxRange = 0;
-                    card.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 10 health.";
+                    card.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 15 health.";
 
                     break;
 
                 case 8:
-
-
-
                     card.id = 8;
                     card.castType = CastType.OnAny;
                     card.name = "Heavenly Smite";
@@ -1510,14 +1529,11 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     card.maxRange = 3;
                     card.aoeMinRange = 0;
                     card.aoeMaxRange = 1;
-                    card.description = "Damages all enemies within (0,1) tiles of the casting origin for 3 health.";
+                    card.description = "Damages all enemies within (0,1) tiles of the casting origin for 8 health.";
 
                     break;
 
                 case 9:
-
-
-
                     card.id = 9;
                     card.castType = CastType.OnAny;
                     card.name = "Prayer";
@@ -1526,14 +1542,11 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     card.maxRange = 2;
                     card.aoeMinRange = 0;
                     card.aoeMaxRange = 1;
-                    card.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 3 health.";
+                    card.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 8 health.";
 
                     break;
 
                 case 10:
-
-
-
                     card.id = 10;
                     card.castType = CastType.OnUnit;
                     card.name = "Vitality";
@@ -1547,9 +1560,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 11:
-
-
-
                     card.id = 11;
                     card.castType = CastType.OnUnit;
                     card.name = "Endurance";
@@ -1563,9 +1573,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 12:
-
-
-
                     card.id = 12;
                     card.castType = CastType.OnUnit;
                     card.name = "Vigor";
@@ -1579,9 +1586,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 13:
-
-
-
                     card.id = 13;
                     card.castType = CastType.OnUnit;
                     card.name = "Nimbleness";
@@ -1595,9 +1599,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 14:
-
-
-
                     card.id = 14;
                     card.castType = CastType.OnUnit;
                     card.name = "Agility";
@@ -1611,9 +1612,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 15:
-
-
-
                     card.id = 15;
                     card.castType = CastType.OnUnit;
                     card.name = "Precision";
@@ -1627,9 +1625,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 16:
-
-
-
                     card.id = 16;
                     card.castType = CastType.OnAny;
                     card.name = "Oracle";
@@ -1643,9 +1638,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 17:
-
-
-
                     card.id = 17;
                     card.castType = CastType.OnEmpty;
                     card.name = "Disarm Trap";
@@ -1659,9 +1651,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 18:
-
-
-
                     card.id = 18;
                     card.castType = CastType.OnUnit;
                     card.name = "Provisions";
@@ -1675,9 +1664,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 19:
-
-
-
                     card.id = 19;
                     card.castType = CastType.OnUnit;
                     card.name = "Reinforcements";
@@ -1691,9 +1677,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 20:
-
-
-
                     card.id = 20;
                     card.castType = CastType.OnAny;
                     card.name = "Greed";
@@ -1723,9 +1706,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 22:
-
-
-
                     card.id = 22;
                     card.castType = CastType.OnUnit;
                     card.name = "Rebirth";
@@ -1739,9 +1719,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 23:
-
-
-
                     card.id = 23;
                     card.castType = CastType.OnUnit;
                     card.name = "Assassinate";
@@ -1755,9 +1732,6 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     break;
 
                 case 24:
-
-
-
                     card.id = 24;
                     card.castType = CastType.OnEmpty;
                     card.name = "Bear Trap";
@@ -1766,30 +1740,24 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     card.maxRange = 2;
                     card.aoeMinRange = 0;
                     card.aoeMaxRange = 0;
-                    card.description = "Damages the triggering unit for 5 health.";
+                    card.description = "Damages the triggering unit for 15 health.";
 
                     break;
 
                 case 25:
-
-
-
                     card.id = 25;
                     card.castType = CastType.OnEmpty;
                     card.name = "Land Mine";
-                    card.cost = 3;
+                    card.cost = 4;
                     card.minRange = 1;
                     card.maxRange = 2;
                     card.aoeMinRange = 0;
                     card.aoeMaxRange = 1;
-                    card.description = "Damages all units from (0,1) tiles from the detonation origin for 3 health.";
+                    card.description = "Damages all units from (0,1) tiles from the detonation origin for 10 health.";
 
                     break;
 
                 case 26:
-
-
-
                     card.id = 26;
                     card.castType = CastType.OnUnit;
                     card.name = "Royal Pledge";
@@ -1810,6 +1778,436 @@ public class TurnManager : MonoBehaviour, IPunObservable
 
         return new Card();
     }
+
+    public Card CreateCard(int cardId)
+    {
+        if (cardId < 6)
+        {
+            UnitCard card = new UnitCard();
+            switch (cardId)
+            {
+                case 0:
+                    card.UnitType = Unit.UnitTypes.Soldier;
+                    card.id = 0;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Soldier";
+                    card.cost = 1;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 10;
+                    card.damage = 5;
+                    card.defence = 1;
+                    card.minAttackRange = 1;
+                    card.maxAttackRange = 1;
+                    card.moveSpeed = 4;
+                    card.accuracy = 80;
+                    card.evasion = 20;
+                    card.flying = false;
+
+                    break;
+
+                case 1:
+                    card.UnitType = Unit.UnitTypes.Knight;
+                    card.id = 1;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Knight";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 20;
+                    card.damage = 7;
+                    card.defence = 3;
+                    card.minAttackRange = 1;
+                    card.maxAttackRange = 1;
+                    card.moveSpeed = 3;
+                    card.accuracy = 70;
+                    card.evasion = 10;
+                    card.flying = false;
+
+                    break;
+
+                case 2:
+                    card.UnitType = Unit.UnitTypes.Assassin;
+                    card.id = 2;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Assassin";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 15;
+                    card.damage = 9;
+                    card.defence = 0;
+                    card.minAttackRange = 1;
+                    card.maxAttackRange = 1;
+                    card.moveSpeed = 6;
+                    card.accuracy = 95;
+                    card.evasion = 60;
+                    card.flying = false;
+
+                    break;
+
+                case 3:
+                    card.UnitType = Unit.UnitTypes.Priest;
+                    card.id = 3;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Priest";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 15;
+                    card.damage = 5;
+                    card.defence = 0;
+                    card.minAttackRange = 0;
+                    card.maxAttackRange = 2;
+                    card.moveSpeed = 4;
+                    card.accuracy = 100;
+                    card.evasion = 30;
+                    card.flying = false;
+
+                    break;
+
+                case 4:
+                    card.UnitType = Unit.UnitTypes.Archer;
+                    card.id = 4;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Archer";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 15;
+                    card.damage = 6;
+                    card.defence = 0;
+                    card.minAttackRange = 2;
+                    card.maxAttackRange = 3;
+                    card.moveSpeed = 4;
+                    card.accuracy = 90;
+                    card.evasion = 30;
+                    card.flying = false;
+
+                    break;
+
+                case 5:
+                    card.UnitType = Unit.UnitTypes.DragonRider;
+                    card.id = 5;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Dragon Rider";
+                    card.cost = 5;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.health = 25;
+                    card.damage = 6;
+                    card.defence = 2;
+                    card.minAttackRange = 1;
+                    card.maxAttackRange = 1;
+                    card.moveSpeed = 4;
+                    card.accuracy = 85;
+                    card.evasion = 20;
+                    card.flying = true;
+
+                    break;
+            }
+
+            return card;
+        }
+        else
+        {
+            SpellCard card = new SpellCard();
+            switch (cardId)
+            {
+                case 6:
+                    card.id = 6;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Smite";
+                    card.cost = 2;
+                    card.minRange = 1;
+                    card.maxRange = 1;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Damages an enemy unit for 10 health.";
+
+                    break;
+
+                case 7:
+                    card.id = 7;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Snipe";
+                    card.cost = 3;
+                    card.minRange = 1;
+                    card.maxRange = 3;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Only castable from a friendly Archer unit. Damages an enemy unit for 15 health.";
+
+                    break;
+
+                case 8:
+                    card.id = 8;
+                    card.castType = CastType.OnAny;
+                    card.name = "Heavenly Smite";
+                    card.cost = 5;
+                    card.minRange = 0;
+                    card.maxRange = 3;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 1;
+                    card.description = "Damages all enemies within (0,1) tiles of the casting origin for 8 health.";
+
+                    break;
+
+                case 9:
+                    card.id = 9;
+                    card.castType = CastType.OnAny;
+                    card.name = "Prayer";
+                    card.cost = 4;
+                    card.minRange = 0;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 1;
+                    card.description = "Only castable from a friendly Priest unit. Heal all allies within (0,1) tiles of the casting origin for 8 health.";
+
+                    break;
+
+                case 10:
+                    card.id = 10;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Vitality";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s current and maximum Health by 5.";
+
+                    break;
+
+                case 11:
+                    card.id = 11;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Endurance";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s Defence by 2.";
+
+                    break;
+
+                case 12:
+                    card.id = 12;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Vigor";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s Damage by 3.";
+
+                    break;
+
+                case 13:
+                    card.id = 13;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Nimbleness";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s movement speed by 1.";
+
+                    break;
+
+                case 14:
+                    card.id = 14;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Agility";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s Evasion by 10.";
+
+                    break;
+
+                case 15:
+                    card.id = 15;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Precision";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Increases an ally unit’s Accuracy by 10.";
+
+                    break;
+
+                case 16:
+                    card.id = 16;
+                    card.castType = CastType.OnAny;
+                    card.name = "Oracle";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 5;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 2;
+                    card.description = "Reveals all traps within (0,2) tiles of the triggering origin.";
+
+                    break;
+
+                case 17:
+                    card.id = 17;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Disarm Trap";
+                    card.cost = 1;
+                    card.minRange = 1;
+                    card.maxRange = 3;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Attempts to disarm an enemy trap on a tile.";
+
+                    break;
+
+                case 18:
+                    card.id = 18;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Provisions";
+                    card.cost = 1;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Heals a unit for 5 health.";
+
+                    break;
+
+                case 19:
+                    card.id = 19;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Reinforcements";
+                    card.cost = 6;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Summons 4 Soldier units around an ally.";
+
+                    break;
+
+                case 20:
+                    card.id = 20;
+                    card.castType = CastType.OnAny;
+                    card.name = "Greed";
+                    card.cost = 3;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Draw 2 cards.";
+
+                    break;
+
+                case 21:
+                    card.id = 21;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Warcry";
+                    card.cost = 4;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 1;
+                    card.description = "Only castable from a friendly Knight unit. Increases the damage of all allies within (0,1) tiles of the casting origin by 2.";
+
+                    break;
+
+                case 22:
+                    card.id = 22;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Rebirth";
+                    card.cost = 4;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Fully heals an ally unit.";
+
+                    break;
+
+                case 23:
+                    card.id = 23;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Assassinate";
+                    card.cost = 5;
+                    card.minRange = 1;
+                    card.maxRange = 1;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Only castable from a friendly Assassin unit. Immediately kills and enemy unit (does not work on King unit).";
+
+                    break;
+
+                case 24:
+                    card.id = 24;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Bear Trap";
+                    card.cost = 2;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Damages the triggering unit for 15 health.";
+
+                    break;
+
+                case 25:
+                    card.id = 25;
+                    card.castType = CastType.OnEmpty;
+                    card.name = "Land Mine";
+                    card.cost = 4;
+                    card.minRange = 1;
+                    card.maxRange = 2;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 1;
+                    card.description = "Damages all units from (0,1) tiles from the detonation origin for 10 health.";
+
+                    break;
+
+                case 26:
+                    card.id = 26;
+                    card.castType = CastType.OnUnit;
+                    card.name = "Royal Pledge";
+                    card.cost = 3;
+                    card.minRange = 0;
+                    card.maxRange = 0;
+                    card.aoeMinRange = 0;
+                    card.aoeMaxRange = 0;
+                    card.description = "Only castable from a friendly King unit. Increases the damage, current health and max health of all allies within (1,1) tiles of the casting origin by 2.";
+
+                    break;
+
+
+            }
+
+            return card;
+        }
+
+        return new Card();
+    }
+
 
     // method to update game history (can maybe make this a PunRPC to have the same on both clients
     public void updateGameHistory(string actionString)
