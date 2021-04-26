@@ -1134,18 +1134,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
                 {
                     if (selectedNode.GetUnit() == null)
                     {
-                        if (storedCard.id == 16)
-                        {
-                            if (GameManager.instance.networked)
-                            {
-                                PhotonView.Get(cardEffectManager).RPC("spell_oracle", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                            else
-                            {
-                                cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNodePosition);
-                            }
-                        }
-                        else if (storedCard.id == 17)
+                        if (storedCard.id == 17)
                         {
                             if (GameManager.instance.networked)
                             {
@@ -1201,6 +1190,17 @@ public class TurnManager : MonoBehaviour, IPunObservable
                     else
                     {
                         cardEffectManager.spell_prayer(currentPlayer.PlayerId, selectedNodePosition);
+                    }
+                }
+                else if (storedCard.id == 16)
+                {
+                    if (GameManager.instance.networked)
+                    {
+                        PhotonView.Get(cardEffectManager).RPC("spell_oracle", RpcTarget.All, currentPlayer.PlayerId, selectedNodePosition);
+                    }
+                    else
+                    {
+                        cardEffectManager.spell_oracle(currentPlayer.PlayerId, selectedNodePosition);
                     }
                 }
             }

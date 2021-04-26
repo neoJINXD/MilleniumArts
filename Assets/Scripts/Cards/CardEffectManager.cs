@@ -360,8 +360,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.updateTurnUpdate("Successfully used Heavenly Smite at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         }
-        Instantiate(anim_spell_heavenlySmite, selectedNode.GetUnit().transform, false);
         TurnManager.instance.cardSuccessful = true;
+        DisplayAnimation(anim_spell_heavenlySmite);
 
     }
 
@@ -400,7 +400,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateTurnUpdate("Successfully used Prayer at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         }
         TurnManager.instance.cardSuccessful = true;
-        Instantiate(anim_spell_prayer, selectedNode.GetUnit().transform, false);
+        DisplayAnimation(anim_spell_prayer);
     }
 
     /*
@@ -632,7 +632,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateTurnUpdate("Successfully used Oracle at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         }
         TurnManager.instance.cardSuccessful = true;
-        Instantiate(anim_spell_oracle, selectedNode.GetUnit().transform, false);
+        DisplayAnimation(anim_spell_oracle);
     }
 
     /*
@@ -652,13 +652,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
         if (selectedNode.GetTrapOrItemList().Count > 0)
         {
-            foreach (TrapOrItem toi in selectedNode.GetTrapOrItemList())
+            foreach (TrapOrItem toi in selectedNode.GetTrapOrItemList().ToArray())
             {
                 if (toi.GetTrapOrItemPlayerID() != playerId)
                 {
                     selectedNode.RemoveTrapOrItem(toi);
                     spellMessage += "Enemy trap removed at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
-                    Instantiate(anim_spell_disarmTrap, selectedNode.GetUnit().transform, false);
+                    DisplayAnimation(anim_spell_disarmTrap);
                 }
             }
         }
@@ -742,7 +742,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 TurnManager.instance.updateTurnUpdate("Successfully used Reinforcements on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             }
             TurnManager.instance.cardSuccessful = true;
-            // Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
         }
         else
         {
@@ -920,12 +920,9 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
             {
                 TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Bear Trap on the battlefield!\n");
-                TurnManager.instance.updateTurnUpdate("Successfully placed Bear Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+                TurnManager.instance.updateTurnUpdate("Successfully placed Bear Trap!", TurnManager.instance.color32_green);
             }
             TurnManager.instance.cardSuccessful = true;
-
-            DisplayAnimation(anim_spell_bearTrap);
-
         }
         else
         {
@@ -969,10 +966,9 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
             {
                 TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Land Mine on the battlefield!\n");
-                TurnManager.instance.updateTurnUpdate("Successfully placed a Land Mine at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+                TurnManager.instance.updateTurnUpdate("Successfully placed a Land Mine!", TurnManager.instance.color32_green);
             }
             TurnManager.instance.cardSuccessful = true;
-            DisplayAnimation(anim_spell_landMine);
         }
         else
         {

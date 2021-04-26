@@ -466,10 +466,6 @@ public class Unit : MonoBehaviour
         {
             if (hit.transform.CompareTag("Tile"))
             {
-                // fixes out of bounce error that occurs when unit selected.
-                if (Vector3.Distance(hit.point, transform.position) < 1)
-                    return; // already at destination
-
                 PathRequestManager.RequestPath(transform.position, hit.transform.position, canFly, this.GetUnitPlayerID(), OnPathFound, heuristic);
             }
         }

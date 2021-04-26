@@ -67,7 +67,8 @@ public class CardMouseOver : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private void OnDisable()
     {
-        cardZoomInPanel.SetActive(false);
+        if(cardZoomInPanel != null)
+            cardZoomInPanel.SetActive(false);
     }
 
     //Detect when Cursor leaves the GameObject
