@@ -70,6 +70,15 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("PhotonGameMap");
     }
 
+    public void LeaveMultiplayer()
+    {
+        if (PhotonNetwork.InRoom)
+            PhotonNetwork.LeaveRoom();
+        if (PhotonNetwork.IsConnected)
+            PhotonNetwork.Disconnect();
+        SceneManager.LoadScene("Main");
+    }
+
     // Callbacks
     public override void OnConnectedToMaster() 
     {
@@ -112,5 +121,16 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         print($"{newPlayer.NickName} has joined the room");
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+            MenuManager.instance.CloseMenu("ingame");
+            MenuManager.instance.OpenMenu("main");
+        }
+
     }
 }
