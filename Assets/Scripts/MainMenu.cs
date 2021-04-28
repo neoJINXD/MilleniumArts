@@ -8,6 +8,9 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private SceneField m_onlineScene;
     [SerializeField] private SceneField m_aiScene;
 
+    [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject credits;
+
     public void OpenOnlineScene()
     {
         SceneManager.LoadScene(m_onlineScene);
@@ -16,6 +19,18 @@ public class MainMenu : MonoBehaviour
     public void OpenAIScene()
     {
         SceneManager.LoadScene(m_aiScene);
+    }
+
+    public void ShowMenu()
+    {
+        mainMenu.SetActive(true);
+        credits.SetActive(false);
+    }
+
+    public void ShowCredits()
+    {
+        mainMenu.SetActive(false);
+        credits.SetActive(true);
     }
 
     public void Quit()
