@@ -52,9 +52,7 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
                     endTurnButton.SetActive(!((NetworkedPlayer)GameLoop.instance.GetCurrentPlayer()).amIP1);
             }
             else
-            {
                 endTurnButton.SetActive(GameLoop.instance.GetCurrentPlayer().PlayerId == 0);
-            }
         }
     }
 
@@ -75,10 +73,8 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
             x += 1;
         }
 
-
         foreach (GameObject child in children)
             GameObject.DestroyImmediate(child);
-
 
         float rectWidth = handPanelRT.rect.width;
 
@@ -107,7 +103,7 @@ public class GameplayUIManager: Singleton<GameplayUIManager>
             GameManager.instance.view.RPC("EndCurrentPlayerTurn", Photon.Pun.RpcTarget.All);
         else
             GameLoop.instance.EndCurrentPlayer();
-        // TODO check if this is needed in the multiplayer part?
+
         TurnManager.instance.cardDrawPanel.SetActive(false);
     }
 }

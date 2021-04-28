@@ -13,7 +13,6 @@ public enum CastType
 [Serializable]
 public class Card : MonoBehaviour
 {
-
     public int id;
     public CastType castType;
     public string name;
@@ -26,17 +25,13 @@ public class Card : MonoBehaviour
 
     public int indexInHand;
 
-    public Card()
-    {
+    public Card() {}
 
-    }
-
-    public Card(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, int cardAOEMin, int cardAOEMax)
+    public Card(int cardId, CastType cardCastType, string cardName, int cardCost, int cardMin, int cardMax, int cardAOEMin, int cardAOEMax)
     {
         id = cardId;
         castType = cardCastType;
         name = cardName;
-        //image = cardImage;
         cost = cardCost;
         minRange = cardMin;
         maxRange = cardMax;

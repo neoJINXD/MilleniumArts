@@ -88,9 +88,7 @@ public class GameLoop : Singleton<GameLoop>
             UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
         }
         else
-        {
             UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
-        }
     }
 
     private const int infiniteManaValue = 999999;
