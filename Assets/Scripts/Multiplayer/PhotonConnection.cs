@@ -108,7 +108,7 @@ public class PhotonConnection : MonoBehaviourPunCallbacks
         }
         else
         {
-            infoText.text = "You are the Red Units";
+            infoText.text = "You are the Red Units\nWait for the Host to start the game";
         }
         inRoom = true;
     }
