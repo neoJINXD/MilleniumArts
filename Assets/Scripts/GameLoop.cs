@@ -24,6 +24,8 @@ public class GameLoop : Singleton<GameLoop>
     private bool winCondition = false;
     private int winningId;
 
+    private Timer timer;
+
     //To be able to wait for local player, networked player, and AI player turns
     public IEnumerator Play()
     {
@@ -55,6 +57,12 @@ public class GameLoop : Singleton<GameLoop>
         }
     }
 
+    private void Start() 
+    {
+        timer = new Timer(5f);
+        timer.OnTimerEnd += EndGame;
+    }
+
     private void Update()
     {
         foreach (var player in players)
@@ -67,6 +75,21 @@ public class GameLoop : Singleton<GameLoop>
                 m_gameOverUI.SetActive(true);
                 m_winningPlayerText.SetText($"Player {winningId} wins!");
             }
+        }
+        if (winCondition)
+            timer.Tick(Time.deltaTime);
+    }
+
+    private void EndGame()
+    {
+        if (GameManager.instance.networked)
+        {
+            Photon.Pun.PhotonNetwork.Disconnect();
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
+        }
+        else
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Main");
         }
     }
 
