@@ -8,12 +8,11 @@ public class SpellCard : Card
 	
 	public string description;
 	
-    public SpellCard(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax, string cardDesc, int cardAOEMin, int cardAOEMax)
+    public SpellCard(int cardId, CastType cardCastType, string cardName, int cardCost, int cardMin, int cardMax, string cardDesc, int cardAOEMin, int cardAOEMax)
     {
         id = cardId;
         castType = cardCastType;
         name = cardName;
-        //image = cardImage;
         cost = cardCost;
         minRange = cardMin;
         maxRange = cardMax;
@@ -30,7 +29,6 @@ public class SpellCard : Card
         id = copyCard.id;
         castType = copyCard.castType;
         name = copyCard.name;
-        //image = cardImage;
         cost = copyCard.cost;
         minRange = copyCard.minRange;
         maxRange = copyCard.maxRange;

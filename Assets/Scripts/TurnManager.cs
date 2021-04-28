@@ -1352,6 +1352,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
         if (random < 6)
         {
             UnitCard card = new UnitCard();
+
             switch (random)
             {
                 case 0:
@@ -1492,6 +1493,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
         else
         {
             SpellCard card = new SpellCard();
+
             switch (random)
             {
                 case 6:
@@ -1784,6 +1786,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
         if (cardId < 6)
         {
             UnitCard card = new UnitCard();
+
             switch (cardId)
             {
                 case 0:
@@ -1924,6 +1927,7 @@ public class TurnManager : MonoBehaviour, IPunObservable
         else
         {
             SpellCard card = new SpellCard();
+
             switch (cardId)
             {
                 case 6:

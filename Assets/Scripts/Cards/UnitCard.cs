@@ -17,14 +17,13 @@ public class UnitCard : Card
 
 	public UnitCard() {}
 
-    public UnitCard(int cardId, CastType cardCastType, string cardName, /*GameObject cardImage,*/ int cardCost, int cardMin, int cardMax,
+    public UnitCard(int cardId, CastType cardCastType, string cardName, int cardCost, int cardMin, int cardMax,
         int cardHealth, int cardDamage, int cardDefence, int cardMinARange, int cardMaxARange, int cardMoveSpeed, int cardAccuracy,
         int cardEvasion, bool cardFlying)
     {
         id = cardId;
         castType = cardCastType;
         name = cardName;
-        //image = cardImage;
         cost = cardCost;
         minRange = cardMin;
         maxRange = cardMax;
@@ -49,7 +48,6 @@ public class UnitCard : Card
         id = copyCard.id;
         castType = copyCard.castType;
         name = copyCard.name;
-        //image = cardImage;
         cost = copyCard.cost;
         minRange = copyCard.minRange;
         maxRange = copyCard.maxRange;

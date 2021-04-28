@@ -3,7 +3,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using ExitGames.Client.Photon.StructWrapping;
-//using UnityEditor;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -98,17 +97,6 @@ public class Unit : MonoBehaviour
         movementSpeedLeft = movementSpeed;
     }
 
-    // dictionary of heap index and unit itself.
-
-    /*
-    For testing:
-    public Transform target;
-    void Start() 
-    {
-        // PathRequestManager.RequestPath(transform.position,target.position, OnPathFound);
-    }*/
-
-    //set, get and update functions for movement speed
     //set, get and update functions for movement speed
     public void SetCanAttack(bool b)
     {
@@ -489,11 +477,8 @@ public class Unit : MonoBehaviour
         Node unitNode = path[0];//keeps track of the node the unit is currently on
         Node currentWaypoint = path[1]; //keeps track of the next node the unit is going to move to
 
-        //Grid grid = GameObject.Find("Pathfinding").GetComponent<Grid>();
-
         while (true)
         {
-            //grid.NodeFromWorldPoint(transform.position).RemoveUnit(this);
             unitNode.RemoveUnit(this);
             transform.position = Vector3.MoveTowards(transform.position, currentWaypoint.worldPosition, constantMovementSpeed * Time.deltaTime);
 
@@ -508,16 +493,7 @@ public class Unit : MonoBehaviour
 
                 currentWaypoint = path[targetIndex];
                 unitNode = path[targetIndex - 1];
-                //currentWaypoint.RemoveUnit(this);// moved this
-                //currentWaypoint = path[targetIndex];
-                //currentWaypoint.AddUnit(this);
-                //CheckHostileTrapOrItemInNode(currentWaypoint); // moved this
             }
-
-            //transform.position = Vector3.MoveTowards(transform.position,currentWaypoint.worldPosition,constantMovementSpeed * Time.deltaTime);
-
-            //CheckHostileTrapOrItemInNode(currentWaypoint);
-
             yield return null;
         }
     }
@@ -559,48 +535,7 @@ public class Unit : MonoBehaviour
 
         foreach (TrapOrItem toi in toiList.ToArray())
             toi.TrapOrItemTriggeredByUnit(waypoint);
-
-        // removed if statement to make player trigger their own traps
-        /*{
-            if (toi.GetTrapOrItemPlayerID() != this.GetUnitPlayerID())
-            {
-                toi.TrapOrItemTriggeredByUnit();
-            }
-        }*/
     }
-
-    // public void OnDrawGizmos() 
-    // {
-    //     if (path != null) {
-    //         for (int i = targetIndex; i < path.Length; i++) {
-    //             Gizmos.color = Color.black;
-    //             Gizmos.DrawCube(path[i], Vector3.one * (1f - 0.3f));
-    //
-    //             if (i == targetIndex) {
-    //                 Gizmos.DrawLine(transform.position, path[i]);
-    //             }
-    //             else {
-    //                 Gizmos.DrawLine(path[i - 1], path[i]);
-    //             }
-    //         }
-    //     }
-    // }
-
-    /*    void OnMouseDown()
-        {
-            Debug.Log("Player ID: " + GetComponent<Unit>().GetUnitPlayerID() +
-                "\nType: " + GetComponent<Unit>().GetUnitType() +
-                "\nMax HP: " + GetComponent<Unit>().GetMaxHealth() +
-                "\nCurrent HP: " + GetComponent<Unit>().GetCurrentHealth() +
-                "\nDamage: " + GetComponent<Unit>().GetDamage() +
-                "\nDefence: " + GetComponent<Unit>().GetDefence() +
-                "\nMin Range: " + GetComponent<Unit>().GetMinRange() +
-                "\nMax Range: " + GetComponent<Unit>().GetMaxRange() +
-                "\nAccuracy: " + GetComponent<Unit>().GetAccuracy() +
-                "\nEvasion: " + GetComponent<Unit>().GetEvasion() +
-                "\nMS: " + GetComponent<Unit>().GetMovementSpeed() +
-                "\nFlying: " + GetComponent<Unit>().GetCanFly());
-        }*/
 
     void OnMouseEnter()
     {
