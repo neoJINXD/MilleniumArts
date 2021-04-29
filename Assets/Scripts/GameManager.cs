@@ -56,37 +56,27 @@ public class GameManager : Singleton<GameManager>
         view = GetComponent<PhotonView>();
 
         print("Starting the photon game");
-        //if (PhotonNetwork.IsMasterClient)
-        //{
-            Player p1 = gameObject.AddComponent<NetworkedPlayer>();
-            //print(p1);
-            view.ObservedComponents.Add(p1);
 
-            Player p2 = gameObject.AddComponent<NetworkedPlayer>();
-            //print(p2);
-            view.ObservedComponents.Add(p2);
+        Player p1 = gameObject.AddComponent<NetworkedPlayer>();
+        view.ObservedComponents.Add(p1);
 
-            gameLoop.GetPlayerList().Clear();
-            gameLoop.AddPlayer(p1);
-            ((NetworkedPlayer)p1).amIP1 = true;
-            gameLoop.AddPlayer(p2);
-            //p2.EndTurn();
-        //}
+        Player p2 = gameObject.AddComponent<NetworkedPlayer>();
+        view.ObservedComponents.Add(p2);
 
-
-
+        gameLoop.GetPlayerList().Clear();
+        gameLoop.AddPlayer(p1);
+        ((NetworkedPlayer)p1).amIP1 = true;
+        gameLoop.AddPlayer(p2);
 
         StartCoroutine(gameLoop.Play());
     }
 
     private void Update() 
     {
-        //print(PhotonNetwork.PlayerList.Length);
         if(networked && !isLeaving && PhotonNetwork.IsConnected && PhotonNetwork.PlayerList.Length != 2)
         {
             isLeaving = true;
             NetworkRoom.LeaveRoom();
-            //     PhotonNetwork.LeaveRoom();
             SceneManager.LoadScene("PhotonPrototyping");
         }    
     }

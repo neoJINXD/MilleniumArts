@@ -63,7 +63,6 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
     #endregion
 
-
     private bool placerClicked = false;
     private const float lockAxis = 27f;
 
@@ -273,9 +272,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
     public void spell_smite(int playerId, Vector3 selectedNodePos)
     {
         Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            selectedNode.GetUnit().DecreaseCurrentHealthBy(5); // smite damage
+            selectedNode.GetUnit().DecreaseCurrentHealthBy(10); // smite damage
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
             {
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Smite on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n");
@@ -287,9 +287,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -305,9 +303,10 @@ public class CardEffectManager : Singleton<CardEffectManager>
     public void spell_snipe(int playerId, Vector3 selectedNodePos)
     {
         Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
-            selectedNode.GetUnit().DecreaseCurrentHealthBy(10); // snipe damage
+            selectedNode.GetUnit().DecreaseCurrentHealthBy(15); // snipe damage
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
             {
                 TurnManager.instance.updateGameHistory("Player " + playerId + " used Snipe on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!\n " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ") lost 10 health!\n");
@@ -319,9 +318,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -349,7 +346,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             {
                 if(node.GetUnit().GetUnitPlayerID() != playerId)
                 {
-                    node.GetUnit().DecreaseCurrentHealthBy(3);
+                    node.GetUnit().DecreaseCurrentHealthBy(8);
                     spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + "," + node.gridY + ") lost 3 health!\n";
                 }
             }
@@ -360,8 +357,9 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.updateTurnUpdate("Successfully used Heavenly Smite at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         }
-        Instantiate(anim_spell_heavenlySmite, selectedNode.GetUnit().transform, false);
+
         TurnManager.instance.cardSuccessful = true;
+        DisplayAnimation(anim_spell_heavenlySmite);
 
     }
 
@@ -390,7 +388,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 if (node.GetUnit().GetUnitPlayerID() == playerId)
                 {
                     spellMessage += node.GetUnit().GetUnitType() + " (" + node.gridX + "," + node.gridY + ") gained 3 health!\n";
-                    node.GetUnit().IncreaseCurrentHealthBy(3);
+                    node.GetUnit().IncreaseCurrentHealthBy(8);
                 }
             }
         }
@@ -399,8 +397,9 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.updateTurnUpdate("Successfully used Prayer at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         }
+
         TurnManager.instance.cardSuccessful = true;
-        Instantiate(anim_spell_prayer, selectedNode.GetUnit().transform, false);
+        DisplayAnimation(anim_spell_prayer);
     }
 
     /*
@@ -430,9 +429,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -448,6 +445,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
     public void spell_endurance(int playerId, Vector3 selectedNodePos)
     {
         Node selectedNode = grid.NodeFromWorldPoint(selectedNodePos);
+
         if (selectedNode.GetUnit() != null) // check if there's a unit on this node
         {
             selectedNode.GetUnit().IncreaseDefenceBy(2);
@@ -462,9 +460,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -494,9 +490,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -527,9 +521,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }   
         }
     }
 
@@ -560,9 +552,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -626,13 +616,15 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 }
             }
         }
+
         if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
         {
             TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.updateTurnUpdate("Successfully used Oracle at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         }
+
         TurnManager.instance.cardSuccessful = true;
-        Instantiate(anim_spell_oracle, selectedNode.GetUnit().transform, false);
+        DisplayAnimation(anim_spell_oracle);
     }
 
     /*
@@ -652,13 +644,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
 
         if (selectedNode.GetTrapOrItemList().Count > 0)
         {
-            foreach (TrapOrItem toi in selectedNode.GetTrapOrItemList())
+            foreach (TrapOrItem toi in selectedNode.GetTrapOrItemList().ToArray())
             {
                 if (toi.GetTrapOrItemPlayerID() != playerId)
                 {
                     selectedNode.RemoveTrapOrItem(toi);
                     spellMessage += "Enemy trap removed at (" + selectedNode.gridX + ", " + selectedNode.gridY + ")!\n";
-                    Instantiate(anim_spell_disarmTrap, selectedNode.GetUnit().transform, false);
+                    DisplayAnimation(anim_spell_disarmTrap);
                 }
             }
         }
@@ -667,6 +659,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.updateTurnUpdate("Successfully used Disarm Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         }
+
         TurnManager.instance.cardSuccessful = true;
     }
 
@@ -697,9 +690,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -742,14 +733,12 @@ public class CardEffectManager : Singleton<CardEffectManager>
                 TurnManager.instance.updateTurnUpdate("Successfully used Reinforcements on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
             }
             TurnManager.instance.cardSuccessful = true;
-            // Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
+            Instantiate(anim_spell_reinforcements, selectedNode.GetUnit().transform, false);
         }
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("Cannot use Reinforcements on this unit! Its surrounding cells must be empty.", TurnManager.instance.color32_red);
-            }
         }
 
     }
@@ -841,17 +830,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
             else
             {
                 if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-                {
                     TurnManager.instance.updateTurnUpdate("This target is already full health!", TurnManager.instance.color32_red);
-                }
             }
         }
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -884,17 +869,13 @@ public class CardEffectManager : Singleton<CardEffectManager>
             else
             {
                 if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-                {
                     TurnManager.instance.updateTurnUpdate("Assassinate cannot be used on a King!", TurnManager.instance.color32_red);
-                }
             }
         }
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("There is no target on this cell!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -905,7 +886,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Card Name: Bear Trap
      * Type: Spell(Trap)
      * Cast Range: (1, 2) tiles from any friendly unit
-     * Effect: Damages the triggering unit for 5 health.
+     * Effect: Damages the triggering unit for 15 health.
      * Cost: 3
      */
     [PunRPC]
@@ -920,19 +901,14 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
             {
                 TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Bear Trap on the battlefield!\n");
-                TurnManager.instance.updateTurnUpdate("Successfully placed Bear Trap at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+                TurnManager.instance.updateTurnUpdate("Successfully placed Bear Trap!", TurnManager.instance.color32_green);
             }
             TurnManager.instance.cardSuccessful = true;
-
-            DisplayAnimation(anim_spell_bearTrap);
-
         }
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -954,8 +930,8 @@ public class CardEffectManager : Singleton<CardEffectManager>
      * Card Name: Land Mine
      * Type: Spell(Trap)
      * Cast Range: (1, 2) tiles from any friendly unit
-     * Effect: Damages all units from (0,1) tiles from the detonation origin for 3 health.
-     * Cost: 3
+     * Effect: Damages all units from (0,1) tiles from the detonation origin for 10 health.
+     * Cost: 4
      */
     [PunRPC]
     public void spell_landMine(int playerId, Vector3 selectedNodePos)
@@ -969,17 +945,14 @@ public class CardEffectManager : Singleton<CardEffectManager>
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
             {
                 TurnManager.instance.updateGameHistory("Player " + playerId + " placed a Land Mine on the battlefield!\n");
-                TurnManager.instance.updateTurnUpdate("Successfully placed a Land Mine at (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
+                TurnManager.instance.updateTurnUpdate("Successfully placed a Land Mine!", TurnManager.instance.color32_green);
             }
             TurnManager.instance.cardSuccessful = true;
-            DisplayAnimation(anim_spell_landMine);
         }
         else
         {
             if (!GameManager.instance.networked || PhotonView.Get(gameObject).IsMine)
-            {
                 TurnManager.instance.updateTurnUpdate("Cannot place a Bear on a cell that has a unit on it!", TurnManager.instance.color32_red);
-            }
         }
     }
 
@@ -1020,6 +993,7 @@ public class CardEffectManager : Singleton<CardEffectManager>
             TurnManager.instance.updateGameHistory(spellMessage);
             TurnManager.instance.updateTurnUpdate("Successfully used Royal Pledge on " + selectedNode.GetUnit().GetUnitType() + " (" + selectedNode.gridX + "," + selectedNode.gridY + ")!", TurnManager.instance.color32_green);
         }
+
         TurnManager.instance.cardSuccessful = true;
     }
 }

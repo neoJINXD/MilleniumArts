@@ -15,7 +15,6 @@ public class Hand : MonoBehaviour
     // Plays a card from the hand
     void playFromHand(int i) {
         handContent.RemoveAt(i);
-        // TODO: PERFORM CARD ACTION
     }
 
     // The number of cards in the hand
